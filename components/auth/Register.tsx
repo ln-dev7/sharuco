@@ -27,12 +27,12 @@ function Register() {
     return router.push("/dashboard")
   }
   return (
-    <div className="wrapper">
-      <div className="form-wrapper">
+    <div className="mb-16 p-16">
+      <div>
         <h2 className="mt-10 scroll-m-20 border-b border-b-slate-200 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:border-b-slate-700">
           Register
         </h2>
-        <form onSubmit={handleForm} className="form">
+        <form onSubmit={handleForm} className="flex flex-col gap-4 p-8">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -51,7 +51,9 @@ function Register() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <Button type="submit">Sign Up</Button>
+          <Button className="w-max" type="submit">
+            Sign Up
+          </Button>
         </form>
       </div>
     </div>
