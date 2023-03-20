@@ -7,7 +7,7 @@ interface SiteConfig {
   links: {
     twitter: string
     github: string
-    author: string
+    donation: string
   }
 }
 
@@ -16,13 +16,13 @@ export const siteConfig: SiteConfig = {
   description: "Share your code with everyone.",
   mainNav: [
     {
-      title: "Home",
-      href: "/",
+      title: "Popular code",
+      href: "/popularcode",
     },
   ],
   links: {
     twitter: "https://twitter.com/sharuco_app",
     github: "https://github.com/ln-dev7/sharuco",
-    author: "https://lndev.me",
+    donation: "https://www.buymeacoffee.com/lndev",
   },
 }

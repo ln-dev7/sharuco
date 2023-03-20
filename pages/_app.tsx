@@ -1,4 +1,5 @@
 import type { AppProps } from "next/app"
+import { AuthContextProvider } from "@/context/AuthContext"
 import { Inter as FontSans } from "@next/font/google"
 import { ThemeProvider } from "next-themes"
 
@@ -18,9 +19,11 @@ export default function App({ Component, pageProps }: AppProps) {
 					--font-sans: ${fontSans.style.fontFamily};
 				}
 			}`}</style>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <AuthContextProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </AuthContextProvider>
     </>
   )
 }

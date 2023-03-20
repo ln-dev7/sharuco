@@ -2,6 +2,8 @@ import Head from "next/head"
 import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
+import Login from "@/components/auth/Login"
+import Register from "@/components/auth/Register"
 import { Layout } from "@/components/layout"
 import { buttonVariants } from "@/components/ui/button"
 
@@ -9,10 +11,11 @@ export default function IndexPage() {
   return (
     <Layout>
       <Head>
-        <title>Next.js</title>
+        <title>Sharuco</title>
         <meta
           name="description"
-          content="Next.js template for building apps with Radix UI and Tailwind CSS"
+          content="Sharuco allows you to share code snippets that you have found
+          useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -31,23 +34,22 @@ export default function IndexPage() {
         </div>
         <div className="flex gap-4">
           <Link
-            href={siteConfig.links.author}
+            href={siteConfig.links.donation}
             target="_blank"
             rel="noreferrer"
             className={buttonVariants({ size: "lg" })}
           >
-            Documentation
+            Donnation
           </Link>
-          <Link
-            target="_blank"
-            rel="noreferrer"
-            href={siteConfig.links.github}
+          <button
             className={buttonVariants({ variant: "outline", size: "lg" })}
           >
-            GitHub
-          </Link>
+            Sigin with Github
+          </button>
         </div>
       </section>
+      <Login />
+      <Register />
     </Layout>
   )
 }
