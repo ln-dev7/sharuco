@@ -13,6 +13,12 @@ coverage
 out/
 build
 
+# idea
+.idea/
+
+# vs code
+.vscode/
+
 # misc
 .DS_Store
 *.pem
