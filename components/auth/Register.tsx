@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import register from "@/firebase/auth/register"
+import { Loader2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,18 +14,19 @@ function Register() {
   const [password, setPassword] = useState("")
   const router = useRouter()
 
+  const [loading, setLoading] = useState(false)
+
   const handleForm = async (event) => {
-    event.preventDefault()
-
-    const { result, error } = await register(email, password)
-
-    if (error) {
-      return console.log(error)
+    try {
+      event.preventDefault()
+      setLoading(true)
+      const { result, error } = await register(email, password)
+      return router.push("/dashboard")
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
-
-    // else successful
-    console.log(result)
-    return router.push("/dashboard")
   }
   return (
     <div className="mb-16 p-16">
@@ -51,7 +53,8 @@ function Register() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <Button className="w-max" type="submit">
+          <Button disabled={loading} className="w-max" type="submit">
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Sign Up
           </Button>
         </form>
