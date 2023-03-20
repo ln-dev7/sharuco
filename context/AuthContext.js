@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react"
+import firebase_app from "@/firebase/config"
 import { getAuth, onAuthStateChanged } from "firebase/auth"
-
-import firebase_app from "../firebase/config"
+import { Loader } from "lucide-react"
 
 const auth = getAuth(firebase_app)
 
@@ -30,7 +30,13 @@ export const AuthContextProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user }}>
-      {loading ? <div>Loading...</div> : children}
+      {loading ? (
+        <div className="fixed inset-0 flex items-center justify-center">
+          <Loader className="animate-spin" />
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   )
 }

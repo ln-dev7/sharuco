@@ -1,14 +1,16 @@
 import Head from "next/head"
 import Link from "next/link"
-import { Github } from "lucide-react"
+import { useAuthContext } from "@/context/AuthContext"
+import { useGitHubLoign } from "@/firebase/auth/githubLogin"
+import { Code2, Github, Loader2 } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
-import Login from "@/components/auth/Login"
-import Register from "@/components/auth/Register"
 import { Layout } from "@/components/layout"
 import { buttonVariants } from "@/components/ui/button"
 
 export default function IndexPage() {
+  const { login, isPending } = useGitHubLoign()
+  const { user } = useAuthContext()
   return (
     <Layout>
       <Head>
@@ -42,16 +44,30 @@ export default function IndexPage() {
           >
             Donnation
           </Link>
-          <button
-            className={buttonVariants({ variant: "outline", size: "lg" })}
-          >
-            <Github className="mr-2 h-4 w-4" />
-            Sigin with Github
-          </button>
+          {user ? (
+            <Link
+              href="/dashboard"
+              className={buttonVariants({ size: "lg", variant: "outline" })}
+            >
+              <Code2 className="mr-2 h-4 w-4" />
+              Your dashboard
+            </Link>
+          ) : (
+            <button
+              className={buttonVariants({ variant: "outline", size: "lg" })}
+              disabled={isPending}
+              onClick={login}
+            >
+              {isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Github className="mr-2 h-4 w-4" />
+              )}
+              Sigin with Github
+            </button>
+          )}
         </div>
       </section>
-      <Login />
-      <Register />
     </Layout>
   )
 }

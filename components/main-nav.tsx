@@ -29,7 +29,7 @@ export function MainNav({ items }: MainNavProps) {
         </span>
       </Link>
       {items?.length ? (
-        <nav className="hidden gap-6 md:flex">
+        <nav className="hidden gap-2 md:flex">
           {items?.map(
             (item, index) =>
               item.href && (
@@ -37,7 +37,7 @@ export function MainNav({ items }: MainNavProps) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    "flex items-center text-lg font-semibold text-slate-600 hover:text-slate-900 dark:text-slate-100 sm:text-sm",
+                    "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent py-2 px-4 text-sm font-semibold transition-colors hover:bg-slate-100 focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-slate-50 data-[active]:bg-slate-50 dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[state=open]:bg-slate-800 dark:data-[active]:bg-slate-800",
                     item.disabled && "cursor-not-allowed opacity-80"
                   )}
                 >

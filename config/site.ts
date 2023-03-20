@@ -17,7 +17,11 @@ export const siteConfig: SiteConfig = {
   mainNav: [
     {
       title: "Popular code",
-      href: "/popularcode",
+      href: "/popular",
+    },
+    {
+      title: "Explore",
+      href: "/explore",
     },
   ],
   links: {
