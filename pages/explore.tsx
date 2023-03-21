@@ -21,10 +21,8 @@ export default function Explore() {
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
         <div className="flex max-w-[980px] flex-col items-start gap-2">
-          <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-            Discover little bits of code
-            <br className="hidden sm:inline" />
-            that can help you.
+          <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
+            Discover little bits of code that can help you.
           </h1>
         </div>
       </section>

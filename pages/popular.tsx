@@ -16,13 +16,45 @@ import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import { Button, buttonVariants } from "@/components/ui/button"
 
+function formaterCodeJS(chaine: string) {
+  let indentation = 0
+  let nouvelleChaine = ""
+
+  for (let i = 0; i < chaine.length; i++) {
+    let caractereCourant = chaine[i]
+    let caractereSuivant = chaine[i + 1]
+
+    if (caractereCourant === "{") {
+      nouvelleChaine += "{\n" + "  ".repeat(indentation + 1)
+      indentation++
+    } else if (caractereCourant === "}") {
+      indentation--
+      nouvelleChaine +=
+        "\n" + "  ".repeat(indentation) + "}\n" + "  ".repeat(indentation)
+    } else {
+      nouvelleChaine += caractereCourant
+
+      if (
+        caractereCourant === "}" ||
+        (caractereCourant === ")" &&
+          caractereSuivant !== "{" &&
+          caractereSuivant !== "}")
+      ) {
+        nouvelleChaine += "\n" + "  ".repeat(indentation)
+      }
+    }
+  }
+
+  return nouvelleChaine
+}
+
 function highlight(code: string, language: string) {
   const grammar = Prism.languages[language]
   if (!grammar) {
     console.warn(`Prism does not support ${language} syntax highlighting.`)
     return code
   }
-  return Prism.highlight(code, grammar, language)
+  return Prism.highlight(formaterCodeJS(code), grammar, language)
 }
 
 export default function Popular() {
@@ -58,7 +90,7 @@ export default function Popular() {
   return (
     <Layout>
       <Head>
-        <title>Sharuco</title>
+        <title>Sharuco | Popular</title>
         <meta
           name="description"
           content="Sharuco allows you to share code snippets that you have found
@@ -69,10 +101,8 @@ export default function Popular() {
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
         <div className="flex max-w-[980px] flex-col items-start gap-2">
-          <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-            Discover the most loved
-            <br className="hidden sm:inline" />
-            code snippets
+          <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
+            Discover the most loved code snippets
           </h1>
         </div>
         <div className="flex flex-col gap-4 p-8">
@@ -83,7 +113,7 @@ export default function Popular() {
               <div key={code.id}>
                 <p>{code.language}</p>
                 <p>{code.idAuthor}</p>
-                <pre className="bg-slate-100 dark:bg-slate-800">
+                <pre className="w-1/2 rounded-lg bg-slate-200 p-4 dark:bg-slate-800">
                   <code
                     dangerouslySetInnerHTML={{
                       __html: highlight(code.code, code.language),

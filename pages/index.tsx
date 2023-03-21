@@ -35,7 +35,7 @@ export default function IndexPage() {
             useful.
           </p>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 md:flex-row">
           <Link
             href={siteConfig.links.donation}
             target="_blank"
