@@ -102,7 +102,7 @@ export default function Popular() {
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
         <div className="flex max-w-[980px] flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
-            Discover the most loved code snippets
+            Discover the most loved code snippets.
           </h1>
         </div>
         <div className="flex flex-col gap-4 p-8">
