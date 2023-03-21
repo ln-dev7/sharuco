@@ -8,7 +8,7 @@ import { useAuthContext } from "@/context/AuthContext"
 import addData from "@/firebase/firestore/addData"
 import getDocuments from "@/firebase/firestore/getDocuments"
 import indentCode from "@/utils/indentCode"
-import { Github, Loader2 } from "lucide-react"
+import { Copy, Github, Loader2 } from "lucide-react"
 import Prism from "prismjs"
 
 import "prism-themes/themes/prism-night-owl.css"
@@ -16,6 +16,10 @@ import { siteConfig } from "@/config/site"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import { Button, buttonVariants } from "@/components/ui/button"
+
+function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text)
+}
 
 function highlight(code: string, language: string) {
   const grammar = Prism.languages[language]
@@ -82,6 +86,13 @@ export default function Popular() {
               <div key={code.id}>
                 <p>{code.language}</p>
                 <p>{code.idAuthor}</p>
+                <button
+                  className={buttonVariants({ variant: "outline", size: "lg" })}
+                  onClick={() => copyToClipboard(code.code)}
+                >
+                  <Copy size={20} />
+                  Copy code
+                </button>
                 <pre className="w-max rounded-lg bg-slate-200 p-4 dark:bg-slate-800">
                   <code
                     dangerouslySetInnerHTML={{
