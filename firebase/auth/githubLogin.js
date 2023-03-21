@@ -2,6 +2,8 @@ import { useState } from "react"
 import { auth } from "@/firebase/config"
 import { GithubAuthProvider, signInWithPopup } from "firebase/auth"
 
+import updateCollection from "../firestore/updateCollection"
+
 export const useGitHubLoign = () => {
   const [error, setError] = useState(false)
   const [isPending, setIsPending] = useState(false)
@@ -18,6 +20,12 @@ export const useGitHubLoign = () => {
       }
 
       const user = res.user
+
+      updateCollection("users", user.reloadUserInfo.screenName, {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      })
       console.log(user)
     } catch (error) {
       console.log(error)
