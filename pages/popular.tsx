@@ -7,11 +7,13 @@ import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import addData from "@/firebase/firestore/addData"
 import getDocuments from "@/firebase/firestore/getDocuments"
+import { useToast } from "@/hooks/use-toast"
 import delinearizeCode from "@/utils/delinearizeCode"
 import indentCode from "@/utils/indentCode"
 import { Copy, Github, Loader2 } from "lucide-react"
 import Prism from "prismjs"
 
+import { ToastAction } from "@/components/ui/toast"
 import "prism-themes/themes/prism-night-owl.css"
 import { siteConfig } from "@/config/site"
 import { Layout } from "@/components/layout"
@@ -33,6 +35,7 @@ function highlight(code: string, language: string) {
 }
 
 export default function Popular() {
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
 
   const handleAddCode = async () => {
@@ -88,13 +91,25 @@ export default function Popular() {
               <div key={code.id}>
                 <p>{code.language}</p>
                 <p>{code.idAuthor}</p>
-                <button
-                  className={buttonVariants({ variant: "outline", size: "lg" })}
-                  onClick={() => copyToClipboard(code.code)}
+
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    copyToClipboard(code.code)
+                    toast({
+                      title: "Copied to clipboard",
+                      description: "The code has been copied to your clipboard",
+                      action: (
+                        <ToastAction altText="Goto schedule to undo">
+                          Undo
+                        </ToastAction>
+                      ),
+                    })
+                  }}
                 >
                   <Copy className="mr-2 h-4 w-4" />
                   Copy code
-                </button>
+                </Button>
                 <pre className="w-max rounded-lg bg-slate-200 p-4 dark:bg-slate-800">
                   <code
                     dangerouslySetInnerHTML={{
