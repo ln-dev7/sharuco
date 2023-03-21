@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
+import getCollections from "@/firebase/firestore/getCollections"
 import { Code2, Github, Loader2 } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
@@ -11,6 +13,25 @@ import { buttonVariants } from "@/components/ui/button"
 export default function IndexPage() {
   const { login, isPending } = useGitHubLoign()
   const { user } = useAuthContext()
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+
+  const [allUsers, setAllUsers]: [any, (value: any) => void] = useState([])
+
+  useEffect(() => {
+    setLoading(true)
+    const fetchAllCodes = async () => {
+      const { result, error } = await getCollections("users")
+      if (error) {
+        setLoading(false)
+      }
+      setAllUsers(result.docs.map((doc) => doc.data()))
+      setLoading(false)
+    }
+    fetchAllCodes()
+  }, [])
+
   return (
     <Layout>
       <Head>
@@ -67,6 +88,14 @@ export default function IndexPage() {
             </button>
           )}
         </div>
+        {!loading ? (
+          <p className="text-sm text-slate-700 dark:text-slate-400">
+            <span className="font-bold">{allUsers.length}</span> registered on
+            the platform
+          </p>
+        ) : (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        )}
       </section>
     </Layout>
   )
