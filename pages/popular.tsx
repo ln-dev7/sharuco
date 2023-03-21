@@ -19,7 +19,7 @@ import Loader from "@/components/loader"
 import { Button, buttonVariants } from "@/components/ui/button"
 
 function copyToClipboard(code: string) {
-  const text = delinearizeCode(code)
+  const text = indentCode(code)
   navigator.clipboard.writeText(text)
 }
 
@@ -92,7 +92,7 @@ export default function Popular() {
                   className={buttonVariants({ variant: "outline", size: "lg" })}
                   onClick={() => copyToClipboard(code.code)}
                 >
-                  <Copy size={20} />
+                  <Copy className="mr-2 h-4 w-4" />
                   Copy code
                 </button>
                 <pre className="w-max rounded-lg bg-slate-200 p-4 dark:bg-slate-800">
