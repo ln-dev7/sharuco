@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import addData from "@/firebase/firestore/addData"
 import getDocuments from "@/firebase/firestore/getDocuments"
+import indentCode from "@/utils/indentCode"
 import { Github, Loader2 } from "lucide-react"
 import Prism from "prismjs"
 
@@ -15,69 +16,6 @@ import { siteConfig } from "@/config/site"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import { Button, buttonVariants } from "@/components/ui/button"
-
-function formaterCodeJS(chaine: string) {
-  let indentation = 0
-  let nouvelleChaine = ""
-
-  for (let i = 0; i < chaine.length; i++) {
-    let caractereCourant = chaine[i]
-    let caractereSuivant = chaine[i + 1]
-
-    if (caractereCourant === "{") {
-      nouvelleChaine += "{\n" + "  ".repeat(indentation + 1)
-      indentation++
-    } else if (caractereCourant === "}") {
-      indentation--
-      nouvelleChaine +=
-        "\n" + "  ".repeat(indentation) + "}\n" + "  ".repeat(indentation)
-    } else {
-      nouvelleChaine += caractereCourant
-
-      if (
-        caractereCourant === "}" ||
-        (caractereCourant === ")" &&
-          caractereSuivant !== "{" &&
-          caractereSuivant !== "}")
-      ) {
-        nouvelleChaine += "\n" + "  ".repeat(indentation)
-      }
-    }
-  }
-
-  return nouvelleChaine
-}
-
-function linearizeCode(codeString: string) {
-  const firstLinearCode = codeString.replace(/\n/g, "\\n")
-  const linearCode = firstLinearCode.replace(/\t/g, "\\t")
-
-  return linearCode
-}
-
-function indentCode(linearCode: string) {
-  let codeString = linearCode.replace(/\\t/g, "\t")
-  codeString = codeString.replace(/\\n/g, "\n")
-
-  // Ajouter une indentation pour chaque niveau de tabulation
-  let indentationLevel = 0
-  let indentedCode = ""
-  for (let i = 0; i < codeString.length; i++) {
-    const char = codeString[i]
-    if (char === "\t") {
-      indentationLevel++
-    } else if (char === "\n") {
-      indentedCode += "\n"
-      for (let j = 0; j < indentationLevel; j++) {
-        indentedCode += "\t"
-      }
-    } else {
-      indentedCode += char
-    }
-  }
-
-  return indentedCode
-}
 
 function highlight(code: string, language: string) {
   const grammar = Prism.languages[language]
@@ -144,7 +82,7 @@ export default function Popular() {
               <div key={code.id}>
                 <p>{code.language}</p>
                 <p>{code.idAuthor}</p>
-                <pre className="w-1/2 rounded-lg bg-slate-200 p-4 dark:bg-slate-800">
+                <pre className="w-max rounded-lg bg-slate-200 p-4 dark:bg-slate-800">
                   <code
                     dangerouslySetInnerHTML={{
                       __html: highlight(code.code, code.language),
