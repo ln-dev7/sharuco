@@ -48,13 +48,44 @@ function formaterCodeJS(chaine: string) {
   return nouvelleChaine
 }
 
+function linearizeCode(codeString: string) {
+  const firstLinearCode = codeString.replace(/\n/g, "\\n")
+  const linearCode = firstLinearCode.replace(/\t/g, "\\t")
+
+  return linearCode
+}
+
+function indentCode(linearCode: string) {
+  let codeString = linearCode.replace(/\\t/g, "\t")
+  codeString = codeString.replace(/\\n/g, "\n")
+
+  // Ajouter une indentation pour chaque niveau de tabulation
+  let indentationLevel = 0
+  let indentedCode = ""
+  for (let i = 0; i < codeString.length; i++) {
+    const char = codeString[i]
+    if (char === "\t") {
+      indentationLevel++
+    } else if (char === "\n") {
+      indentedCode += "\n"
+      for (let j = 0; j < indentationLevel; j++) {
+        indentedCode += "\t"
+      }
+    } else {
+      indentedCode += char
+    }
+  }
+
+  return indentedCode
+}
+
 function highlight(code: string, language: string) {
   const grammar = Prism.languages[language]
   if (!grammar) {
     console.warn(`Prism does not support ${language} syntax highlighting.`)
     return code
   }
-  return Prism.highlight(formaterCodeJS(code), grammar, language)
+  return Prism.highlight(indentCode(code), grammar, language)
 }
 
 export default function Popular() {
