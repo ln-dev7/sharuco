@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import addData from "@/firebase/firestore/addData"
 import getDocuments from "@/firebase/firestore/getDocuments"
+import delinearizeCode from "@/utils/delinearizeCode"
 import indentCode from "@/utils/indentCode"
 import { Copy, Github, Loader2 } from "lucide-react"
 import Prism from "prismjs"
@@ -17,7 +18,8 @@ import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import { Button, buttonVariants } from "@/components/ui/button"
 
-function copyToClipboard(text: string) {
+function copyToClipboard(code: string) {
+  const text = delinearizeCode(code)
   navigator.clipboard.writeText(text)
 }
 
