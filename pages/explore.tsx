@@ -1,17 +1,60 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useAuthContext } from "@/context/AuthContext"
+import addData from "@/firebase/firestore/addData"
+import getDocuments from "@/firebase/firestore/getDocuments"
 import { useToast } from "@/hooks/use-toast"
-import { Github, Loader2 } from "lucide-react"
+import copyToClipboard from "@/utils/copyToClipboard"
+import delinearizeCode from "@/utils/delinearizeCode"
+import highlight from "@/utils/highlight"
+import indentCode from "@/utils/indentCode"
+import { Copy, Github, Loader2, Star } from "lucide-react"
+import Prism from "prismjs"
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ToastAction } from "@/components/ui/toast"
+import "prism-themes/themes/prism-one-dark.min.css"
 import { siteConfig } from "@/config/site"
 import { Layout } from "@/components/layout"
+import Loader from "@/components/loader"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { ToastAction } from "@/components/ui/toast"
 
 export default function Explore() {
   const { toast } = useToast()
+  const [loading, setLoading] = useState(false)
+
+  const handleAddCode = async () => {
+    const data = {
+      idAuthor: "ln-de7",
+      language: "JavaScript",
+    }
+    const { result, error } = await addData("codes", "user-id", data)
+
+    if (error) {
+      return console.log(error)
+    }
+  }
+
+  const [allCodes, setAllCodes]: [any, (value: any) => void] = useState([])
+
+  useEffect(() => {
+    setLoading(true)
+    const fetchAllCodes = async () => {
+      const { result, error } = await getDocuments("codes")
+      if (error) {
+        return console.log("popular 1", error)
+        setLoading(false)
+      }
+      setAllCodes(result.docs.map((doc) => doc.data()))
+      setLoading(false)
+    }
+    fetchAllCodes()
+  }, [])
   return (
     <Layout>
       <Head>
@@ -29,22 +72,82 @@ export default function Explore() {
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Discover little bits of code that can help you.
           </h1>
-          <Button
-            variant="outline"
-            onClick={() => {
-              toast({
-                title: "Scheduled: Catch up ",
-                description: "Friday, February 10, 2023 at 5:57 PM",
-                action: (
-                  <ToastAction altText="Goto schedule to undo">
-                    Undo
-                  </ToastAction>
-                ),
-              })
-            }}
-          >
-            Add to calendar
-          </Button>
+        </div>
+        <div className="">
+          {loading ? (
+            <Loader />
+          ) : (
+            <ResponsiveMasonry
+              columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
+            >
+              <Masonry>
+                {allCodes.map((code) => (
+                  <div key={code.id} className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <Button
+                        variant="subtle"
+                        onClick={() => {
+                          copyToClipboard(code.code)
+                          toast({
+                            title: "Copied to clipboard",
+                            description:
+                              "The code has been copied to your clipboard",
+                            action: (
+                              <ToastAction altText="Goto schedule to undo">
+                                Undo
+                              </ToastAction>
+                            ),
+                          })
+                        }}
+                      >
+                        <Copy className="mr-2 h-4 w-4" />
+                        Copy code
+                      </Button>
+                      <Button>
+                        <Star className="mr-2 h-4 w-4" />0
+                      </Button>
+                    </div>
+                    <pre className="w-auto overflow-x-auto rounded-lg border border-slate-600 bg-slate-900 p-4 dark:bg-black">
+                      <code
+                        className="text-white"
+                        dangerouslySetInnerHTML={{
+                          __html: highlight(code.code, code.language),
+                        }}
+                      />
+                    </pre>
+                    <Link
+                      href={`/${code.idAuthor}`}
+                      className="flex items-center justify-start gap-2"
+                    >
+                      <Avatar className="h-8 w-8 cursor-pointer">
+                        <AvatarImage
+                          src="https://github.com/shadcn.png"
+                          alt="@ln_dev7"
+                        />
+                        <AvatarFallback>LN</AvatarFallback>
+                      </Avatar>
+                      <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
+                        {code.idAuthor}
+                      </span>
+                    </Link>
+                    <p className="text-sm text-slate-700 dark:text-slate-400">
+                      {code.description}
+                    </p>
+                    <div className="flex items-center justify-start gap-2">
+                      {code.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </Masonry>
+            </ResponsiveMasonry>
+          )}
         </div>
       </section>
     </Layout>

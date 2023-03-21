@@ -1,12 +1,17 @@
+"use client"
+
 import Link from "next/link"
+import { useAuthContext } from "@/context/AuthContext"
 
 import { siteConfig } from "@/config/site"
 import { Icons } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { buttonVariants } from "@/components/ui/button"
+import { AvatarUser } from "./avatar-user"
 
 export function SiteHeader() {
+  const { user } = useAuthContext()
   return (
     <header className="sticky top-0 z-40 w-full border-b border-b-slate-200 bg-white dark:border-b-slate-700 dark:bg-slate-900">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
@@ -47,6 +52,7 @@ export function SiteHeader() {
             </Link>
             <ThemeToggle />
           </nav>
+          {user && <AvatarUser />}
         </div>
       </div>
     </header>

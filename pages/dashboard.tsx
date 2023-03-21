@@ -39,9 +39,6 @@ export default function Dashboard() {
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Dashboard
           </h1>
-          <button onClick={logout} className={buttonVariants({ size: "lg" })}>
-            Logout
-          </button>
         </div>
       </section>
     </Layout>
