@@ -8,14 +8,26 @@ import { useAuthContext } from "@/context/AuthContext"
 import addData from "@/firebase/firestore/addData"
 import getDocuments from "@/firebase/firestore/getDocuments"
 import { Github, Loader2 } from "lucide-react"
-import Highlight, { defaultProps } from "prism-react-renderer"
-import { render } from "react-dom"
+import Prism from "prismjs"
 
+import "prism-themes/themes/prism-night-owl.css"
 import { siteConfig } from "@/config/site"
 import { Layout } from "@/components/layout"
+import Loader from "@/components/loader"
 import { Button, buttonVariants } from "@/components/ui/button"
 
+function highlight(code: string, language: string) {
+  const grammar = Prism.languages[language]
+  if (!grammar) {
+    console.warn(`Prism does not support ${language} syntax highlighting.`)
+    return code
+  }
+  return Prism.highlight(code, grammar, language)
+}
+
 export default function Popular() {
+  const [loading, setLoading] = useState(false)
+
   const handleAddCode = async () => {
     const data = {
       idAuthor: "ln-de7",
@@ -31,12 +43,15 @@ export default function Popular() {
   const [allCodes, setAllCodes]: [any, (value: any) => void] = useState([])
 
   useEffect(() => {
+    setLoading(true)
     const fetchAllCodes = async () => {
       const { result, error } = await getDocuments("codes")
       if (error) {
-        return console.log(error)
+        return console.log("popular 1", error)
+        setLoading(false)
       }
       setAllCodes(result.docs.map((doc) => doc.data()))
+      setLoading(false)
     }
     fetchAllCodes()
   }, [])
@@ -61,35 +76,23 @@ export default function Popular() {
           </h1>
         </div>
         <div className="flex flex-col gap-4 p-8">
-          {allCodes.map((code) => (
-            <div key={code.id}>
-              <p>{code.language}</p>
-              <p>{code.idAuthor}</p>
-              <Highlight
-                {...defaultProps}
-                code={code.code}
-                language="javascript"
-              >
-                {({
-                  className,
-                  style,
-                  tokens,
-                  getLineProps,
-                  getTokenProps,
-                }) => (
-                  <pre className={className} style={style}>
-                    {tokens.map((line, i) => (
-                      <div {...getLineProps({ line, key: i })}>
-                        {line.map((token, key) => (
-                          <span {...getTokenProps({ token, key })} />
-                        ))}
-                      </div>
-                    ))}
-                  </pre>
-                )}
-              </Highlight>
-            </div>
-          ))}
+          {loading ? (
+            <Loader />
+          ) : (
+            allCodes.map((code) => (
+              <div key={code.id}>
+                <p>{code.language}</p>
+                <p>{code.idAuthor}</p>
+                <pre className="bg-slate-100 dark:bg-slate-800">
+                  <code
+                    dangerouslySetInnerHTML={{
+                      __html: highlight(code.code, code.language),
+                    }}
+                  />
+                </pre>
+              </div>
+            ))
+          )}
           {/* <Button className="w-max" onClick={handleAddCode}>
             Add code
           </Button> */}

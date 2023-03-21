@@ -6,8 +6,6 @@ import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import addData from "@/firebase/firestore/addData"
 import getDocuments from "@/firebase/firestore/getDocuments"
-import Highlight, { defaultProps } from "prism-react-renderer"
-import { render } from "react-dom"
 
 import { Button } from "@/components/ui/button"
 

@@ -44,28 +44,18 @@ export default function IndexPage() {
           >
             Donnation
           </Link>
-          {user ? (
-            <Link
-              href="/dashboard"
-              className={buttonVariants({ size: "lg", variant: "outline" })}
-            >
-              <Code2 className="mr-2 h-4 w-4" />
-              Your dashboard
-            </Link>
-          ) : (
-            <button
-              className={buttonVariants({ variant: "outline", size: "lg" })}
-              disabled={isPending}
-              onClick={login}
-            >
-              {isPending ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <Github className="mr-2 h-4 w-4" />
-              )}
-              Sigin with Github
-            </button>
-          )}
+          <button
+            className={buttonVariants({ variant: "outline", size: "lg" })}
+            disabled={isPending}
+            onClick={login}
+          >
+            {isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Github className="mr-2 h-4 w-4" />
+            )}
+            Sigin with Github
+          </button>
         </div>
       </section>
     </Layout>
