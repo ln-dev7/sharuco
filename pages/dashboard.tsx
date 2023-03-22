@@ -7,6 +7,7 @@ import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useCollections } from "@/firebase/firestore/getCollections"
 import { Eye, EyeOff, Loader2, MoreHorizontal, Plus } from "lucide-react"
+import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import { cn } from "@/lib/utils"
@@ -99,6 +100,7 @@ export default function Dashboard() {
                       <SelectValue placeholder="What language is the code written in ?" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="other">Other</SelectItem>
                       <SelectItem value="bash">Bash</SelectItem>
                       <SelectItem value="c">C</SelectItem>
                       <SelectItem value="csharp">C#</SelectItem>
@@ -110,15 +112,11 @@ export default function Dashboard() {
                       <SelectItem value="java">Java</SelectItem>
                       <SelectItem value="javascript">Javascript</SelectItem>
                       <SelectItem value="json">JSON</SelectItem>
-                      <SelectItem value="jsx">JSX</SelectItem>
                       <SelectItem value="kotlin">Kotlin</SelectItem>
-                      <SelectItem value="less">Less</SelectItem>
                       <SelectItem value="markdown">Markdown</SelectItem>
                       <SelectItem value="php">PHP</SelectItem>
                       <SelectItem value="python">Python</SelectItem>
-                      <SelectItem value="scss">Scss</SelectItem>
                       <SelectItem value="sql">SQL</SelectItem>
-                      <SelectItem value="typescript">Typescript</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

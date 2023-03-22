@@ -18,6 +18,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ToastAction } from "@/components/ui/toast"
 import "prism-themes/themes/prism-one-dark.min.css"
+import moment from "moment"
 import { useQuery } from "react-query"
 
 import { siteConfig } from "@/config/site"
@@ -57,28 +58,32 @@ export default function Explore() {
               columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
             >
               <Masonry gutter="1rem">
-                {data.map(
-                  (code: {
-                    id: string
-                    idAuthor: string
-                    language: string
-                    code: string
-                    description: string
-                    tags: string[]
-                    favoris: string[]
-                  }) => (
-                    <CardCode
-                      key={code.id}
-                      id={code.id}
-                      idAuthor={code.idAuthor}
-                      language={code.language}
-                      code={code.code}
-                      description={code.description}
-                      tags={code.tags}
-                      favoris={code.favoris}
-                    />
-                  )
-                )}
+                {data
+                  .sort((a, b) => {
+                    return moment(b.createdAt).diff(moment(a.createdAt))
+                  })
+                  .map(
+                    (code: {
+                      id: string
+                      idAuthor: string
+                      language: string
+                      code: string
+                      description: string
+                      tags: string[]
+                      favoris: string[]
+                    }) => (
+                      <CardCode
+                        key={code.id}
+                        id={code.id}
+                        idAuthor={code.idAuthor}
+                        language={code.language}
+                        code={code.code}
+                        description={code.description}
+                        tags={code.tags}
+                        favoris={code.favoris}
+                      />
+                    )
+                  )}
               </Masonry>
             </ResponsiveMasonry>
           )}

@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ToastAction } from "@/components/ui/toast"
 import "prism-themes/themes/prism-one-dark.min.css"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
-import {useUpdateCollection} from "@/firebase/firestore/updateCollection"
+import { useUpdateCollection } from "@/firebase/firestore/updateCollection"
 import { useQuery } from "react-query"
 import {
   EmailIcon,
@@ -99,7 +99,7 @@ export default function CardCode({
       const newFavoris = favoris.filter(
         (favoris: string) => favoris !== user.reloadUserInfo.screenName
       )
-      
+
       const { result, error } = await useUpdateCollection("codes", id, {
         favoris: newFavoris,
       })
@@ -280,7 +280,7 @@ export default function CardCode({
         </div>
       </div>
       <div className="overflow-hidden rounded-lg">
-        <pre className="w-auto overflow-x-auto rounded-lg border border-slate-600 bg-slate-900 p-4 dark:bg-black">
+        <pre className="max-h-[480px] w-auto overflow-auto rounded-lg border border-slate-600 bg-slate-900 p-4 dark:bg-black">
           <code
             className="text-white"
             dangerouslySetInnerHTML={{
