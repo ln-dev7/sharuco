@@ -26,7 +26,7 @@ export const useGitHubLoign = () => {
         email: user.email,
         photoURL: user.photoURL,
       })
-      console.log(user)
+      //console.log(user)
     } catch (error) {
       console.log(error)
       setError(error.message)

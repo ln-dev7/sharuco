@@ -4,7 +4,7 @@ import firebase_app from "../config"
 
 const db = getFirestore(firebase_app)
 
-export default async function updateDocument(collectionName, documentId, data) {
+export default async function updateCollection(collectionName, documentId, data) {
   let result = null
   let error = null
 

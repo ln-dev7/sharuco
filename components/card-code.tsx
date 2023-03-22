@@ -19,6 +19,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ToastAction } from "@/components/ui/toast"
 import "prism-themes/themes/prism-one-dark.min.css"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
+import getCode from "@/firebase/firestore/getCode"
+import updateCollection from "@/firebase/firestore/updateCollection"
 import { useQuery } from "react-query"
 import {
   EmailIcon,
@@ -59,12 +61,53 @@ export default function CardCode({
   code,
   description,
   tags,
+  favoris,
 }) {
   const { toast } = useToast()
   const { user } = useAuthContext()
   const { login, isPending } = useGitHubLoign()
 
   const shareUrl = `https://shacuro.lndev.me/code-preview/${id}`
+
+  // Add code on favoris
+  const [loadingAddCodeOnFavoris, setLoadingAddCodeOnFavoris] = useState(false)
+  const [codeFavoris, setCodeFavoris]: [any, (value: any) => void] = useState(
+    favoris.length
+  )
+  const [isCodeFavoris, setIsCodeFavoris] = useState(
+    favoris.includes(user.reloadUserInfo.screenName)
+  )
+
+  const addCodeOnFavoris = async (id: string) => {
+    setLoadingAddCodeOnFavoris(true)
+    const { result, error } = await getCode(id)
+
+    favoris = result.data().favoris
+
+    if (favoris.includes(user.reloadUserInfo.screenName)) {
+      const newFavoris = favoris.filter(
+        (favoris: string) => favoris !== user.reloadUserInfo.screenName
+      )
+      updateCollection("codes", id, {
+        favoris: newFavoris,
+      })
+      setLoadingAddCodeOnFavoris(false)
+      setCodeFavoris(codeFavoris - 1)
+      setIsCodeFavoris(false)
+    } else {
+      updateCollection("codes", id, {
+        favoris: [...result.data().favoris, user.reloadUserInfo.screenName],
+      })
+      setCodeFavoris(codeFavoris + 1)
+      setIsCodeFavoris(true)
+    }
+
+    if (error) {
+      setLoadingAddCodeOnFavoris(false)
+    }
+
+    setLoadingAddCodeOnFavoris(false)
+  }
 
   return (
     <div key={id} className="flex flex-col gap-2">
@@ -87,8 +130,36 @@ export default function CardCode({
         </Button>
         <div className="flex items-center justify-start gap-2">
           {user ? (
-            <Button>
-              <Star className="mr-2 h-4 w-4" />0
+            <Button
+              onClick={() => {
+                addCodeOnFavoris(id)
+              }}
+            >
+              {loadingAddCodeOnFavoris ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <>
+                  {isCodeFavoris ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="#F9197F"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#F9197F"
+                      className="mr-2 h-4 w-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                      />
+                    </svg>
+                  ) : (
+                    <Star className="mr-2 h-4 w-4" />
+                  )}
+                  {codeFavoris}
+                </>
+              )}
             </Button>
           ) : (
             <AlertDialog>

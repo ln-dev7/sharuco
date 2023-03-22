@@ -85,6 +85,7 @@ export default function CodePreview() {
                     code={codeInfos.code}
                     description={codeInfos.description}
                     tags={codeInfos.tags}
+                    favoris={codeInfos.favoris}
                   />
                 </Masonry>
               </ResponsiveMasonry>

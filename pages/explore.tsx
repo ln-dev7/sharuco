@@ -93,6 +93,7 @@ export default function Explore() {
                     code: string
                     description: string
                     tags: string[]
+                    favoris: string[]
                   }) => (
                     <CardCode
                       key={code.id}
@@ -102,6 +103,7 @@ export default function Explore() {
                       code={code.code}
                       description={code.description}
                       tags={code.tags}
+                      favoris={code.favoris}
                     />
                   )
                 )}
