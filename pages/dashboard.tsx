@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useCollections } from "@/firebase/firestore/getCollections"
-import { Eye, EyeOff, Loader2, MoreHorizontal, Plus } from "lucide-react"
+import { Eye, EyeOff, Loader2, MoreHorizontal, Plus, Star } from "lucide-react"
 import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
@@ -166,6 +166,10 @@ export default function Dashboard() {
                 <EyeOff className="mr-2 h-4 w-4" />
                 Private code
               </TabsTrigger>
+              <TabsTrigger value="favorite-code">
+                <Star className="mr-2 h-4 w-4" />
+                Favorite code
+              </TabsTrigger>
             </div>
           </TabsList>
           <TabsContent
@@ -175,6 +179,10 @@ export default function Dashboard() {
           <TabsContent
             className="border-none"
             value="private-code"
+          ></TabsContent>
+          <TabsContent
+            className="border-none"
+            value="favorite-code"
           ></TabsContent>
         </Tabs>
       </section>
