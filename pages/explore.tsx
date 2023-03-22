@@ -5,7 +5,7 @@ import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
-import getCollections from "@/firebase/firestore/getCollections"
+import { useCollections } from "@/firebase/firestore/getCollections"
 import { useToast } from "@/hooks/use-toast"
 import copyToClipboard from "@/utils/copyToClipboard"
 import delinearizeCode from "@/utils/delinearizeCode"
@@ -22,42 +22,15 @@ import { useQuery } from "react-query"
 
 import { siteConfig } from "@/config/site"
 import CardCode from "@/components/card-code"
+import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import { Button, buttonVariants } from "@/components/ui/button"
 
 export default function Explore() {
   const { toast } = useToast()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
 
-  const [allCodes, setAllCodes]: [any, (value: any) => void] = useState([])
-
-  useEffect(() => {
-    setLoading(true)
-    const fetchAllCodes = async () => {
-      const { result, error } = await getCollections("codes")
-
-      if (error) {
-        setLoading(false)
-      }
-
-      const allCodesWithId = result.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }))
-
-      setAllCodes(
-        result.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }))
-      )
-
-      setLoading(false)
-    }
-    fetchAllCodes()
-  }, [])
+  const { data, isLoading, isError } = useCollections("codes")
 
   return (
     <Layout>
@@ -78,14 +51,13 @@ export default function Explore() {
           </h1>
         </div>
         <div className="">
-          {loading ? (
-            <Loader />
-          ) : (
+          {isLoading && <Loader />}
+          {data && (
             <ResponsiveMasonry
               columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
             >
               <Masonry gutter="1rem">
-                {allCodes.map(
+                {data.map(
                   (code: {
                     id: string
                     idAuthor: string
@@ -110,6 +82,7 @@ export default function Explore() {
               </Masonry>
             </ResponsiveMasonry>
           )}
+          {isError && <Error />}
         </div>
       </section>
     </Layout>
