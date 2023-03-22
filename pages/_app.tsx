@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes"
 
 import "@/styles/globals.css"
 import { QueryClient, QueryClientProvider } from "react-query"
+import { ReactQueryDevtools, reactQueryDevtools } from "react-query/devtools"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -14,7 +15,13 @@ const fontSans = FontSans({
 })
 
 export default function App({ Component, pageProps }: AppProps) {
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        //refetchOnWindowFocus: false,
+      },
+    },
+  })
   return (
     <>
       <style jsx global>{`
@@ -50,6 +57,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <QueryClientProvider client={queryClient}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Component {...pageProps} />
+            <ReactQueryDevtools initialIsOpen={false} />
           </ThemeProvider>
         </QueryClientProvider>
       </AuthContextProvider>

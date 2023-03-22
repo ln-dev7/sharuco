@@ -5,7 +5,8 @@ import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
-import {useCollections} from "@/firebase/firestore/getCollections"
+import { useCollection } from "@/firebase/firestore/getCollection"
+import { useCollections } from "@/firebase/firestore/getCollections"
 import { useToast } from "@/hooks/use-toast"
 import copyToClipboard from "@/utils/copyToClipboard"
 import delinearizeCode from "@/utils/delinearizeCode"
@@ -19,8 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ToastAction } from "@/components/ui/toast"
 import "prism-themes/themes/prism-one-dark.min.css"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
-import getCode from "@/firebase/firestore/getCode"
-import updateCollection from "@/firebase/firestore/updateCollection"
+import {useUpdateCollection} from "@/firebase/firestore/updateCollection"
 import { useQuery } from "react-query"
 import {
   EmailIcon,
@@ -75,27 +75,40 @@ export default function CardCode({
     favoris.length
   )
   const [isCodeFavoris, setIsCodeFavoris] = useState(
-    favoris.includes(user.reloadUserInfo.screenName)
+    favoris.includes(user ? user.reloadUserInfo.screenName : "undefined")
   )
+
+  const {
+    data: dataCodes,
+    isLoading: isLoadingCodes,
+    isError: isErrorCodes,
+  } = useCollection(id, "codes")
+
+  const {
+    data: dataAuthor,
+    isLoading: isLoadingAuthor,
+    isError: isErrorAuthor,
+  } = useCollection(user && user.reloadUserInfo.screenName, "users")
 
   const addCodeOnFavoris = async (id: string) => {
     setLoadingAddCodeOnFavoris(true)
-    const { result, error } = await getCode(id)
 
-    favoris = result.data().favoris
+    favoris = dataCodes.data.favoris
 
     if (favoris.includes(user.reloadUserInfo.screenName)) {
       const newFavoris = favoris.filter(
         (favoris: string) => favoris !== user.reloadUserInfo.screenName
       )
-      updateCollection("codes", id, {
+      
+      const { result, error } = await useUpdateCollection("codes", id, {
         favoris: newFavoris,
       })
+
       setLoadingAddCodeOnFavoris(false)
       setCodeFavoris(codeFavoris - 1)
       setIsCodeFavoris(false)
     } else {
-      updateCollection("codes", id, {
+      useUpdateCollection("codes", id, {
         favoris: [...result.data().favoris, user.reloadUserInfo.screenName],
       })
       setCodeFavoris(codeFavoris + 1)
@@ -213,7 +226,7 @@ export default function CardCode({
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>
-                  Like a Code to share the love.
+                  Share this code on your social networks.
                 </AlertDialogTitle>
                 <AlertDialogDescription>
                   <div className="flex gap-2">

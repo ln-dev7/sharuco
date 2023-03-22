@@ -12,8 +12,9 @@ const getCollections = async (collectionName) => {
 }
 
 const useCollections = (collectionName) => {
-  return useQuery(["collections", collectionName], () =>
-    getCollections(collectionName)
+  return useQuery(
+    ["collections", collectionName],
+    () => getCollections(collectionName)
   )
 }
 

@@ -48,31 +48,31 @@ export default function User() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
-        {isLoading && <Loader />}
-        {data && data.exists && (
-          <div className="flex flex-col items-center gap-4">
-            <Avatar className="h-40 w-40 cursor-pointer">
-              <AvatarImage
-                src={data.data.photoURL}
-                alt={data.data.displayName}
-              />
-              <AvatarFallback>{data.data.displayName}</AvatarFallback>
-            </Avatar>
-            <h1 className="text-4xl font-bold">{data.data.displayName}</h1>
-          </div>
-        )}
-        {data && !data.exists && (
-          <div className="flex flex-col items-center gap-4">
-            <h1 className="tesxt-4xl font-bold">User not found</h1>
-            <Link
-              href="/"
-              className={buttonVariants({ size: "lg", variant: "outline" })}
-            >
-              Go back to home
-            </Link>
-          </div>
-        )}
-        {isError && <Error />}
+          {isLoading && <Loader />}
+          {data && data.exists && (
+            <div className="flex flex-col items-center gap-4">
+              <Avatar className="h-40 w-40 cursor-pointer">
+                <AvatarImage
+                  src={data.data.photoURL}
+                  alt={data.data.displayName}
+                />
+                <AvatarFallback>{data.data.displayName}</AvatarFallback>
+              </Avatar>
+              <h1 className="text-4xl font-bold">{data.data.displayName}</h1>
+            </div>
+          )}
+          {data && !data.exists && (
+            <div className="flex flex-col items-center gap-4">
+              <h1 className="tesxt-4xl font-bold">User not found</h1>
+              <Link
+                href="/"
+                className={buttonVariants({ size: "lg", variant: "outline" })}
+              >
+                Go back to home
+              </Link>
+            </div>
+          )}
+          {isError && <Error />}
       </section>
     </Layout>
   )
