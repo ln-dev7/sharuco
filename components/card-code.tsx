@@ -195,7 +195,7 @@ export default function CardCode({
           </AlertDialog>
         </div>
       </div>
-      <div className="overflow-hiddenrounded-lg">
+      <div className="overflow-hidden rounded-lg">
         <pre className="w-auto overflow-x-auto rounded-lg border border-slate-600 bg-slate-900 p-4 dark:bg-black">
           <code
             className="text-white"
@@ -221,7 +221,7 @@ export default function CardCode({
         {description}
       </p>
       <div className="flex items-center justify-start gap-2">
-        {tags.map((tag: string) => (
+        {tags?.map((tag: string) => (
           <span
             key={tag}
             className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
