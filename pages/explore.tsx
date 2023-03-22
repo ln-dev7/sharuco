@@ -21,6 +21,7 @@ import "prism-themes/themes/prism-one-dark.min.css"
 import { useQuery } from "react-query"
 
 import { siteConfig } from "@/config/site"
+import CardCode from "@/components/card-code"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -36,14 +37,28 @@ export default function Explore() {
     setLoading(true)
     const fetchAllCodes = async () => {
       const { result, error } = await getCollections("codes")
+
       if (error) {
         setLoading(false)
       }
-      setAllCodes(result.docs.map((doc) => doc.data()))
+
+      const allCodesWithId = result.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }))
+
+      setAllCodes(
+        result.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }))
+      )
+
       setLoading(false)
     }
     fetchAllCodes()
   }, [])
+
   return (
     <Layout>
       <Head>
@@ -79,73 +94,15 @@ export default function Explore() {
                     description: string
                     tags: string[]
                   }) => (
-                    <div key={code.id} className="flex flex-col gap-2">
-                      <div className="flex items-center justify-between">
-                        <Button
-                          variant="subtle"
-                          onClick={() => {
-                            copyToClipboard(code.code)
-                            toast({
-                              title: "Copied to clipboard",
-                              description:
-                                "The code has been copied to your clipboard",
-                              action: (
-                                <ToastAction altText="Goto schedule to undo">
-                                  Undo
-                                </ToastAction>
-                              ),
-                            })
-                          }}
-                        >
-                          <Copy className="mr-2 h-4 w-4" />
-                          Copy code
-                        </Button>
-                        <div className="flex items-center justify-start gap-2">
-                          <Button>
-                            <Star className="mr-2 h-4 w-4" />0
-                          </Button>
-                          <Button>
-                            <Share className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                      <pre className="w-auto overflow-x-auto rounded-lg border border-slate-600 bg-slate-900 p-4 dark:bg-black">
-                        <code
-                          className="text-white"
-                          dangerouslySetInnerHTML={{
-                            __html: highlight(code.code, code.language),
-                          }}
-                        />
-                      </pre>
-                      <Link
-                        href={`/${code.idAuthor}`}
-                        className="flex items-center justify-start gap-2"
-                      >
-                        <Avatar className="h-8 w-8 cursor-pointer">
-                          <AvatarImage
-                            src="https://github.com/shadcn.png"
-                            alt="@ln_dev7"
-                          />
-                          <AvatarFallback>LN</AvatarFallback>
-                        </Avatar>
-                        <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
-                          {code.idAuthor}
-                        </span>
-                      </Link>
-                      <p className="text-sm text-slate-700 dark:text-slate-400">
-                        {code.description}
-                      </p>
-                      <div className="flex items-center justify-start gap-2">
-                        {code.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                    <CardCode
+                      key={code.id}
+                      id={code.id}
+                      idAuthor={code.idAuthor}
+                      language={code.language}
+                      code={code.code}
+                      description={code.description}
+                      tags={code.tags}
+                    />
                   )
                 )}
               </Masonry>

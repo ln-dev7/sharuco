@@ -45,7 +45,7 @@ export function MainNav({ items }: MainNavProps) {
                   {item.title}
                   {item.external && <ExternalLink className="ml-2 h-4 w-4" />}
                   {item.disabled && (
-                    <span className="ml-2 rounded-md bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-slate-900">
+                    <span className="ml-2 rounded-xl bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-slate-900">
                       Soon
                     </span>
                   )}
@@ -83,7 +83,7 @@ export function MainNav({ items }: MainNavProps) {
                     {item.title}
                     {item.external && <ExternalLink className="ml-2 h-4 w-4" />}
                     {item.disabled && (
-                      <span className="ml-2 rounded-md bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-slate-900">
+                      <span className="ml-2 rounded-xl bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-slate-900">
                         Soon
                       </span>
                     )}
