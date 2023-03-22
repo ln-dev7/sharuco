@@ -33,8 +33,6 @@ export default function User() {
     "users"
   )
 
-  console.log(data)
-
   return (
     <Layout>
       <Head>
