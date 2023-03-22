@@ -90,8 +90,8 @@ export default function IndexPage() {
         </div>
         {!loading ? (
           <p className="text-sm text-slate-700 dark:text-slate-400">
-            <span className="font-bold">{allUsers.length}</span> registered on
-            the platform
+            <span className="font-bold">{allUsers.length}</span> users
+            registered on sharuco.
           </p>
         ) : (
           <Loader2 className="h-4 w-4 animate-spin" />

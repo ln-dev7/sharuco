@@ -26,14 +26,12 @@ export function AvatarUser() {
           <AvatarFallback>LN</AvatarFallback>
         </Avatar>
       </SheetTrigger>
-      <SheetContent position="right" size="sm">
+      <SheetContent position="right" size="custom_w_200">
         <SheetHeader>
-          <SheetTitle>Edit profile</SheetTitle>
-          <SheetDescription>
-            Make changes to your profile here. Click save when you&apos;re done.
-          </SheetDescription>
+          <SheetTitle>Hello LN</SheetTitle>
+          <SheetDescription>This is your profile.</SheetDescription>
         </SheetHeader>
-        <div className="grid gap-4 py-4">
+        {/* <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
               Name
@@ -46,9 +44,9 @@ export function AvatarUser() {
             </Label>
             <Input id="username" value="@peduarte" className="col-span-3" />
           </div>
-        </div>
+        </div> */}
         <SheetFooter>
-          <Button type="submit">Save changes</Button>
+          {/* <Button type="submit">Save changes</Button> */}
           <Button variant="destructive" onClick={() => logout()}>
             Logout
           </Button>

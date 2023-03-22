@@ -71,6 +71,7 @@ const sheetVariants = cva(
         lg: "",
         xl: "",
         full: "",
+        custom_w_200: "",
       },
     },
     compoundVariants: [
@@ -133,6 +134,11 @@ const sheetVariants = cva(
         position: ["right", "left"],
         size: "full",
         class: "w-screen",
+      },
+      {
+        position: "right",
+        size: "custom_w_200",
+        class: "w-[320px]",
       },
     ],
     defaultVariants: {

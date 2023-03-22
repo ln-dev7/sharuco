@@ -1,5 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
+import { ExternalLink } from "lucide-react"
 
 import { NavItem } from "@/types/nav"
 import { siteConfig } from "@/config/site"
@@ -35,13 +36,19 @@ export function MainNav({ items }: MainNavProps) {
               item.href && (
                 <Link
                   key={index}
-                  href={item.href}
+                  href={item.disabled ? "#" : item.href}
                   className={cn(
                     "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent py-2 px-4 text-sm font-semibold transition-colors hover:bg-slate-100 focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-slate-50 data-[active]:bg-slate-50 dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[state=open]:bg-slate-800 dark:data-[active]:bg-slate-800",
-                    item.disabled && "cursor-not-allowed opacity-80"
+                    item.disabled && "cursor-not-allowed"
                   )}
                 >
                   {item.title}
+                  {item.external && <ExternalLink className="ml-2 h-4 w-4" />}
+                  {item.disabled && (
+                    <span className="ml-2 rounded-md bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-slate-900">
+                      Soon
+                    </span>
+                  )}
                 </Link>
               )
           )}
@@ -72,7 +79,15 @@ export function MainNav({ items }: MainNavProps) {
             (item, index) =>
               item.href && (
                 <DropdownMenuItem key={index} asChild>
-                  <Link href={item.href}>{item.title}</Link>
+                  <Link href={item.disabled ? "#" : item.href}>
+                    {item.title}
+                    {item.external && <ExternalLink className="ml-2 h-4 w-4" />}
+                    {item.disabled && (
+                      <span className="ml-2 rounded-md bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-slate-900">
+                        Soon
+                      </span>
+                    )}
+                  </Link>
                 </DropdownMenuItem>
               )
           )}
