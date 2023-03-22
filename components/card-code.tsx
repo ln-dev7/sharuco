@@ -67,6 +67,12 @@ export default function CardCode({
   const { user } = useAuthContext()
   const { login, isPending } = useGitHubLoign()
 
+  const {
+    data: dataUser,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+  } = useCollection(idAuthor, "users")
+
   const shareUrl = `https://shacuro.lndev.me/code-preview/${id}`
 
   // Add code on favoris
@@ -228,50 +234,48 @@ export default function CardCode({
                 <AlertDialogTitle>
                   Share this code on your social networks.
                 </AlertDialogTitle>
-                <AlertDialogDescription>
-                  <div className="flex gap-2">
-                    <FacebookShareButton
-                      url={shareUrl}
-                      quote={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here`}
-                    >
-                      <FacebookIcon size={38} round />
-                    </FacebookShareButton>
-                    <TwitterShareButton
-                      url={shareUrl}
-                      title={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here.`}
-                      hashtags={["CaParleDev", "ShareWithSharuco"]}
-                    >
-                      <TwitterIcon size={38} round />
-                    </TwitterShareButton>
-                    <LinkedinShareButton
-                      url={shareUrl}
-                      title={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here. #CaParleDev`}
-                      source="https://shacuro.lndev.me"
-                    >
-                      <LinkedinIcon size={38} round />
-                    </LinkedinShareButton>
-                    <EmailShareButton
-                      url={shareUrl}
-                      subject={`Share code on shacuro.lndev.me`}
-                      body={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here. #CaParleDev`}
-                    >
-                      <EmailIcon size={38} round />
-                    </EmailShareButton>
-                    <WhatsappShareButton
-                      url={shareUrl}
-                      title={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here. #CaParleDev`}
-                    >
-                      <WhatsappIcon size={38} round />
-                    </WhatsappShareButton>
-                    <TelegramShareButton
-                      url={shareUrl}
-                      title={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here. #CaParleDev`}
-                    >
-                      <TelegramIcon size={38} round />
-                    </TelegramShareButton>
-                  </div>
-                </AlertDialogDescription>
               </AlertDialogHeader>
+              <div className="flex gap-2">
+                <FacebookShareButton
+                  url={shareUrl}
+                  quote={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here`}
+                >
+                  <FacebookIcon size={38} round />
+                </FacebookShareButton>
+                <TwitterShareButton
+                  url={shareUrl}
+                  title={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here.`}
+                  hashtags={["CaParleDev", "ShareWithSharuco"]}
+                >
+                  <TwitterIcon size={38} round />
+                </TwitterShareButton>
+                <LinkedinShareButton
+                  url={shareUrl}
+                  title={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                  source="https://shacuro.lndev.me"
+                >
+                  <LinkedinIcon size={38} round />
+                </LinkedinShareButton>
+                <EmailShareButton
+                  url={shareUrl}
+                  subject={`Share code on shacuro.lndev.me`}
+                  body={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                >
+                  <EmailIcon size={38} round />
+                </EmailShareButton>
+                <WhatsappShareButton
+                  url={shareUrl}
+                  title={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                >
+                  <WhatsappIcon size={38} round />
+                </WhatsappShareButton>
+                <TelegramShareButton
+                  url={shareUrl}
+                  title={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                >
+                  <TelegramIcon size={38} round />
+                </TelegramShareButton>
+              </div>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
               </AlertDialogFooter>
@@ -294,8 +298,26 @@ export default function CardCode({
         className="flex items-center justify-start gap-2"
       >
         <Avatar className="h-8 w-8 cursor-pointer">
-          <AvatarImage src="https://github.com/shadcn.png" alt="@ln_dev7" />
-          <AvatarFallback>LN</AvatarFallback>
+          {isLoadingUser && (
+            <AvatarFallback>
+              <Loader />
+            </AvatarFallback>
+          )}
+          {dataUser && dataUser.exists && (
+            <>
+              <AvatarImage
+                src={dataUser.data.photoURL}
+                alt={dataUser.data.displayName}
+              />
+              <AvatarFallback>
+                {dataUser.data.displayName.split(" ")[1] === undefined
+                  ? dataUser.data.displayName.split(" ")[0][0] +
+                    dataUser.data.displayName.split(" ")[0][1]
+                  : dataUser.data.displayName.split(" ")[0][0] +
+                    dataUser.data.displayName.split(" ")[1][0]}
+              </AvatarFallback>
+            </>
+          )}
         </Avatar>
         <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
           {idAuthor}
@@ -304,7 +326,7 @@ export default function CardCode({
       <p className="text-sm text-slate-700 dark:text-slate-400">
         {description}
       </p>
-      <div className="flex items-center justify-start gap-2">
+      <div className="mb-4 flex items-center justify-start gap-2">
         {tags?.map((tag: string) => (
           <span
             key={tag}

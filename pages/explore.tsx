@@ -18,6 +18,8 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ToastAction } from "@/components/ui/toast"
 import "prism-themes/themes/prism-one-dark.min.css"
+import { useCollection } from "@/firebase/firestore/getCollection"
+import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
 import moment from "moment"
 import { useQuery } from "react-query"
 
@@ -31,7 +33,7 @@ import { Button, buttonVariants } from "@/components/ui/button"
 export default function Explore() {
   const { toast } = useToast()
 
-  const { data, isLoading, isError } = useCollections("codes")
+  const { isLoading, isError, data } = useGetIsPrivateCodes(false)
 
   return (
     <Layout>
