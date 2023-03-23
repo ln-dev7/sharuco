@@ -76,6 +76,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { ToastAction } from "@/components/ui/toast"
 import "prism-themes/themes/prism-one-dark.min.css"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
+import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
 import { useQuery } from "react-query"
 import {
@@ -127,6 +128,17 @@ export default function CardCodeAuthor({
     isLoading: isLoadingAuthor,
     isError: isErrorAuthor,
   } = useDocument(user && user.reloadUserInfo.screenName, "users")
+
+  const {
+    deleteDocument,
+    isLoading: isLoadingDD,
+    isError: isErrorDD,
+    isSuccess: isSuccessDD,
+  }: any = useDeleteDocument("codes")
+
+  const handleDeleteDocument = () => {
+    deleteDocument(id)
+  }
 
   // Add code on favoris
   const [loadingAddCodeOnFavoris, setLoadingAddCodeOnFavoris] = useState(false)
@@ -414,6 +426,22 @@ export default function CardCodeAuthor({
                       <AlertDialogTitle>
                         Are you sure you want to delete this code ?
                       </AlertDialogTitle>
+                      {isSuccessDD && (
+                        <AlertDialogDescription>
+                          <span className="pt-4 text-sm font-bold text-red-500">
+                            Your code has been added successfully !
+                          </span>
+                          <span
+                            onClick={() => {
+                              window.location.reload()
+                            }}
+                            className="cursor-pointer pt-4 text-sm font-bold italic underline"
+                          >
+                            {" "}
+                            please reload page to see changes
+                          </span>
+                        </AlertDialogDescription>
+                      )}
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -421,10 +449,12 @@ export default function CardCodeAuthor({
                         className={cn(
                           "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                         )}
-                        disabled={isPending}
-                        onClick={login}
+                        disabled={isLoadingDD}
+                        onClick={
+                          !isLoadingDD ? handleDeleteDocument : undefined
+                        }
                       >
-                        {isPending && (
+                        {isLoadingDD && (
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         )}
                         Delete

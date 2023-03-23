@@ -28,28 +28,35 @@
 //   return { result, error }
 // }
 
-import { collection, addDoc, getFirestore, setDoc } from "firebase/firestore"
+import { addDoc, collection, getFirestore, setDoc } from "firebase/firestore"
+import moment from "moment"
 import { useMutation, useQueryClient } from "react-query"
 
 import firebase_app from "../config"
 
 const db = getFirestore(firebase_app)
 
-const useCreateDocument = (collectionName, newData) => {
-  const createDocument = async (newData) => {
-    const docRef = await addDoc(collection(db, collectionName), newData)
-    const newCollection = {
-      ...newData,
-      id: docRef.id,
-    }
-    return newCollection
+const createDocument = async (newData, collectionName) => {
+  const docRef = await addDoc(collection(db, collectionName), newData)
+  const newCollection = {
+    ...newData,
+    id: docRef.id,
   }
+  return newCollection
+}
 
-  return useMutation(() => createDocument(newData), {
-    onSuccess: () => {
-      queryCache.invalidateQueries(["collections", collectionName])
-    },
-  })
+const useCreateDocument = (collectionName) => {
+  const mutation = useMutation(
+    [`create-document-${moment().valueOf()}`],
+    (newData) => createDocument(newData, collectionName)
+  )
+
+  return {
+    createDocument: mutation.mutate,
+    isLoading: mutation.isLoading,
+    isError: mutation.isError,
+    isSuccess: mutation.isSuccess,
+  }
 }
 
 export { useCreateDocument }

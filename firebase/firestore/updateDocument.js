@@ -74,8 +74,8 @@ const updateDocumentWithQuery = async ({
   }
 }
 
-const useUpdateDoocument = () => {
+const useUpdateDocument = () => {
   return useMutation(updateDocumentWithQuery)
 }
 
-export { useUpdateDoocument }
+export { useUpdateDocument }
