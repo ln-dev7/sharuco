@@ -272,6 +272,15 @@ export default function Dashboard() {
                   {isSuccess && (
                     <p className="pt-4 text-sm font-bold text-green-500">
                       Your code has been added successfully !
+                      <span
+                        onClick={() => {
+                          window.location.reload()
+                        }}
+                        className="cursor-pointer pt-4 text-sm font-bold italic text-slate-400 underline"
+                      >
+                        {" "}
+                        please reload page to see changes
+                      </span>
                     </p>
                   )}
                   {isError && (
