@@ -11,7 +11,6 @@ import { useDocuments } from "@/firebase/firestore/getDocuments"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
-import { useToast } from "@/hooks/use-toast"
 import copyToClipboard from "@/utils/copyToClipboard"
 import delinearizeCode from "@/utils/delinearizeCode"
 import highlight from "@/utils/highlight"
@@ -78,6 +77,7 @@ import "prism-themes/themes/prism-one-dark.min.css"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
+import toast, { Toaster } from "react-hot-toast"
 import { useQuery } from "react-query"
 import {
   EmailIcon,
@@ -103,9 +103,10 @@ export default function CardCodeAuthor({
   code,
   description,
   tags,
-  favoris,
+  favoris
 }) {
-  const { toast } = useToast()
+  const notifyCodeCopied = () => toast.success("Code copied to clipboard")
+  const notifyUrlCopied = () => toast.success("Url of code copied to clipboard")
   const { user } = useAuthContext()
   const { login, isPending } = useGitHubLoign()
 
@@ -183,18 +184,13 @@ export default function CardCodeAuthor({
 
   return (
     <div key={id} className="flex flex-col gap-2">
+      <Toaster position="top-right" reverseOrder={false} />
       <div className="flex items-center justify-between">
         <Button
           variant="subtle"
           onClick={() => {
             copyToClipboard(code)
-            toast({
-              title: "Copied to clipboard",
-              description: "The code has been copied to your clipboard",
-              action: (
-                <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
-              ),
-            })
+            notifyCodeCopied()
           }}
         >
           <Copy className="mr-2 h-4 w-4" />
@@ -394,16 +390,7 @@ export default function CardCodeAuthor({
                         className="h-12 w-12 rounded-full"
                         onClick={() => {
                           copyToClipboard(shareUrl)
-                          toast({
-                            title: "Copied to clipboard",
-                            description:
-                              "The link of code has been copied to your clipboard",
-                            action: (
-                              <ToastAction altText="Goto schedule to undo">
-                                Undo
-                              </ToastAction>
-                            ),
-                          })
+                          notifyUrlCopied()
                         }}
                       >
                         <Copy className="h-4 w-4" />
@@ -426,22 +413,6 @@ export default function CardCodeAuthor({
                       <AlertDialogTitle>
                         Are you sure you want to delete this code ?
                       </AlertDialogTitle>
-                      {isSuccessDD && (
-                        <AlertDialogDescription>
-                          <span className="pt-4 text-sm font-bold text-red-500">
-                            Your code has been added successfully !
-                          </span>
-                          <span
-                            onClick={() => {
-                              window.location.reload()
-                            }}
-                            className="cursor-pointer pt-4 text-sm font-bold italic underline"
-                          >
-                            {" "}
-                            please reload page to see changes
-                          </span>
-                        </AlertDialogDescription>
-                      )}
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>

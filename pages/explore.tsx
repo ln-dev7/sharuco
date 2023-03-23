@@ -6,7 +6,6 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
-import { useToast } from "@/hooks/use-toast"
 import copyToClipboard from "@/utils/copyToClipboard"
 import delinearizeCode from "@/utils/delinearizeCode"
 import highlight from "@/utils/highlight"
@@ -31,7 +30,6 @@ import Loader from "@/components/loader"
 import { Button, buttonVariants } from "@/components/ui/button"
 
 export default function Explore() {
-  const { toast } = useToast()
 
   const {
     isLoading: isLoadingPublicCodes,
@@ -66,7 +64,7 @@ export default function Explore() {
               <Masonry gutter="1rem">
                 {dataPublicCodes
                   .sort((a, b) => {
-                    return moment(b.createdAt).diff(moment(a.createdAt))
+                    return moment(b.date).diff(moment(a.date))
                   })
                   .map(
                     (code: {

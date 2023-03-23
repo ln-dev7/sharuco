@@ -1,6 +1,6 @@
 import { deleteDoc, doc, getFirestore } from "firebase/firestore"
 import moment from "moment"
-import { useMutation } from "react-query"
+import { useMutation, useQueryClient } from "react-query"
 
 import firebase_app from "../config"
 
@@ -11,9 +11,17 @@ const deleteDocument = async (documentId, collectionName) => {
 }
 
 const useDeleteDocument = (collectionName) => {
+  const queryClient = useQueryClient()
   const mutation = useMutation(
     [`delete-document-${moment().valueOf()}`],
-    (documentId) => deleteDocument(documentId, collectionName)
+    (documentId) => deleteDocument(documentId, collectionName),
+    {
+      onSuccess: (data, variables, context) => {
+        queryClient.invalidateQueries("isprivate-code-from-user-false")
+        queryClient.invalidateQueries("isprivate-code-from-user-true")
+        queryClient.invalidateQueries("favorites-codes")
+      },
+    }
   )
 
   return {

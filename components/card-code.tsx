@@ -7,13 +7,13 @@ import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
-import { useToast } from "@/hooks/use-toast"
 import copyToClipboard from "@/utils/copyToClipboard"
 import delinearizeCode from "@/utils/delinearizeCode"
 import highlight from "@/utils/highlight"
 import indentCode from "@/utils/indentCode"
 import { Copy, Github, Loader2, Share, Star } from "lucide-react"
 import Prism from "prismjs"
+import toast, { Toaster } from "react-hot-toast"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -63,7 +63,8 @@ export default function CardCode({
   tags,
   favoris,
 }) {
-  const { toast } = useToast()
+  const notifyCodeCopied = () => toast.success("Code copied to clipboard")
+  const notifyUrlCopied = () => toast.success("Url of code copied to clipboard")
   const { user } = useAuthContext()
   const { login, isPending } = useGitHubLoign()
 
@@ -130,18 +131,13 @@ export default function CardCode({
 
   return (
     <div key={id} className="flex flex-col gap-2">
+      <Toaster position="top-right" reverseOrder={false} />
       <div className="flex items-center justify-between">
         <Button
           variant="subtle"
           onClick={() => {
             copyToClipboard(code)
-            toast({
-              title: "Copied to clipboard",
-              description: "The code has been copied to your clipboard",
-              action: (
-                <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
-              ),
-            })
+            notifyCodeCopied()
           }}
         >
           <Copy className="mr-2 h-4 w-4" />
@@ -280,16 +276,7 @@ export default function CardCode({
                   className="h-12 w-12 rounded-full"
                   onClick={() => {
                     copyToClipboard(shareUrl)
-                    toast({
-                      title: "Copied to clipboard",
-                      description:
-                        "The link of code has been copied to your clipboard",
-                      action: (
-                        <ToastAction altText="Goto schedule to undo">
-                          Undo
-                        </ToastAction>
-                      ),
-                    })
+                    notifyUrlCopied()
                   }}
                 >
                   <Copy className="h-4 w-4" />
@@ -344,7 +331,7 @@ export default function CardCode({
           </span>
         </Link>
         <span className="p-2 text-sm font-bold italic text-slate-700 dark:text-slate-400">
-          {language}
+          {language.toLowerCase()}
         </span>
       </div>
       <p className="text-sm text-slate-700 dark:text-slate-400">

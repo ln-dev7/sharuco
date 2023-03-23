@@ -46,9 +46,16 @@ const createDocument = async (newData, collectionName) => {
 }
 
 const useCreateDocument = (collectionName) => {
+  const queryClient = useQueryClient()
   const mutation = useMutation(
     [`create-document-${moment().valueOf()}`],
-    (newData) => createDocument(newData, collectionName)
+    (newData) => createDocument(newData, collectionName),
+    {
+      onSuccess: (data, variables, context) => {
+        queryClient.invalidateQueries("isprivate-code-from-user-false")
+        queryClient.invalidateQueries("isprivate-code-from-user-true")
+      },
+    }
   )
 
   return {

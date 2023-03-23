@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
-import { useToast } from "@/hooks/use-toast"
+import toast, { Toaster } from "react-hot-toast"
 import delinearizeCode from "@/utils/delinearizeCode"
 import indentCode from "@/utils/indentCode"
 import { Copy, Github, Loader2, Star } from "lucide-react"
@@ -76,7 +76,7 @@ export default function User() {
                   <Masonry gutter="1rem">
                     {dataPublicCodes
                       .sort((a, b) => {
-                        return moment(b.createdAt).diff(moment(a.createdAt))
+                        return moment(b.date).diff(moment(a.date))
                       })
                       .map(
                         (code: {

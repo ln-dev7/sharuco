@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -24,6 +24,7 @@ import {
 } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
+import toast, { Toaster } from "react-hot-toast"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
@@ -63,6 +64,8 @@ import { Textarea } from "@/components/ui/textarea"
 
 export default function Dashboard() {
   const { logout } = useGitHubLogout()
+  const notifyCodeAdded = () =>
+    toast.success("Your code has been added successfully !")
 
   const { user } = useAuthContext()
   const router = useRouter()
@@ -103,6 +106,7 @@ export default function Dashboard() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -114,7 +118,7 @@ export default function Dashboard() {
   const onSubmit = async (data) => {
     const { code, description, language, tags, isPrivate } = data
     const linearCode = linearizeCode(code)
-    const now = moment().valueOf()
+    const now = Date.now()
     const tabTabs = tags ? tags.split(",") : []
     if (tabTabs[tabTabs.length - 1] === "") {
       tabTabs.pop()
@@ -132,7 +136,21 @@ export default function Dashboard() {
     }
 
     createDocument(newDocument)
+
+    reset({
+      code: "",
+      description: "",
+      language: "",
+      tags: "",
+      isPrivate: false,
+    })
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      notifyCodeAdded()
+    }
+  }, [isSuccess])
 
   return (
     <Layout>
@@ -147,6 +165,7 @@ export default function Dashboard() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+        <Toaster position="top-right" reverseOrder={false} />
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Dashboard
@@ -269,20 +288,6 @@ export default function Dashboard() {
                       )}
                     </Label>
                   </div>
-                  {isSuccess && (
-                    <p className="pt-4 text-sm font-bold text-green-500">
-                      Your code has been added successfully !
-                      <span
-                        onClick={() => {
-                          window.location.reload()
-                        }}
-                        className="cursor-pointer pt-4 text-sm font-bold italic text-slate-400 underline"
-                      >
-                        {" "}
-                        please reload page to see changes
-                      </span>
-                    </p>
-                  )}
                   {isError && (
                     <p className="pt-4 text-sm font-bold text-red-500">
                       An error has occurred, please try again later.
@@ -343,7 +348,7 @@ export default function Dashboard() {
                   <Masonry gutter="1rem">
                     {dataPublicCodes
                       .sort((a, b) => {
-                        return moment(b.createdAt).diff(moment(a.createdAt))
+                        return moment(b.date).diff(moment(a.date))
                       })
                       .map(
                         (code: {
@@ -391,7 +396,7 @@ export default function Dashboard() {
                   <Masonry gutter="1rem">
                     {dataPrivateCodes
                       .sort((a, b) => {
-                        return moment(b.createdAt).diff(moment(a.createdAt))
+                        return moment(b.date).diff(moment(a.date))
                       })
                       .map(
                         (code: {
@@ -439,7 +444,7 @@ export default function Dashboard() {
                   <Masonry gutter="1rem">
                     {dataFavoriteCodes
                       .sort((a, b) => {
-                        return moment(b.createdAt).diff(moment(a.createdAt))
+                        return moment(b.date).diff(moment(a.date))
                       })
                       .map(
                         (code: {
