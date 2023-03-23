@@ -477,6 +477,43 @@ export default function Dashboard() {
             {isErrorFavoriteCodes && <Error />}
           </TabsContent>
         </Tabs>
+        {/* <div className="flex flex-col items-start gap-2">
+          <h1 className="mb-2 text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-3xl lg:text-3xl">
+            Danger Zone
+          </h1>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive">Delete your account</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Are you sure you want to delete your account ?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action is irreversible, please reflect beforehand. You
+                  will lose all your codes.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <button
+                  className={cn(
+                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                  )}
+                  disabled={isLoading}
+                  onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
+                >
+                  {isLoading && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Yes I&apos;m sure !
+                </button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div> */}
       </section>
     </Layout>
   )

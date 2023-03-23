@@ -7,7 +7,7 @@ interface SiteConfig {
   links: {
     twitter: string
     github: string
-    donation: string
+    explore: string
   }
 }
 
@@ -29,10 +29,15 @@ export const siteConfig: SiteConfig = {
       href: "https://www.producthunt.com/products/sharuco",
       external: true,
     },
+    {
+      title: "Donnation",
+      href: "https://www.buymeacoffee.com/lndev",
+      external: true,
+    },
   ],
   links: {
-    twitter: "https://twitter.com/ln_dev7",
+    twitter: "https://twitter.com/sharuco_app",
     github: "https://github.com/ln-dev7/sharuco",
-    donation: "https://www.buymeacoffee.com/lndev",
+    explore: "/explore",
   },
 }

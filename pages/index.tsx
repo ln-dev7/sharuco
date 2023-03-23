@@ -42,12 +42,10 @@ export default function IndexPage() {
         </div>
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 md:flex-row">
           <Link
-            href={siteConfig.links.donation}
-            target="_blank"
-            rel="noreferrer"
+            href={siteConfig.links.explore}
             className={buttonVariants({ size: "lg" })}
           >
-            Donnation
+            Explore code
           </Link>
           {user ? (
             <Link
