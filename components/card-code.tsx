@@ -5,8 +5,8 @@ import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
-import { useCollection } from "@/firebase/firestore/getCollection"
-import { useCollections } from "@/firebase/firestore/getCollections"
+import { useDocument } from "@/firebase/firestore/getDocument"
+import { useDocuments } from "@/firebase/firestore/getDocuments"
 import { useToast } from "@/hooks/use-toast"
 import copyToClipboard from "@/utils/copyToClipboard"
 import delinearizeCode from "@/utils/delinearizeCode"
@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ToastAction } from "@/components/ui/toast"
 import "prism-themes/themes/prism-one-dark.min.css"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
-import { useUpdateCollection } from "@/firebase/firestore/updateCollection"
+import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
 import { useQuery } from "react-query"
 import {
   EmailIcon,
@@ -67,13 +67,25 @@ export default function CardCode({
   const { user } = useAuthContext()
   const { login, isPending } = useGitHubLoign()
 
+  const shareUrl = `https://shacuro.lndev.me/code-preview/${id}`
+
   const {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useCollection(idAuthor, "users")
+  } = useDocument(idAuthor, "users")
 
-  const shareUrl = `https://shacuro.lndev.me/code-preview/${id}`
+  const {
+    data: dataCodes,
+    isLoading: isLoadingCodes,
+    isError: isErrorCodes,
+  } = useDocument(id, "codes")
+
+  const {
+    data: dataAuthor,
+    isLoading: isLoadingAuthor,
+    isError: isErrorAuthor,
+  } = useDocument(user && user.reloadUserInfo.screenName, "users")
 
   // Add code on favoris
   const [loadingAddCodeOnFavoris, setLoadingAddCodeOnFavoris] = useState(false)
@@ -83,18 +95,6 @@ export default function CardCode({
   const [isCodeFavoris, setIsCodeFavoris] = useState(
     favoris.includes(user ? user.reloadUserInfo.screenName : "undefined")
   )
-
-  const {
-    data: dataCodes,
-    isLoading: isLoadingCodes,
-    isError: isErrorCodes,
-  } = useCollection(id, "codes")
-
-  const {
-    data: dataAuthor,
-    isLoading: isLoadingAuthor,
-    isError: isErrorAuthor,
-  } = useCollection(user && user.reloadUserInfo.screenName, "users")
 
   const addCodeOnFavoris = async (id: string) => {
     setLoadingAddCodeOnFavoris(true)
@@ -106,7 +106,7 @@ export default function CardCode({
         (favoris: string) => favoris !== user.reloadUserInfo.screenName
       )
 
-      const { result, error } = await useUpdateCollection("codes", id, {
+      const { result, error } = await useUpdateDocument("codes", id, {
         favoris: newFavoris,
       })
 
@@ -114,7 +114,7 @@ export default function CardCode({
       setCodeFavoris(codeFavoris - 1)
       setIsCodeFavoris(false)
     } else {
-      useUpdateCollection("codes", id, {
+      useUpdateDocument("codes", id, {
         favoris: [...result.data().favoris, user.reloadUserInfo.screenName],
       })
       setCodeFavoris(codeFavoris + 1)
@@ -275,6 +275,25 @@ export default function CardCode({
                 >
                   <TelegramIcon size={38} round />
                 </TelegramShareButton>
+                <Button
+                  variant="subtle"
+                  className="h-12 w-12 rounded-full"
+                  onClick={() => {
+                    copyToClipboard(shareUrl)
+                    toast({
+                      title: "Copied to clipboard",
+                      description:
+                        "The link of code has been copied to your clipboard",
+                      action: (
+                        <ToastAction altText="Goto schedule to undo">
+                          Undo
+                        </ToastAction>
+                      ),
+                    })
+                  }}
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
               </div>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -293,49 +312,56 @@ export default function CardCode({
           />
         </pre>
       </div>
-      <Link
-        href={`/${idAuthor}`}
-        className="flex items-center justify-start gap-2"
-      >
-        <Avatar className="h-8 w-8 cursor-pointer">
-          {isLoadingUser && (
-            <AvatarFallback>
-              <Loader />
-            </AvatarFallback>
-          )}
-          {dataUser && dataUser.exists && (
-            <>
-              <AvatarImage
-                src={dataUser.data.photoURL}
-                alt={dataUser.data.displayName}
-              />
+      <div className="flex items-center justify-between gap-4">
+        <Link
+          href={`/${idAuthor}`}
+          className="flex items-center justify-start gap-2"
+        >
+          <Avatar className="h-8 w-8 cursor-pointer">
+            {isLoadingUser && (
               <AvatarFallback>
-                {dataUser.data.displayName.split(" ")[1] === undefined
-                  ? dataUser.data.displayName.split(" ")[0][0] +
-                    dataUser.data.displayName.split(" ")[0][1]
-                  : dataUser.data.displayName.split(" ")[0][0] +
-                    dataUser.data.displayName.split(" ")[1][0]}
+                <Loader />
               </AvatarFallback>
-            </>
-          )}
-        </Avatar>
-        <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
-          {idAuthor}
+            )}
+            {dataUser && dataUser.exists && (
+              <>
+                <AvatarImage
+                  src={dataUser.data.photoURL}
+                  alt={dataUser.data.displayName}
+                />
+                <AvatarFallback>
+                  {dataUser.data.displayName.split(" ")[1] === undefined
+                    ? dataUser.data.displayName.split(" ")[0][0] +
+                      dataUser.data.displayName.split(" ")[0][1]
+                    : dataUser.data.displayName.split(" ")[0][0] +
+                      dataUser.data.displayName.split(" ")[1][0]}
+                </AvatarFallback>
+              </>
+            )}
+          </Avatar>
+          <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
+            {idAuthor}
+          </span>
+        </Link>
+        <span className="p-2 text-sm font-bold italic text-slate-700 dark:text-slate-400">
+          {language}
         </span>
-      </Link>
+      </div>
       <p className="text-sm text-slate-700 dark:text-slate-400">
         {description}
       </p>
-      <div className="mb-4 flex items-center justify-start gap-2">
-        {tags?.map((tag: string) => (
-          <span
-            key={tag}
-            className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
+      {tags && tags.length > 0 && (
+        <div className="mb-4 flex items-center justify-start gap-2">
+          {tags?.map((tag: string) => (
+            <span
+              key={tag}
+              className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

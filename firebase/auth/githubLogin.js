@@ -2,7 +2,7 @@ import { useState } from "react"
 import { auth } from "@/firebase/config"
 import { GithubAuthProvider, signInWithPopup } from "firebase/auth"
 
-import updateCollection from "../firestore/updateCollection"
+import updateCollection from "../firestore/updateDocument"
 
 export const useGitHubLoign = () => {
   const [error, setError] = useState(false)

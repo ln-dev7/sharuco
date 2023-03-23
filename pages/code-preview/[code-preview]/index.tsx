@@ -5,8 +5,8 @@ import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
-import { useCollection } from "@/firebase/firestore/getCollection"
-import { useCollections } from "@/firebase/firestore/getCollections"
+import { useDocument } from "@/firebase/firestore/getDocument"
+import { useDocuments } from "@/firebase/firestore/getDocuments"
 import { useToast } from "@/hooks/use-toast"
 import delinearizeCode from "@/utils/delinearizeCode"
 import indentCode from "@/utils/indentCode"
@@ -29,7 +29,7 @@ import { Button, buttonVariants } from "@/components/ui/button"
 export default function CodePreview() {
   const searchParams = useSearchParams()
 
-  const { data, isLoading, isError } = useCollection(
+  const { data, isLoading, isError } = useDocument(
     searchParams.get("code-preview"),
     "codes"
   )

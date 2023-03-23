@@ -11,9 +11,9 @@ import firebase_app from "../config"
 
 const db = getFirestore(firebase_app)
 
-const getIsPrivateCodes = async (isPrivate) => {
+const getFavoriteCode = async (userId) => {
   const querySnapshot = await getDocs(
-    query(collection(db, "codes"), where("isPrivate", "==", isPrivate))
+    query(collection(db, "codes"), where("favoris", "array-contains", userId))
   )
   const collections = querySnapshot.docs.map((doc) => {
     const data = doc.data()
@@ -23,10 +23,8 @@ const getIsPrivateCodes = async (isPrivate) => {
   return collections
 }
 
-const useGetIsPrivateCodes = (isPrivate) => {
-  return useQuery([`isprivate-code-${isPrivate}`, "codes"], () =>
-    getIsPrivateCodes(isPrivate)
-  )
+const useGetFavoriteCode = (userId) => {
+  return useQuery(["favorites-codes", "codes"], () => getFavoriteCode(userId))
 }
 
-export { useGetIsPrivateCodes }
+export { useGetFavoriteCode }

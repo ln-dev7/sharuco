@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
-import { useCollection } from "@/firebase/firestore/getCollection"
+import { useDocument } from "@/firebase/firestore/getDocument"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -24,7 +24,7 @@ import Loader from "./loader"
 export function AvatarUser() {
   const { logout } = useGitHubLogout()
   const { user } = useAuthContext()
-  const { data, isLoading, isError } = useCollection(
+  const { data, isLoading, isError } = useDocument(
     user.reloadUserInfo.screenName,
     "users"
   )

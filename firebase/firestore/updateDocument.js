@@ -43,7 +43,7 @@ import firebase_app from "../config"
 
 const db = getFirestore(firebase_app)
 
-const updateCollectionWithQuery = async ({
+const updateDocumentWithQuery = async ({
   collectionName,
   documentId,
   data,
@@ -74,8 +74,8 @@ const updateCollectionWithQuery = async ({
   }
 }
 
-const useUpdateCollection = () => {
-  return useMutation(updateCollectionWithQuery)
+const useUpdateDoocument = () => {
+  return useMutation(updateDocumentWithQuery)
 }
 
-export { useUpdateCollection }
+export { useUpdateDoocument }

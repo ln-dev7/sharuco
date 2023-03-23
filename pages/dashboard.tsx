@@ -6,7 +6,13 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
-import { useCollections } from "@/firebase/firestore/getCollections"
+import { useCreateDocument } from "@/firebase/firestore/createDocument"
+import { useDocuments } from "@/firebase/firestore/getDocuments"
+import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
+import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
+import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
+import linearizeCode from "@/utils/linearizeCode"
+import { yupResolver } from "@hookform/resolvers/yup"
 import {
   Eye,
   EyeOff,
@@ -17,10 +23,16 @@ import {
   User,
 } from "lucide-react"
 import moment from "moment"
+import { useForm } from "react-hook-form"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import * as yup from "yup"
 
 import { cn } from "@/lib/utils"
+import CardCode from "@/components/card-code"
+import CardCodeAuthor from "@/components/card-code-author"
+import Error from "@/components/error"
 import { Layout } from "@/components/layout"
+import Loader from "@/components/loader"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -60,6 +72,67 @@ export default function Dashboard() {
     }
   })
 
+  const {
+    isLoading: isLoadingPrivateCodes,
+    isError: isErrorPrivateCodes,
+    data: dataPrivateCodes,
+  } = useGetIsPrivateCodeFromUser(true, user.reloadUserInfo.screenName)
+
+  const {
+    isLoading: isLoadingPublicCodes,
+    isError: isErrorPublicCodes,
+    data: dataPublicCodes,
+  } = useGetIsPrivateCodeFromUser(false, user.reloadUserInfo.screenName)
+
+  const {
+    isLoading: isLoadingFavoriteCodes,
+    isError: isErrorFavoriteCodes,
+    data: dataFavoriteCodes,
+  } = useGetFavoriteCode(user.reloadUserInfo.screenName)
+
+  const [checkboxOn, setCheckboxOn] = useState(false)
+
+  const schema = yup.object().shape({
+    code: yup.string().required(),
+    description: yup.string().required(),
+    language: yup.string().required(),
+    tags: yup.string(),
+    isPrivate: yup.boolean(),
+  })
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  })
+
+  const { mutate: createCollection }: any = useCreateDocument("codes")
+
+  const onSubmit = async (data) => {
+    const { code, description, language, tags, isPrivate } = data
+    const linearCode = linearizeCode(code)
+    const now = moment().valueOf()
+    const tabTabs = tags ? tags.split(",") : []
+    if (tabTabs[tabTabs.length - 1] === "") {
+      tabTabs.pop()
+    }
+
+    const newDocument = {
+      code: linearCode,
+      description: description,
+      isPrivate: !!isPrivate,
+      language: language,
+      tags: tabTabs,
+      date: now,
+      favoris: [],
+      idAuthor: user.reloadUserInfo.screenName,
+    }
+
+    //createCollection(newDocument)
+  }
+
   return (
     <Layout>
       <Head>
@@ -73,9 +146,30 @@ export default function Dashboard() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
-        <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
-          Dashboard
-        </h1>
+        <div className="flex flex-col items-start gap-2">
+          <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
+            Dashboard
+          </h1>
+          <p
+            className={cn(
+              "text-sm font-medium leading-5 text-gray-500 dark:text-gray-400",
+              "sm:text-base md:text-lg lg:text-lg"
+            )}
+          >
+            You can{" "}
+            <span className="text-gray-700 dark:text-gray-300">modify</span> or{" "}
+            <span className="text-gray-700 dark:text-gray-300">delete</span> a
+            code only on the{" "}
+            <span className="text-gray-700 dark:text-gray-300">
+              public code
+            </span>{" "}
+            and{" "}
+            <span className="text-gray-700 dark:text-gray-300">
+              private code
+            </span>{" "}
+            section.
+          </p>
+        </div>
         <div className="flex flex-col justify-between gap-2 sm:flex-row">
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -92,61 +186,86 @@ export default function Dashboard() {
                   </h3>
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                  <div className="flex flex-col items-start w-full gap-1.5 mb-4">
+                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                     <Label htmlFor="code">Insert your code</Label>
                     <Textarea
                       placeholder="Insert your code here..."
                       id="code"
+                      {...register("code")}
                     />
+                    {errors.code && (
+                      <p className="text-sm text-red-500">
+                        This field is required
+                      </p>
+                    )}
                   </div>
-                  <div className="flex flex-col items-start w-full gap-1.5 mb-4">
+                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                     <Label htmlFor="description">Description</Label>
                     <Textarea
                       placeholder="What does this code do ?"
                       id="description"
+                      {...register("description")}
                     />
+                    {errors.description && (
+                      <p className="text-sm text-red-500">
+                        This field is required
+                      </p>
+                    )}
                   </div>
-                  <div className="flex flex-col items-start w-full gap-1.5 mb-4">
+                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                     <Label htmlFor="language">Language</Label>
-                    <Select>
-                      <SelectTrigger className="w-full" id="language">
-                        <SelectValue placeholder="What language is the code written in ?" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="other">Other</SelectItem>
-                        <SelectItem value="bash">Bash</SelectItem>
-                        <SelectItem value="c">C</SelectItem>
-                        <SelectItem value="csharp">C#</SelectItem>
-                        <SelectItem value="cpp">C++</SelectItem>
-                        <SelectItem value="css">CSS</SelectItem>
-                        <SelectItem value="docker">Docker</SelectItem>
-                        <SelectItem value="go">Go</SelectItem>
-                        <SelectItem value="html">HTML</SelectItem>
-                        <SelectItem value="java">Java</SelectItem>
-                        <SelectItem value="javascript">Javascript</SelectItem>
-                        <SelectItem value="json">JSON</SelectItem>
-                        <SelectItem value="kotlin">Kotlin</SelectItem>
-                        <SelectItem value="markdown">Markdown</SelectItem>
-                        <SelectItem value="php">PHP</SelectItem>
-                        <SelectItem value="python">Python</SelectItem>
-                        <SelectItem value="sql">SQL</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Input
+                      type="text"
+                      id="language"
+                      placeholder="The code is written in what language ?"
+                      {...register("language")}
+                    />
+                    {errors.language && (
+                      <p className="text-sm text-red-500">
+                        This field is required
+                      </p>
+                    )}
                   </div>
-                  <div className="flex flex-col items-start w-full gap-1.5 mb-4">
+                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                     <Label htmlFor="tags">Tags</Label>
-                    <Input type="text" id="tags" placeholder="" />
+                    <Input
+                      type="text"
+                      id="tags"
+                      placeholder="Enter a tags ..."
+                      {...register("tags")}
+                    />
                     <p className="text-sm text-slate-500">
                       Please separate tags with{" "}
                       <span className="text-slate-700 dark:text-slate-300">
                         ,
                       </span>
                     </p>
+                    {errors.tags && (
+                      <p className="text-sm text-red-500">
+                        This field is required
+                      </p>
+                    )}
                   </div>
                   <div className="flex items-center gap-4">
-                    <Switch id="isPrivate" />
+                    <input
+                      type="checkbox"
+                      {...register("isPrivate")}
+                      name="isPrivate"
+                      id="isPrivate"
+                      className={`h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none ring-slate-500
+                       ring-offset-0 focus:ring-slate-400 focus:ring-offset-slate-900 dark:bg-slate-800
+                      ${checkboxOn ? "ring-2" : "ring-0"}
+                      `}
+                      checked={checkboxOn}
+                      onChange={() => setCheckboxOn(!checkboxOn)}
+                    />
                     <Label htmlFor="isPrivate">
-                      Will this code be private ?
+                      Will this code be private ?{" "}
+                      {checkboxOn ? (
+                        <span className="font-bold text-teal-300">Yes</span>
+                      ) : (
+                        <span className="font-bold text-teal-300">No</span>
+                      )}
                     </Label>
                   </div>
                 </AlertDialogDescription>
@@ -158,7 +277,7 @@ export default function Dashboard() {
                     "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                   )}
                   // disabled={isPending}
-                  // onClick={login}
+                  onClick={handleSubmit(onSubmit)}
                 >
                   {/* {isPending ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -195,18 +314,159 @@ export default function Dashboard() {
               </TabsTrigger>
             </div>
           </TabsList>
-          <TabsContent
-            className="border-none"
-            value="public-code"
-          ></TabsContent>
-          <TabsContent
-            className="border-none"
-            value="private-code"
-          ></TabsContent>
-          <TabsContent
-            className="border-none"
-            value="favorite-code"
-          ></TabsContent>
+          <TabsContent className="border-none p-0 pt-4" value="public-code">
+            {isLoadingPublicCodes && <Loader />}
+            {dataPublicCodes && (
+              <>
+                <ResponsiveMasonry
+                  columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
+                  className="w-full"
+                >
+                  <Masonry gutter="1rem">
+                    {dataPublicCodes
+                      .sort((a, b) => {
+                        return moment(b.createdAt).diff(moment(a.createdAt))
+                      })
+                      .map(
+                        (code: {
+                          id: string
+                          idAuthor: string
+                          language: string
+                          code: string
+                          description: string
+                          tags: string[]
+                          favoris: string[]
+                        }) => (
+                          <CardCodeAuthor
+                            key={code.id}
+                            id={code.id}
+                            idAuthor={code.idAuthor}
+                            language={code.language}
+                            code={code.code}
+                            description={code.description}
+                            tags={code.tags}
+                            favoris={code.favoris}
+                          />
+                        )
+                      )}
+                  </Masonry>
+                </ResponsiveMasonry>
+                {dataPublicCodes.length == 0 && (
+                  <div className="flex flex-col items-center gap-4">
+                    <h1 className="text-2xl font-bold">
+                      You don&apos;t have any public code yet
+                    </h1>
+                  </div>
+                )}
+              </>
+            )}
+            {isErrorPublicCodes && <Error />}
+          </TabsContent>
+          <TabsContent className="border-none p-0 pt-4" value="private-code">
+            {isLoadingPrivateCodes && <Loader />}
+            {dataPrivateCodes && (
+              <>
+                <ResponsiveMasonry
+                  columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
+                  className="w-full"
+                >
+                  <Masonry gutter="1rem">
+                    {dataPrivateCodes
+                      .sort((a, b) => {
+                        return moment(b.createdAt).diff(moment(a.createdAt))
+                      })
+                      .map(
+                        (code: {
+                          id: string
+                          idAuthor: string
+                          language: string
+                          code: string
+                          description: string
+                          tags: string[]
+                          favoris: string[]
+                        }) => (
+                          <CardCodeAuthor
+                            key={code.id}
+                            id={code.id}
+                            idAuthor={code.idAuthor}
+                            language={code.language}
+                            code={code.code}
+                            description={code.description}
+                            tags={code.tags}
+                            favoris={code.favoris}
+                          />
+                        )
+                      )}
+                  </Masonry>
+                </ResponsiveMasonry>
+                {dataPrivateCodes.length == 0 && (
+                  <div className="flex flex-col items-center gap-4">
+                    <h1 className="text-2xl font-bold">
+                      You don&apos;t have any private code yet
+                    </h1>
+                  </div>
+                )}
+              </>
+            )}
+            {isErrorFavoriteCodes && <Error />}
+          </TabsContent>
+          <TabsContent className="border-none p-0 pt-4" value="favorite-code">
+            {isLoadingFavoriteCodes && <Loader />}
+            {dataFavoriteCodes && (
+              <>
+                <ResponsiveMasonry
+                  columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
+                  className="w-full"
+                >
+                  <Masonry gutter="1rem">
+                    {dataFavoriteCodes
+                      .sort((a, b) => {
+                        return moment(b.createdAt).diff(moment(a.createdAt))
+                      })
+                      .map(
+                        (code: {
+                          id: string
+                          idAuthor: string
+                          language: string
+                          code: string
+                          description: string
+                          tags: string[]
+                          favoris: string[]
+                        }) => (
+                          <CardCode
+                            key={code.id}
+                            id={code.id}
+                            idAuthor={code.idAuthor}
+                            language={code.language}
+                            code={code.code}
+                            description={code.description}
+                            tags={code.tags}
+                            favoris={code.favoris}
+                          />
+                        )
+                      )}
+                  </Masonry>
+                </ResponsiveMasonry>
+                {dataFavoriteCodes.length == 0 && (
+                  <div className="flex flex-col items-center gap-4">
+                    <h1 className="text-2xl font-bold">
+                      You don&apos;t have any favorite code yet
+                    </h1>
+                    <Link
+                      href="/explore"
+                      className={buttonVariants({
+                        size: "lg",
+                        variant: "outline",
+                      })}
+                    >
+                      Explore code
+                    </Link>
+                  </div>
+                )}
+              </>
+            )}
+            {isErrorFavoriteCodes && <Error />}
+          </TabsContent>
         </Tabs>
       </section>
     </Layout>

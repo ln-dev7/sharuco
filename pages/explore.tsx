@@ -5,7 +5,7 @@ import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
-import { useCollections } from "@/firebase/firestore/getCollections"
+import { useDocuments } from "@/firebase/firestore/getDocuments"
 import { useToast } from "@/hooks/use-toast"
 import copyToClipboard from "@/utils/copyToClipboard"
 import delinearizeCode from "@/utils/delinearizeCode"
@@ -18,7 +18,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ToastAction } from "@/components/ui/toast"
 import "prism-themes/themes/prism-one-dark.min.css"
-import { useCollection } from "@/firebase/firestore/getCollection"
+import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
 import moment from "moment"
 import { useQuery } from "react-query"
@@ -33,7 +33,11 @@ import { Button, buttonVariants } from "@/components/ui/button"
 export default function Explore() {
   const { toast } = useToast()
 
-  const { isLoading, isError, data } = useGetIsPrivateCodes(false)
+  const {
+    isLoading: isLoadingPublicCodes,
+    isError: isErrorPublicCodes,
+    data: dataPublicCodes,
+  } = useGetIsPrivateCodes(false)
 
   return (
     <Layout>
@@ -54,13 +58,13 @@ export default function Explore() {
           </h1>
         </div>
         <div className="">
-          {isLoading && <Loader />}
-          {data && (
+          {isLoadingPublicCodes && <Loader />}
+          {dataPublicCodes && (
             <ResponsiveMasonry
               columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
             >
               <Masonry gutter="1rem">
-                {data
+                {dataPublicCodes
                   .sort((a, b) => {
                     return moment(b.createdAt).diff(moment(a.createdAt))
                   })
@@ -89,7 +93,7 @@ export default function Explore() {
               </Masonry>
             </ResponsiveMasonry>
           )}
-          {isError && <Error />}
+          {isErrorPublicCodes && <Error />}
         </div>
       </section>
     </Layout>

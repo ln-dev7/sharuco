@@ -5,8 +5,8 @@ import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
-import { useCollection } from "@/firebase/firestore/getCollection"
-import { useCollections } from "@/firebase/firestore/getCollections"
+import { useDocument } from "@/firebase/firestore/getDocument"
+import { useDocuments } from "@/firebase/firestore/getDocuments"
 import { useToast } from "@/hooks/use-toast"
 import delinearizeCode from "@/utils/delinearizeCode"
 import indentCode from "@/utils/indentCode"
@@ -17,7 +17,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import { ToastAction } from "@/components/ui/toast"
 import "prism-themes/themes/prism-one-dark.min.css"
 import { useSearchParams } from "next/navigation"
-import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
+import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import moment from "moment"
 
 import { siteConfig } from "@/config/site"
@@ -31,16 +31,16 @@ import { Button, buttonVariants } from "@/components/ui/button"
 export default function User() {
   const searchParams = useSearchParams()
 
-  const { data, isLoading, isError } = useCollection(
+  const { data, isLoading, isError } = useDocument(
     searchParams.get("user"),
     "users"
   )
 
   const {
-    isLoading: isLoadingCodes,
-    isError: isErrorCodes,
-    data: dataCodes,
-  } = useGetIsPrivateCodes(false)
+    isLoading: isLoadingPublicCodes,
+    isError: isErrorPublicCodes,
+    data: dataPublicCodes,
+  } = useGetIsPrivateCodeFromUser(false, searchParams.get("user"))
 
   return (
     <Layout>
@@ -66,47 +66,52 @@ export default function User() {
               <AvatarFallback>{data.data.displayName}</AvatarFallback>
             </Avatar>
             <h1 className="mb-8 text-4xl font-bold">{data.data.displayName}</h1>
-            {isLoadingCodes && <Loader />}
-            {dataCodes && dataCodes.length > 0 ? (
-              <ResponsiveMasonry
-                columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
-                className="w-full"
-              >
-                <Masonry gutter="1rem">
-                  {dataCodes
-                    .sort((a, b) => {
-                      return moment(b.createdAt).diff(moment(a.createdAt))
-                    })
-                    .map(
-                      (code: {
-                        id: string
-                        idAuthor: string
-                        language: string
-                        code: string
-                        description: string
-                        tags: string[]
-                        favoris: string[]
-                      }) => (
-                        <CardCode
-                          key={code.id}
-                          id={code.id}
-                          idAuthor={code.idAuthor}
-                          language={code.language}
-                          code={code.code}
-                          description={code.description}
-                          tags={code.tags}
-                          favoris={code.favoris}
-                        />
-                      )
-                    )}
-                </Masonry>
-              </ResponsiveMasonry>
-            ) : (
-              <h1 className="text-2xl font-bold">
-                This user has not shared any code yet
-              </h1>
+            {isLoadingPublicCodes && <Loader />}
+            {dataPublicCodes && (
+              <>
+                <ResponsiveMasonry
+                  columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
+                  className="w-full"
+                >
+                  <Masonry gutter="1rem">
+                    {dataPublicCodes
+                      .sort((a, b) => {
+                        return moment(b.createdAt).diff(moment(a.createdAt))
+                      })
+                      .map(
+                        (code: {
+                          id: string
+                          idAuthor: string
+                          language: string
+                          code: string
+                          description: string
+                          tags: string[]
+                          favoris: string[]
+                        }) => (
+                          <CardCode
+                            key={code.id}
+                            id={code.id}
+                            idAuthor={code.idAuthor}
+                            language={code.language}
+                            code={code.code}
+                            description={code.description}
+                            tags={code.tags}
+                            favoris={code.favoris}
+                          />
+                        )
+                      )}
+                  </Masonry>
+                </ResponsiveMasonry>
+                {dataPublicCodes.length == 0 && (
+                  <div className="flex flex-col items-center gap-4">
+                    <h1 className="text-2xl font-bold">
+                      This user has not shared any code yet
+                    </h1>
+                  </div>
+                )}
+              </>
             )}
-            {isErrorCodes && <Error />}
+            {isErrorPublicCodes && <Error />}
           </div>
         )}
         {data && !data.exists && (

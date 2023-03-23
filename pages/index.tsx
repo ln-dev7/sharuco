@@ -3,7 +3,7 @@ import Head from "next/head"
 import Link from "next/link"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
-import { useCollections } from "@/firebase/firestore/getCollections"
+import { useDocuments } from "@/firebase/firestore/getDocuments"
 import { Code2, Github, Loader2 } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
@@ -14,7 +14,7 @@ export default function IndexPage() {
   const { login, isPending } = useGitHubLoign()
   const { user } = useAuthContext()
 
-  const { data, isLoading, isError } = useCollections("users")
+  const { data, isLoading, isError } = useDocuments("users")
 
   return (
     <Layout>
