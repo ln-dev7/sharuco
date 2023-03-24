@@ -64,7 +64,7 @@ export default function Explore() {
               <Masonry gutter="1rem">
                 {dataPublicCodes
                   .sort((a, b) => {
-                    return moment(b.date).diff(moment(a.date))
+                    return moment(b.createdAt).diff(moment(a.createdAt))
                   })
                   .map(
                     (code: {

@@ -1,8 +1,7 @@
 import { useState } from "react"
 import { auth } from "@/firebase/config"
+import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
 import { GithubAuthProvider, signInWithPopup } from "firebase/auth"
-
-import updateCollection from "../firestore/updateDocument"
 
 export const useGitHubLoign = () => {
   const [error, setError] = useState(false)
@@ -21,11 +20,14 @@ export const useGitHubLoign = () => {
 
       const user = res.user
 
-      updateCollection("users", user.reloadUserInfo.screenName, {
+      useUpdateDocument("users", user.reloadUserInfo.screenName, {
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
+        createdAt: parseInt(user.metadata.createdAt),
+        lastLoginAt: parseInt(user.metadata.lastLoginAt),
       })
+
       //console.log(user)
     } catch (error) {
       console.log(error)

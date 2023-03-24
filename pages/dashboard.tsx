@@ -58,6 +58,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
@@ -320,6 +321,7 @@ export default function Dashboard() {
             Your profile
           </Link>
         </div>
+        <Separator className="my-4" />
         <Tabs defaultValue="public-code" className="w-full">
           <TabsList>
             <div>
@@ -348,7 +350,7 @@ export default function Dashboard() {
                   <Masonry gutter="1rem">
                     {dataPublicCodes
                       .sort((a, b) => {
-                        return moment(b.date).diff(moment(a.date))
+                        return moment(b.createdAt).diff(moment(a.createdAt))
                       })
                       .map(
                         (code: {
@@ -396,7 +398,7 @@ export default function Dashboard() {
                   <Masonry gutter="1rem">
                     {dataPrivateCodes
                       .sort((a, b) => {
-                        return moment(b.date).diff(moment(a.date))
+                        return moment(b.createdAt).diff(moment(a.createdAt))
                       })
                       .map(
                         (code: {
@@ -444,7 +446,7 @@ export default function Dashboard() {
                   <Masonry gutter="1rem">
                     {dataFavoriteCodes
                       .sort((a, b) => {
-                        return moment(b.date).diff(moment(a.date))
+                        return moment(b.createdAt).diff(moment(a.createdAt))
                       })
                       .map(
                         (code: {
@@ -491,8 +493,9 @@ export default function Dashboard() {
             {isErrorFavoriteCodes && <Error />}
           </TabsContent>
         </Tabs>
-        {/* <div className="flex flex-col items-start gap-2">
-          <h1 className="mb-2 text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-3xl lg:text-3xl">
+        <Separator className="my-4" />
+        <div className="flex flex-col items-start gap-2">
+          <h1 className="mb-2 text-2xl font-extrabold leading-tight tracking-tighter">
             Danger Zone
           </h1>
 
@@ -507,27 +510,24 @@ export default function Dashboard() {
                 </AlertDialogTitle>
                 <AlertDialogDescription>
                   This action is irreversible, please reflect beforehand. You
-                  will lose all your codes.
+                  will lose all your codes. <br className="hidden sm:inline" />
+                  If you are sure, contact us
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <button
+                <a
+                  href="mailto:sharuco@leonelngoya.com"
                   className={cn(
                     "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                   )}
-                  disabled={isLoading}
-                  onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
                 >
-                  {isLoading && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  Yes I&apos;m sure !
-                </button>
+                  Contact us
+                </a>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        </div> */}
+        </div>
       </section>
     </Layout>
   )
