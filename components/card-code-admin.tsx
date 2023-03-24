@@ -77,6 +77,9 @@ import "prism-themes/themes/prism-one-dark.min.css"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
+import linearizeCode from "@/utils/linearizeCode"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useForm } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
 import { useQuery } from "react-query"
 import {
@@ -93,6 +96,7 @@ import {
   WhatsappIcon,
   WhatsappShareButton,
 } from "react-share"
+import * as yup from "yup"
 
 import { siteConfig } from "@/config/site"
 
@@ -103,32 +107,18 @@ export default function CardCodeAdmin({
   code,
   description,
   tags,
-  favoris
+  favoris: favorisInit,
 }) {
   const notifyCodeCopied = () => toast.success("Code copied to clipboard")
   const notifyUrlCopied = () => toast.success("Url of code copied to clipboard")
+  const notifyCodeAdded = () =>
+    toast.success("Your code has been added successfully !")
   const { user } = useAuthContext()
   const { login, isPending } = useGitHubLoign()
 
-  const {
-    data: dataUser,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
-  } = useDocument(idAuthor, "users")
-
   const shareUrl = `https://shacuro.lndev.me/code-preview/${id}`
 
-  const {
-    data: dataCodes,
-    isLoading: isLoadingCodes,
-    isError: isErrorCodes,
-  } = useDocument(id, "codes")
-
-  const {
-    data: dataAuthor,
-    isLoading: isLoadingAuthor,
-    isError: isErrorAuthor,
-  } = useDocument(user && user.reloadUserInfo.screenName, "users")
+  //
 
   const {
     deleteDocument,
@@ -141,45 +131,96 @@ export default function CardCodeAdmin({
     deleteDocument(id)
   }
 
-  // Add code on favoris
-  const [loadingAddCodeOnFavoris, setLoadingAddCodeOnFavoris] = useState(false)
-  const [codeFavoris, setCodeFavoris]: [any, (value: any) => void] = useState(
-    favoris.length
-  )
-  const [isCodeFavoris, setIsCodeFavoris] = useState(
-    favoris.includes(user ? user.reloadUserInfo.screenName : "undefined")
-  )
+  //
+  const [checkboxOn, setCheckboxOn] = useState(false)
+
+  const schema = yup.object().shape({
+    code: yup.string().required(),
+    description: yup.string().required(),
+    language: yup.string().required(),
+    tags: yup.string(),
+    isPrivate: yup.boolean(),
+  })
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  })
+
+  const { updateDocument, isLoading, isError, isSuccess }: any =
+    useUpdateDocument("codes")
+
+  const onSubmit = async (data) => {
+    const { code, description, language, tags, isPrivate } = data
+    const linearCode = linearizeCode(code)
+    const now = Date.now()
+    const tabTabs = tags ? tags.split(",") : []
+    if (tabTabs[tabTabs.length - 1] === "") {
+      tabTabs.pop()
+    }
+
+    const updatedData = {
+      code: linearCode,
+      description: description,
+      isPrivate: !!isPrivate,
+      language: language,
+      tags: tabTabs,
+    }
+
+    updateDocument({ id, updatedData })
+
+    reset({
+      code: "",
+      description: "",
+      language: "",
+      tags: "",
+      isPrivate: false,
+    })
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      notifyCodeAdded()
+    }
+  }, [isSuccess])
+
+  //
+
+  const {
+    data: dataUser,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+  } = useDocument(idAuthor, "users")
+
+  const {
+    data: dataCodes,
+    isLoading: isLoadingCodes,
+    isError: isErrorCodes,
+  } = useDocument(id, "codes")
+
+  const {
+    updateDocument: updateDocumentFavoris,
+    isLoading: isLoadingAddFavoris,
+    isError: isErrorAddFavoris,
+    isSuccess: isSuccessAddFavoris,
+    error: errorAddFavoris,
+  }: any = useUpdateDocument("codes")
 
   const addCodeOnFavoris = async (id: string) => {
-    setLoadingAddCodeOnFavoris(true)
-
-    favoris = dataCodes.data.favoris
-
-    if (favoris.includes(user.reloadUserInfo.screenName)) {
-      const newFavoris = favoris.filter(
-        (favoris: string) => favoris !== user.reloadUserInfo.screenName
-      )
-
-      const { result, error } = await useUpdateDocument("codes", id, {
-        favoris: newFavoris,
-      })
-
-      setLoadingAddCodeOnFavoris(false)
-      setCodeFavoris(codeFavoris - 1)
-      setIsCodeFavoris(false)
-    } else {
-      useUpdateDocument("codes", id, {
-        favoris: [...result.data().favoris, user.reloadUserInfo.screenName],
-      })
-      setCodeFavoris(codeFavoris + 1)
-      setIsCodeFavoris(true)
+    const updatedData = {
+      favoris:
+        favorisInit?.includes(user.reloadUserInfo.screenName) ?? false
+          ? favorisInit.filter(
+              (idUser: string) => idUser !== user.reloadUserInfo.screenName
+            )
+          : [...favorisInit, user.reloadUserInfo.screenName],
     }
 
-    if (error) {
-      setLoadingAddCodeOnFavoris(false)
-    }
-
-    setLoadingAddCodeOnFavoris(false)
+    updateDocumentFavoris({ id, updatedData })
   }
 
   return (
@@ -197,16 +238,13 @@ export default function CardCodeAdmin({
           Copy code
         </Button>
         <div className="flex items-center justify-start gap-2">
-          <Button
-            onClick={() => {
-              addCodeOnFavoris(id)
-            }}
-          >
-            {loadingAddCodeOnFavoris ? (
+          <Button onClick={() => addCodeOnFavoris(id)}>
+            {isLoadingAddFavoris ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <>
-                {isCodeFavoris ? (
+                {user &&
+                favorisInit.includes(user.reloadUserInfo.screenName) ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="#F9197F"
@@ -224,7 +262,7 @@ export default function CardCodeAdmin({
                 ) : (
                   <Star className="mr-2 h-4 w-4" />
                 )}
-                {codeFavoris}
+                {favorisInit.length}
               </>
             )}
           </Button>

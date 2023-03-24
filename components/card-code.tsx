@@ -61,7 +61,7 @@ export default function CardCode({
   code,
   description,
   tags,
-  favoris,
+  favoris: favorisInit,
 }) {
   const notifyCodeCopied = () => toast.success("Code copied to clipboard")
   const notifyUrlCopied = () => toast.success("Url of code copied to clipboard")
@@ -83,50 +83,24 @@ export default function CardCode({
   } = useDocument(id, "codes")
 
   const {
-    data: dataAuthor,
-    isLoading: isLoadingAuthor,
-    isError: isErrorAuthor,
-  } = useDocument(user && user.reloadUserInfo.screenName, "users")
-
-  // Add code on favoris
-  const [loadingAddCodeOnFavoris, setLoadingAddCodeOnFavoris] = useState(false)
-  const [codeFavoris, setCodeFavoris]: [any, (value: any) => void] = useState(
-    favoris.length
-  )
-  const [isCodeFavoris, setIsCodeFavoris] = useState(
-    favoris.includes(user ? user.reloadUserInfo.screenName : "undefined")
-  )
+    updateDocument,
+    isLoading: isLoadingAddFavoris,
+    isError: isErrorAddFavoris,
+    isSuccess: isSuccessAddFavoris,
+    error: errorAddFavoris,
+  }: any = useUpdateDocument("codes")
 
   const addCodeOnFavoris = async (id: string) => {
-    setLoadingAddCodeOnFavoris(true)
-
-    favoris = dataCodes.data.favoris
-
-    if (favoris.includes(user.reloadUserInfo.screenName)) {
-      const newFavoris = favoris.filter(
-        (favoris: string) => favoris !== user.reloadUserInfo.screenName
-      )
-
-      const { result, error } = await useUpdateDocument("codes", id, {
-        favoris: newFavoris,
-      })
-
-      setLoadingAddCodeOnFavoris(false)
-      setCodeFavoris(codeFavoris - 1)
-      setIsCodeFavoris(false)
-    } else {
-      useUpdateDocument("codes", id, {
-        favoris: [...result.data().favoris, user.reloadUserInfo.screenName],
-      })
-      setCodeFavoris(codeFavoris + 1)
-      setIsCodeFavoris(true)
+    const updatedData = {
+      favoris:
+        favorisInit?.includes(user.reloadUserInfo.screenName) ?? false
+          ? favorisInit.filter(
+              (idUser: string) => idUser !== user.reloadUserInfo.screenName
+            )
+          : [...favorisInit, user.reloadUserInfo.screenName],
     }
 
-    if (error) {
-      setLoadingAddCodeOnFavoris(false)
-    }
-
-    setLoadingAddCodeOnFavoris(false)
+    updateDocument({ id, updatedData })
   }
 
   return (
@@ -145,16 +119,13 @@ export default function CardCode({
         </Button>
         <div className="flex items-center justify-start gap-2">
           {user ? (
-            <Button
-              onClick={() => {
-                addCodeOnFavoris(id)
-              }}
-            >
-              {loadingAddCodeOnFavoris ? (
+            <Button onClick={() => addCodeOnFavoris(id)}>
+              {isLoadingAddFavoris ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <>
-                  {isCodeFavoris ? (
+                  {user &&
+                  favorisInit.includes(user.reloadUserInfo.screenName) ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="#F9197F"
@@ -172,7 +143,7 @@ export default function CardCode({
                   ) : (
                     <Star className="mr-2 h-4 w-4" />
                   )}
-                  {codeFavoris}
+                  {favorisInit.length}
                 </>
               )}
             </Button>

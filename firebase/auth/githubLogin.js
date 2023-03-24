@@ -51,13 +51,14 @@ export const useGitHubLoign = () => {
       const user = res.user
 
       updateProfile("users", user.reloadUserInfo.screenName, {
+        pseudo: user.reloadUserInfo.screenName,
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
         createdAt: moment(user.metadata.creationTime).valueOf(),
         lastLoginAt: moment(user.metadata.lastSignInTime).valueOf(),
       })
-      console.log(user)
+      //console.log(user)
     } catch (error) {
       console.log(error)
       setError(error.message)

@@ -24,7 +24,7 @@ const getIsPrivateCodes = async (isPrivate) => {
 }
 
 const useGetIsPrivateCodes = (isPrivate) => {
-  return useQuery([`isprivate-code-${isPrivate}`, "codes"], () =>
+  return useQuery([`isprivate-codes-${isPrivate}`, "codes"], () =>
     getIsPrivateCodes(isPrivate)
   )
 }
