@@ -5,8 +5,9 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/router"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogout } from "@/firebase/auth/githubLogout"
+import { auth } from "@/firebase/config"
 import { useDocument } from "@/firebase/firestore/getDocument"
+import { signOut } from "firebase/auth"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -23,9 +24,25 @@ import {
 } from "@/components/ui/sheet"
 import Loader from "./loader"
 
+export const useGitHubLogout = () => {
+  const router = useRouter()
+  const logout = async () => {
+    if (router.pathname === "/dashboard") {
+      router.push("/")
+    }
+    try {
+      await signOut(auth)
+      console.log("user logged out")
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  return { logout }
+}
+
 export function AvatarUser() {
   const { logout } = useGitHubLogout()
-  const router = useRouter()
   const { user } = useAuthContext()
   const { data, isLoading, isError } = useDocument(
     user.reloadUserInfo.screenName,
@@ -75,7 +92,6 @@ export function AvatarUser() {
           <Button
             className={buttonVariants({ size: "lg", variant: "destructive" })}
             onClick={() => {
-              router.push("/")
               logout()
             }}
           >
