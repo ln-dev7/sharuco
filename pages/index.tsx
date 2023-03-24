@@ -166,14 +166,14 @@ export default function IndexPage() {
         ) : (
           <Loader2 className="h-4 w-4 animate-spin" />
         )}
-        {/* <div className="mt-4 overflow-hidden rounded-lg border bg-white shadow-xl">
-          <video autoPlay muted>
+        <div className="mt-4 overflow-hidden rounded-lg border bg-white shadow-xl">
+          <video autoPlay muted loop>
             <source
-              src="https://ui-shadcn.s3.amazonaws.com/ui-promo-hd.mp4"
+              src="https://leonelngoyadatabase.leonelngoya.com/sharuco-hero-video.mp4"
               type="video/mp4"
             />
           </video>
-        </div> */}
+        </div>
       </section>
       <Toaster position="top-right" reverseOrder={false} />
       {user && (
