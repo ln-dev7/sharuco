@@ -7,6 +7,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore"
+import moment from "moment"
 import { useMutation, useQueryClient } from "react-query"
 
 import firebase_app from "../config"
@@ -34,6 +35,7 @@ const useUpdateDocument = (collectionName) => {
         queryClient.invalidateQueries("isprivate-code-from-user-false")
         queryClient.invalidateQueries("isprivate-code-from-user-true")
         queryClient.invalidateQueries("favorites-codes")
+        queryClient.invalidateQueries("users")
       },
     }
   )

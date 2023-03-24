@@ -96,7 +96,7 @@ import {
 
 import { siteConfig } from "@/config/site"
 
-export default function CardCodeAuthor({
+export default function CardCodeAdmin({
   id,
   idAuthor,
   language,

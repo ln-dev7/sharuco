@@ -34,7 +34,7 @@ import * as yup from "yup"
 
 import { cn } from "@/lib/utils"
 import CardCode from "@/components/card-code"
-import CardCodeAuthor from "@/components/card-code-author"
+import CardCodeAdmin from "@/components/card-code-admin"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
@@ -205,7 +205,7 @@ export default function Dashboard() {
                           tags: string[]
                           favoris: string[]
                         }) => (
-                          <CardCodeAuthor
+                          <CardCodeAdmin
                             key={code.id}
                             id={code.id}
                             idAuthor={code.idAuthor}

@@ -1,7 +1,9 @@
 "use client"
 
+import { useEffect } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { useRouter } from "next/router"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -23,6 +25,7 @@ import Loader from "./loader"
 
 export function AvatarUser() {
   const { logout } = useGitHubLogout()
+  const router = useRouter()
   const { user } = useAuthContext()
   const { data, isLoading, isError } = useDocument(
     user.reloadUserInfo.screenName,
@@ -71,7 +74,10 @@ export function AvatarUser() {
           </Link>
           <Button
             className={buttonVariants({ size: "lg", variant: "destructive" })}
-            onClick={() => logout()}
+            onClick={() => {
+              router.push("/")
+              logout()
+            }}
           >
             Logout
           </Button>

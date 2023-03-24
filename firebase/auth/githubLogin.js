@@ -3,7 +3,7 @@ import { auth } from "@/firebase/config"
 import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
 import { GithubAuthProvider, signInWithPopup } from "firebase/auth"
 
-export const useGitHubLoign = () => {
+export const useGitHubLoign = (updateDocument) => {
   const [error, setError] = useState(false)
   const [isPending, setIsPending] = useState(false)
   const provider = new GithubAuthProvider()
@@ -20,13 +20,16 @@ export const useGitHubLoign = () => {
 
       const user = res.user
 
-      useUpdateDocument("users", user.reloadUserInfo.screenName, {
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        createdAt: parseInt(user.metadata.createdAt),
-        lastLoginAt: parseInt(user.metadata.lastLoginAt),
-      })
+      updateDocument(
+        {
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          createdAt: parseInt(user.metadata.createdAt),
+          lastLoginAt: parseInt(user.metadata.lastLoginAt),
+        },
+        user.reloadUserInfo.screenName
+      )
 
       //console.log(user)
     } catch (error) {

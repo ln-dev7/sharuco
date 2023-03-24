@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
+import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
 import { Code2, Github, Loader2 } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
@@ -11,10 +12,22 @@ import { Layout } from "@/components/layout"
 import { buttonVariants } from "@/components/ui/button"
 
 export default function IndexPage() {
-  const { login, isPending } = useGitHubLoign()
+  const {
+    updateDocument,
+    isLoading: isLoadingUpdate,
+    isError: isErrorUpdate,
+    isSuccess: isSuccessUpdate,
+  } = useUpdateDocument("users")
+
+  const { login, isPending } = useGitHubLoign(updateDocument)
+
   const { user } = useAuthContext()
 
-  const { data, isLoading, isError } = useDocuments("users")
+  const {
+    data: dataUsers,
+    isLoading: isLoadingUsers,
+    isError: isErrorUsers,
+  } = useDocuments("users")
 
   return (
     <Layout>
@@ -70,10 +83,10 @@ export default function IndexPage() {
             </button>
           )}
         </div>
-        {!isLoading ? (
+        {!isLoadingUsers ? (
           <p className="text-sm text-slate-700 dark:text-slate-400">
-            <span className="font-bold">{data.length}</span> users registered on
-            sharuco.
+            <span className="font-bold">{dataUsers.length}</span> users
+            registered on sharuco.
           </p>
         ) : (
           <Loader2 className="h-4 w-4 animate-spin" />
