@@ -6,7 +6,6 @@ import { ThemeProvider } from "next-themes"
 
 import "@/styles/globals.css"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { ReactQueryDevtools } from "react-query/devtools"
 
 const fontSans = FontSans({
   subsets: ["latin"],

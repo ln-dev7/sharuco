@@ -1,27 +1,17 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
-import { useDocuments } from "@/firebase/firestore/getDocuments"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
-import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import {
-  Eye,
-  EyeOff,
-  Loader2,
-  MoreHorizontal,
-  Plus,
-  Star,
-  User,
-} from "lucide-react"
+import { Eye, EyeOff, Loader2, Plus, Star, User } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
@@ -36,7 +26,6 @@ import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -48,18 +37,7 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 

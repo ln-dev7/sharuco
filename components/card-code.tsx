@@ -1,27 +1,17 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import Head from "next/head"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
+import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
-import { useDocuments } from "@/firebase/firestore/getDocuments"
+import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
-import delinearizeCode from "@/utils/delinearizeCode"
 import highlight from "@/utils/highlight"
-import indentCode from "@/utils/indentCode"
 import { Copy, Github, Loader2, Share, Star, Verified } from "lucide-react"
-import Prism from "prismjs"
 import toast, { Toaster } from "react-hot-toast"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ToastAction } from "@/components/ui/toast"
 import "prism-themes/themes/prism-one-dark.min.css"
-import { useGitHubLoign } from "@/firebase/auth/githubLogin"
-import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
-import { useQuery } from "react-query"
 import {
   EmailIcon,
   EmailShareButton,
@@ -37,13 +27,10 @@ import {
   WhatsappShareButton,
 } from "react-share"
 
-import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -52,7 +39,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 
 export default function CardCode({
   id,
@@ -244,7 +231,7 @@ export default function CardCode({
                 </TelegramShareButton>
                 <Button
                   variant="subtle"
-                  className="h-12 w-12 rounded-full"
+                  className="h-10 w-10 rounded-full p-0"
                   onClick={() => {
                     copyToClipboard(shareUrl)
                     notifyUrlCopied()

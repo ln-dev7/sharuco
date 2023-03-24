@@ -1,71 +1,27 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import Head from "next/head"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
-import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
-import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
-import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import {
-  Code,
-  Eye,
-  EyeOff,
-  Loader2,
-  MoreHorizontal,
-  Plus,
-  Star,
-  User,
-  UserCheckIcon,
-  UserCog,
-  UserIcon,
-} from "lucide-react"
+import { Code, UserIcon } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
-import { cn } from "@/lib/utils"
-import CardCode from "@/components/card-code"
 import CardCodeAdmin from "@/components/card-code-admin"
+import CardUserAdmin from "@/components/card-user-admin"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button, buttonVariants } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
-import CardUserAdmin from "@/components/card-user-admin"
 
 export default function Dashboard() {
   const { logout } = useGitHubLogout()
@@ -235,31 +191,31 @@ export default function Dashboard() {
           <TabsContent className="border-none p-0 pt-4" value="all-users">
             {isLoadingUsers && <Loader />}
             {dataUsers && (
-               <ResponsiveMasonry
-               columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
-               className="w-full"
-             >
-               <Masonry gutter="1rem">
-                 {dataUsers
-                   .sort((a, b) => {
-                     return moment(b.createdAt).diff(moment(a.createdAt))
-                   })
-                   .map(
-                     (user: {
-                       pseudo: string
-                       displayName: string
-                       photoURL: string
-                     }) => (
-                       <CardUserAdmin
-                         key={user.pseudo}
-                         pseudo={user.pseudo}
-                         displayName={user.displayName}
-                         photoURL={user.photoURL}
-                       />
-                     )
-                   )}
-               </Masonry>
-             </ResponsiveMasonry>
+              <ResponsiveMasonry
+                columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
+                className="w-full"
+              >
+                <Masonry gutter="1rem">
+                  {dataUsers
+                    .sort((a, b) => {
+                      return moment(b.createdAt).diff(moment(a.createdAt))
+                    })
+                    .map(
+                      (user: {
+                        pseudo: string
+                        displayName: string
+                        photoURL: string
+                      }) => (
+                        <CardUserAdmin
+                          key={user.pseudo}
+                          pseudo={user.pseudo}
+                          displayName={user.displayName}
+                          photoURL={user.photoURL}
+                        />
+                      )
+                    )}
+                </Masonry>
+              </ResponsiveMasonry>
             )}
             {isErrorUsers && <Error />}
           </TabsContent>

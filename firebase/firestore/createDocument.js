@@ -1,4 +1,4 @@
-import { addDoc, collection, getFirestore, setDoc } from "firebase/firestore"
+import { addDoc, collection, getFirestore } from "firebase/firestore"
 import moment from "moment"
 import { useMutation, useQueryClient } from "react-query"
 

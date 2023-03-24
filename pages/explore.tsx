@@ -1,36 +1,17 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Head from "next/head"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
-import { useDocuments } from "@/firebase/firestore/getDocuments"
-import copyToClipboard from "@/utils/copyToClipboard"
-import delinearizeCode from "@/utils/delinearizeCode"
-import highlight from "@/utils/highlight"
-import indentCode from "@/utils/indentCode"
-import { Copy, Github, Loader2, Share, Star } from "lucide-react"
-import Prism from "prismjs"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ToastAction } from "@/components/ui/toast"
-import "prism-themes/themes/prism-one-dark.min.css"
-import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
 import moment from "moment"
-import { useQuery } from "react-query"
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
-import { siteConfig } from "@/config/site"
 import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
-import { Button, buttonVariants } from "@/components/ui/button"
+import "prism-themes/themes/prism-one-dark.min.css"
 
 export default function Explore() {
-
   const {
     isLoading: isLoadingPublicCodes,
     isError: isErrorPublicCodes,

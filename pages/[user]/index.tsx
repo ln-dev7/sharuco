@@ -1,32 +1,21 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
+import { useSearchParams } from "next/navigation"
 import { useDocument } from "@/firebase/firestore/getDocument"
-import { useDocuments } from "@/firebase/firestore/getDocuments"
-import delinearizeCode from "@/utils/delinearizeCode"
-import indentCode from "@/utils/indentCode"
-import { Copy, Github, Loader2, Star, Verified } from "lucide-react"
-import Prism from "prismjs"
-import toast, { Toaster } from "react-hot-toast"
+import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
+import { Verified } from "lucide-react"
+import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
-import { ToastAction } from "@/components/ui/toast"
-import "prism-themes/themes/prism-one-dark.min.css"
-import { useSearchParams } from "next/navigation"
-import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
-import moment from "moment"
-
-import { siteConfig } from "@/config/site"
 import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+import "prism-themes/themes/prism-one-dark.min.css"
 
 export default function User() {
   const searchParams = useSearchParams()
@@ -82,7 +71,7 @@ export default function User() {
                   </span>
                 </p>
                 <p className="text-center text-gray-500">
-                  Last seen{" "}
+                  Last connexion{" "}
                   <span className="font-bold">
                     {moment(data.data.lastLoginAt).fromNow()}
                   </span>

@@ -1,47 +1,30 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Head from "next/head"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogout } from "@/firebase/auth/githubLogout"
+import { useGitHubLoign } from "@/firebase/auth/githubLogin"
+import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
-import { useDocuments } from "@/firebase/firestore/getDocuments"
-import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
-import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
-import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
+import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
-import delinearizeCode from "@/utils/delinearizeCode"
 import highlight from "@/utils/highlight"
-import indentCode from "@/utils/indentCode"
+import linearizeCode from "@/utils/linearizeCode"
+import { yupResolver } from "@hookform/resolvers/yup"
 import {
   Copy,
   Edit,
-  Eye,
-  EyeOff,
-  Github,
   Loader2,
-  MoreHorizontal,
-  Plus,
   Settings2,
   Share,
   Star,
   Trash,
-  User,
 } from "lucide-react"
-import moment from "moment"
-import Prism from "prismjs"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import { cn } from "@/lib/utils"
-import CardCode from "@/components/card-code"
-import Error from "@/components/error"
-import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -51,7 +34,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -62,26 +45,15 @@ import {
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import { ToastAction } from "@/components/ui/toast"
 import "prism-themes/themes/prism-one-dark.min.css"
-import { useGitHubLoign } from "@/firebase/auth/githubLogin"
-import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
-import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
-import linearizeCode from "@/utils/linearizeCode"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
-import { useQuery } from "react-query"
 import {
   EmailIcon,
   EmailShareButton,
@@ -97,8 +69,6 @@ import {
   WhatsappShareButton,
 } from "react-share"
 import * as yup from "yup"
-
-import { siteConfig } from "@/config/site"
 
 export default function CardCodeAdmin({
   id,
@@ -426,7 +396,7 @@ export default function CardCodeAdmin({
                       </TelegramShareButton>
                       <Button
                         variant="subtle"
-                        className="h-12 w-12 rounded-full"
+                        className="h-10 w-10 rounded-full p-0"
                         onClick={() => {
                           copyToClipboard(shareUrl)
                           notifyUrlCopied()

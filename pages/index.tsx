@@ -5,7 +5,6 @@ import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
-import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Code2, Github, Loader2, Plus } from "lucide-react"
@@ -18,7 +17,6 @@ import { cn } from "@/lib/utils"
 import { Layout } from "@/components/layout"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -31,12 +29,6 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 
 export default function IndexPage() {
   const { login, isPending } = useGitHubLoign()

@@ -34,7 +34,6 @@ const useGetCodesByDescription = (searchTerm) => {
 
 export { useGetCodesByDescription }
 
-
 // import React, { useState } from "react"
 // import { useGetCodesByDescription } from "./votreFichier"
 

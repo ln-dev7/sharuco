@@ -1,30 +1,17 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
+import { useSearchParams } from "next/navigation"
 import { useDocument } from "@/firebase/firestore/getDocument"
-import { useDocuments } from "@/firebase/firestore/getDocuments"
-import toast, { Toaster } from "react-hot-toast"
-import delinearizeCode from "@/utils/delinearizeCode"
-import indentCode from "@/utils/indentCode"
-import { Copy, Github, Loader2, Star } from "lucide-react"
-import Prism from "prismjs"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
-import { ToastAction } from "@/components/ui/toast"
-import "prism-themes/themes/prism-one-dark.min.css"
-import { useSearchParams } from "next/navigation"
-
-import { siteConfig } from "@/config/site"
 import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+import "prism-themes/themes/prism-one-dark.min.css"
 
 export default function CodePreview() {
   const searchParams = useSearchParams()
