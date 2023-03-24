@@ -169,7 +169,7 @@ export default function IndexPage() {
         <div className="mt-4 overflow-hidden rounded-lg border bg-white shadow-xl">
           <video autoPlay muted loop>
             <source
-              src="https://leonelngoyadatabase.leonelngoya.com/sharuco-hero-video.mp4"
+              src="https://leonelngoyadatabase.vercel.app/sharuco-hero-video.mp4"
               type="video/mp4"
             />
           </video>
@@ -180,7 +180,7 @@ export default function IndexPage() {
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
-              variant="outline"
+              variant="subtle"
               className="fixed bottom-4 right-4 z-10 h-14 w-14 rounded-full p-0"
             >
               <Plus className="h-6 w-6" />

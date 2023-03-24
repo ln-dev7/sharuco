@@ -42,11 +42,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 
 export default function Dashboard() {
-  const { logout } = useGitHubLogout()
-  const notifyCodeAdded = () =>
-    toast.success("Your code has been added successfully !")
-
-  const { user } = useAuthContext()
   const router = useRouter()
   useEffect(() => {
     if (!user) {
@@ -54,23 +49,30 @@ export default function Dashboard() {
     }
   })
 
+  const { logout } = useGitHubLogout()
+  const notifyCodeAdded = () =>
+    toast.success("Your code has been added successfully !")
+
+  const { user } = useAuthContext()
+  const pseudo = user?.reloadUserInfo.screenName
+
   const {
     isLoading: isLoadingPrivateCodes,
     isError: isErrorPrivateCodes,
     data: dataPrivateCodes,
-  } = useGetIsPrivateCodeFromUser(true, user.reloadUserInfo.screenName)
+  } = useGetIsPrivateCodeFromUser(true, pseudo)
 
   const {
     isLoading: isLoadingPublicCodes,
     isError: isErrorPublicCodes,
     data: dataPublicCodes,
-  } = useGetIsPrivateCodeFromUser(false, user.reloadUserInfo.screenName)
+  } = useGetIsPrivateCodeFromUser(false, pseudo)
 
   const {
     isLoading: isLoadingFavoriteCodes,
     isError: isErrorFavoriteCodes,
     data: dataFavoriteCodes,
-  } = useGetFavoriteCode(user.reloadUserInfo.screenName)
+  } = useGetFavoriteCode(pseudo)
 
   const [checkboxOn, setCheckboxOn] = useState(false)
 
@@ -111,7 +113,7 @@ export default function Dashboard() {
       tags: tabTabs,
       date: now,
       favoris: [],
-      idAuthor: user.reloadUserInfo.screenName,
+      idAuthor: pseudo,
     }
 
     createDocument(newDocument)
@@ -293,7 +295,7 @@ export default function Dashboard() {
             </AlertDialogContent>
           </AlertDialog>
           <Link
-            href={`/${user.reloadUserInfo.screenName}`}
+            href={`/${pseudo}`}
             className={buttonVariants({ size: "lg", variant: "outline" })}
           >
             <User className="mr-2 h-4 w-4" />

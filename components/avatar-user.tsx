@@ -40,10 +40,8 @@ export const useGitHubLogout = () => {
 export function AvatarUser() {
   const { logout } = useGitHubLogout()
   const { user } = useAuthContext()
-  const { data, isLoading, isError } = useDocument(
-    user.reloadUserInfo.screenName,
-    "users"
-  )
+  const pseudo = user?.reloadUserInfo.screenName
+  const { data, isLoading, isError } = useDocument(pseudo, "users")
   return (
     <Sheet>
       <SheetTrigger asChild>

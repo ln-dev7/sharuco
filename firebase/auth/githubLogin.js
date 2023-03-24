@@ -57,8 +57,6 @@ export const useGitHubLoign = () => {
         photoURL: user.photoURL,
         createdAt: moment(user.metadata.creationTime).valueOf(),
         lastLoginAt: moment(user.metadata.lastSignInTime).valueOf(),
-        favoris: [],
-        codes: [],
       })
       //console.log(user)
     } catch (error) {
