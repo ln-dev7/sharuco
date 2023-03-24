@@ -11,7 +11,7 @@ import copyToClipboard from "@/utils/copyToClipboard"
 import delinearizeCode from "@/utils/delinearizeCode"
 import highlight from "@/utils/highlight"
 import indentCode from "@/utils/indentCode"
-import { Copy, Github, Loader2, Share, Star } from "lucide-react"
+import { Copy, Github, Loader2, Share, Star, Verified } from "lucide-react"
 import Prism from "prismjs"
 import toast, { Toaster } from "react-hot-toast"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
@@ -326,9 +326,16 @@ export default function CardCode({
               </>
             )}
           </Avatar>
-          <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
-            {idAuthor}
-          </span>
+          <div className="flex items-center justify-start gap-1">
+            <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
+              {idAuthor}{" "}
+            </span>
+            <span>
+              {dataUser.data.isCertified && (
+                <Verified className="h-4 w-4 text-green-500" />
+              )}
+            </span>
+          </div>
         </Link>
         <span className="p-2 text-sm font-bold italic text-slate-700 dark:text-slate-400">
           {language.toLowerCase()}

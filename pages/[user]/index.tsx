@@ -9,7 +9,7 @@ import { useDocument } from "@/firebase/firestore/getDocument"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
 import delinearizeCode from "@/utils/delinearizeCode"
 import indentCode from "@/utils/indentCode"
-import { Copy, Github, Loader2, Star } from "lucide-react"
+import { Copy, Github, Loader2, Star, Verified } from "lucide-react"
 import Prism from "prismjs"
 import toast, { Toaster } from "react-hot-toast"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
@@ -65,11 +65,30 @@ export default function User() {
               />
               <AvatarFallback>{data.data.displayName}</AvatarFallback>
             </Avatar>
-            <h1 className="mb-8 text-4xl font-bold">{data.data.displayName}</h1>
-            <p>Joined {moment(data.data.createdAt).format("MMMM Do YYYY")}</p>
-            <p>
-              Last seen {moment(data.data.lastLoginAt).format("MMMM Do YYYY")}
-            </p>
+            <div className="mb-8 flex flex-col items-center gap-2">
+              <div className="flex items-center gap-0">
+                <h1 className="text-4xl font-bold">{data.data.displayName}</h1>
+                <span className="ml-2">
+                  {data.data.isCertified && (
+                    <Verified className="h-6 w-6 text-green-500" />
+                  )}
+                </span>
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <p className="text-center text-gray-500">
+                  Joined{" "}
+                  <span className="font-bold">
+                    {moment(data.data.createdAt).format("DD MMMM YYYY")}
+                  </span>
+                </p>
+                <p className="text-center text-gray-500">
+                  Last seen{" "}
+                  <span className="font-bold">
+                    {moment(data.data.lastLoginAt).format("DD MMMM YYYY")}
+                  </span>
+                </p>
+              </div>
+            </div>
             {isLoadingPublicCodes && <Loader />}
             {dataPublicCodes && (
               <>
