@@ -68,7 +68,7 @@ export default function CardCode({
   const { user } = useAuthContext()
   const { login, isPending } = useGitHubLoign()
 
-  const shareUrl = `https://shacuro.lndev.me/code-preview/${id}`
+  const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
 
   const {
     data: dataUser,
@@ -205,40 +205,40 @@ export default function CardCode({
               <div className="flex gap-2">
                 <FacebookShareButton
                   url={shareUrl}
-                  quote={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here`}
+                  quote={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here`}
                 >
                   <FacebookIcon size={38} round />
                 </FacebookShareButton>
                 <TwitterShareButton
                   url={shareUrl}
-                  title={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here.`}
+                  title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here.`}
                   hashtags={["CaParleDev", "ShareWithSharuco"]}
                 >
                   <TwitterIcon size={38} round />
                 </TwitterShareButton>
                 <LinkedinShareButton
                   url={shareUrl}
-                  title={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here. #CaParleDev`}
-                  source="https://shacuro.lndev.me"
+                  title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                  source="https://sharuco.lndev.me"
                 >
                   <LinkedinIcon size={38} round />
                 </LinkedinShareButton>
                 <EmailShareButton
                   url={shareUrl}
-                  subject={`Share code on shacuro.lndev.me`}
-                  body={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                  subject={`Share code on sharuco.lndev.me`}
+                  body={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
                 >
                   <EmailIcon size={38} round />
                 </EmailShareButton>
                 <WhatsappShareButton
                   url={shareUrl}
-                  title={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                  title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
                 >
                   <WhatsappIcon size={38} round />
                 </WhatsappShareButton>
                 <TelegramShareButton
                   url={shareUrl}
-                  title={`I discovered this code on shacuro.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                  title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
                 >
                   <TelegramIcon size={38} round />
                 </TelegramShareButton>
