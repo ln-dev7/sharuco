@@ -301,11 +301,13 @@ export default function CardCode({
             <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
               {idAuthor}{" "}
             </span>
-            <span>
-              {dataUser.data.isCertified && (
-                <Verified className="h-4 w-4 text-green-500" />
-              )}
-            </span>
+            {dataUser && dataUser.exists && (
+              <span>
+                {dataUser.data.isCertified && (
+                  <Verified className="h-4 w-4 text-green-500" />
+                )}
+              </span>
+            )}
           </div>
         </Link>
         <span className="p-2 text-sm font-bold italic text-slate-700 dark:text-slate-400">
