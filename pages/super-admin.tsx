@@ -145,7 +145,12 @@ export default function Dashboard() {
             {dataCodes && (
               <>
                 <ResponsiveMasonry
-                  columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
+                  columnsCountBreakPoints={{
+                    659: 1,
+                    660: 2,
+                    720: 2,
+                    990: 3,
+                  }}
                   className="w-full"
                 >
                   <Masonry gutter="1rem">
@@ -192,7 +197,13 @@ export default function Dashboard() {
             {isLoadingUsers && <Loader />}
             {dataUsers && (
               <ResponsiveMasonry
-                columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
+                columnsCountBreakPoints={{
+                  659: 1,
+                  660: 2,
+                  899: 3,
+                  900: 3,
+                  1200: 4,
+                }}
                 className="w-full"
               >
                 <Masonry gutter="1rem">

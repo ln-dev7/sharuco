@@ -40,7 +40,14 @@ export default function Explore() {
           {isLoadingPublicCodes && <Loader />}
           {dataPublicCodes && (
             <ResponsiveMasonry
-              columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
+              columnsCountBreakPoints={{
+                659: 1,
+                660: 2,
+                720: 2,
+                989: 3,
+                990: 3,
+                1200: 4,
+              }}
             >
               <Masonry gutter="1rem">
                 {dataPublicCodes

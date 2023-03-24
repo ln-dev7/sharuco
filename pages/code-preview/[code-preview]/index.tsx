@@ -34,6 +34,7 @@ export default function CodePreview() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+        
         {isLoading && <Loader />}
         {data && data.exists && (
           <ResponsiveMasonry

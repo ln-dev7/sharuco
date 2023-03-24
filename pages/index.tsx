@@ -166,6 +166,14 @@ export default function IndexPage() {
         ) : (
           <Loader2 className="h-4 w-4 animate-spin" />
         )}
+        {/* <div className="mt-4 overflow-hidden rounded-lg border bg-white shadow-xl">
+          <video autoPlay muted>
+            <source
+              src="https://ui-shadcn.s3.amazonaws.com/ui-promo-hd.mp4"
+              type="video/mp4"
+            />
+          </video>
+        </div> */}
       </section>
       <Toaster position="top-right" reverseOrder={false} />
       {user && (
@@ -173,7 +181,7 @@ export default function IndexPage() {
           <AlertDialogTrigger asChild>
             <Button
               variant="outline"
-              className="absolute bottom-4 right-4 z-10 h-14 w-14 rounded-full p-0"
+              className="fixed bottom-4 right-4 z-10 h-14 w-14 rounded-full p-0"
             >
               <Plus className="h-6 w-6" />
               <span className="sr-only">Open settings</span>

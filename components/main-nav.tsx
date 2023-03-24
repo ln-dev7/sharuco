@@ -37,7 +37,7 @@ export function MainNav({ items }: MainNavProps) {
                   key={index}
                   href={item.disabled ? "#" : item.href}
                   className={cn(
-                    "group inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent py-2 px-4 text-sm font-semibold transition-colors hover:bg-slate-100 focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-slate-50 data-[active]:bg-slate-50 dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[state=open]:bg-slate-800 dark:data-[active]:bg-slate-800",
+                    "group relative inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent py-2 px-4 text-sm font-semibold transition-colors hover:bg-slate-100 focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-slate-50 data-[active]:bg-slate-50 dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[state=open]:bg-slate-800 dark:data-[active]:bg-slate-800",
                     item.disabled && "cursor-not-allowed"
                   )}
                 >
@@ -46,6 +46,12 @@ export function MainNav({ items }: MainNavProps) {
                   {item.disabled && (
                     <span className="ml-2 rounded-xl bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-slate-900">
                       Soon
+                    </span>
+                  )}
+                  {item.pined && (
+                    <span className="absolute top-0 right-0 flex h-3 w-3">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
+                      <span className="inline-flex h-3 w-3 rounded-full bg-sky-500"></span>
                     </span>
                   )}
                 </Link>

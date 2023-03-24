@@ -18,6 +18,7 @@ export const siteConfig: SiteConfig = {
     {
       title: "Explore",
       href: "/explore",
+      pined: true,
     },
     {
       title: "Popular code",
