@@ -51,6 +51,7 @@ export default function CodePreview() {
                 description={data.data.description}
                 tags={data.data.tags}
                 favoris={data.data.favoris}
+                isPrivate={data.data.isPrivate}
               />
             </Masonry>
           </ResponsiveMasonry>

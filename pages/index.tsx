@@ -169,7 +169,7 @@ export default function IndexPage() {
         <div className="mt-4 overflow-hidden rounded-lg border bg-white shadow-md">
           <video autoPlay muted loop className="overflow-hidden rounded-lg">
             <source
-              src="https://leonelngoyadatabase.vercel.app/sharuco-hero-video.mp4"
+              src="https://leonelngoyadatabase.leonelngoya.com/sharuco-hero-video.mp4"
               type="video/mp4"
             />
           </video>

@@ -11,7 +11,7 @@ import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { Eye, EyeOff, Loader2, Plus, Star, User } from "lucide-react"
+import { Eye, EyeOff, Loader2, Plus, Settings, Star, User } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
@@ -303,9 +303,13 @@ export default function Dashboard() {
           </Link>
         </div>
         <Separator className="my-4" />
-        <Tabs defaultValue="public-code" className="w-full">
+        <Tabs defaultValue="manage-code" className="w-full">
           <TabsList>
             <div>
+              <TabsTrigger value="manage-code">
+                <Settings className="mr-2 h-4 w-4" />
+                Manage code
+              </TabsTrigger>
               <TabsTrigger value="public-code">
                 <Eye className="mr-2 h-4 w-4" />
                 public code
@@ -320,6 +324,61 @@ export default function Dashboard() {
               </TabsTrigger>
             </div>
           </TabsList>
+          <TabsContent className="border-none p-0 pt-4" value="manage-code">
+            {(isLoadingPublicCodes || isLoadingPrivateCodes) && <Loader />}
+            {dataPublicCodes && dataPrivateCodes && (
+              <>
+                <ResponsiveMasonry
+                  columnsCountBreakPoints={{
+                    659: 1,
+                    660: 2,
+                    720: 2,
+                    990: 3,
+                  }}
+                  className="w-full"
+                >
+                  <Masonry gutter="1rem">
+                    {[...dataPublicCodes, ...dataPrivateCodes]
+                      .sort((a, b) => {
+                        return moment(b.createdAt).diff(moment(a.createdAt))
+                      })
+                      .map(
+                        (code: {
+                          id: string
+                          idAuthor: string
+                          language: string
+                          code: string
+                          description: string
+                          tags: string[]
+                          favoris: string[]
+                          isPrivate: boolean
+                        }) => (
+                          <CardCodeAdmin
+                            key={code.id}
+                            id={code.id}
+                            idAuthor={code.idAuthor}
+                            language={code.language}
+                            code={code.code}
+                            description={code.description}
+                            tags={code.tags}
+                            favoris={code.favoris}
+                            isPrivate={code.isPrivate}
+                          />
+                        )
+                      )}
+                  </Masonry>
+                </ResponsiveMasonry>
+                {dataPublicCodes.length == 0 && (
+                  <div className="flex flex-col items-center gap-4">
+                    <h1 className="text-2xl font-bold">
+                      You don&apos;t have any public code yet
+                    </h1>
+                  </div>
+                )}
+              </>
+            )}
+            {(isErrorPublicCodes || isErrorPrivateCodes) && <Error />}
+          </TabsContent>
           <TabsContent className="border-none p-0 pt-4" value="public-code">
             {isLoadingPublicCodes && <Loader />}
             {dataPublicCodes && (
@@ -349,7 +408,7 @@ export default function Dashboard() {
                           favoris: string[]
                           isPrivate: boolean
                         }) => (
-                          <CardCodeAdmin
+                          <CardCode
                             key={code.id}
                             id={code.id}
                             idAuthor={code.idAuthor}
@@ -404,7 +463,7 @@ export default function Dashboard() {
                           favoris: string[]
                           isPrivate: boolean
                         }) => (
-                          <CardCodeAdmin
+                          <CardCode
                             key={code.id}
                             id={code.id}
                             idAuthor={code.idAuthor}
@@ -457,6 +516,7 @@ export default function Dashboard() {
                           description: string
                           tags: string[]
                           favoris: string[]
+                          isPrivate: boolean
                         }) => (
                           <CardCode
                             key={code.id}
@@ -467,6 +527,7 @@ export default function Dashboard() {
                             description={code.description}
                             tags={code.tags}
                             favoris={code.favoris}
+                            isPrivate={code.isPrivate}
                           />
                         )
                       )}

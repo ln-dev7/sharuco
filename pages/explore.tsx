@@ -63,6 +63,7 @@ export default function Explore() {
                       description: string
                       tags: string[]
                       favoris: string[]
+                      isPrivate: boolean
                     }) => (
                       <CardCode
                         key={code.id}
@@ -73,6 +74,7 @@ export default function Explore() {
                         description={code.description}
                         tags={code.tags}
                         favoris={code.favoris}
+                        isPrivate={code.isPrivate}
                       />
                     )
                   )}
