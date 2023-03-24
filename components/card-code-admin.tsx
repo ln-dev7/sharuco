@@ -180,6 +180,7 @@ export default function CardCodeAdmin({
       tags: "",
       isPrivate: false,
     })
+    setCheckboxOn(false)
   }
 
   useEffect(() => {

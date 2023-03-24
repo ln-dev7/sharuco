@@ -65,6 +65,7 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
+import CardUserAdmin from "@/components/card-user-admin"
 
 export default function Dashboard() {
   const { logout } = useGitHubLogout()
@@ -142,6 +143,7 @@ export default function Dashboard() {
       tags: "",
       isPrivate: false,
     })
+    setCheckboxOn(false)
   }
 
   useEffect(() => {
@@ -232,7 +234,33 @@ export default function Dashboard() {
           </TabsContent>
           <TabsContent className="border-none p-0 pt-4" value="all-users">
             {isLoadingUsers && <Loader />}
-            {dataUsers && <p>User</p>}
+            {dataUsers && (
+               <ResponsiveMasonry
+               columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}
+               className="w-full"
+             >
+               <Masonry gutter="1rem">
+                 {dataUsers
+                   .sort((a, b) => {
+                     return moment(b.createdAt).diff(moment(a.createdAt))
+                   })
+                   .map(
+                     (user: {
+                       pseudo: string
+                       displayName: string
+                       photoURL: string
+                     }) => (
+                       <CardUserAdmin
+                         key={user.pseudo}
+                         pseudo={user.pseudo}
+                         displayName={user.displayName}
+                         photoURL={user.photoURL}
+                       />
+                     )
+                   )}
+               </Masonry>
+             </ResponsiveMasonry>
+            )}
             {isErrorUsers && <Error />}
           </TabsContent>
         </Tabs>

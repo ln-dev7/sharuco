@@ -145,6 +145,7 @@ export default function Dashboard() {
       tags: "",
       isPrivate: false,
     })
+    setCheckboxOn(false)
   }
 
   useEffect(() => {
