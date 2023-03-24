@@ -12,14 +12,7 @@ import { Layout } from "@/components/layout"
 import { buttonVariants } from "@/components/ui/button"
 
 export default function IndexPage() {
-  const {
-    updateDocument,
-    isLoading: isLoadingUpdate,
-    isError: isErrorUpdate,
-    isSuccess: isSuccessUpdate,
-  } = useUpdateDocument("users")
-
-  const { login, isPending } = useGitHubLoign(updateDocument)
+  const { login, isPending } = useGitHubLoign()
 
   const { user } = useAuthContext()
 

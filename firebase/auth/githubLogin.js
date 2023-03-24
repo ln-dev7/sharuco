@@ -1,9 +1,39 @@
 import { useState } from "react"
 import { auth } from "@/firebase/config"
-import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
 import { GithubAuthProvider, signInWithPopup } from "firebase/auth"
+import { collection, doc, getFirestore, setDoc } from "firebase/firestore"
+import moment from "moment"
 
-export const useGitHubLoign = (updateDocument) => {
+import firebase_app from "../config"
+
+const db = getFirestore(firebase_app)
+
+export default async function updateProfile(collectionName, documentId, data) {
+  let result = null
+  let error = null
+
+  try {
+    const documentRef = doc(collection(db, collectionName), documentId)
+    await setDoc(documentRef, data, { merge: true })
+    result = "Document updated successfully"
+  } catch (e) {
+    if (e.code === "not-found") {
+      try {
+        const documentRef = doc(db, `${collectionName}/${documentId}`)
+        await setDoc(documentRef, data)
+        result = "Document created and updated successfully"
+      } catch (e) {
+        error = e
+      }
+    } else {
+      error = e
+    }
+  }
+
+  return { result, error }
+}
+
+export const useGitHubLoign = () => {
   const [error, setError] = useState(false)
   const [isPending, setIsPending] = useState(false)
   const provider = new GithubAuthProvider()
@@ -20,18 +50,14 @@ export const useGitHubLoign = (updateDocument) => {
 
       const user = res.user
 
-      updateDocument(
-        {
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-          createdAt: parseInt(user.metadata.createdAt),
-          lastLoginAt: parseInt(user.metadata.lastLoginAt),
-        },
-        user.reloadUserInfo.screenName
-      )
-
-      //console.log(user)
+      updateProfile("users", user.reloadUserInfo.screenName, {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        createdAt: moment(user.metadata.creationTime).valueOf(),
+        lastLoginAt: moment(user.metadata.lastSignInTime).valueOf(),
+      })
+      console.log(user)
     } catch (error) {
       console.log(error)
       setError(error.message)
