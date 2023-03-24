@@ -78,12 +78,14 @@ export default function CardCodeAdmin({
   description,
   tags,
   favoris: favorisInit,
+  isPrivate,
 }) {
   const notifyCodeCopied = () => toast.success("Code copied to clipboard")
   const notifyUrlCopied = () => toast.success("Url of code copied to clipboard")
   const notifyCodeAdded = () =>
     toast.success("Your code has been added successfully !")
   const { user } = useAuthContext()
+  const pseudo = user?.reloadUserInfo.screenName
   const { login, isPending } = useGitHubLoign()
 
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
@@ -174,24 +176,31 @@ export default function CardCodeAdmin({
   } = useDocument(id, "codes")
 
   const {
-    updateDocument: updateDocumentFavoris,
-    isLoading: isLoadingAddFavoris,
-    isError: isErrorAddFavoris,
-    isSuccess: isSuccessAddFavoris,
-    error: errorAddFavoris,
+    updateDocument: updateDocumentCodes,
+    isLoading: isLoadingAddFavorisCodes,
+    isError: isErrorAddFavorisCodes,
+    isSuccess: isSuccessAddFavorisCodes,
+    error: errorAddFavorisCodes,
   }: any = useUpdateDocument("codes")
+
+  const {
+    updateDocument: updateDocumentUsers,
+    isLoading: isLoadingAddFavorisUsers,
+    isError: isErrorAddFavorisUsers,
+    isSuccess: isSuccessAddFavorisUsers,
+    error: errorAddFavorisUsers,
+  }: any = useUpdateDocument("users")
 
   const addCodeOnFavoris = async (id: string) => {
     const updatedData = {
       favoris:
-        favorisInit?.includes(user.reloadUserInfo.screenName) ?? false
-          ? favorisInit.filter(
-              (idUser: string) => idUser !== user.reloadUserInfo.screenName
-            )
-          : [...favorisInit, user.reloadUserInfo.screenName],
+        favorisInit?.includes(pseudo) ?? false
+          ? favorisInit.filter((idUser: string) => idUser !== pseudo)
+          : [...favorisInit, pseudo],
     }
 
-    updateDocumentFavoris({ id, updatedData })
+    updateDocumentCodes({ id, updatedData })
+    updateDocumentUsers({ pseudo, updatedData })
   }
 
   return (
@@ -210,7 +219,7 @@ export default function CardCodeAdmin({
         </Button>
         <div className="flex items-center justify-start gap-2">
           <Button onClick={() => addCodeOnFavoris(id)}>
-            {isLoadingAddFavoris ? (
+            {isLoadingAddFavorisCodes || isLoadingAddFavorisUsers ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <>
@@ -341,75 +350,77 @@ export default function CardCodeAdmin({
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>{" "}
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button>
-                      Share
-                      <Share className="ml-2 h-4 w-4" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Share this code on your social networks.
-                      </AlertDialogTitle>
-                    </AlertDialogHeader>
-                    <div className="flex gap-2">
-                      <FacebookShareButton
-                        url={shareUrl}
-                        quote={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here`}
-                      >
-                        <FacebookIcon size={38} round />
-                      </FacebookShareButton>
-                      <TwitterShareButton
-                        url={shareUrl}
-                        title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here.`}
-                        hashtags={["CaParleDev", "ShareWithSharuco"]}
-                      >
-                        <TwitterIcon size={38} round />
-                      </TwitterShareButton>
-                      <LinkedinShareButton
-                        url={shareUrl}
-                        title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
-                        source="https://sharuco.lndev.me"
-                      >
-                        <LinkedinIcon size={38} round />
-                      </LinkedinShareButton>
-                      <EmailShareButton
-                        url={shareUrl}
-                        subject={`Share code on sharuco.lndev.me`}
-                        body={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
-                      >
-                        <EmailIcon size={38} round />
-                      </EmailShareButton>
-                      <WhatsappShareButton
-                        url={shareUrl}
-                        title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
-                      >
-                        <WhatsappIcon size={38} round />
-                      </WhatsappShareButton>
-                      <TelegramShareButton
-                        url={shareUrl}
-                        title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
-                      >
-                        <TelegramIcon size={38} round />
-                      </TelegramShareButton>
-                      <Button
-                        variant="subtle"
-                        className="h-10 w-10 rounded-full p-0"
-                        onClick={() => {
-                          copyToClipboard(shareUrl)
-                          notifyUrlCopied()
-                        }}
-                      >
-                        <Copy className="h-4 w-4" />
+                {!isPrivate && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button>
+                        Share
+                        <Share className="ml-2 h-4 w-4" />
                       </Button>
-                    </div>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Share this code on your social networks.
+                        </AlertDialogTitle>
+                      </AlertDialogHeader>
+                      <div className="flex gap-2">
+                        <FacebookShareButton
+                          url={shareUrl}
+                          quote={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here`}
+                        >
+                          <FacebookIcon size={38} round />
+                        </FacebookShareButton>
+                        <TwitterShareButton
+                          url={shareUrl}
+                          title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here.`}
+                          hashtags={["CaParleDev", "ShareWithSharuco"]}
+                        >
+                          <TwitterIcon size={38} round />
+                        </TwitterShareButton>
+                        <LinkedinShareButton
+                          url={shareUrl}
+                          title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                          source="https://sharuco.lndev.me"
+                        >
+                          <LinkedinIcon size={38} round />
+                        </LinkedinShareButton>
+                        <EmailShareButton
+                          url={shareUrl}
+                          subject={`Share code on sharuco.lndev.me`}
+                          body={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                        >
+                          <EmailIcon size={38} round />
+                        </EmailShareButton>
+                        <WhatsappShareButton
+                          url={shareUrl}
+                          title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                        >
+                          <WhatsappIcon size={38} round />
+                        </WhatsappShareButton>
+                        <TelegramShareButton
+                          url={shareUrl}
+                          title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                        >
+                          <TelegramIcon size={38} round />
+                        </TelegramShareButton>
+                        <Button
+                          variant="subtle"
+                          className="h-10 w-10 rounded-full p-0"
+                          onClick={() => {
+                            copyToClipboard(shareUrl)
+                            notifyUrlCopied()
+                          }}
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive">

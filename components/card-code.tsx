@@ -53,6 +53,7 @@ export default function CardCode({
   const notifyCodeCopied = () => toast.success("Code copied to clipboard")
   const notifyUrlCopied = () => toast.success("Url of code copied to clipboard")
   const { user } = useAuthContext()
+  const pseudo = user?.reloadUserInfo.screenName
   const { login, isPending } = useGitHubLoign()
 
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
@@ -70,24 +71,31 @@ export default function CardCode({
   } = useDocument(id, "codes")
 
   const {
-    updateDocument,
-    isLoading: isLoadingAddFavoris,
-    isError: isErrorAddFavoris,
-    isSuccess: isSuccessAddFavoris,
-    error: errorAddFavoris,
+    updateDocument: updateDocumentCodes,
+    isLoading: isLoadingAddFavorisCodes,
+    isError: isErrorAddFavorisCodes,
+    isSuccess: isSuccessAddFavorisCodes,
+    error: errorAddFavorisCodes,
   }: any = useUpdateDocument("codes")
+
+  const {
+    updateDocument: updateDocumentUsers,
+    isLoading: isLoadingAddFavorisUsers,
+    isError: isErrorAddFavorisUsers,
+    isSuccess: isSuccessAddFavorisUsers,
+    error: errorAddFavorisUsers,
+  }: any = useUpdateDocument("users")
 
   const addCodeOnFavoris = async (id: string) => {
     const updatedData = {
       favoris:
-        favorisInit?.includes(user.reloadUserInfo.screenName) ?? false
-          ? favorisInit.filter(
-              (idUser: string) => idUser !== user.reloadUserInfo.screenName
-            )
-          : [...favorisInit, user.reloadUserInfo.screenName],
+        favorisInit?.includes(pseudo) ?? false
+          ? favorisInit.filter((idUser: string) => idUser !== pseudo)
+          : [...favorisInit, pseudo],
     }
 
-    updateDocument({ id, updatedData })
+    updateDocumentCodes({ id, updatedData })
+    updateDocumentUsers({ pseudo, updatedData })
   }
 
   return (
@@ -107,12 +115,11 @@ export default function CardCode({
         <div className="flex items-center justify-start gap-2">
           {user ? (
             <Button onClick={() => addCodeOnFavoris(id)}>
-              {isLoadingAddFavoris ? (
+              {isLoadingAddFavorisCodes || isLoadingAddFavorisUsers ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <>
-                  {user &&
-                  favorisInit.includes(user.reloadUserInfo.screenName) ? (
+                  {user && favorisInit.includes(pseudo) ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="#F9197F"

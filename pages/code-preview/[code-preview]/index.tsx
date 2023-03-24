@@ -34,9 +34,8 @@ export default function CodePreview() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
-        
         {isLoading && <Loader />}
-        {data && data.exists && (
+        {data && data.exists && !data.data.isPrivate && (
           <ResponsiveMasonry
             columnsCountBreakPoints={{
               all: 1,
@@ -56,7 +55,8 @@ export default function CodePreview() {
             </Masonry>
           </ResponsiveMasonry>
         )}
-        {data && !data.exists && (
+        {((data && !data.exists) ||
+          (data && data.exists && data.data.isPrivate)) && (
           <div className="flex flex-col items-center gap-4">
             <h1 className="tesxt-4xl font-bold">
               This code snippet does not exist.

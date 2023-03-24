@@ -167,6 +167,7 @@ export default function Dashboard() {
                           description: string
                           tags: string[]
                           favoris: string[]
+                          isPrivate: boolean
                         }) => (
                           <CardCodeAdmin
                             key={code.id}
@@ -177,6 +178,7 @@ export default function Dashboard() {
                             description={code.description}
                             tags={code.tags}
                             favoris={code.favoris}
+                            isPrivate={code.isPrivate}
                           />
                         )
                       )}
