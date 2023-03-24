@@ -78,13 +78,13 @@ export default function User() {
                 <p className="text-center text-gray-500">
                   Joined{" "}
                   <span className="font-bold">
-                    {moment(data.data.createdAt).format("DD MMMM YYYY")}
+                    {moment(data.data.createdAt).fromNow()}
                   </span>
                 </p>
                 <p className="text-center text-gray-500">
                   Last seen{" "}
                   <span className="font-bold">
-                    {moment(data.data.lastLoginAt).format("DD MMMM YYYY")}
+                    {moment(data.data.lastLoginAt).fromNow()}
                   </span>
                 </p>
               </div>
