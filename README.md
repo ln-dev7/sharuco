@@ -38,8 +38,8 @@ This project is licensed under the MIT License.
 
 ## Credits
 
-Frontend: [Next.js](https://nextjs.org/)
-DataBase / Auth: [Firebase](https://firebase.google.com/)
-Hosting: [Vercel](https://vercel.com/)
-UI : [UI Shadcn](https://ui.shadcn.com/) ( Tailwind CSS + Radix UI )
-Tools: [React Query](https://tanstack.com/query/v3/), [React Hook Form](https://react-hook-form.com/)
+1. Frontend: [Next.js](https://nextjs.org/)
+2. DataBase / Auth: [Firebase](https://firebase.google.com/)
+3. Hosting: [Vercel](https://vercel.com/)
+4. UI : [UI Shadcn](https://ui.shadcn.com/) ( Tailwind CSS + Radix UI )
+5. Tools: [React Query](https://tanstack.com/query/v3/), [React Hook Form](https://react-hook-form.com/)
