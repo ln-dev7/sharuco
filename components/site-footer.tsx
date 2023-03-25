@@ -23,12 +23,20 @@ export function SiteFooter() {
               href="https://twitter.com/ln_dev7"
               target="_blank"
               rel="noreferrer"
-              className="font-medium underline underline-offset-4"
+              className="font-semibold underline underline-offset-4"
             >
               LN
             </a>
             {"  "}
-            🇨🇲
+            🇨🇲 | Using{" "}
+            <a
+              href="https://ui.shadcn.com/"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium underline underline-offset-4"
+            >
+              shadcn/ui
+            </a>
           </p>
         </div>
       </div>

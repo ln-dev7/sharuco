@@ -19,21 +19,25 @@ export const siteConfig: SiteConfig = {
       title: "Explore",
       href: "/explore",
       pined: true,
+      support: false,
     },
     {
       title: "Popular code",
       href: "/popular",
       disabled: true,
+      support: false,
     },
     {
       title: "Product Hunt",
       href: "https://www.producthunt.com/products/sharuco",
       external: true,
+      support: true,
     },
     {
       title: "Donnation",
       href: "https://www.buymeacoffee.com/lndev",
       external: true,
+      support: true,
     },
   ],
   links: {

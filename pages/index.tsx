@@ -158,15 +158,28 @@ export default function IndexPage() {
             </button>
           )}
         </div>
-        {!isLoadingUsers ? (
+        <p className="text-sm text-slate-700 dark:text-slate-400">
+          Follow us on{" "}
+          <Link
+            href="https://twitter.com/ln_dev7"
+            className="font-bold underline underline-offset-4"
+          >
+            Twitter
+          </Link>{" "}
+          for the latest updates
+        </p>
+        {/* {!isLoadingUsers ? (
           <p className="text-sm text-slate-700 dark:text-slate-400">
             <span className="font-bold">{dataUsers.length}</span> users
             registered on sharuco.
           </p>
         ) : (
           <Loader2 className="h-4 w-4 animate-spin" />
-        )}
-        <div className="mt-4 overflow-hidden rounded-lg border bg-white shadow-md">
+        )} */}
+        <div
+          className="mt-4 overflow-hidden rounded-lg border bg-white shadow-md"
+          data-radix-aspect-ratio-wrapper
+        >
           <video autoPlay muted loop className="overflow-hidden rounded-lg">
             <source
               src="https://leonelngoyadatabase.leonelngoya.com/sharuco-hero-video.mp4"

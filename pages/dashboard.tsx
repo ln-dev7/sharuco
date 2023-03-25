@@ -162,12 +162,8 @@ export default function Dashboard() {
             <span className="text-gray-700 dark:text-gray-300">modify</span> or{" "}
             <span className="text-gray-700 dark:text-gray-300">delete</span> a
             code only on the{" "}
-            <span className="text-gray-700 dark:text-gray-300">
-              public code
-            </span>{" "}
-            and{" "}
-            <span className="text-gray-700 dark:text-gray-300">
-              private code
+            <span className="font-semibold text-gray-700 dark:text-gray-300">
+              manage code
             </span>{" "}
             section.
           </p>
