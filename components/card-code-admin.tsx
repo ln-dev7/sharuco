@@ -11,7 +11,7 @@ import copyToClipboard from "@/utils/copyToClipboard"
 import highlight from "@/utils/highlight"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { Copy, Edit, Loader2, Settings2, Share, Trash } from "lucide-react"
+import { Copy, Edit, Settings2, Share, Trash } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import Loader from "@/components/loader"
@@ -361,12 +361,13 @@ export default function CardCodeAdmin({
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>
-                        Are you sure you want to delete this code ?
+                        {/* Are you sure you want to delete this code ? */}
+                        Delet code is not yet available.
                       </AlertDialogTitle>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <button
+                      {/* <button
                         className={cn(
                           "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                         )}
@@ -379,7 +380,7 @@ export default function CardCodeAdmin({
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         )}
                         Delete
-                      </button>
+                      </button> */}
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>

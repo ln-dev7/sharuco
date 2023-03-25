@@ -55,6 +55,15 @@ export default function CardCode({
 }) {
   const notifyCodeCopied = () => toast.success("Code copied to clipboard")
   const notifyUrlCopied = () => toast.success("Url of code copied to clipboard")
+
+  const alertAddFavoris = () =>
+    toast(
+      "Adding/deleting a bookmark takes time before it is visible on the screen, so please don't click many times.",
+      {
+        icon: " ⚠️ ",
+      }
+    )
+
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
   const { login, isPending } = useGitHubLoign()
@@ -124,7 +133,12 @@ export default function CardCode({
         </Button>
         <div className="flex items-center justify-start gap-2">
           {user ? (
-            <Button onClick={() => addCodeOnFavoris(id)}>
+            <Button
+              onClick={() => {
+                alertAddFavoris()
+                addCodeOnFavoris(id)
+              }}
+            >
               {isLoadingAddFavorisCodes || isLoadingAddFavorisUsers ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
