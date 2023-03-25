@@ -18,17 +18,34 @@ const useUpdateDocument = (collectionName) => {
     ({ docId, updatedData }) =>
       updateDocument(docId, updatedData, collectionName),
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries("isprivate-code-from-user-false")
-        queryClient.invalidateQueries("isprivate-code-from-user-true")
-        queryClient.invalidateQueries("favorites-codes")
-        queryClient.invalidateQueries("isprivate-codes-true")
-        queryClient.invalidateQueries("isprivate-codes-false")
-        queryClient.invalidateQueries("document-users")
-        queryClient.invalidateQueries("document-codes")
-        queryClient.invalidateQueries("users")
-        queryClient.invalidateQueries("codes")
-        queryClient.invalidateQueries("documents")
+      onSuccess: (code) => {
+        queryClient.setQueriesData("isprivate-code-from-user-false", (old) => {
+          return old.filter((c) => c.id !== code.id)
+        })
+        queryClient.setQueriesData("isprivate-code-from-user-true", (old) => {
+          return old.filter((c) => c.id !== code.id)
+        })
+        queryClient.setQueriesData("favorites-codes", (old) => {
+          return old.filter((c) => c.id !== code.id)
+        })
+        queryClient.setQueriesData("isprivate-codes-true", (old) => {
+          return old.filter((c) => c.id !== code.id)
+        })
+        queryClient.setQueriesData("isprivate-codes-false", (old) => {
+          return old.filter((c) => c.id !== code.id)
+        })
+        queryClient.setQueriesData("document-users", (old) => {
+          return old.filter((c) => c.id !== code.id)
+        })
+        queryClient.setQueriesData("document-codes", (old) => {
+          return old.filter((c) => c.id !== code.id)
+        })
+        queryClient.setQueriesData("codes", (old) => {
+          return old.filter((c) => c.id !== code.id)
+        })
+        queryClient.setQueriesData("documents", (old) => {
+          return old.filter((c) => c.id !== code.id)
+        })
       },
     }
   )

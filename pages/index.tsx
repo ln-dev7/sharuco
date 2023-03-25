@@ -197,7 +197,7 @@ export default function IndexPage() {
               className="fixed bottom-4 right-4 z-10 h-14 w-14 rounded-full p-0"
             >
               <Plus className="h-6 w-6" />
-              <span className="sr-only">Open settings</span>
+              <span className="sr-only">Open modal</span>
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>

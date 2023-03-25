@@ -1,3 +1,4 @@
+import React from "react"
 import Link from "next/link"
 import { ExternalLink } from "lucide-react"
 
@@ -69,10 +70,9 @@ export function MainNav({ items }: MainNavProps) {
                 (item, index) =>
                   item.href &&
                   item.support && (
-                    <>
+                    <React.Fragment key={index}>
                       <DropdownMenuItem className="cursor-pointer p-0">
                         <Link
-                          key={index}
                           href={item.disabled ? "#" : item.href}
                           className={cn(
                             "group relative inline-flex w-full items-center justify-start rounded-md bg-transparent py-2 px-4 text-sm font-semibold transition-colors focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-slate-50 data-[active]:bg-slate-50 dark:text-slate-100 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[state=open]:bg-slate-800 dark:data-[active]:bg-slate-800",
@@ -97,7 +97,7 @@ export function MainNav({ items }: MainNavProps) {
                         </Link>
                       </DropdownMenuItem>
                       {index !== items.length - 1 && <DropdownMenuSeparator />}
-                    </>
+                    </React.Fragment>
                   )
               )}
             </DropdownMenuContent>

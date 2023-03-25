@@ -44,10 +44,9 @@ export default function Explore() {
                 659: 1,
                 660: 2,
                 720: 2,
-                989: 3,
                 990: 3,
-                1200: 4,
               }}
+              className="w-full"
             >
               <Masonry gutter="1rem">
                 {dataPublicCodes
