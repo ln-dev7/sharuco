@@ -11,7 +11,7 @@ import copyToClipboard from "@/utils/copyToClipboard"
 import highlight from "@/utils/highlight"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { Copy, Edit, Settings2, Share, Trash } from "lucide-react"
+import { Copy, Edit, Loader2, Settings2, Share, Trash } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import Loader from "@/components/loader"
@@ -34,14 +34,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import "prism-themes/themes/prism-one-dark.min.css"
 import { useForm } from "react-hook-form"
@@ -81,6 +73,12 @@ export default function CardCodeAdmin({
   const { login, isPending } = useGitHubLoign()
 
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
+
+  const {
+    data: dataCode,
+    isLoading: isLoadingCode,
+    isError: isErrorCode,
+  } = useDocument(id, "codes")
 
   //
 
@@ -192,73 +190,110 @@ export default function CardCodeAdmin({
                       <Edit className="ml-2 h-4 w-4" />
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
+                  {/* <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>
                         <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
-                          Edit snippet
+                          Edit a snippet
                         </h3>
                       </AlertDialogTitle>
                       <AlertDialogDescription>
                         <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                          <Label htmlFor="code">Insert your code</Label>
+                          <Label htmlFor="code">Edit your code</Label>
                           <Textarea
                             placeholder="Insert your code here..."
                             id="code"
+                            value={dataCode?.data?.code}
+                            {...register("code")}
                           />
+                          {errors.code && (
+                            <p className="text-sm text-red-500">
+                              This field is required
+                            </p>
+                          )}
                         </div>
                         <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                           <Label htmlFor="description">Description</Label>
                           <Textarea
                             placeholder="What does this code do ?"
                             id="description"
+                            value={dataCode?.data?.description}
+                            {...register("description")}
                           />
+                          {errors.description && (
+                            <p className="text-sm text-red-500">
+                              This field is required
+                            </p>
+                          )}
                         </div>
                         <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                           <Label htmlFor="language">Language</Label>
-                          <Select>
-                            <SelectTrigger className="w-full" id="language">
-                              <SelectValue placeholder="What language is the code written in ?" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="other">Other</SelectItem>
-                              <SelectItem value="bash">Bash</SelectItem>
-                              <SelectItem value="c">C</SelectItem>
-                              <SelectItem value="csharp">C#</SelectItem>
-                              <SelectItem value="cpp">C++</SelectItem>
-                              <SelectItem value="css">CSS</SelectItem>
-                              <SelectItem value="docker">Docker</SelectItem>
-                              <SelectItem value="go">Go</SelectItem>
-                              <SelectItem value="html">HTML</SelectItem>
-                              <SelectItem value="java">Java</SelectItem>
-                              <SelectItem value="javascript">
-                                Javascript
-                              </SelectItem>
-                              <SelectItem value="json">JSON</SelectItem>
-                              <SelectItem value="kotlin">Kotlin</SelectItem>
-                              <SelectItem value="markdown">Markdown</SelectItem>
-                              <SelectItem value="php">PHP</SelectItem>
-                              <SelectItem value="python">Python</SelectItem>
-                              <SelectItem value="sql">SQL</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <Input
+                            type="text"
+                            id="language"
+                            placeholder="The code is written in what language ?"
+                            value={dataCode?.data?.language}
+                            {...register("language")}
+                          />
+                          {errors.language && (
+                            <p className="text-sm text-red-500">
+                              This field is required
+                            </p>
+                          )}
                         </div>
                         <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                           <Label htmlFor="tags">Tags</Label>
-                          <Input type="text" id="tags" placeholder="" />
+                          <Input
+                            type="text"
+                            id="tags"
+                            placeholder="Enter a tags ..."
+                            value={dataCode?.data?.tags}
+                            {...register("tags")}
+                          />
                           <p className="text-sm text-slate-500">
                             Please separate tags with{" "}
                             <span className="text-slate-700 dark:text-slate-300">
                               ,
                             </span>
                           </p>
+                          {errors.tags && (
+                            <p className="text-sm text-red-500">
+                              This field is required
+                            </p>
+                          )}
                         </div>
                         <div className="flex items-center gap-4">
-                          <Switch id="isPrivate" />
+                          <input
+                            type="checkbox"
+                            {...register("isPrivate")}
+                            value={dataCode?.data?.isPrivate}
+                            name="isPrivate"
+                            id="isPrivate"
+                            className={`h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none ring-slate-500
+                       ring-offset-0 focus:ring-slate-400 focus:ring-offset-slate-900 dark:bg-slate-800
+                      ${checkboxOn ? "ring-2" : "ring-0"}
+                      `}
+                            checked={checkboxOn}
+                            onChange={() => setCheckboxOn(!checkboxOn)}
+                          />
                           <Label htmlFor="isPrivate">
-                            Will this code be private ?
+                            Will this code be private ?{" "}
+                            {checkboxOn ? (
+                              <span className="font-bold text-teal-300">
+                                Yes
+                              </span>
+                            ) : (
+                              <span className="font-bold text-teal-300">
+                                No
+                              </span>
+                            )}
                           </Label>
                         </div>
+                        {isError && (
+                          <p className="pt-4 text-sm font-bold text-red-500">
+                            An error has occurred, please try again later.
+                          </p>
+                        )}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -267,16 +302,26 @@ export default function CardCodeAdmin({
                         className={cn(
                           "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                         )}
-                        // disabled={isPending}
-                        // onClick={login}
+                        disabled={isLoading}
+                        onClick={
+                          !isLoading ? handleSubmit(onSubmit) : undefined
+                        }
                       >
-                        {/* {isPending ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Github className="mr-2 h-4 w-4" />
-                )} */}
-                        Save
+                        {isLoading && (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        )}
+                        Submit
                       </button>
+                    </AlertDialogFooter>
+                  </AlertDialogContent> */}
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Edit a snippet is not available yet.
+                      </AlertDialogTitle>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>{" "}
