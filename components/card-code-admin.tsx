@@ -6,7 +6,7 @@ import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
-import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
+import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
 import highlight from "@/utils/highlight"
 import linearizeCode from "@/utils/linearizeCode"
@@ -116,7 +116,7 @@ export default function CardCodeAdmin({
   })
 
   const { updateDocument, isLoading, isError, isSuccess }: any =
-    useUpdateDocument("codes")
+    useUpdateCodeDocument("codes")
 
   const onSubmit = async (data) => {
     const { code, description, language, tags, isPrivate } = data

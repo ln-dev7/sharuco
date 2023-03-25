@@ -71,7 +71,10 @@ export function AvatarUser() {
       <SheetContent position="right" size="custom_w_200">
         <SheetHeader>
           <SheetTitle>
-            Hello {data && data.exists && <span className="font-bold">LN</span>}
+            Hello{" "}
+            {data && data.exists && (
+              <span className="font-bold">{data.data.displayName}</span>
+            )}
           </SheetTitle>
           <SheetDescription>This is your profile.</SheetDescription>
           <div className="py-4"></div>

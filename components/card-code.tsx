@@ -4,7 +4,8 @@ import Link from "next/link"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
-import { useUpdateDocument } from "@/firebase/firestore/updateDocument"
+import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
+import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
 import highlight from "@/utils/highlight"
 import { Copy, Github, Loader2, Share, Star, Verified } from "lucide-react"
@@ -50,6 +51,7 @@ export default function CardCode({
   tags,
   favoris: favorisInit,
   isPrivate,
+  currentUser,
 }) {
   const notifyCodeCopied = () => toast.success("Code copied to clipboard")
   const notifyUrlCopied = () => toast.success("Url of code copied to clipboard")
@@ -60,9 +62,9 @@ export default function CardCode({
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
 
   const {
-    data: dataUser,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
+    data: dataAuthor,
+    isLoading: isLoadingAuthor,
+    isError: isErrorAuthor,
   } = useDocument(idAuthor, "users")
 
   const {
@@ -72,31 +74,38 @@ export default function CardCode({
   } = useDocument(id, "codes")
 
   const {
-    updateDocument: updateDocumentCodes,
+    updateCodeDocument,
     isLoading: isLoadingAddFavorisCodes,
     isError: isErrorAddFavorisCodes,
     isSuccess: isSuccessAddFavorisCodes,
     error: errorAddFavorisCodes,
-  }: any = useUpdateDocument("codes")
+  }: any = useUpdateCodeDocument("codes")
 
   const {
-    updateDocument: updateDocumentUsers,
+    updateUserDocument,
     isLoading: isLoadingAddFavorisUsers,
     isError: isErrorAddFavorisUsers,
     isSuccess: isSuccessAddFavorisUsers,
     error: errorAddFavorisUsers,
-  }: any = useUpdateDocument("users")
+  }: any = useUpdateUserDocument("users")
 
   const addCodeOnFavoris = async (id: string) => {
-    const updatedData = {
-      favoris:
-        favorisInit?.includes(pseudo) ?? false
-          ? favorisInit.filter((idUser: string) => idUser !== pseudo)
-          : [...favorisInit, pseudo],
+    let updatedCodeData = {
+      favoris: favorisInit.includes(pseudo)
+        ? favorisInit.filter((item) => item !== pseudo)
+        : [...favorisInit, pseudo],
     }
 
-    updateDocumentCodes({ id, updatedData })
-    updateDocumentUsers({ pseudo, updatedData })
+    let updatedUserData = {
+      favoris: currentUser.favoris.includes(id)
+        ? currentUser.favoris.filter((item) => item !== id)
+        : [...currentUser.favoris, id],
+    }
+
+    updateUserDocument({ pseudo, updatedUserData })
+    updateCodeDocument({ id, updatedCodeData })
+
+    // console.log(isSuccessAddFavorisCodes, isSuccessAddFavorisUsers)
   }
 
   return (
@@ -273,23 +282,23 @@ export default function CardCode({
           className="flex items-center justify-start gap-2"
         >
           <Avatar className="h-8 w-8 cursor-pointer">
-            {isLoadingUser && (
+            {isLoadingAuthor && (
               <AvatarFallback>
                 <Loader />
               </AvatarFallback>
             )}
-            {dataUser && dataUser.exists && (
+            {dataAuthor && dataAuthor.exists && (
               <>
                 <AvatarImage
-                  src={dataUser.data.photoURL}
-                  alt={dataUser.data.displayName}
+                  src={dataAuthor.data.photoURL}
+                  alt={dataAuthor.data.displayName}
                 />
                 <AvatarFallback>
-                  {dataUser.data.displayName.split(" ")[1] === undefined
-                    ? dataUser.data.displayName.split(" ")[0][0] +
-                      dataUser.data.displayName.split(" ")[0][1]
-                    : dataUser.data.displayName.split(" ")[0][0] +
-                      dataUser.data.displayName.split(" ")[1][0]}
+                  {dataAuthor.data.displayName.split(" ")[1] === undefined
+                    ? dataAuthor.data.displayName.split(" ")[0][0] +
+                      dataAuthor.data.displayName.split(" ")[0][1]
+                    : dataAuthor.data.displayName.split(" ")[0][0] +
+                      dataAuthor.data.displayName.split(" ")[1][0]}
                 </AvatarFallback>
               </>
             )}
@@ -298,9 +307,9 @@ export default function CardCode({
             <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
               {idAuthor}{" "}
             </span>
-            {dataUser && dataUser.exists && (
+            {dataAuthor && dataAuthor.exists && (
               <span>
-                {dataUser.data.isCertified && (
+                {dataAuthor.data.isCertified && (
                   <Verified className="h-4 w-4 text-green-500" />
                 )}
               </span>

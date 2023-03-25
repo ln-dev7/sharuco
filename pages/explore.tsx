@@ -1,6 +1,8 @@
 "use client"
 
 import Head from "next/head"
+import { useAuthContext } from "@/context/AuthContext"
+import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
 import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
@@ -12,6 +14,15 @@ import Loader from "@/components/loader"
 import "prism-themes/themes/prism-one-dark.min.css"
 
 export default function Explore() {
+  const { user } = useAuthContext()
+  const pseudo = user?.reloadUserInfo.screenName
+
+  const {
+    data: dataUser,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+  } = useDocument(pseudo, "users")
+
   const {
     isLoading: isLoadingPublicCodes,
     isError: isErrorPublicCodes,
@@ -63,6 +74,7 @@ export default function Explore() {
                       tags: string[]
                       favoris: string[]
                       isPrivate: boolean
+                      currentUser: any
                     }) => (
                       <CardCode
                         key={code.id}
@@ -74,6 +86,7 @@ export default function Explore() {
                         tags={code.tags}
                         favoris={code.favoris}
                         isPrivate={code.isPrivate}
+                        currentUser={dataUser?.data}
                       />
                     )
                   )}

@@ -12,9 +12,18 @@ import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import { buttonVariants } from "@/components/ui/button"
 import "prism-themes/themes/prism-one-dark.min.css"
+import { useAuthContext } from "@/context/AuthContext"
 
 export default function CodePreview() {
   const searchParams = useSearchParams()
+  const { user } = useAuthContext()
+  const pseudo = user?.reloadUserInfo.screenName
+
+  const {
+    data: dataUser,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+  } = useDocument(pseudo, "users")
 
   const { data, isLoading, isError } = useDocument(
     searchParams.get("code-preview"),
@@ -52,6 +61,7 @@ export default function CodePreview() {
                 tags={data.data.tags}
                 favoris={data.data.favoris}
                 isPrivate={data.data.isPrivate}
+                currentUser={dataUser?.data}
               />
             </Masonry>
           </ResponsiveMasonry>

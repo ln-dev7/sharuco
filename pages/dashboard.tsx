@@ -40,6 +40,7 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
+import { useDocument } from "@/firebase/firestore/getDocument"
 
 export default function Dashboard() {
   const router = useRouter()
@@ -55,6 +56,12 @@ export default function Dashboard() {
 
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
+
+  const {
+    data: dataUser,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+  } = useDocument(pseudo, "users")
 
   const {
     isLoading: isLoadingPrivateCodes,
@@ -403,6 +410,7 @@ export default function Dashboard() {
                           tags: string[]
                           favoris: string[]
                           isPrivate: boolean
+                          currentUser: any
                         }) => (
                           <CardCode
                             key={code.id}
@@ -414,6 +422,7 @@ export default function Dashboard() {
                             tags={code.tags}
                             favoris={code.favoris}
                             isPrivate={code.isPrivate}
+                            currentUser={dataUser?.data}
                           />
                         )
                       )}
@@ -458,6 +467,7 @@ export default function Dashboard() {
                           tags: string[]
                           favoris: string[]
                           isPrivate: boolean
+                          currentUser: any
                         }) => (
                           <CardCode
                             key={code.id}
@@ -469,6 +479,7 @@ export default function Dashboard() {
                             tags={code.tags}
                             favoris={code.favoris}
                             isPrivate={code.isPrivate}
+                            currentUser={dataUser?.data}
                           />
                         )
                       )}
@@ -513,6 +524,7 @@ export default function Dashboard() {
                           tags: string[]
                           favoris: string[]
                           isPrivate: boolean
+                          currentUser: any
                         }) => (
                           <CardCode
                             key={code.id}
@@ -524,6 +536,7 @@ export default function Dashboard() {
                             tags={code.tags}
                             favoris={code.favoris}
                             isPrivate={code.isPrivate}
+                            currentUser={dataUser?.data}
                           />
                         )
                       )}
