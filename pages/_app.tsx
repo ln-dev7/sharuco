@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        ///refetchOnWindowFocus: false,
+        refetchOnWindowFocus: false,
       },
     },
   })

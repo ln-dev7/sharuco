@@ -12,7 +12,7 @@ export default function Popular() {
         <title>Sharuco | Popular</title>
         <meta
           name="description"
-          content="Sharuco allows you to share code snippets that you have found
+          content="Sharuco allows you to share code codes that you have found
            useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,7 +21,7 @@ export default function Popular() {
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
         <div className="flex max-w-[980px] flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
-            Discover the most loved code snippets.
+            Discover the most loved code codes.
           </h1>
         </div>
       </section>
