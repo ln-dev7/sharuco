@@ -228,7 +228,10 @@ export default function Dashboard() {
                         <CardUserAdmin
                           key={user.pseudo}
                           pseudo={user.pseudo}
-                          displayName={user.displayName}
+                          displayName={
+                            user.displayName
+                            .split(" ")[0]
+                          }
                           photoURL={user.photoURL}
                         />
                       )

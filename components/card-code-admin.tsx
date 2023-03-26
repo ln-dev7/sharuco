@@ -450,7 +450,7 @@ export default function CardCodeAdmin({
           </Popover>
         </div>
       </div>
-      <div className="overflow-hidden rounded-lg">
+      <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
         <pre className="max-h-[480px] w-auto overflow-auto rounded-lg border border-slate-600 bg-slate-900 p-4 dark:bg-black">
           <code
             className="text-white"
