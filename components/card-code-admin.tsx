@@ -356,7 +356,7 @@ export default function CardCodeAdmin({
                         </FacebookShareButton>
                         <TwitterShareButton
                           url={shareUrl}
-                          title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here.`}
+                          title={`I discovered this code on @sharuco_app and found it useful, I share it with you here.`}
                           hashtags={["CaParleDev", "ShareWithSharuco"]}
                         >
                           <TwitterIcon size={38} round />
