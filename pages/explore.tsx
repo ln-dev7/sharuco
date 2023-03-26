@@ -4,7 +4,6 @@ import Head from "next/head"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
-import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import CardCode from "@/components/card-code"
@@ -62,7 +61,7 @@ export default function Explore() {
               <Masonry gutter="1rem">
                 {dataPublicCodes
                   .sort((a, b) => {
-                    return moment(b.createdAt).diff(moment(a.createdAt))
+                    return b.createdAt - a.createdAt
                   })
                   .map(
                     (code: {

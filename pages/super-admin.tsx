@@ -10,7 +10,6 @@ import { useDocuments } from "@/firebase/firestore/getDocuments"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Code, UserIcon } from "lucide-react"
-import moment from "moment"
 import { useForm } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
@@ -162,7 +161,7 @@ export default function Dashboard() {
                   <Masonry gutter="1rem">
                     {dataCodes
                       .sort((a, b) => {
-                        return moment(b.createdAt).diff(moment(a.createdAt))
+                        return b.createdAt - a.createdAt
                       })
                       .map(
                         (code: {
@@ -217,7 +216,7 @@ export default function Dashboard() {
                 <Masonry gutter="1rem">
                   {dataUsers
                     .sort((a, b) => {
-                      return moment(b.createdAt).diff(moment(a.createdAt))
+                      return b.createdAt - a.createdAt
                     })
                     .map(
                       (user: {
@@ -228,10 +227,7 @@ export default function Dashboard() {
                         <CardUserAdmin
                           key={user.pseudo}
                           pseudo={user.pseudo}
-                          displayName={
-                            user.displayName
-                            .split(" ")[0]
-                          }
+                          displayName={user.displayName.split(" ")[0]}
                           photoURL={user.photoURL}
                         />
                       )
