@@ -57,7 +57,7 @@ export default function User() {
             <div className="mb-8 flex flex-col items-center gap-2">
               <div className="flex items-center gap-0">
                 <h1 className="text-center text-4xl font-bold">
-                  {data.data.displayName.split(" ")[0]} {" "}
+                  {data.data.displayName.split(" ")[0]}{" "}
                   {data.data.displayName.split(" ")[1] &&
                     data.data.displayName.split(" ")[1]}
                 </h1>
@@ -91,7 +91,7 @@ export default function User() {
                   <Masonry gutter="1rem">
                     {dataPublicCodes
                       .sort((a, b) => {
-                        return moment(b.createdAt).diff(moment(a.createdAt))
+                        return b.createdAt - a.createdAt
                       })
                       .map(
                         (code: {

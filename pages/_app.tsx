@@ -28,38 +28,38 @@ export default function App({ Component, pageProps }: AppProps) {
 					--font-sans: ${fontSans.style.fontFamily};
 				}
 			}`}</style>
-      <AuthContextProvider>
-        <NextSeo
-          title="Sharuco"
-          description="Share your code with everyone."
-          canonical="https://sharuco.lndev.me/"
-          openGraph={{
-            url: "https://sharuco.lndev.me/",
-            title: "Sharuco",
-            description: "Share your code with everyone.",
-            images: [
-              {
-                url: "https://sharuco.lndev.me/sharuco-banner.png",
-                alt: "Sharuco",
-                type: "image/jpeg",
-                secureUrl: "https://sharuco.lndev.me/sharuco-banner.png",
-              },
-            ],
-            siteName: "Sharuco",
-          }}
-          twitter={{
-            handle: "@ln_dev7",
-            site: "@ln_dev7",
-            cardType: "summary_large_image",
-          }}
-        />
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <AuthContextProvider>
+          <NextSeo
+            title="Sharuco"
+            description="Share your code with everyone."
+            canonical="https://sharuco.lndev.me/"
+            openGraph={{
+              url: "https://sharuco.lndev.me/",
+              title: "Sharuco",
+              description: "Share your code with everyone.",
+              images: [
+                {
+                  url: "https://sharuco.lndev.me/sharuco-banner.png",
+                  alt: "Sharuco",
+                  type: "image/jpeg",
+                  secureUrl: "https://sharuco.lndev.me/sharuco-banner.png",
+                },
+              ],
+              siteName: "Sharuco",
+            }}
+            twitter={{
+              handle: "@ln_dev7",
+              site: "@ln_dev7",
+              cardType: "summary_large_image",
+            }}
+          />
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Component {...pageProps} />
             {/* <ReactQueryDevtools initialIsOpen={false} /> */}
           </ThemeProvider>
-        </QueryClientProvider>
-      </AuthContextProvider>
+        </AuthContextProvider>
+      </QueryClientProvider>
     </>
   )
 }

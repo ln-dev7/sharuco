@@ -117,7 +117,7 @@ export default function Dashboard() {
       isPrivate: !!isPrivate,
       language: language,
       tags: tabTabs,
-      date: moment().valueOf(),
+      createdAt: moment().valueOf(),
       favoris: [],
       idAuthor: pseudo,
     }
@@ -182,7 +182,7 @@ export default function Dashboard() {
                 Add new code
               </button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+            <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
               <AlertDialogHeader>
                 <AlertDialogTitle>
                   <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
@@ -277,8 +277,7 @@ export default function Dashboard() {
                     role="alert"
                   >
                     <span className="font-medium">Warning alert!</span> :
-                    Currently the modification and deletion of a code are not
-                    available
+                    Currently the modification of a code are not available
                   </div>
                   {isError && (
                     <p className="pt-4 text-sm font-bold text-red-500">
@@ -350,7 +349,7 @@ export default function Dashboard() {
                   <Masonry gutter="1rem">
                     {[...dataPublicCodes, ...dataPrivateCodes]
                       .sort((a, b) => {
-                        return moment(b.createdAt).diff(moment(a.createdAt))
+                        return b.createdAt - a.createdAt
                       })
                       .map(
                         (code: {
@@ -405,7 +404,7 @@ export default function Dashboard() {
                   <Masonry gutter="1rem">
                     {dataPublicCodes
                       .sort((a, b) => {
-                        return moment(b.createdAt).diff(moment(a.createdAt))
+                        return b.createdAt - a.createdAt
                       })
                       .map(
                         (code: {
@@ -462,7 +461,7 @@ export default function Dashboard() {
                   <Masonry gutter="1rem">
                     {dataPrivateCodes
                       .sort((a, b) => {
-                        return moment(b.createdAt).diff(moment(a.createdAt))
+                        return b.createdAt - a.createdAt
                       })
                       .map(
                         (code: {
@@ -519,7 +518,7 @@ export default function Dashboard() {
                   <Masonry gutter="1rem">
                     {dataFavoriteCodes
                       .sort((a, b) => {
-                        return moment(b.createdAt).diff(moment(a.createdAt))
+                        return b.createdAt - a.createdAt
                       })
                       .map(
                         (code: {

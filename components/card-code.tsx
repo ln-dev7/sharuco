@@ -94,14 +94,6 @@ export default function CardCode({
     error: errorAddFavorisCodes,
   }: any = useUpdateCodeDocument("codes")
 
-  const {
-    updateUserDocument,
-    isLoading: isLoadingAddFavorisUsers,
-    isError: isErrorAddFavorisUsers,
-    isSuccess: isSuccessAddFavorisUsers,
-    error: errorAddFavorisUsers,
-  }: any = useUpdateUserDocument("users")
-
   const addCodeOnFavoris = async (id: string) => {
     let updatedCodeData = {
       favoris: favorisInit.includes(pseudo)
@@ -109,13 +101,6 @@ export default function CardCode({
         : [...favorisInit, pseudo],
     }
 
-    let updatedUserData = {
-      favoris: currentUser.favoris.includes(id)
-        ? currentUser.favoris.filter((item) => item !== id)
-        : [...currentUser.favoris, id],
-    }
-
-    updateUserDocument({ pseudo, updatedUserData })
     updateCodeDocument({ id, updatedCodeData })
 
     // console.log(isSuccessAddFavorisCodes, isSuccessAddFavorisUsers)
@@ -143,7 +128,7 @@ export default function CardCode({
                 addCodeOnFavoris(id)
               }}
             >
-              {isLoadingAddFavorisCodes || isLoadingAddFavorisUsers ? (
+              {isLoadingAddFavorisCodes ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <>

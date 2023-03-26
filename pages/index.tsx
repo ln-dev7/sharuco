@@ -81,7 +81,7 @@ export default function IndexPage() {
       isPrivate: !!isPrivate,
       language: language,
       tags: tabTabs,
-      date: moment().valueOf(),
+      createdAt: moment().valueOf(),
       favoris: [],
       idAuthor: user.reloadUserInfo.screenName,
     }
@@ -310,7 +310,7 @@ export default function IndexPage() {
                   role="alert"
                 >
                   <span className="font-medium">Warning alert!</span> :
-                  Currently the modification and deletion of a code are not
+                  Currently the modification of a code are not
                   available
                 </div>
                 {isError && (
