@@ -194,7 +194,7 @@ export default function CardCodeAdmin({
                     <AlertDialogHeader>
                       <AlertDialogTitle>
                         <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
-                          Edit a snippet
+                          Edit a code
                         </h3>
                       </AlertDialogTitle>
                       <AlertDialogDescription>
@@ -317,11 +317,19 @@ export default function CardCodeAdmin({
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>
-                        Edit a snippet is not available yet.
+                        Edit a code is not available yet.
                       </AlertDialogTitle>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>{" "}
+                      <a
+                        href="mailto:sharuco@leonelngoya.com"
+                        className={cn(
+                          "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        )}
+                      >
+                        Contact us
+                      </a>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>{" "}
@@ -407,11 +415,19 @@ export default function CardCodeAdmin({
                     <AlertDialogHeader>
                       <AlertDialogTitle>
                         {/* Are you sure you want to delete this code ? */}
-                        Delet code is not yet available.
+                        Delete code is not yet available.
                       </AlertDialogTitle>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <a
+                        href="mailto:sharuco@leonelngoya.com"
+                        className={cn(
+                          "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        )}
+                      >
+                        Contact us
+                      </a>
                       {/* <button
                         className={cn(
                           "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"

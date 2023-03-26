@@ -13,7 +13,7 @@ export default function Custom404() {
         <title>Sharuco | Page Not Fount</title>
         <meta
           name="description"
-          content="Sharuco allows you to share code snippets that you have found
+          content="Sharuco allows you to share code codes that you have found
       useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

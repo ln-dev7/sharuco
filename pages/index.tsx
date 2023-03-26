@@ -110,7 +110,7 @@ export default function IndexPage() {
         <title>Sharuco</title>
         <meta
           name="description"
-          content="Sharuco allows you to share code snippets that you have found
+          content="Sharuco allows you to share code codes that you have found
           useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -124,8 +124,7 @@ export default function IndexPage() {
             with everyone.
           </h1>
           <p className="max-w-[700px] text-lg text-slate-700 dark:text-slate-400 sm:text-xl">
-            Sharuco allows you to share code snippets that you have found
-            useful.
+            Sharuco allows you to share code codes that you have found useful.
           </p>
         </div>
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 md:flex-row">
@@ -204,7 +203,7 @@ export default function IndexPage() {
             <AlertDialogHeader>
               <AlertDialogTitle>
                 <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
-                  Add new snippet
+                  Add new code
                 </h3>
               </AlertDialogTitle>
               <AlertDialogDescription>
@@ -289,6 +288,14 @@ export default function IndexPage() {
                       <span className="font-bold text-teal-300">No</span>
                     )}
                   </Label>
+                </div>
+                <div
+                  className="mt-4 rounded-lg bg-yellow-50 p-4 text-sm text-yellow-800 dark:bg-gray-800 dark:text-yellow-300"
+                  role="alert"
+                >
+                  <span className="font-medium">Warning alert!</span> :
+                  Currently the modification and deletion of a code are not
+                  available
                 </div>
                 {isError && (
                   <p className="pt-4 text-sm font-bold text-red-500">

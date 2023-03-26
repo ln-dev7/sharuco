@@ -36,7 +36,7 @@ export default function CodePreview() {
         <title>Sharuco</title>
         <meta
           name="description"
-          content="Sharuco allows you to share code snippets that you have found
+          content="Sharuco allows you to share code codes that you have found
                  useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -70,7 +70,7 @@ export default function CodePreview() {
           (data && data.exists && data.data.isPrivate)) && (
           <div className="flex flex-col items-center gap-4">
             <h1 className="tesxt-4xl font-bold">
-              This code snippet does not exist.
+              This code code does not exist.
             </h1>
             <Link
               href="/explore"

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
+import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import linearizeCode from "@/utils/linearizeCode"
@@ -40,7 +41,6 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import { useDocument } from "@/firebase/firestore/getDocument"
 
 export default function Dashboard() {
   const router = useRouter()
@@ -147,7 +147,7 @@ export default function Dashboard() {
         <title>Sharuco | Dashboard</title>
         <meta
           name="description"
-          content="Sharuco allows you to share code snippets that you have found
+          content="Sharuco allows you to share code codes that you have found
          useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -180,14 +180,14 @@ export default function Dashboard() {
             <AlertDialogTrigger asChild>
               <button className={buttonVariants({ size: "lg" })}>
                 <Plus className="mr-2 h-4 w-4" />
-                Add new snippet
+                Add new code
               </button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>
                   <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
-                    Add new snippet
+                    Add new code
                   </h3>
                 </AlertDialogTitle>
                 <AlertDialogDescription>
@@ -272,6 +272,14 @@ export default function Dashboard() {
                         <span className="font-bold text-teal-300">No</span>
                       )}
                     </Label>
+                  </div>
+                  <div
+                    className="mt-4 rounded-lg bg-yellow-50 p-4 text-sm text-yellow-800 dark:bg-gray-800 dark:text-yellow-300"
+                    role="alert"
+                  >
+                    <span className="font-medium">Warning alert!</span> :
+                    Currently the modification and deletion of a code are not
+                    available
                   </div>
                   {isError && (
                     <p className="pt-4 text-sm font-bold text-red-500">

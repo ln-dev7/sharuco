@@ -57,12 +57,16 @@ export default function CardCode({
   const notifyUrlCopied = () => toast.success("Url of code copied to clipboard")
 
   const alertAddFavoris = () =>
-    toast(
-      "Adding/deleting a bookmark takes time before it is visible on the screen, so please don't click many times.",
-      {
-        icon: " ⚠️ ",
-      }
-    )
+    toast.custom((t) => (
+      <div
+        className="mt-4 rounded-lg border-2 border-yellow-800 bg-yellow-50 p-4 text-sm text-yellow-800 dark:bg-gray-800 dark:text-yellow-300"
+        role="alert"
+      >
+        <span className="font-medium">Warning alert!</span> Adding/deleting a
+        bookmark takes time before it is visible on the screen, so please
+        don&apos;t click many times.
+      </div>
+    ))
 
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
@@ -224,20 +228,20 @@ export default function CardCode({
                 <div className="flex gap-2">
                   <FacebookShareButton
                     url={shareUrl}
-                    quote={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here`}
+                    quote={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
                   >
                     <FacebookIcon size={38} round />
                   </FacebookShareButton>
                   <TwitterShareButton
                     url={shareUrl}
-                    title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here.`}
+                    title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} »`}
                     hashtags={["CaParleDev", "ShareWithSharuco"]}
                   >
                     <TwitterIcon size={38} round />
                   </TwitterShareButton>
                   <LinkedinShareButton
                     url={shareUrl}
-                    title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                    title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
                     source="https://sharuco.lndev.me"
                   >
                     <LinkedinIcon size={38} round />
@@ -245,19 +249,19 @@ export default function CardCode({
                   <EmailShareButton
                     url={shareUrl}
                     subject={`Share code on sharuco.lndev.me`}
-                    body={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                    body={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
                   >
                     <EmailIcon size={38} round />
                   </EmailShareButton>
                   <WhatsappShareButton
                     url={shareUrl}
-                    title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                    title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
                   >
                     <WhatsappIcon size={38} round />
                   </WhatsappShareButton>
                   <TelegramShareButton
                     url={shareUrl}
-                    title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                    title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
                   >
                     <TelegramIcon size={38} round />
                   </TelegramShareButton>
@@ -280,7 +284,7 @@ export default function CardCode({
           )}
         </div>
       </div>
-      <div className="overflow-hidden rounded-lg">
+      <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
         <pre className="max-h-[480px] w-auto overflow-auto rounded-lg border border-slate-600 bg-slate-900 p-4 dark:bg-black">
           <code
             className="text-white"
