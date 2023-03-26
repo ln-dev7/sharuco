@@ -126,10 +126,12 @@ export default function Dashboard() {
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Hello Admin
           </h1>
-          <p className="text-sm text-slate-700 dark:text-slate-400">
-            <span className="text-mdfont-bold">{dataUsers.length} users</span>
-            registered on Sharuco.
-          </p>
+          {dataUsers && (
+            <p className="text-sm text-slate-700 dark:text-slate-400">
+              <span className="text-mdfont-bold">{dataUsers.length} users</span>
+              registered on sharuco.
+            </p>
+          )}
         </div>
         <Tabs defaultValue="all-codes" className="w-full">
           <TabsList>
