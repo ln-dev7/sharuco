@@ -63,6 +63,7 @@
     "react-share": "^4.4.1",
     "sharp": "^0.31.3",
     "tailwind-merge": "^1.8.0",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss-animate": "^1.0.5",
     "yup": "^1.0.2"
   },

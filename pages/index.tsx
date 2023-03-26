@@ -8,6 +8,7 @@ import { useDocuments } from "@/firebase/firestore/getDocuments"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Code2, Github, Loader2, Plus } from "lucide-react"
+import moment from "moment"
 import { useForm } from "react-hook-form"
 import { Toaster, toast } from "react-hot-toast"
 import * as yup from "yup"
@@ -69,7 +70,6 @@ export default function IndexPage() {
   const onSubmit = async (data) => {
     const { code, description, language, tags, isPrivate } = data
     const linearCode = linearizeCode(code)
-    const now = Date.now()
     const tabTabs = tags ? tags.split(",") : []
     if (tabTabs[tabTabs.length - 1] === "") {
       tabTabs.pop()
@@ -81,7 +81,7 @@ export default function IndexPage() {
       isPrivate: !!isPrivate,
       language: language,
       tags: tabTabs,
-      date: now,
+      date: moment().valueOf(),
       favoris: [],
       idAuthor: user.reloadUserInfo.screenName,
     }
@@ -199,7 +199,7 @@ export default function IndexPage() {
               <span className="sr-only">Open modal</span>
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
             <AlertDialogHeader>
               <AlertDialogTitle>
                 <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
