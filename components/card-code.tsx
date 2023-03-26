@@ -173,7 +173,7 @@ export default function CardCode({
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button>
-                  <Star className="mr-2 h-4 w-4" />0
+                  <Star className="mr-2 h-4 w-4" />{favorisInit.length}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
@@ -234,7 +234,7 @@ export default function CardCode({
                   </FacebookShareButton>
                   <TwitterShareButton
                     url={shareUrl}
-                    title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} »`}
+                    title={`I discovered this code on @sharuco_app , I share it with you here. - « ${description} »`}
                     hashtags={["CaParleDev", "ShareWithSharuco"]}
                   >
                     <TwitterIcon size={38} round />
