@@ -106,7 +106,6 @@ export default function Dashboard() {
   const onSubmit = async (data) => {
     const { code, description, language, tags, isPrivate } = data
     const linearCode = linearizeCode(code)
-    const now = Date.now()
     const tabTabs = tags ? tags.split(",") : []
     if (tabTabs[tabTabs.length - 1] === "") {
       tabTabs.pop()
@@ -118,7 +117,7 @@ export default function Dashboard() {
       isPrivate: !!isPrivate,
       language: language,
       tags: tabTabs,
-      date: now,
+      date: moment().valueOf(),
       favoris: [],
       idAuthor: pseudo,
     }
@@ -183,7 +182,7 @@ export default function Dashboard() {
                 Add new code
               </button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+            <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
               <AlertDialogHeader>
                 <AlertDialogTitle>
                   <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">

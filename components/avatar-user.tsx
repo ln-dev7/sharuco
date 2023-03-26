@@ -19,6 +19,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import Loader from "./loader"
+import { Verified } from "lucide-react"
 
 export const useGitHubLogout = () => {
   const router = useRouter()
@@ -79,7 +80,7 @@ export function AvatarUser() {
           <SheetDescription>This is your profile.</SheetDescription>
           <div className="py-4"></div>
         </SheetHeader>
-        <SheetFooter className="gap-2 md:gap-0">
+        <div className="flex flex-col gap-2">
           <Link
             href="/dashboard"
             className={buttonVariants({ size: "lg", variant: "outline" })}
@@ -94,7 +95,7 @@ export function AvatarUser() {
           >
             Logout
           </Button>
-        </SheetFooter>
+        </div>
       </SheetContent>
     </Sheet>
   )
