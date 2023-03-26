@@ -47,6 +47,7 @@ export const useGitHubLoign = () => {
           lastLoginAt: moment(user.metadata.lastSignInTime).valueOf(),
           favoris: [],
           codes: [],
+          isCertified: false,
         })
       } else {
         await setDoc(
