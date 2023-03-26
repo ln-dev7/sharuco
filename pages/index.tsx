@@ -70,7 +70,7 @@ export default function IndexPage() {
   const onSubmit = async (data) => {
     const { code, description, language, tags, isPrivate } = data
     const linearCode = linearizeCode(code)
-    const tabTabs = tags ? tags.split(",") : []
+    const tabTabs = tags ? tags.split(',').map(word => word.trim()) : []
     if (tabTabs[tabTabs.length - 1] === "") {
       tabTabs.pop()
     }
@@ -167,10 +167,11 @@ export default function IndexPage() {
             className="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
             role="alert"
           >
-            <span className="font-semibold">Warning alert !</span> We have noticed
-            that you are in <span className="font-semibold">Cameroon</span> , if you are using an{" "}
-            <span className="font-semibold">Orange connection</span> you need to
-            use a VPN and change your location in order to connect.
+            <span className="font-semibold">Warning alert !</span> We have
+            noticed that you are in{" "}
+            <span className="font-semibold">Cameroon</span> , if you are using
+            an <span className="font-semibold">Orange connection</span> you need
+            to use a VPN and change your location in order to connect.
           </div>
         )}
         <p className="text-sm text-slate-700 dark:text-slate-400">
@@ -215,7 +216,7 @@ export default function IndexPage() {
               <span className="sr-only">Open modal</span>
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+          <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
             <AlertDialogHeader>
               <AlertDialogTitle>
                 <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
@@ -257,6 +258,9 @@ export default function IndexPage() {
                     placeholder="The code is written in what language ?"
                     {...register("language")}
                   />
+                  <p className="text-md font-medium text-slate-500">
+                    please enter only one language
+                  </p>
                   {errors.language && (
                     <p className="text-sm text-red-500">
                       This field is required
@@ -271,7 +275,7 @@ export default function IndexPage() {
                     placeholder="Enter a tags ..."
                     {...register("tags")}
                   />
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm font-medium text-slate-500">
                     Please separate tags with{" "}
                     <span className="text-slate-700 dark:text-slate-300">
                       ,
@@ -305,14 +309,13 @@ export default function IndexPage() {
                     )}
                   </Label>
                 </div>
-                <div
+                {/* <div
                   className="mt-4 rounded-lg bg-yellow-50 p-4 text-sm text-yellow-800 dark:bg-gray-800 dark:text-yellow-300"
                   role="alert"
                 >
                   <span className="font-medium">Warning alert!</span> :
-                  Currently the modification of a code are not
-                  available
-                </div>
+                  Currently the modification of a code are not available
+                </div> */}
                 {isError && (
                   <p className="pt-4 text-sm font-bold text-red-500">
                     An error has occurred, please try again later.

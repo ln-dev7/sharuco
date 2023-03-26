@@ -18,70 +18,17 @@ const useUpdateCodeDocument = (collectionName) => {
       updateCodeDocument(params, collectionName)
     },
     {
-      onSuccess: async (data) => {
-        queryClient.setQueryData("documents", (oldData) => {
-          return {
-            ...oldData,
-            ...data,
-          }
-        })
-        queryClient.setQueryData("isprivate-codes-false", (oldData) => {
-          return {
-            ...oldData,
-            ...data,
-          }
-        })
-        queryClient.setQueryData("isprivate-codes-true", (oldData) => {
-          return {
-            ...oldData,
-            ...data,
-          }
-        })
-        queryClient.setQueryData("favorites-codes", (oldData) => {
-          return {
-            ...oldData,
-            ...data,
-          }
-        })
-        queryClient.setQueryData("document-codes", (oldData) => {
-          return {
-            ...oldData,
-            ...data,
-          }
-        })
-        queryClient.setQueryData("document-users", (oldData) => {
-          return {
-            ...oldData,
-            ...data,
-          }
-        })
-        queryClient.setQueryData("users", (oldData) => {
-          return {
-            ...oldData,
-            ...data,
-          }
-        })
-        queryClient.setQueryData("codes", (oldData) => {
-          return {
-            ...oldData,
-            ...data,
-          }
-        })
-        queryClient.setQueryData("isprivate-code-from-user-true", (oldData) => {
-          return {
-            ...oldData,
-            ...data,
-          }
-        })
-        queryClient.setQueryData(
-          "isprivate-code-from-user-false",
-          (oldData) => {
-            return {
-              ...oldData,
-              ...data,
-            }
-          }
-        )
+      onSuccess: (data, variables, context) => {
+        queryClient.invalidateQueries("isprivate-code-from-user-false")
+        queryClient.invalidateQueries("isprivate-code-from-user-true")
+        queryClient.invalidateQueries("favorites-codes")
+        queryClient.invalidateQueries("isprivate-codes-true")
+        queryClient.invalidateQueries("isprivate-codes-false")
+        queryClient.invalidateQueries("document-users")
+        queryClient.invalidateQueries("document-codes")
+        queryClient.invalidateQueries("users")
+        queryClient.invalidateQueries("codes")
+        queryClient.invalidateQueries("documents")
       },
     }
   )
