@@ -127,8 +127,8 @@ export default function Dashboard() {
             Hello Admin
           </h1>
           {dataUsers && (
-            <p className="text-sm text-slate-700 dark:text-slate-400">
-              <span className="text-mdfont-bold">{dataUsers.length} users</span>
+            <p className="text-lg text-slate-700 dark:text-slate-400">
+              <span className="font-bold">{dataUsers.length} users </span>
               registered on sharuco.
             </p>
           )}
