@@ -104,6 +104,11 @@ export default function IndexPage() {
     }
   }, [isSuccess])
 
+  const [userCountry, setUserCountry] = useState("")
+  useEffect(() => {
+    setUserCountry(window.navigator.language.split("-")[1])
+  }, [])
+
   return (
     <Layout>
       <Head>
@@ -157,6 +162,17 @@ export default function IndexPage() {
             </button>
           )}
         </div>
+        {!user && userCountry == "CM" && (
+          <div
+            className="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
+            role="alert"
+          >
+            <span className="font-semibold">Warning alert !</span> We have noticed
+            that you are in <span className="font-semibold">Cameroon</span> , if you are using an{" "}
+            <span className="font-semibold">Orange connection</span> you need to
+            use a VPN and change your location in order to connect.
+          </div>
+        )}
         <p className="text-sm text-slate-700 dark:text-slate-400">
           Follow us on{" "}
           <Link
