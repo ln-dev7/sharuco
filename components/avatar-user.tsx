@@ -6,6 +6,7 @@ import { useAuthContext } from "@/context/AuthContext"
 import { auth } from "@/firebase/config"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { signOut } from "firebase/auth"
+import { Verified } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -19,7 +20,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import Loader from "./loader"
-import { Verified } from "lucide-react"
 
 export const useGitHubLogout = () => {
   const router = useRouter()
@@ -74,7 +74,9 @@ export function AvatarUser() {
           <SheetTitle>
             Hello{" "}
             {data && data.exists && (
-              <span className="font-bold">{data.data.displayName}</span>
+              <span className="font-bold">
+                {data.data.displayName.split(" ")[0]}
+              </span>
             )}
           </SheetTitle>
           <SheetDescription>This is your profile.</SheetDescription>

@@ -56,7 +56,11 @@ export default function User() {
             </Avatar>
             <div className="mb-8 flex flex-col items-center gap-2">
               <div className="flex items-center gap-0">
-                <h1 className="text-4xl font-bold">{data.data.displayName}</h1>
+                <h1 className="text-center text-4xl font-bold">
+                  {data.data.displayName.split(" ")[0]} {" "}
+                  {data.data.displayName.split(" ")[1] &&
+                    data.data.displayName.split(" ")[1]}
+                </h1>
                 <span className="ml-2">
                   {data.data.isCertified && (
                     <Verified className="h-6 w-6 text-green-500" />
@@ -68,12 +72,6 @@ export default function User() {
                   Joined{" "}
                   <span className="font-bold">
                     {moment(data.data.createdAt).fromNow()}
-                  </span>
-                </p>
-                <p className="text-center text-gray-500">
-                  Last connexion{" "}
-                  <span className="font-bold">
-                    {moment(data.data.lastLoginAt).fromNow()}
                   </span>
                 </p>
               </div>
@@ -125,7 +123,7 @@ export default function User() {
                 </ResponsiveMasonry>
                 {dataPublicCodes.length == 0 && (
                   <div className="flex flex-col items-center gap-4">
-                    <h1 className="text-2xl font-bold">
+                    <h1 className="text-center text-2xl font-bold">
                       This user has not shared any code yet
                     </h1>
                   </div>
