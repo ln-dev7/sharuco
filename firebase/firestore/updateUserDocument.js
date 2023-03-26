@@ -24,6 +24,7 @@ const useUpdateUserDocument = (collectionName) => {
       onSuccess: (data, variables, context) => {
         queryClient.invalidateQueries("isprivate-code-from-user-false")
         queryClient.invalidateQueries("isprivate-code-from-user-true")
+        queryClient.invalidateQueries("code-from-user")
         queryClient.invalidateQueries("favorites-codes")
         queryClient.invalidateQueries("isprivate-codes-true")
         queryClient.invalidateQueries("isprivate-codes-false")

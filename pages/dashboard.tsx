@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
+import { useGetCodeFromUser } from "@/firebase/firestore/getCodeFromUser"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
@@ -76,6 +77,12 @@ export default function Dashboard() {
   } = useGetIsPrivateCodeFromUser(false, pseudo)
 
   const {
+    isLoading: isLoadingCodes,
+    isError: isErrorCodes,
+    data: dataCodes,
+  } = useGetCodeFromUser(pseudo)
+
+  const {
     isLoading: isLoadingFavoriteCodes,
     isError: isErrorFavoriteCodes,
     data: dataFavoriteCodes,
@@ -106,7 +113,7 @@ export default function Dashboard() {
   const onSubmit = async (data) => {
     const { code, description, language, tags, isPrivate } = data
     const linearCode = linearizeCode(code)
-    const tabTabs = tags ? tags.split(",") : []
+    const tabTabs = tags ? tags.split(',').map(word => word.trim()) : []
     if (tabTabs[tabTabs.length - 1] === "") {
       tabTabs.pop()
     }
@@ -224,6 +231,9 @@ export default function Dashboard() {
                       placeholder="The code is written in what language ?"
                       {...register("language")}
                     />
+                    <p className="text-md font-medium text-slate-500">
+                      please enter only one language
+                    </p>
                     {errors.language && (
                       <p className="text-sm text-red-500">
                         This field is required
@@ -238,7 +248,7 @@ export default function Dashboard() {
                       placeholder="Enter a tags ..."
                       {...register("tags")}
                     />
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm font-medium text-slate-500">
                       Please separate tags with{" "}
                       <span className="text-slate-700 dark:text-slate-300">
                         ,
@@ -272,13 +282,13 @@ export default function Dashboard() {
                       )}
                     </Label>
                   </div>
-                  <div
+                  {/* <div
                     className="mt-4 rounded-lg bg-yellow-50 p-4 text-sm text-yellow-800 dark:bg-gray-800 dark:text-yellow-300"
                     role="alert"
                   >
                     <span className="font-medium">Warning alert!</span> :
                     Currently the modification of a code are not available
-                  </div>
+                  </div> */}
                   {isError && (
                     <p className="pt-4 text-sm font-bold text-red-500">
                       An error has occurred, please try again later.
@@ -347,7 +357,7 @@ export default function Dashboard() {
                   className="w-full"
                 >
                   <Masonry gutter="1rem">
-                    {[...dataPublicCodes, ...dataPrivateCodes]
+                    {dataCodes
                       .sort((a, b) => {
                         return b.createdAt - a.createdAt
                       })
