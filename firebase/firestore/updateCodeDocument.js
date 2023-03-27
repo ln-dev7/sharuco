@@ -28,7 +28,8 @@ const useUpdateCodeDocument = (collectionName) => {
         queryClient.invalidateQueries("document-codes")
         queryClient.invalidateQueries("users")
         queryClient.invalidateQueries("codes")
-        queryClient.invalidateQueries("documents")
+        queryClient.invalidateQueries("documents-codes")
+        queryClient.invalidateQueries("documents-users")
       },
     }
   )
