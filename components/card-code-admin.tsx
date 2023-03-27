@@ -161,16 +161,7 @@ export default function CardCodeAdmin({
       isPrivate: !!isPrivateUpdate,
       language: languageUpdate,
       tags: tabTabs,
-    }
-    if (isPrivateUpdate && !isPrivate) {
-      updatedCodeData = {
-        code: linearCode,
-        description: descriptionUpdate,
-        isPrivate: !!isPrivateUpdate,
-        language: languageUpdate,
-        tags: tabTabs,
-        favoris: [],
-      }
+      favoris: isPrivateUpdate && !isPrivate ? [] : [...favorisInit]
     }
 
     updateCodeDocument({ id, updatedCodeData })
