@@ -50,8 +50,18 @@ export default function IndexPage() {
   const schema = yup.object().shape({
     code: yup.string().required(),
     description: yup.string().required(),
-    language: yup.string().required(),
-    tags: yup.string(),
+    language: yup
+      .string()
+      .matches(/^[a-zA-Z]+$/, "The language field should only contain letters")
+      .required(),
+    tags: yup
+      .string()
+      .test(
+        "tags",
+        "The tags field must contain only letters, commas and/or spaces",
+        (val) => !val || /^[a-zA-Z, ]*$/.test(val)
+      )
+      .required(),
     isPrivate: yup.boolean(),
   })
 
@@ -70,7 +80,9 @@ export default function IndexPage() {
   const onSubmit = async (data) => {
     const { code, description, language, tags, isPrivate } = data
     const linearCode = linearizeCode(code)
-    const tabTabs = tags ? tags.split(',').map(word => word.trim()) : []
+    const tabTabs = tags
+      ? tags.split(",").map((word) => word.trim().toLowerCase())
+      : []
     if (tabTabs[tabTabs.length - 1] === "") {
       tabTabs.pop()
     }
@@ -79,7 +91,7 @@ export default function IndexPage() {
       code: linearCode,
       description: description,
       isPrivate: !!isPrivate,
-      language: language,
+      language: language.toLowerCase(),
       tags: tabTabs,
       createdAt: moment().valueOf(),
       favoris: [],
@@ -216,7 +228,7 @@ export default function IndexPage() {
               <span className="sr-only">Open modal</span>
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
+          <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
             <AlertDialogHeader>
               <AlertDialogTitle>
                 <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
@@ -231,11 +243,9 @@ export default function IndexPage() {
                     id="code"
                     {...register("code")}
                   />
-                  {errors.code && (
-                    <p className="text-sm text-red-500">
-                      This field is required
-                    </p>
-                  )}
+                  <p className="text-sm text-red-500">
+                    {errors.code && <>{errors.code.message}</>}
+                  </p>
                 </div>
                 <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                   <Label htmlFor="description">Description</Label>
@@ -244,11 +254,9 @@ export default function IndexPage() {
                     id="description"
                     {...register("description")}
                   />
-                  {errors.description && (
-                    <p className="text-sm text-red-500">
-                      This field is required
-                    </p>
-                  )}
+                  <p className="text-sm text-red-500">
+                    {errors.description && <>{errors.description.message}</>}
+                  </p>
                 </div>
                 <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                   <Label htmlFor="language">Language</Label>
@@ -261,11 +269,9 @@ export default function IndexPage() {
                   <p className="text-md font-medium text-slate-500">
                     please enter only one language
                   </p>
-                  {errors.language && (
-                    <p className="text-sm text-red-500">
-                      This field is required
-                    </p>
-                  )}
+                  <p className="text-sm text-red-500">
+                    {errors.language && <>{errors.language.message}</>}
+                  </p>
                 </div>
                 <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                   <Label htmlFor="tags">Tags</Label>
@@ -281,11 +287,9 @@ export default function IndexPage() {
                       ,
                     </span>
                   </p>
-                  {errors.tags && (
-                    <p className="text-sm text-red-500">
-                      This field is required
-                    </p>
-                  )}
+                  <p className="text-sm text-red-500">
+                    {errors.tags && <>{errors.tags.message}</>}
+                  </p>
                 </div>
                 <div className="flex items-center gap-4">
                   <input

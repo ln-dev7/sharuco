@@ -94,8 +94,18 @@ export default function CardCodeAdmin({
   const schema = yup.object().shape({
     code: yup.string().required(),
     description: yup.string().required(),
-    language: yup.string().required(),
-    tags: yup.string(),
+    language: yup
+      .string()
+      .matches(/^[a-zA-Z]+$/, "The language field should only contain letters")
+      .required(),
+    tags: yup
+      .string()
+      .test(
+        "tags",
+        "The tags field must contain only letters, commas and/or spaces",
+        (val) => !val || /^[a-zA-Z, ]*$/.test(val)
+      )
+      .required(),
     isPrivate: yup.boolean(),
   })
 
@@ -131,7 +141,7 @@ export default function CardCodeAdmin({
 
     const linearCode = linearizeCode(codeUpdate)
     const tabTabs = tagsUpdate
-      ? tagsUpdate.split(",").map((word) => word.trim())
+      ? tagsUpdate.split(",").map((word) => word.trim().toLowerCase())
       : []
     if (tabTabs[tabTabs.length - 1] === "") {
       tabTabs.pop()
@@ -159,9 +169,10 @@ export default function CardCodeAdmin({
       code: linearCode,
       description: descriptionUpdate,
       isPrivate: !!isPrivateUpdate,
-      language: languageUpdate,
+      language: languageUpdate.toLowerCase(),
       tags: tabTabs,
-      favoris: (isPrivateUpdate === true && isPrivate === false) ? [] : favorisInit,
+      favoris:
+        isPrivateUpdate === true && isPrivate === false ? [] : favorisInit,
     }
 
     updateCodeDocument({ id, updatedCodeData })
@@ -231,11 +242,9 @@ export default function CardCodeAdmin({
                             id="code"
                             {...register("code")}
                           />
-                          {errors.code && (
-                            <p className="text-sm text-red-500">
-                              This field is required
-                            </p>
-                          )}
+                          <p className="text-sm text-red-500">
+                            {errors.code && <>{errors.code.message}</>}
+                          </p>
                         </div>
                         <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                           <Label htmlFor="description">Edit escription</Label>
@@ -244,11 +253,11 @@ export default function CardCodeAdmin({
                             id="description"
                             {...register("description")}
                           />
-                          {errors.description && (
-                            <p className="text-sm text-red-500">
-                              This field is required
-                            </p>
-                          )}
+                          <p className="text-sm text-red-500">
+                            {errors.description && (
+                              <>{errors.description.message}</>
+                            )}
+                          </p>
                         </div>
                         <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                           <Label htmlFor="language">Edit language</Label>
@@ -261,11 +270,9 @@ export default function CardCodeAdmin({
                           <p className="text-md font-medium text-slate-500">
                             please enter only one language
                           </p>
-                          {errors.language && (
-                            <p className="text-sm text-red-500">
-                              This field is required
-                            </p>
-                          )}
+                          <p className="text-sm text-red-500">
+                            {errors.language && <>{errors.language.message}</>}
+                          </p>
                         </div>
                         <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                           <Label htmlFor="tags">Edit tags</Label>
@@ -281,11 +288,9 @@ export default function CardCodeAdmin({
                               ,
                             </span>
                           </p>
-                          {errors.tags && (
-                            <p className="text-sm text-red-500">
-                              This field is required
-                            </p>
-                          )}
+                          <p className="text-sm text-red-500">
+                            {errors.tags && <>{errors.tags.message}</>}
+                          </p>
                         </div>
                         <div className="flex items-center gap-4">
                           <input

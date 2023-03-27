@@ -10,7 +10,18 @@ import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
+import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import "prism-themes/themes/prism-one-dark.min.css"
+import SearchCode from "@/components/search-code"
 
 export default function Explore() {
   const { user } = useAuthContext()
@@ -41,7 +52,7 @@ export default function Explore() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-8 pt-6 pb-8 md:py-10">
-        <div className="flex max-w-[980px] flex-col items-start gap-2">
+        <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Discover little bits of code that can help you.
           </h1>
