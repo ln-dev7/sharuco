@@ -16,7 +16,7 @@ const getDocuments = async (collectionName) => {
 }
 
 const useDocuments = (collectionName) => {
-  return useQuery(["documents", collectionName], () =>
+  return useQuery([`documents-${collectionName}`, collectionName], () =>
     getDocuments(collectionName)
   )
 }
