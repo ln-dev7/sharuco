@@ -24,7 +24,7 @@ const getCodesWithLanguage = async (language) => {
 }
 
 const useGetCodesWithLanguage = (searchTerm) => {
-  return useQuery([`code-description-${searchTerm}`, "codes"], () =>
+  return useQuery([`code-description`, "codes"], () =>
     getCodesWithLanguage(searchTerm)
   )
 }

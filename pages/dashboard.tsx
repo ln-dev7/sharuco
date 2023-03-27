@@ -103,8 +103,7 @@ export default function Dashboard() {
         "tags",
         "The tags field must contain only letters, commas and/or spaces",
         (val) => !val || /^[a-zA-Z, ]*$/.test(val)
-      )
-      .required(),
+      ),
     isPrivate: yup.boolean(),
   })
 
@@ -201,7 +200,7 @@ export default function Dashboard() {
                 Add new code
               </button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
+            <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
               <AlertDialogHeader>
                 <AlertDialogTitle>
                   <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">

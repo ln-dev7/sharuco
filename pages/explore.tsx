@@ -10,18 +10,7 @@ import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
-import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import "prism-themes/themes/prism-one-dark.min.css"
-import SearchCode from "@/components/search-code"
 
 export default function Explore() {
   const { user } = useAuthContext()

@@ -60,8 +60,7 @@ export default function IndexPage() {
         "tags",
         "The tags field must contain only letters, commas and/or spaces",
         (val) => !val || /^[a-zA-Z, ]*$/.test(val)
-      )
-      .required(),
+      ),
     isPrivate: yup.boolean(),
   })
 
