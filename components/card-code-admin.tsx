@@ -114,8 +114,8 @@ export default function CardCodeAdmin({
     setValue("description", description)
     setValue("language", language)
     setValue("tags", tags.join().trim().replace(/\s+/g, ""))
-    setValue("isPrivate", isPrivate)
-  }, [code, description, language, tags, isPrivate, setValue])
+    setValue("isPrivate", checkboxOn)
+  }, [code, description, language, tags, checkboxOn, setValue])
 
   const { updateCodeDocument, isLoading, isError, isSuccess }: any =
     useUpdateCodeDocument("codes")
