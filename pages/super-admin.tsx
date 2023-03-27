@@ -52,8 +52,18 @@ export default function Dashboard() {
   const schema = yup.object().shape({
     code: yup.string().required(),
     description: yup.string().required(),
-    language: yup.string().required(),
-    tags: yup.string(),
+    language: yup
+      .string()
+      .matches(/^[a-zA-Z]+$/, "The language field should only contain letters")
+      .required(),
+    tags: yup
+      .string()
+      .test(
+        "tags",
+        "The tags field must contain only letters, commas and/or spaces",
+        (val) => !val || /^[a-zA-Z, ]*$/.test(val)
+      )
+      .required(),
     isPrivate: yup.boolean(),
   })
 
