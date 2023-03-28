@@ -3,16 +3,17 @@
 import Head from "next/head"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import CardCode from "@/components/card-code"
+import CardCodeAdmin from "@/components/card-code-admin"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import { buttonVariants } from "@/components/ui/button"
 import "prism-themes/themes/prism-one-dark.min.css"
-import { useAuthContext } from "@/context/AuthContext"
 
 export default function CodePreview() {
   const searchParams = useSearchParams()
@@ -51,18 +52,32 @@ export default function CodePreview() {
             }}
           >
             <Masonry>
-              <CardCode
-                key={data.data.id}
-                id={data.data.id}
-                idAuthor={data.data.idAuthor}
-                language={data.data.language}
-                code={data.data.code}
-                description={data.data.description}
-                tags={data.data.tags}
-                favoris={data.data.favoris}
-                isPrivate={data.data.isPrivate}
-                currentUser={dataUser?.data}
-              />
+              {dataUser?.data.pseudo === data.data.idAuthor ? (
+                <CardCodeAdmin
+                  key={data.data.id}
+                  id={data.data.id}
+                  idAuthor={data.data.idAuthor}
+                  language={data.data.language}
+                  code={data.data.code}
+                  description={data.data.description}
+                  tags={data.data.tags}
+                  favoris={data.data.favoris}
+                  isPrivate={data.data.isPrivate}
+                />
+              ) : (
+                <CardCode
+                  key={data.data.id}
+                  id={data.data.id}
+                  idAuthor={data.data.idAuthor}
+                  language={data.data.language}
+                  code={data.data.code}
+                  description={data.data.description}
+                  tags={data.data.tags}
+                  favoris={data.data.favoris}
+                  isPrivate={data.data.isPrivate}
+                  currentUser={dataUser?.data}
+                />
+              )}
             </Masonry>
           </ResponsiveMasonry>
         )}
