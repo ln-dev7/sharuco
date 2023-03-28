@@ -104,8 +104,7 @@ export default function CardCodeAdmin({
         "tags",
         "The tags field must contain only letters, commas and/or spaces",
         (val) => !val || /^[a-zA-Z, ]*$/.test(val)
-      )
-      .required(),
+      ),
     isPrivate: yup.boolean(),
   })
 
@@ -369,20 +368,20 @@ export default function CardCodeAdmin({
                       <div className="flex gap-2">
                         <FacebookShareButton
                           url={shareUrl}
-                          quote={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here`}
+                          quote={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
                         >
                           <FacebookIcon size={38} round />
                         </FacebookShareButton>
                         <TwitterShareButton
                           url={shareUrl}
-                          title={`I discovered this code on @sharuco_app and found it useful, I share it with you here.`}
+                          title={`I discovered this code on @sharuco_app , I share it with you here. - « ${description} »`}
                           hashtags={["CaParleDev", "ShareWithSharuco"]}
                         >
                           <TwitterIcon size={38} round />
                         </TwitterShareButton>
                         <LinkedinShareButton
                           url={shareUrl}
-                          title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                          title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
                           source="https://sharuco.lndev.me"
                         >
                           <LinkedinIcon size={38} round />
@@ -390,19 +389,19 @@ export default function CardCodeAdmin({
                         <EmailShareButton
                           url={shareUrl}
                           subject={`Share code on sharuco.lndev.me`}
-                          body={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                          body={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
                         >
                           <EmailIcon size={38} round />
                         </EmailShareButton>
                         <WhatsappShareButton
                           url={shareUrl}
-                          title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                          title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
                         >
                           <WhatsappIcon size={38} round />
                         </WhatsappShareButton>
                         <TelegramShareButton
                           url={shareUrl}
-                          title={`I discovered this code on sharuco.lndev.me and found it useful, I share it with you here. #CaParleDev`}
+                          title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
                         >
                           <TelegramIcon size={38} round />
                         </TelegramShareButton>
