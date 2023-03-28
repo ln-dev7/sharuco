@@ -160,7 +160,11 @@ export default function Dashboard() {
                         <CardUserAdmin
                           key={dataUser.pseudo}
                           pseudo={dataUser.pseudo}
-                          displayName={dataUser.displayName.split(" ")[0]}
+                          displayName={
+                            dataUser.displayName
+                              ? dataUser.displayName.split(" ")[0]
+                              : dataUser.pseudo
+                          }
                           photoURL={dataUser.photoURL}
                         />
                       )

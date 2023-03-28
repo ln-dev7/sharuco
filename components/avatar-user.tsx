@@ -6,7 +6,6 @@ import { useAuthContext } from "@/context/AuthContext"
 import { auth } from "@/firebase/config"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { signOut } from "firebase/auth"
-import { Verified } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -14,7 +13,6 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -59,11 +57,15 @@ export function AvatarUser() {
                 alt={data.data.displayName}
               />
               <AvatarFallback>
-                {data.data.displayName.split(" ")[1] === undefined
-                  ? data.data.displayName.split(" ")[0][0] +
-                    data.data.displayName.split(" ")[0][1]
-                  : data.data.displayName.split(" ")[0][0] +
-                    data.data.displayName.split(" ")[1][0]}
+                {data.data.displayName ? (
+                  <>
+                    {data.data.displayName.split(" ")[0]}{" "}
+                    {data.data.displayName.split(" ")[1] &&
+                      data.data.displayName.split(" ")[1]}
+                  </>
+                ) : (
+                  pseudo
+                )}
               </AvatarFallback>
             </>
           )}
