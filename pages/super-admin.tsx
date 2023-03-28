@@ -152,16 +152,16 @@ export default function Dashboard() {
                       return b.createdAt - a.createdAt
                     })
                     .map(
-                      (user: {
+                      (dataUser: {
                         pseudo: string
                         displayName: string
                         photoURL: string
                       }) => (
                         <CardUserAdmin
-                          key={user.pseudo}
-                          pseudo={user.pseudo}
-                          displayName={user.displayName.split(" ")[0]}
-                          photoURL={user.photoURL}
+                          key={dataUser.pseudo}
+                          pseudo={dataUser.pseudo}
+                          displayName={dataUser.displayName.split(" ")[0]}
+                          photoURL={dataUser.photoURL}
                         />
                       )
                     )}
