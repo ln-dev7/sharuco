@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -10,7 +11,26 @@ import highlight from "@/utils/highlight"
 import { Copy, Github, Loader2, Share, Star, Verified } from "lucide-react"
 import toast, { Toaster } from "react-hot-toast"
 
+import { cn } from "@/lib/utils"
+import Loader from "@/components/loader"
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import "prism-themes/themes/prism-one-dark.min.css"
 import {
   EmailIcon,
@@ -27,20 +47,6 @@ import {
   WhatsappShareButton,
 } from "react-share"
 
-import { cn } from "@/lib/utils"
-import Loader from "@/components/loader"
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-
 export default function CardCode({
   id,
   idAuthor,
@@ -51,9 +57,12 @@ export default function CardCode({
   favoris: favorisInit,
   isPrivate,
   currentUser,
+  comments,
 }) {
   const notifyCodeCopied = () => toast.success("Code copied to clipboard")
   const notifyUrlCopied = () => toast.success("Url of code copied to clipboard")
+
+  const searchParams = useSearchParams()
 
   const alertAddFavoris = () =>
     toast.custom((t) => (
@@ -311,18 +320,55 @@ export default function CardCode({
       <p className="text-sm text-slate-700 dark:text-slate-400">
         {description}
       </p>
-      {tags && tags.length > 0 && (
-        <div className="mb-4 flex items-center justify-start gap-2">
-          {tags?.map((tag: string) => (
-            <span
-              key={tag}
-              className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
+      <div className="mb-4 flex items-center justify-between gap-2">
+        {tags && tags.length > 0 && (
+          <div className="flex w-full flex-wrap items-center justify-start gap-2">
+            {tags?.map((tag: string) => (
+              <span
+                key={tag}
+                className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+        {(searchParams.get("code-preview") === null && !isPrivate) && (
+          <div className="shrink-0">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href={`/code-preview/${id}`}
+                    className="flex gap-1 text-slate-700 dark:text-slate-400"
+                  >
+                    {comments.length}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="h-6 w-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"
+                      />
+                    </svg>
+
+                    <span className="sr-only">Add or view</span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Add or View comments</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

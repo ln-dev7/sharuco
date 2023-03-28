@@ -14,6 +14,7 @@ import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import { buttonVariants } from "@/components/ui/button"
 import "prism-themes/themes/prism-one-dark.min.css"
+import moment from "moment"
 
 export default function CodePreview() {
   const searchParams = useSearchParams()
@@ -63,6 +64,7 @@ export default function CodePreview() {
                   tags={data.data.tags}
                   favoris={data.data.favoris}
                   isPrivate={data.data.isPrivate}
+                  comments={data.data.comments}
                 />
               ) : (
                 <CardCode
@@ -76,6 +78,7 @@ export default function CodePreview() {
                   favoris={data.data.favoris}
                   isPrivate={data.data.isPrivate}
                   currentUser={dataUser?.data}
+                  comments={data.data.comments}
                 />
               )}
             </Masonry>

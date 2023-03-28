@@ -138,6 +138,7 @@ export default function Dashboard() {
       createdAt: moment().valueOf(),
       favoris: [],
       idAuthor: pseudo,
+      comments: [],
     }
 
     createDocument(newDocument)
@@ -374,6 +375,7 @@ export default function Dashboard() {
                           tags: string[]
                           favoris: string[]
                           isPrivate: boolean
+                          comments: any
                         }) => (
                           <CardCodeAdmin
                             key={code.id}
@@ -385,6 +387,7 @@ export default function Dashboard() {
                             tags={code.tags}
                             favoris={code.favoris}
                             isPrivate={code.isPrivate}
+                            comments={code.comments}
                           />
                         )
                       )}
@@ -430,6 +433,7 @@ export default function Dashboard() {
                           favoris: string[]
                           isPrivate: boolean
                           currentUser: any
+                          comments: any
                         }) => (
                           <CardCode
                             key={code.id}
@@ -442,6 +446,7 @@ export default function Dashboard() {
                             favoris={code.favoris}
                             isPrivate={code.isPrivate}
                             currentUser={dataUser?.data}
+                            comments={code.comments}
                           />
                         )
                       )}
@@ -487,6 +492,7 @@ export default function Dashboard() {
                           favoris: string[]
                           isPrivate: boolean
                           currentUser: any
+                          comments: any
                         }) => (
                           <CardCode
                             key={code.id}
@@ -499,6 +505,7 @@ export default function Dashboard() {
                             favoris={code.favoris}
                             isPrivate={code.isPrivate}
                             currentUser={dataUser?.data}
+                            comments={code.comments}
                           />
                         )
                       )}
@@ -544,6 +551,7 @@ export default function Dashboard() {
                           favoris: string[]
                           isPrivate: boolean
                           currentUser: any
+                          comments: any
                         }) => (
                           <CardCode
                             key={code.id}
@@ -556,6 +564,7 @@ export default function Dashboard() {
                             favoris={code.favoris}
                             isPrivate={code.isPrivate}
                             currentUser={dataUser?.data}
+                            comments={code.comments}
                           />
                         )
                       )}

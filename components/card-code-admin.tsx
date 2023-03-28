@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
@@ -33,6 +34,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import "prism-themes/themes/prism-one-dark.min.css"
 import { useForm } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
@@ -65,9 +72,12 @@ export default function CardCodeAdmin({
   tags,
   favoris: favorisInit,
   isPrivate,
+  comments: commentsInit,
 }) {
   const notifyCodeCopied = () => toast.success("Code copied to clipboard")
   const notifyUrlCopied = () => toast.success("Url of code copied to clipboard")
+
+  const searchParams = useSearchParams()
 
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
@@ -164,6 +174,7 @@ export default function CardCodeAdmin({
       language: string
       tags: string[]
       favoris?: string[]
+      comments?: any[]
     } = {
       code: linearCode,
       description: descriptionUpdate,
@@ -172,6 +183,8 @@ export default function CardCodeAdmin({
       tags: tabTabs,
       favoris:
         isPrivateUpdate === true && isPrivate === false ? [] : favorisInit,
+      comments:
+        isPrivateUpdate === true && isPrivate === false ? [] : commentsInit,
     }
 
     updateCodeDocument({ id, updatedCodeData })
@@ -323,7 +336,7 @@ export default function CardCodeAdmin({
                         >
                           <span className="font-semibold">Warning alert !</span>{" "}
                           If you change your code from public to private, you
-                          will lose all the favourites of this code
+                          will lose all the favourites and comments of this code
                         </div>
                         {isError && (
                           <p className="pt-4 text-sm font-bold text-red-500">
@@ -507,18 +520,55 @@ export default function CardCodeAdmin({
       <p className="text-sm text-slate-700 dark:text-slate-400">
         {description}
       </p>
-      {tags && tags.length > 0 && (
-        <div className="mb-4 flex items-center justify-start gap-2">
-          {tags?.map((tag: string) => (
-            <span
-              key={tag}
-              className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
+      <div className="mb-4 flex items-center justify-between gap-2">
+        {tags && tags.length > 0 && (
+          <div className="mb-4 flex items-center justify-start gap-2">
+            {tags?.map((tag: string) => (
+              <span
+                key={tag}
+                className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+        {searchParams.get("code-preview") === null && !isPrivate && (
+          <div className="shrink-0">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href={`/code-preview/${id}`}
+                    className="flex gap-1 text-slate-700 dark:text-slate-400"
+                  >
+                    {commentsInit.length}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="h-6 w-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"
+                      />
+                    </svg>
+
+                    <span className="sr-only">Add or view</span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Add or View comments</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
