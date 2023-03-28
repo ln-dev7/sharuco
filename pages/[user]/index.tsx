@@ -110,6 +110,7 @@ export default function User() {
                           favoris: string[]
                           isPrivate: boolean
                           currentUser: any
+                          comments: any
                         }) => (
                           <CardCode
                             key={code.id}
@@ -122,6 +123,7 @@ export default function User() {
                             favoris={code.favoris}
                             isPrivate={code.isPrivate}
                             currentUser={data?.data}
+                            comments={code.comments}
                           />
                         )
                       )}

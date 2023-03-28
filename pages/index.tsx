@@ -95,6 +95,7 @@ export default function IndexPage() {
       createdAt: moment().valueOf(),
       favoris: [],
       idAuthor: user.reloadUserInfo.screenName,
+      comments: [],
     }
 
     createDocument(newDocument)
