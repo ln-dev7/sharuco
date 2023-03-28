@@ -1,19 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import Head from "next/head"
 import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
-import { useCreateDocument } from "@/firebase/firestore/createDocument"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
-import linearizeCode from "@/utils/linearizeCode"
-import { yupResolver } from "@hookform/resolvers/yup"
 import { Code, UserIcon } from "lucide-react"
-import { useForm } from "react-hook-form"
-import toast, { Toaster } from "react-hot-toast"
+import { Toaster } from "react-hot-toast"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
-import * as yup from "yup"
 
 import CardCodeAdmin from "@/components/card-code-admin"
 import CardUserAdmin from "@/components/card-user-admin"
@@ -24,8 +19,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function Dashboard() {
   const { logout } = useGitHubLogout()
-  const notifyCodeAdded = () =>
-    toast.success("Your code has been added successfully !")
 
   const { user } = useAuthContext()
   const router = useRouter()
@@ -46,75 +39,6 @@ export default function Dashboard() {
     isLoading: isLoadingCodes,
     isError: isErrorCodes,
   } = useDocuments("codes")
-
-  const [checkboxOn, setCheckboxOn] = useState(false)
-
-  const schema = yup.object().shape({
-    code: yup.string().required(),
-    description: yup.string().required(),
-    language: yup
-      .string()
-      .matches(/^[a-zA-Z]+$/, "The language field should only contain letters")
-      .required(),
-    tags: yup
-      .string()
-      .test(
-        "tags",
-        "The tags field must contain only letters, commas and/or spaces",
-        (val) => !val || /^[a-zA-Z, ]*$/.test(val)
-      ),
-    isPrivate: yup.boolean(),
-  })
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  })
-
-  const { createDocument, isLoading, isError, isSuccess }: any =
-    useCreateDocument("codes")
-
-  const onSubmit = async (data) => {
-    const { code, description, language, tags, isPrivate } = data
-    const linearCode = linearizeCode(code)
-    const now = Date.now()
-    const tabTabs = tags ? tags.split(",") : []
-    if (tabTabs[tabTabs.length - 1] === "") {
-      tabTabs.pop()
-    }
-
-    const newDocument = {
-      code: linearCode,
-      description: description,
-      isPrivate: !!isPrivate,
-      language: language,
-      tags: tabTabs,
-      date: now,
-      favoris: [],
-      idAuthor: user.reloadUserInfo.screenName,
-    }
-
-    createDocument(newDocument)
-
-    reset({
-      code: "",
-      description: "",
-      language: "",
-      tags: "",
-      isPrivate: false,
-    })
-    setCheckboxOn(false)
-  }
-
-  useEffect(() => {
-    if (isSuccess) {
-      notifyCodeAdded()
-    }
-  }, [isSuccess])
 
   return (
     <Layout>
