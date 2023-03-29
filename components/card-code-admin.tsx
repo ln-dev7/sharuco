@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
@@ -13,10 +13,12 @@ import highlight from "@/utils/highlight"
 import indentCode from "@/utils/indentCode"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
+import * as htmlToImage from "html-to-image"
 import {
   Copy,
   Edit,
   Loader2,
+  Save,
   Settings2,
   Share,
   Star,
@@ -217,30 +219,23 @@ export default function CardCodeAdmin({
     isError: isErrorUser,
   } = useDocument(idAuthor, "users")
 
+  const domRefImage = useRef(null)
+
+  const downloadImage = async () => {
+    const dataUrl = await htmlToImage.toPng(domRefImage.current)
+
+    // download image
+    const link = document.createElement("a")
+    link.download = `sharuco-code-${id}.png`
+    link.href = dataUrl
+    link.click()
+  }
+
   return (
     <div key={id} className="flex flex-col gap-2">
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="flex items-center justify-between">
-        <Button
-          variant="subtle"
-          onClick={() => {
-            copyToClipboard(code)
-            notifyCodeCopied()
-          }}
-        >
-          <Copy className="mr-2 h-4 w-4" />
-          Copy code
-        </Button>
-        <div className="flex items-center justify-start gap-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button className="w-10 p-0">
-                <Settings2 className="h-4 w-4" />
-                <span className="sr-only">Open settings</span>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80">
-              <div className="grid gap-4">
+      <div className="flex w-full items-center justify-end">
+        <div className="flex items-center gap-2">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="outline">
@@ -375,77 +370,6 @@ export default function CardCodeAdmin({
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>{" "}
-                {!isPrivate && (
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button>
-                        Share
-                        <Share className="ml-2 h-4 w-4" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Share this code on your social networks.
-                        </AlertDialogTitle>
-                      </AlertDialogHeader>
-                      <div className="flex gap-2">
-                        <FacebookShareButton
-                          url={shareUrl}
-                          quote={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
-                        >
-                          <FacebookIcon size={38} round />
-                        </FacebookShareButton>
-                        <TwitterShareButton
-                          url={shareUrl}
-                          title={`I discovered this code on @sharuco_app , I share it with you here. - « ${description} »`}
-                          hashtags={["CaParleDev", "ShareWithSharuco"]}
-                        >
-                          <TwitterIcon size={38} round />
-                        </TwitterShareButton>
-                        <LinkedinShareButton
-                          url={shareUrl}
-                          title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
-                          source="https://sharuco.lndev.me"
-                        >
-                          <LinkedinIcon size={38} round />
-                        </LinkedinShareButton>
-                        <EmailShareButton
-                          url={shareUrl}
-                          subject={`Share code on sharuco.lndev.me`}
-                          body={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
-                        >
-                          <EmailIcon size={38} round />
-                        </EmailShareButton>
-                        <WhatsappShareButton
-                          url={shareUrl}
-                          title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
-                        >
-                          <WhatsappIcon size={38} round />
-                        </WhatsappShareButton>
-                        <TelegramShareButton
-                          url={shareUrl}
-                          title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
-                        >
-                          <TelegramIcon size={38} round />
-                        </TelegramShareButton>
-                        <Button
-                          variant="subtle"
-                          className="h-10 w-10 rounded-full p-0"
-                          onClick={() => {
-                            copyToClipboard(shareUrl)
-                            notifyUrlCopied()
-                          }}
-                        >
-                          <Copy className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                )}
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant="destructive">
@@ -479,15 +403,70 @@ export default function CardCodeAdmin({
                   </AlertDialogContent>
                 </AlertDialog>
               </div>
-            </PopoverContent>
-          </Popover>
-        </div>
       </div>
       <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
-        <div className="bg-[#343541] py-1 px-4">
+        <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
           <span className="text-xs font-medium text-white">
             {language.toLowerCase()}
           </span>
+          <div className="flex items-center gap-2">
+            <span
+              className="flex cursor-pointer items-center p-1 text-xs font-medium text-white"
+              onClick={() => {
+                copyToClipboard(code)
+                notifyCodeCopied()
+              }}
+            >
+              <Copy className="mr-2 h-4 w-4" />
+              Copy code
+            </span>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button className="cursor-pointer text-white">
+                  <Save class="h-4 w-4 cursor-pointer" />
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto scrollbar-hide">
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <button
+                    className={cn(
+                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    )}
+                    onClick={downloadImage}
+                  >
+                    Download Image
+                  </button>
+                </AlertDialogFooter>
+                <div
+                  ref={domRefImage}
+                  className=" flex max-w-[1280px] flex-col items-center justify-center bg-gradient-to-br from-blue-400 to-indigo-700 p-8"
+                >
+                  <h3 className="mb-2 text-center text-lg font-semibold text-white">
+                    sharuco.lndev.me
+                  </h3>
+                  <div className="max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
+                    <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
+                      <span className="text-xs font-medium text-white">
+                        {language.toLowerCase()}
+                      </span>
+                      <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
+                        @ {idAuthor}
+                      </span>
+                    </div>
+                    <pre className="max-w-[1280px] rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
+                      <code
+                        className="max-w-[1280px] text-white"
+                        dangerouslySetInnerHTML={{
+                          __html: highlight(code, language),
+                        }}
+                      />
+                    </pre>
+                  </div>
+                </div>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
         <pre className="max-h-[480px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
           <code
@@ -592,11 +571,93 @@ export default function CardCodeAdmin({
             )}
             {favorisInit.length}
           </div>
+
+          {!isPrivate && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <span className="flex cursor-pointer items-center justify-center rounded-full p-1 text-slate-700 duration-200 hover:bg-[#1C9BEF] hover:text-white dark:text-slate-400 dark:hover:text-white">
+                  <Share className="h-5 w-5" />
+                </span>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Share this code on your social networks.
+                  </AlertDialogTitle>
+                </AlertDialogHeader>
+                <div className="flex gap-2">
+                  <FacebookShareButton
+                    url={shareUrl}
+                    quote={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                  >
+                    <FacebookIcon size={38} round />
+                  </FacebookShareButton>
+                  <TwitterShareButton
+                    url={shareUrl}
+                    title={`I discovered this code on @sharuco_app , I share it with you here. - « ${description} »`}
+                    hashtags={["CaParleDev", "ShareWithSharuco"]}
+                  >
+                    <TwitterIcon size={38} round />
+                  </TwitterShareButton>
+                  <LinkedinShareButton
+                    url={shareUrl}
+                    title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                    source="https://sharuco.lndev.me"
+                  >
+                    <LinkedinIcon size={38} round />
+                  </LinkedinShareButton>
+                  <EmailShareButton
+                    url={shareUrl}
+                    subject={`Share code on sharuco.lndev.me`}
+                    body={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                  >
+                    <EmailIcon size={38} round />
+                  </EmailShareButton>
+                  <WhatsappShareButton
+                    url={shareUrl}
+                    title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                  >
+                    <WhatsappIcon size={38} round />
+                  </WhatsappShareButton>
+                  <TelegramShareButton
+                    url={shareUrl}
+                    title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                  >
+                    <TelegramIcon size={38} round />
+                  </TelegramShareButton>
+                  <Button
+                    variant="subtle"
+                    className="h-10 w-10 rounded-full p-0"
+                    onClick={() => {
+                      copyToClipboard(shareUrl)
+                      notifyUrlCopied()
+                    }}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
         </div>
       </div>
-      <p className="text-sm text-slate-700 dark:text-slate-400">
-        {description}
-      </p>
+      {searchParams.get("code-preview") === null && !isPrivate ? (
+        <Link
+          href={`/code-preview/${id}`}
+          className="text-sm text-slate-700 dark:text-slate-400"
+        >
+          {description.length > 300
+            ? description.substring(0, 300) + "..."
+            : description}
+        </Link>
+      ) : (
+        <p className="text-sm text-slate-700 dark:text-slate-400">
+          {description}
+        </p>
+      )}
       <div className="mb-4 flex items-center justify-start gap-2">
         {tags && tags.length > 0 && (
           <div className="mb-4 flex items-center justify-start gap-2">

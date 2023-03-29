@@ -143,7 +143,7 @@ export default function User() {
         )}
         {data && !data.exists && (
           <div className="flex flex-col items-center gap-4">
-            <h1 className="tesxt-4xl font-bold">User not found</h1>
+            <h1 className="text-2xl font-bold">User not found</h1>
             <Link
               href="/"
               className={buttonVariants({ size: "lg", variant: "outline" })}
