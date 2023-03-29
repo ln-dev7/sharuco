@@ -264,7 +264,12 @@ export default function CardCode({
         </div>
       </div>
       <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
-        <pre className="max-h-[480px] w-auto overflow-auto rounded-lg border border-slate-600 bg-slate-900 p-4 dark:bg-black">
+        <div className="bg-[#343541] py-1 px-4">
+          <span className="text-xs font-medium text-white">
+            {language.toLowerCase()}
+          </span>
+        </div>
+        <pre className="max-h-[480px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
           <code
             className="text-white"
             dangerouslySetInnerHTML={{
@@ -313,34 +318,14 @@ export default function CardCode({
             )}
           </div>
         </Link>
-        <span className="p-2 text-sm font-bold italic text-slate-700 dark:text-slate-400">
-          {language.toLowerCase()}
-        </span>
-      </div>
-      <p className="text-sm text-slate-700 dark:text-slate-400">
-        {description}
-      </p>
-      <div className="mb-4 flex items-center justify-between gap-2">
-        {tags && tags.length > 0 && (
-          <div className="flex w-full flex-wrap items-center justify-start gap-2">
-            {tags?.map((tag: string) => (
-              <span
-                key={tag}
-                className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-        {(searchParams.get("code-preview") === null && !isPrivate) && (
+        {searchParams.get("code-preview") === null && !isPrivate && (
           <div className="shrink-0">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
                     href={`/code-preview/${id}`}
-                    className="flex gap-1 text-slate-700 dark:text-slate-400"
+                    className="flex gap-1 text-slate-700 hover:text-slate-500 dark:text-slate-400 hover:dark:text-white"
                   >
                     {comments.length}
                     <svg
@@ -366,6 +351,35 @@ export default function CardCode({
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+          </div>
+        )}
+      </div>
+
+      {searchParams.get("code-preview") === null && !isPrivate ? (
+        <Link
+          href={`/code-preview/${id}`}
+          className="text-sm text-slate-700 dark:text-slate-400"
+        >
+          {description.length > 300
+            ? description.substring(0, 300) + "..."
+            : description}
+        </Link>
+      ) : (
+        <p className="text-sm text-slate-700 dark:text-slate-400">
+          {description}
+        </p>
+      )}
+      <div className="mb-4 flex items-center justify-start gap-2">
+        {tags && tags.length > 0 && (
+          <div className="flex w-full flex-wrap items-center justify-start gap-2">
+            {tags?.map((tag: string) => (
+              <span
+                key={tag}
+                className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         )}
       </div>

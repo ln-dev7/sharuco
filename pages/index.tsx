@@ -337,7 +337,7 @@ export default function IndexPage() {
                 onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
               >
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Submit
+                Add
               </button>
             </AlertDialogFooter>
           </AlertDialogContent>
