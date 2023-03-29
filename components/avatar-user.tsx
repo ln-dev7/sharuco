@@ -27,9 +27,8 @@ export const useGitHubLogout = () => {
     }
     try {
       await signOut(auth)
-      console.log("user logged out")
     } catch (error) {
-      console.log(error.message)
+      console.error(error.message)
     }
   }
 
