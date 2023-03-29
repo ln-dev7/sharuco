@@ -261,7 +261,7 @@ export default function CardCodeAdmin({
                       {...register("description")}
                     />
                     <p className="text-sm text-red-500">
-                      {errors.description && <p>{errors.description.message}</>}
+                      {errors.description && <>{errors.description.message}</>}
                     </p>
                   </div>
                   <div className="mb-4 flex w-full flex-col items-start gap-1.5">
