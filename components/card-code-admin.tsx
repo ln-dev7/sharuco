@@ -1,8 +1,5 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
@@ -19,14 +16,15 @@ import {
   Edit,
   Loader2,
   Save,
-  Settings2,
   Share,
   Star,
   Trash,
   Verified,
 } from "lucide-react"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+import { useEffect, useRef, useState } from "react"
 
-import { cn } from "@/lib/utils"
 import Loader from "@/components/loader"
 import {
   AlertDialog,
@@ -41,16 +39,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
 import "prism-themes/themes/prism-one-dark.min.css"
 import { useForm } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
@@ -115,10 +109,7 @@ export default function CardCodeAdmin({
   const schema = yup.object().shape({
     code: yup.string().required(),
     description: yup.string().required(),
-    language: yup
-      .string()
-      .matches(/^[a-zA-Z]+$/, "The language field should only contain letters")
-      .required(),
+    language: yup.string().required(),
     tags: yup
       .string()
       .test(
@@ -236,173 +227,186 @@ export default function CardCodeAdmin({
       <Toaster position="top-right" reverseOrder={false} />
       <div className="flex w-full items-center justify-end">
         <div className="flex items-center gap-2">
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="outline">
-                      Edit
-                      <Edit className="ml-2 h-4 w-4" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
-                          Edit a code
-                        </h3>
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                          <Label htmlFor="code">Edit your code</Label>
-                          <Textarea
-                            placeholder="Insert your code here..."
-                            id="code"
-                            {...register("code")}
-                          />
-                          <p className="text-sm text-red-500">
-                            {errors.code && <>{errors.code.message}</>}
-                          </p>
-                        </div>
-                        <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                          <Label htmlFor="description">Edit escription</Label>
-                          <Textarea
-                            placeholder="What does this code do ?"
-                            id="description"
-                            {...register("description")}
-                          />
-                          <p className="text-sm text-red-500">
-                            {errors.description && (
-                              <>{errors.description.message}</>
-                            )}
-                          </p>
-                        </div>
-                        <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                          <Label htmlFor="language">Edit language</Label>
-                          <Input
-                            type="text"
-                            id="language"
-                            placeholder="The code is written in what language ?"
-                            {...register("language")}
-                          />
-                          <p className="text-md font-medium text-slate-500">
-                            please enter only one language
-                          </p>
-                          <p className="text-sm text-red-500">
-                            {errors.language && <>{errors.language.message}</>}
-                          </p>
-                        </div>
-                        <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                          <Label htmlFor="tags">Edit tags</Label>
-                          <Input
-                            type="text"
-                            id="tags"
-                            placeholder="Enter a tags ..."
-                            {...register("tags")}
-                          />
-                          <p className="text-sm font-medium text-slate-500">
-                            Please separate tags with{" "}
-                            <span className="text-slate-700 dark:text-slate-300">
-                              ,
-                            </span>
-                          </p>
-                          <p className="text-sm text-red-500">
-                            {errors.tags && <>{errors.tags.message}</>}
-                          </p>
-                        </div>
-                        {searchParams.get("code-preview") === null && (
-                          <div className="flex items-center gap-4">
-                            <input
-                              type="checkbox"
-                              {...register("isPrivate")}
-                              name="isPrivate"
-                              id="isPrivate"
-                              className={`h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none ring-slate-500
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline">
+                Edit
+                <Edit className="ml-2 h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
+                    Edit a code
+                  </h3>
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
+                    <Label htmlFor="code">Edit your code</Label>
+                    <Textarea
+                      placeholder="Insert your code here..."
+                      id="code"
+                      {...register("code")}
+                    />
+                    <p className="text-sm text-red-500">
+                      {errors.code && <>{errors.code.message}</>}
+                    </p>
+                  </div>
+                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
+                    <Label htmlFor="description">Edit escription</Label>
+                    <Textarea
+                      placeholder="What does this code do ?"
+                      id="description"
+                      {...register("description")}
+                    />
+                    <p className="text-sm text-red-500">
+                      {errors.description && <p>{errors.description.message}</>}
+                    </p>
+                  </div>
+                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
+                    <Label htmlFor="language">Edit language</Label>
+                    <select
+                      className="flex h-10 w-full rounded-md border border-slate-300 bg-transparent py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      name="language"
+                      id="language"
+                      {...register("language")}
+                    >
+                      <option value="" disabled selected>
+                        {" "}
+                        The code is written in what language ?
+                      </option>
+                      <option value="c">C</option>
+                      <option value="csharp">C#</option>
+                      <option value="css">CSS</option>
+                      <option value="dart">Dart</option>
+                      <option value="graphql">GraphQL</option>
+                      <option value="html">HTML</option>
+                      <option value="java">Java</option>
+                      <option value="javascript">Javascript</option>
+                      <option value="json">JSON</option>
+                      <option value="kotlin">Kotlin</option>
+                      <option value="markdown">Markdown</option>
+                      <option value="typescript">Typescript</option>
+                      <option value="php">PHP</option>
+                      <option value="python">Python</option>
+                      <option value="ruby">Ruby</option>
+                      <option value="scss">SCSS</option>
+                      <option value="sql">SQL</option>
+                      <option value="swift">Swift</option>
+                      <option value="xml">XML</option>
+                      <option value="yaml">YAML</option>
+                    </select>
+
+                    <p className="text-sm text-red-500">
+                      {errors.language && <>{errors.language.message}</>}
+                    </p>
+                  </div>
+                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
+                    <Label htmlFor="tags">Edit tags</Label>
+                    <Input
+                      type="text"
+                      id="tags"
+                      placeholder="Enter a tags ..."
+                      {...register("tags")}
+                    />
+                    <p className="text-sm font-medium text-slate-500">
+                      Please separate tags with{" "}
+                      <span className="text-slate-700 dark:text-slate-300">
+                        ,
+                      </span>
+                    </p>
+                    <p className="text-sm text-red-500">
+                      {errors.tags && <>{errors.tags.message}</>}
+                    </p>
+                  </div>
+                  {searchParams.get("code-preview") === null && (
+                    <div className="flex items-center gap-4">
+                      <input
+                        type="checkbox"
+                        {...register("isPrivate")}
+                        name="isPrivate"
+                        id="isPrivate"
+                        className={`h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none ring-slate-500
                            ring-offset-0 focus:ring-slate-400 focus:ring-offset-slate-900 dark:bg-slate-800
                           ${checkboxOn ? "ring-2" : "ring-0"}
                           `}
-                              checked={checkboxOn}
-                              onChange={() => setCheckboxOn(!checkboxOn)}
-                            />
-                            <Label htmlFor="isPrivate">
-                              Will this code be private ?{" "}
-                              {checkboxOn ? (
-                                <span className="font-bold text-teal-300">
-                                  Yes
-                                </span>
-                              ) : (
-                                <span className="font-bold text-teal-300">
-                                  No
-                                </span>
-                              )}
-                            </Label>
-                          </div>
+                        checked={checkboxOn}
+                        onChange={() => setCheckboxOn(!checkboxOn)}
+                      />
+                      <Label htmlFor="isPrivate">
+                        Will this code be private ?{" "}
+                        {checkboxOn ? (
+                          <span className="font-bold text-teal-300">Yes</span>
+                        ) : (
+                          <span className="font-bold text-teal-300">No</span>
                         )}
-                        <div
-                          className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
-                          role="alert"
-                        >
-                          <span className="font-semibold">Warning alert !</span>{" "}
-                          If you change your code from public to private, you
-                          will lose all the favourites and comments of this code
-                        </div>
-                        {isError && (
-                          <p className="pt-4 text-sm font-bold text-red-500">
-                            An error has occurred, please try again later.
-                          </p>
-                        )}
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <button
-                        className={cn(
-                          "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
-                        )}
-                        disabled={isLoading}
-                        onClick={
-                          !isLoading ? handleSubmit(onSubmit) : undefined
-                        }
-                      >
-                        {isLoading && (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        Edit
-                      </button>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>{" "}
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="destructive">
-                      Delete
-                      <Trash className="ml-2 h-4 w-4" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you sure you want to delete this code ?
-                      </AlertDialogTitle>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <button
-                        className={cn(
-                          "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
-                        )}
-                        disabled={isLoadingDD}
-                        onClick={
-                          !isLoadingDD ? handleDeleteDocument : undefined
-                        }
-                      >
-                        {isLoadingDD && (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        Delete
-                      </button>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
+                      </Label>
+                    </div>
+                  )}
+                  <div
+                    className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
+                    role="alert"
+                  >
+                    <span className="font-semibold">Warning alert !</span> If
+                    you change your code from public to private, you will lose
+                    all the favourites and comments of this code
+                  </div>
+                  {isError && (
+                    <p className="pt-4 text-sm font-bold text-red-500">
+                      An error has occurred, please try again later.
+                    </p>
+                  )}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <button
+                  className={cn(
+                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                  )}
+                  disabled={isLoading}
+                  onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
+                >
+                  {isLoading && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Edit
+                </button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>{" "}
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive">
+                Delete
+                <Trash className="ml-2 h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Are you sure you want to delete this code ?
+                </AlertDialogTitle>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <button
+                  className={cn(
+                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                  )}
+                  disabled={isLoadingDD}
+                  onClick={!isLoadingDD ? handleDeleteDocument : undefined}
+                >
+                  {isLoadingDD && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Delete
+                </button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </div>
       <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
         <div className="flex items-center justify-between bg-[#343541] py-1 px-4">

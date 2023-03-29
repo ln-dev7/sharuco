@@ -93,10 +93,7 @@ export default function Dashboard() {
   const schema = yup.object().shape({
     code: yup.string().required(),
     description: yup.string().required(),
-    language: yup
-      .string()
-      .matches(/^[a-zA-Z]+$/, "The language field should only contain letters")
-      .required(),
+    language: yup.string().required(),
     tags: yup
       .string()
       .test(
@@ -233,15 +230,38 @@ export default function Dashboard() {
                   </div>
                   <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                     <Label htmlFor="language">Language</Label>
-                    <Input
-                      type="text"
+                    <select
+                      className="flex h-10 w-full rounded-md border border-slate-300 bg-transparent py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      name="language"
                       id="language"
-                      placeholder="The code is written in what language ?"
                       {...register("language")}
-                    />
-                    <p className="text-md font-medium text-slate-500">
-                      please enter only one language
-                    </p>
+                    >
+                      <option value="" disabled selected>
+                        {" "}
+                        The code is written in what language ?
+                      </option>
+                      <option value="c">C</option>
+                      <option value="csharp">C#</option>
+                      <option value="css">CSS</option>
+                      <option value="dart">Dart</option>
+                      <option value="graphql">GraphQL</option>
+                      <option value="html">HTML</option>
+                      <option value="java">Java</option>
+                      <option value="javascript">Javascript</option>
+                      <option value="json">JSON</option>
+                      <option value="kotlin">Kotlin</option>
+                      <option value="markdown">Markdown</option>
+                      <option value="typescript">Typescript</option>
+                      <option value="php">PHP</option>
+                      <option value="python">Python</option>
+                      <option value="ruby">Ruby</option>
+                      <option value="scss">SCSS</option>
+                      <option value="sql">SQL</option>
+                      <option value="swift">Swift</option>
+                      <option value="xml">XML</option>
+                      <option value="yaml">YAML</option>
+                    </select>
+
                     <p className="text-sm text-red-500">
                       {errors.language && <>{errors.language.message}</>}
                     </p>
