@@ -178,15 +178,15 @@ export default function CodePreview() {
                 )}
               </Masonry>
             </ResponsiveMasonry>
-            <div className="flex w-full flex-col items-start gap-2">
-              <div className="flex flex-col w-full items-start">
+            <div className="flex flex-col items-start w-full gap-2">
+              <div className="flex flex-col items-start w-full">
                 <h2 className="text-2xl font-bold">
                   {dataCode.data.comments.length} Comment(s)
                 </h2>
                 <Separator className="my-4" />
               </div>
-              <div className="flex w-full flex-col-reverse items-center gap-4 lg:flex-row lg:items-start">
-                <div className="flex w-full flex-col gap-8">
+              <div className="flex flex-col-reverse items-center w-full gap-4 lg:flex-row lg:items-start">
+                <div className="flex flex-col w-full gap-8">
                   {dataCode.data.comments &&
                     dataCode.data.comments
                       //.sort((a, b) => b.createdAt - a.createdAt)
@@ -198,9 +198,9 @@ export default function CodePreview() {
                           <div className="flex flex-wrap items-center">
                             <Link
                               href={`/${comment.idAuthor}`}
-                              className="flex items-center mr-2 justify-start gap-2"
+                              className="flex items-center justify-start gap-2 mr-2"
                             >
-                              <Avatar className="h-8 w-8 cursor-pointer">
+                              <Avatar className="w-8 h-8 cursor-pointer">
                                 {isLoadingUser && (
                                   <AvatarFallback>
                                     <Loader />
@@ -219,12 +219,12 @@ export default function CodePreview() {
                                 </AvatarFallback>
                               </Avatar>
                               <div className="flex items-center justify-start gap-1">
-                                <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
+                                <span className="font-bold text-md text-slate-700 hover:underline dark:text-slate-400 ">
                                   {comment.idAuthor}{" "}
                                 </span>
                                 <span>
                                   {comment.isCertified && (
-                                    <Verified className="h-4 w-4 text-green-500" />
+                                    <Verified className="w-4 h-4 text-green-500" />
                                   )}
                                 </span>
                               </div>
@@ -242,15 +242,15 @@ export default function CodePreview() {
                               </span>
                             </div>
                           </div>
-                          <div className="flex w-full flex-col gap-2 rounded-md bg-slate-100 p-4 dark:bg-slate-800">
-                            <p className="text-md font-semibold text-slate-900 dark:text-white">
+                          <div className="flex flex-col w-full gap-2 p-4 rounded-md bg-slate-100 dark:bg-slate-800">
+                            <p className="font-semibold text-md text-slate-900 dark:text-white">
                               {comment.comment}
                             </p>
                             {/* <p
                               dangerouslySetInnerHTML={{
                                 __html: comment.comment,
                               }}
-                              className="text-md font-semibold text-slate-900 dark:text-white"
+                              className="font-semibold text-md text-slate-900 dark:text-white"
                             ></p> */}
 
                             {comment.code && (
@@ -292,7 +292,7 @@ export default function CodePreview() {
                                 }}
                                 className="flex items-center justify-center gap-2 text-sm font-semibold text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500"
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <Trash2 className="w-4 h-4" />
                                 <span>Delete</span>
                               </button>
                             </div>
@@ -337,7 +337,7 @@ export default function CodePreview() {
                         }
                       >
                         {isLoadingAddComment && (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                         )}
                         Add comment
                       </button>
@@ -351,9 +351,9 @@ export default function CodePreview() {
                       onClick={login}
                     >
                       {isPending ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                       ) : (
-                        <Github className="mr-2 h-4 w-4" />
+                        <Github className="w-4 h-4 mr-2" />
                       )}
                       Login with Github to comment
                     </button>
@@ -366,7 +366,7 @@ export default function CodePreview() {
         {((dataCode && !dataCode.exists) ||
           (dataCode && dataCode.exists && dataCode.data.isPrivate)) && (
           <div className="flex flex-col items-center gap-4">
-            <h1 className="tesxt-4xl font-bold">
+            <h1 className="font-bold tesxt-4xl">
               This code code does not exist.
             </h1>
             <Link
