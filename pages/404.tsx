@@ -21,7 +21,7 @@ export default function Custom404() {
       </Head>
       <section className="container grid items-center gap-8 pt-6 pb-8 md:py-10">
         <div className="flex flex-col items-center gap-4">
-          <h1 className="tesxt-4xl font-bold">This page does not exist.</h1>
+          <h1 className="text-2xl font-bold">This page does not exist.</h1>
           <Link
             href="/"
             className={buttonVariants({ size: "lg", variant: "outline" })}

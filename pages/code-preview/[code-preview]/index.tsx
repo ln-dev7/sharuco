@@ -410,7 +410,7 @@ export default function CodePreview() {
         {((dataCode && !dataCode.exists) ||
           (dataCode && dataCode.exists && dataCode.data.isPrivate)) && (
           <div className="flex flex-col items-center gap-4">
-            <h1 className="tesxt-4xl font-bold">
+            <h1 className="text-2xl font-bold">
               This code code does not exist.
             </h1>
             <Link
