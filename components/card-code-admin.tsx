@@ -13,7 +13,16 @@ import highlight from "@/utils/highlight"
 import indentCode from "@/utils/indentCode"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { Copy, Edit, Loader2, Settings2, Share, Trash } from "lucide-react"
+import {
+  Copy,
+  Edit,
+  Loader2,
+  Settings2,
+  Share,
+  Star,
+  Trash,
+  Verified,
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import Loader from "@/components/loader"
@@ -239,7 +248,7 @@ export default function CardCodeAdmin({
                       <Edit className="ml-2 h-4 w-4" />
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
+                  <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
                     <AlertDialogHeader>
                       <AlertDialogTitle>
                         <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
@@ -304,32 +313,34 @@ export default function CardCodeAdmin({
                             {errors.tags && <>{errors.tags.message}</>}
                           </p>
                         </div>
-                        <div className="flex items-center gap-4">
-                          <input
-                            type="checkbox"
-                            {...register("isPrivate")}
-                            name="isPrivate"
-                            id="isPrivate"
-                            className={`h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none ring-slate-500
-                       ring-offset-0 focus:ring-slate-400 focus:ring-offset-slate-900 dark:bg-slate-800
-                      ${checkboxOn ? "ring-2" : "ring-0"}
-                      `}
-                            checked={checkboxOn}
-                            onChange={() => setCheckboxOn(!checkboxOn)}
-                          />
-                          <Label htmlFor="isPrivate">
-                            Will this code be private ?{" "}
-                            {checkboxOn ? (
-                              <span className="font-bold text-teal-300">
-                                Yes
-                              </span>
-                            ) : (
-                              <span className="font-bold text-teal-300">
-                                No
-                              </span>
-                            )}
-                          </Label>
-                        </div>
+                        {searchParams.get("code-preview") === null && (
+                          <div className="flex items-center gap-4">
+                            <input
+                              type="checkbox"
+                              {...register("isPrivate")}
+                              name="isPrivate"
+                              id="isPrivate"
+                              className={`h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none ring-slate-500
+                           ring-offset-0 focus:ring-slate-400 focus:ring-offset-slate-900 dark:bg-slate-800
+                          ${checkboxOn ? "ring-2" : "ring-0"}
+                          `}
+                              checked={checkboxOn}
+                              onChange={() => setCheckboxOn(!checkboxOn)}
+                            />
+                            <Label htmlFor="isPrivate">
+                              Will this code be private ?{" "}
+                              {checkboxOn ? (
+                                <span className="font-bold text-teal-300">
+                                  Yes
+                                </span>
+                              ) : (
+                                <span className="font-bold text-teal-300">
+                                  No
+                                </span>
+                              )}
+                            </Label>
+                          </div>
+                        )}
                         <div
                           className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
                           role="alert"
@@ -359,7 +370,7 @@ export default function CardCodeAdmin({
                         {isLoading && (
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         )}
-                        Submit
+                        Edit
                       </button>
                     </AlertDialogFooter>
                   </AlertDialogContent>
@@ -473,7 +484,12 @@ export default function CardCodeAdmin({
         </div>
       </div>
       <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
-        <pre className="max-h-[480px] w-auto overflow-auto rounded-lg border border-slate-600 bg-slate-900 p-4 dark:bg-black">
+        <div className="bg-[#343541] py-1 px-4">
+          <span className="text-xs font-medium text-white">
+            {language.toLowerCase()}
+          </span>
+        </div>
+        <pre className="max-h-[480px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
           <code
             className="text-white"
             dangerouslySetInnerHTML={{
@@ -509,38 +525,27 @@ export default function CardCodeAdmin({
               </>
             )}
           </Avatar>
-          <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
-            {idAuthor}
-          </span>
-        </Link>
-        <span className="p-2 text-sm font-bold italic text-slate-700 dark:text-slate-400">
-          {language}
-        </span>
-      </div>
-      <p className="text-sm text-slate-700 dark:text-slate-400">
-        {description}
-      </p>
-      <div className="mb-4 flex items-center justify-between gap-2">
-        {tags && tags.length > 0 && (
-          <div className="mb-4 flex items-center justify-start gap-2">
-            {tags?.map((tag: string) => (
-              <span
-                key={tag}
-                className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
-              >
-                {tag}
+          <div className="flex items-center justify-start gap-1">
+            <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
+              {idAuthor}{" "}
+            </span>
+            {dataUser && dataUser.exists && (
+              <span>
+                {dataUser.data.isCertified && (
+                  <Verified className="h-4 w-4 text-green-500" />
+                )}
               </span>
-            ))}
+            )}
           </div>
-        )}
-        {searchParams.get("code-preview") === null && !isPrivate && (
-          <div className="shrink-0">
+        </Link>
+        <div className="flex shrink-0 items-center gap-4">
+          {searchParams.get("code-preview") === null && !isPrivate && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
                     href={`/code-preview/${id}`}
-                    className="flex gap-1 text-slate-700 dark:text-slate-400"
+                    className="flex gap-1 text-slate-700 hover:text-slate-500 dark:text-slate-400 hover:dark:text-white"
                   >
                     {commentsInit.length}
                     <svg
@@ -557,7 +562,6 @@ export default function CardCodeAdmin({
                         d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"
                       />
                     </svg>
-
                     <span className="sr-only">Add or view</span>
                   </Link>
                 </TooltipTrigger>
@@ -566,6 +570,44 @@ export default function CardCodeAdmin({
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
+          )}
+          <div className="flex items-center text-slate-700 dark:text-slate-400 ">
+            {user && favorisInit.includes(pseudo) ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#F9197F"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="#F9197F"
+                className="mr-2 h-5 w-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                />
+              </svg>
+            ) : (
+              <Star className="mr-2 h-5 w-5" />
+            )}
+            {favorisInit.length}
+          </div>
+        </div>
+      </div>
+      <p className="text-sm text-slate-700 dark:text-slate-400">
+        {description}
+      </p>
+      <div className="mb-4 flex items-center justify-start gap-2">
+        {tags && tags.length > 0 && (
+          <div className="mb-4 flex items-center justify-start gap-2">
+            {tags?.map((tag: string) => (
+              <span
+                key={tag}
+                className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         )}
       </div>

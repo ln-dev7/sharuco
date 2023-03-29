@@ -312,7 +312,7 @@ export default function Dashboard() {
                   {isLoading && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
-                  Submit
+                  Add
                 </button>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -348,8 +348,8 @@ export default function Dashboard() {
             </div>
           </TabsList>
           <TabsContent className="border-none p-0 pt-4" value="manage-code">
-            {(isLoadingPublicCodes || isLoadingPrivateCodes) && <Loader />}
-            {dataPublicCodes && dataPrivateCodes && (
+            {isLoadingCodes && <Loader />}
+            {dataCodes && (
               <>
                 <ResponsiveMasonry
                   columnsCountBreakPoints={{

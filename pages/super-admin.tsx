@@ -58,10 +58,12 @@ export default function Dashboard() {
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Hello Admin
           </h1>
-          {dataUsers && (
+          {dataUsers && dataCodes && (
             <p className="text-lg text-slate-700 dark:text-slate-400">
               <span className="font-bold">{dataUsers.length} users </span>
-              registered on sharuco.
+              registered and{" "}
+              <span className="font-bold">{dataCodes.length} codes</span> shared
+              on Sharuco
             </p>
           )}
         </div>
@@ -106,6 +108,7 @@ export default function Dashboard() {
                           tags: string[]
                           favoris: string[]
                           isPrivate: boolean
+                          comments: any
                         }) => (
                           <CardCodeAdmin
                             key={code.id}
@@ -117,6 +120,7 @@ export default function Dashboard() {
                             tags={code.tags}
                             favoris={code.favoris}
                             isPrivate={code.isPrivate}
+                            comments={code.comments}
                           />
                         )
                       )}
