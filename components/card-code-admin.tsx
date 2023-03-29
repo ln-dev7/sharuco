@@ -1,5 +1,8 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
@@ -21,10 +24,8 @@ import {
   Trash,
   Verified,
 } from "lucide-react"
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
 
+import { cn } from "@/lib/utils"
 import Loader from "@/components/loader"
 import {
   AlertDialog,
@@ -44,7 +45,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
 import "prism-themes/themes/prism-one-dark.min.css"
 import { useForm } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
@@ -211,6 +211,28 @@ export default function CardCodeAdmin({
   } = useDocument(idAuthor, "users")
 
   const domRefImage = useRef(null)
+  const [backgroundImage, setBackgroundImage] = useState(
+    "bg-gradient-to-br from-blue-400 to-indigo-700"
+  )
+
+  const handleChangeBgImg1 = () => {
+    setBackgroundImage("bg-gradient-to-br from-blue-400 to-indigo-700")
+  }
+
+  const handleChangeBgImg2 = () => {
+    setBackgroundImage("bg-gradient-to-r from-pink-500 to-indigo-600")
+  }
+
+  const handleChangeBgImg3 = () => {
+    setBackgroundImage("bg-gradient-to-br from-teal-400 to-green-500")
+  }
+
+  const handleChangeBgImg4 = () => {
+    setBackgroundImage("bg-gradient-to-br from-yellow-300 to-orange-500")
+  }
+  const handleChangeBgImg5 = () => {
+    setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600")
+  }
 
   const downloadImage = async () => {
     const dataUrl = await htmlToImage.toPng(domRefImage.current)
@@ -441,9 +463,31 @@ export default function CardCodeAdmin({
                     Download Image
                   </button>
                 </AlertDialogFooter>
+                <div className="flex w-full items-center justify-center gap-2">
+                  <button
+                    className="h-6 w-6 rounded-full bg-gradient-to-br from-blue-400 to-indigo-700"
+                    onClick={handleChangeBgImg1}
+                  ></button>{" "}
+                  <button
+                    className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-indigo-600"
+                    onClick={handleChangeBgImg2}
+                  ></button>{" "}
+                  <button
+                    className="h-6 w-6 rounded-full bg-gradient-to-br from-teal-400 to-green-500"
+                    onClick={handleChangeBgImg3}
+                  ></button>
+                  <button
+                    className="h-6 w-6 rounded-full bg-gradient-to-br from-yellow-300 to-orange-500"
+                    onClick={handleChangeBgImg4}
+                  ></button>
+                  <button
+                    className="h-6 w-6 rounded-full bg-gradient-to-br from-red-500 to-pink-600"
+                    onClick={handleChangeBgImg5}
+                  ></button>
+                </div>
                 <div
                   ref={domRefImage}
-                  className=" flex max-w-[1280px] flex-col items-center justify-center bg-gradient-to-br from-blue-400 to-indigo-700 p-8"
+                  className={`flex max-w-[1280px] flex-col items-center justify-center ${backgroundImage} p-8`}
                 >
                   <h3 className="mb-2 text-center text-lg font-semibold text-white">
                     sharuco.lndev.me
