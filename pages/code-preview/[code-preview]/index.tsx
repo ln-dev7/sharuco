@@ -7,10 +7,11 @@ import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
+import copyToClipboard from "@/utils/copyToClipboard"
 import highlight from "@/utils/highlight"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { Github, Loader2, Trash2, Verified } from "lucide-react"
+import { Copy, Github, Loader2, Trash2, Verified } from "lucide-react"
 import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
@@ -27,6 +28,15 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import * as yup from "yup"
 
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
@@ -35,6 +45,8 @@ export default function CodePreview() {
   const searchParams = useSearchParams()
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
+
+  const notifyCodeCopied = () => toast.success("Code copied to clipboard")
 
   const { login, isPending } = useGitHubLoign()
 
@@ -121,7 +133,7 @@ export default function CodePreview() {
       ),
     }
 
-    updateCodeDocument({ id, updatedCodeData })
+    await updateCodeDocument({ id, updatedCodeData })
 
     toast.success("Comment deleted successfully")
   }
@@ -261,9 +273,19 @@ export default function CodePreview() {
                               >
                                 <Masonry>
                                   <div className="w-full overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
-                                    <div className="bg-[#343541] py-1 px-4">
+                                    <div className="flex justify-between items-center bg-[#343541] py-1 px-4">
                                       <span className="text-xs font-medium text-white">
                                         {dataCode.data.language.toLowerCase()}
+                                      </span>
+                                      <span
+                                        className="flex items-center py-1 px-1 text-xs font-medium text-white cursor-pointer"
+                                        onClick={() => {
+                                          copyToClipboard(comment.code)
+                                          notifyCodeCopied()
+                                        }}
+                                      >
+                                        <Copy className="mr-2 h-4 w-4" />
+                                        Copy code
                                       </span>
                                     </div>
                                     <pre className="max-h-[380px] w-full overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
@@ -286,15 +308,37 @@ export default function CodePreview() {
                             dataCode.data.idAuthor ===
                               dataUser?.data.pseudo) && (
                             <div>
-                              <button
-                                onClick={() => {
-                                  handleDeletComment(comment.idComment)
-                                }}
-                                className="flex items-center justify-center gap-2 text-sm font-semibold text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                                <span>Delete</span>
-                              </button>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <button className="flex items-center justify-center gap-2 text-sm font-semibold text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500">
+                                    <Trash2 className="h-4 w-4" />
+                                    <span>Delete</span>
+                                  </button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                      Are you sure you want to delete this
+                                      comment ?
+                                    </AlertDialogTitle>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>
+                                      Cancel
+                                    </AlertDialogCancel>
+                                    <button
+                                      className={cn(
+                                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                                      )}
+                                      onClick={() => {
+                                        handleDeletComment(comment.idComment)
+                                      }}
+                                    >
+                                      Delete
+                                    </button>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
                             </div>
                           )}
                         </div>
