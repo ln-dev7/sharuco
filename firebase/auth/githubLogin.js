@@ -61,12 +61,13 @@ export const useGitHubLoign = () => {
           { merge: true }
         )
       }
-    } catch (error) {
-      console.log(error)
-      setError(error.message)
-    } finally {
-      setIsPending(false)
-    }
+   } catch (error) {
+  console.log(error)
+  setError(error.message)
+  await auth.signOut()
+} finally {
+  setIsPending(false)
+}
   }
 
   return { login, error, isPending }
