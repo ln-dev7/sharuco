@@ -1,5 +1,6 @@
 "use client"
 
+import { useRef, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
@@ -10,6 +11,21 @@ import copyToClipboard from "@/utils/copyToClipboard"
 import highlight from "@/utils/highlight"
 import * as htmlToImage from "html-to-image"
 import { Copy, Github, Loader2, Save, Share, Verified } from "lucide-react"
+import toast, { Toaster } from "react-hot-toast"
+import {
+  EmailIcon,
+  EmailShareButton,
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  TelegramIcon,
+  TelegramShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+} from "react-share"
 
 import { cn } from "@/lib/utils"
 import Loader from "@/components/loader"
@@ -31,23 +47,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import "prism-themes/themes/prism-one-dark.min.css"
-import { useRef, useState } from "react"
-import toast, { Toaster } from "react-hot-toast"
-import {
-  EmailIcon,
-  EmailShareButton,
-  FacebookIcon,
-  FacebookShareButton,
-  LinkedinIcon,
-  LinkedinShareButton,
-  TelegramIcon,
-  TelegramShareButton,
-  TwitterIcon,
-  TwitterShareButton,
-  WhatsappIcon,
-  WhatsappShareButton,
-} from "react-share"
 
 export default function CardCode({
   id,
