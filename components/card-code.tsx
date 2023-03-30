@@ -164,7 +164,7 @@ export default function CardCode({
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <button className="cursor-pointer text-white">
-                  <Save class="h-4 w-4 cursor-pointer" />
+                  <Save className="h-4 w-4 cursor-pointer" />
                 </button>
               </AlertDialogTrigger>
               <AlertDialogContent className="flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto scrollbar-hide">
