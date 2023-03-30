@@ -40,7 +40,10 @@ export const useGitHubLoign = () => {
       if (!docSnapshot.exists()) {
         await setDoc(documentRef, {
           pseudo: user.reloadUserInfo.screenName,
-          displayName: user.displayName,
+          displayName:
+            user.displayName !== null
+              ? user.displayName
+              : user.reloadUserInfo.screenName,
           email: user.email,
           photoURL: user.photoURL,
           createdAt: moment(user.metadata.creationTime).valueOf(),
@@ -52,7 +55,10 @@ export const useGitHubLoign = () => {
           documentRef,
           {
             pseudo: user.reloadUserInfo.screenName,
-            displayName: user.displayName,
+            displayName:
+              user.displayName !== null
+                ? user.displayName
+                : user.reloadUserInfo.screenName,
             email: user.email,
             photoURL: user.photoURL,
             createdAt: moment(user.metadata.creationTime).valueOf(),
@@ -61,13 +67,13 @@ export const useGitHubLoign = () => {
           { merge: true }
         )
       }
-   } catch (error) {
-  console.log(error)
-  setError(error.message)
-  await auth.signOut()
-} finally {
-  setIsPending(false)
-}
+    } catch (error) {
+      console.log(error)
+      setError(error.message)
+      await auth.signOut()
+    } finally {
+      setIsPending(false)
+    }
   }
 
   return { login, error, isPending }
