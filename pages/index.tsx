@@ -7,7 +7,6 @@ import Link from "next/link"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import highlight from "@/utils/highlight"
-import linearizeCode from "@/utils/linearizeCode"
 import * as htmlToImage from "html-to-image"
 import { Code2, Github, Loader2 } from "lucide-react"
 import { toast } from "react-hot-toast"
@@ -24,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { buttonVariants } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import linearizeCode from "@/utils/linearizeCode"
 
 export default function IndexPage() {
   const { login, isPending } = useGitHubLoign()
@@ -162,7 +162,7 @@ export default function IndexPage() {
             </h2>
           </div>
           <div className="flex flex-col gap-6 md:flex-row">
-            <div className="w-full md:w-1/2">
+            <div className="w-full bg-slate-100 dark:bg-slate-800 md:w-1/2">
               <Image
                 src="/code-preview.png"
                 alt="Card preview"
@@ -174,7 +174,7 @@ export default function IndexPage() {
               <div className="flex w-full flex-col items-start gap-1.5">
                 <Textarea
                   placeholder="Insert your code here"
-                  id="codeImg"
+                  id="codeImage"
                   onChange={(e) => setCodeImage(e.target.value)}
                   className="h-44"
                 />
@@ -182,8 +182,8 @@ export default function IndexPage() {
               <div className="flex w-full flex-col items-start gap-1.5">
                 <select
                   className="flex h-10 w-full rounded-md border border-slate-300 bg-white py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
-                  name="language"
-                  id="language"
+                  name="languageImage"
+                  id="languageImage"
                   onChange={(e) => setLanguageImage(e.target.value)}
                 >
                   <option value="" disabled selected>
@@ -287,12 +287,9 @@ export default function IndexPage() {
                       </div>
                       <pre className="max-w-[1280px] rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
                         <code
-                          className="max-w-[1280px] text-white"
+                          className="text-sm text-white"
                           dangerouslySetInnerHTML={{
-                            __html: highlight(
-                              linearizeCode(codeImage),
-                              languageImage
-                            ),
+                            __html: highlight(linearizeCode(codeImage), languageImage),
                           }}
                         />
                       </pre>
