@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils"
 import Loader from "@/components/loader"
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -170,14 +171,9 @@ export default function CardCode({
               <AlertDialogContent className="flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto scrollbar-hide">
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <button
-                    className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
-                    )}
-                    onClick={downloadImage}
-                  >
+                  <AlertDialogAction onClick={downloadImage}>
                     Download Image
-                  </button>
+                  </AlertDialogAction>
                 </AlertDialogFooter>
                 <div className="flex w-full items-center justify-center gap-2">
                   <button
