@@ -28,15 +28,7 @@ export function SiteFooter() {
               LN
             </a>
             {"  "}
-            🇨🇲 | Using{" "}
-            <a
-              href="https://ui.shadcn.com/"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
-              shadcn/ui
-            </a>
+            🇨🇲
           </p>
         </div>
       </div>
