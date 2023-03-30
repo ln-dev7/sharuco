@@ -30,7 +30,7 @@ Contributions are welcome! To contribute, follow these steps:
 1. Fork the repository.
 2. Create a branch for your contribution with `git checkout -b my_new_feature`.
 3. Make your changes.
-4. Submit a pull request on release branch. [Link of Release Branch](https://sharuco.vercel.app/)
+4. Submit a pull request on master branch.
 
 ## License
 
