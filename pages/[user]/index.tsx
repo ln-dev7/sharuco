@@ -50,14 +50,22 @@ export default function User() {
             <Avatar className="h-40 w-40 cursor-pointer">
               <AvatarImage
                 src={data.data.photoURL}
-                alt={data.data.displayName}
+                alt={
+                  data.data.displayName !== null
+                    ? data.data.displayName
+                    : searchParams.get("user")
+                }
               />
-              <AvatarFallback>{data.data.displayName}</AvatarFallback>
+              <AvatarFallback>
+                {data.data.displayName !== null
+                  ? data.data.displayName
+                  : searchParams.get("user")}
+              </AvatarFallback>
             </Avatar>
             <div className="mb-8 flex flex-col items-center gap-2">
               <div className="flex items-center gap-0">
                 <h1 className="text-center text-4xl font-bold">
-                  {data.data.displayName ? (
+                  {data.data.displayName !== null ? (
                     <>
                       {data.data.displayName.split(" ")[0]}{" "}
                       {data.data.displayName.split(" ")[1] &&

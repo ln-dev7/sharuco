@@ -255,14 +255,24 @@ export default function CardCode({
               <>
                 <AvatarImage
                   src={dataAuthor.data.photoURL}
-                  alt={dataAuthor.data.displayName}
+                  alt={
+                    dataAuthor.data.displayName !== null
+                      ? dataAuthor.data.displayName
+                      : idAuthor
+                  }
                 />
                 <AvatarFallback>
-                  {dataAuthor.data.displayName.split(" ")[1] === undefined
-                    ? dataAuthor.data.displayName.split(" ")[0][0] +
-                      dataAuthor.data.displayName.split(" ")[0][1]
-                    : dataAuthor.data.displayName.split(" ")[0][0] +
-                      dataAuthor.data.displayName.split(" ")[1][0]}
+                  {dataAuthor.data.displayName !== null ? (
+                    <>
+                      {dataAuthor.data.displayName.split(" ")[1] === undefined
+                        ? dataAuthor.data.displayName.split(" ")[0][0] +
+                          dataAuthor.data.displayName.split(" ")[0][1]
+                        : dataAuthor.data.displayName.split(" ")[0][0] +
+                          dataAuthor.data.displayName.split(" ")[1][0]}
+                    </>
+                  ) : (
+                    dataAuthor.data.pseudo[0] + dataAuthor.data.pseudo[1]
+                  )}
                 </AvatarFallback>
               </>
             )}

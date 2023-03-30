@@ -54,17 +54,21 @@ export function AvatarUser() {
             <>
               <AvatarImage
                 src={data.data.photoURL}
-                alt={data.data.displayName}
+                alt={
+                  data.data.displayName !== null
+                    ? data.data.displayName
+                    : pseudo
+                }
               />
               <AvatarFallback>
-                {data.data.displayName ? (
+                {data.data.displayName !== null ? (
                   <>
                     {data.data.displayName.split(" ")[0]}{" "}
                     {data.data.displayName.split(" ")[1] &&
                       data.data.displayName.split(" ")[1]}
                   </>
                 ) : (
-                  pseudo
+                  data.data.pseudo[0] + data.data.pseudo[1]
                 )}
               </AvatarFallback>
             </>
@@ -77,7 +81,9 @@ export function AvatarUser() {
             Hello{" "}
             {data && data.exists && (
               <span className="font-bold">
-                {data.data.displayName.split(" ")[0]}
+                {data.data.displayName !== null
+                  ? data.data.displayName.split(" ")[0]
+                  : pseudo}
               </span>
             )}
           </SheetTitle>

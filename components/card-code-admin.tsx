@@ -540,14 +540,24 @@ export default function CardCodeAdmin({
               <>
                 <AvatarImage
                   src={dataUser.data.photoURL}
-                  alt={dataUser.data.displayName}
+                  alt={
+                    dataUser.data.displayName !== null
+                      ? dataUser.data.displayName
+                      : dataUser.data.pseudo
+                  }
                 />
                 <AvatarFallback>
-                  {dataUser.data.displayName.split(" ")[1] === undefined
-                    ? dataUser.data.displayName.split(" ")[0][0] +
-                      dataUser.data.displayName.split(" ")[0][1]
-                    : dataUser.data.displayName.split(" ")[0][0] +
-                      dataUser.data.displayName.split(" ")[1][0]}
+                  {dataUser.data.displayName !== null ? (
+                    <>
+                      {dataUser.data.displayName.split(" ")[1] === undefined
+                        ? dataUser.data.displayName.split(" ")[0][0] +
+                          dataUser.data.displayName.split(" ")[0][1]
+                        : dataUser.data.displayName.split(" ")[0][0] +
+                          dataUser.data.displayName.split(" ")[1][0]}
+                    </>
+                  ) : (
+                    dataUser.data.pseudo[0] + dataUser.data.pseudo[1]
+                  )}
                 </AvatarFallback>
               </>
             )}
