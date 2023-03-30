@@ -5,8 +5,8 @@ import { NextSeo } from "next-seo"
 import { ThemeProvider } from "next-themes"
 
 import "@/styles/globals.css"
+import "prism-themes/themes/prism-one-dark.min.css"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { ReactQueryDevtools } from "react-query/devtools"
 
 const fontSans = FontSans({
   subsets: ["latin"],
