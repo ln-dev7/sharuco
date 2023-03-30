@@ -212,6 +212,7 @@ export default function Dashboard() {
                       placeholder="Insert your code here..."
                       id="code"
                       {...register("code")}
+                      className="h-32"
                     />
                     <p className="text-sm text-red-500">
                       {errors.code && <>{errors.code.message}</>}
@@ -260,6 +261,7 @@ export default function Dashboard() {
                       <option value="swift">Swift</option>
                       <option value="xml">XML</option>
                       <option value="yaml">YAML</option>
+                      <option value="other">Other</option>
                     </select>
                     <p className="text-sm text-red-500">
                       {errors.language && <>{errors.language.message}</>}
