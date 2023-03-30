@@ -175,7 +175,6 @@ export default function IndexPage() {
                   id="codeImg"
                   onChange={(e) => setCodeImage(e.target.value)}
                   className="h-44"
-                  value={codeImage}
                 />
               </div>
               <div className="flex w-full flex-col items-start gap-1.5">
@@ -184,7 +183,6 @@ export default function IndexPage() {
                   name="language"
                   id="language"
                   onChange={(e) => setLanguageImage(e.target.value)}
-                  value={languageImage}
                 >
                   <option value="" disabled selected>
                     {" "}
