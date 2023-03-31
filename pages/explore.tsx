@@ -44,6 +44,11 @@ export default function Explore() {
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Discover little bits of code that can help you.
           </h1>
+          {/* <SearchCode
+            dataCodes={dataPublicCodes}
+            isLoadingCodes={isLoadingPublicCodes}
+            isErrorCodes={isErrorPublicCodes}
+          /> */}
         </div>
         <div className="">
           {isLoadingPublicCodes && <Loader />}
