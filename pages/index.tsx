@@ -7,6 +7,7 @@ import Link from "next/link"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import highlight from "@/utils/highlight"
+import linearizeCode from "@/utils/linearizeCode"
 import * as htmlToImage from "html-to-image"
 import { Code2, Github, Loader2 } from "lucide-react"
 import { toast } from "react-hot-toast"
@@ -23,7 +24,6 @@ import {
 } from "@/components/ui/alert-dialog"
 import { buttonVariants } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import linearizeCode from "@/utils/linearizeCode"
 
 export default function IndexPage() {
   const { login, isPending } = useGitHubLoign()
@@ -266,10 +266,21 @@ export default function IndexPage() {
                       className="h-6 w-6 rounded-full bg-gradient-to-br from-red-500 to-pink-600"
                       onClick={handleChangeBgImg5}
                     ></button>
+                    <input
+                      type="color"
+                      className="h-8 w-8 cursor-pointer appearance-none rounded-full border-0 bg-transparent p-0"
+                      value={backgroundImage}
+                      onChange={(e) => {
+                        setBackgroundImage(`${e.target.value}`)
+                      }}
+                    />
                   </div>
                   <div
                     ref={domRefImage}
                     className={`flex max-w-[1280px] flex-col items-center justify-center ${backgroundImage} p-8`}
+                    style={{
+                      backgroundColor: `${backgroundImage}`,
+                    }}
                   >
                     <h3 className="mb-2 text-center text-lg font-semibold text-white">
                       sharuco.lndev.me
@@ -289,7 +300,10 @@ export default function IndexPage() {
                         <code
                           className="text-sm text-white"
                           dangerouslySetInnerHTML={{
-                            __html: highlight(linearizeCode(codeImage), languageImage),
+                            __html: highlight(
+                              linearizeCode(codeImage),
+                              languageImage
+                            ),
                           }}
                         />
                       </pre>

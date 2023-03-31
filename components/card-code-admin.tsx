@@ -483,10 +483,21 @@ export default function CardCodeAdmin({
                     className="h-6 w-6 rounded-full bg-gradient-to-br from-red-500 to-pink-600"
                     onClick={handleChangeBgImg5}
                   ></button>
+                  <input
+                    type="color"
+                    className="h-8 w-8 cursor-pointer appearance-none rounded-full border-0 bg-transparent p-0"
+                    value={backgroundImage}
+                    onChange={(e) => {
+                      setBackgroundImage(`${e.target.value}`)
+                    }}
+                  />
                 </div>
                 <div
                   ref={domRefImage}
                   className={`flex max-w-[1280px] flex-col items-center justify-center ${backgroundImage} p-8`}
+                  style={{
+                    backgroundColor: `${backgroundImage}`,
+                  }}
                 >
                   <h3 className="mb-2 text-center text-lg font-semibold text-white">
                     sharuco.lndev.me
