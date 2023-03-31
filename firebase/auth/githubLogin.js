@@ -70,7 +70,7 @@ export const useGitHubLoign = () => {
     } catch (error) {
       console.log(error)
       setError(error.message)
-      await auth.signOut()
+      await signOut(auth)
     } finally {
       setIsPending(false)
     }

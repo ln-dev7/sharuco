@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes"
 
 import "@/styles/globals.css"
 import "prism-themes/themes/prism-one-dark.min.css"
+//import "prism-themes/themes/prism-night-owl.css"
 import { QueryClient, QueryClientProvider } from "react-query"
 
 const fontSans = FontSans({

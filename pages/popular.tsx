@@ -3,7 +3,6 @@
 import Head from "next/head"
 
 import { Layout } from "@/components/layout"
-import "prism-themes/themes/prism-one-dark.min.css"
 
 export default function Popular() {
   return (

@@ -3,6 +3,7 @@
 import Head from "next/head"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { superAdmin } from "@/contants/super-admin"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -13,7 +14,10 @@ import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Copy, Github, Loader2, Trash2, Verified } from "lucide-react"
 import moment from "moment"
+import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import * as yup from "yup"
 
 import { cn } from "@/lib/utils"
 import CardCode from "@/components/card-code"
@@ -21,13 +25,6 @@ import CardCodeAdmin from "@/components/card-code-admin"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
-import { buttonVariants } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import "prism-themes/themes/prism-one-dark.min.css"
-import { useForm } from "react-hook-form"
-import toast from "react-hot-toast"
-import * as yup from "yup"
-
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -38,8 +35,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { buttonVariants } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import { Textarea } from "@/components/ui/textarea"
 
 export default function CodePreview() {
   const searchParams = useSearchParams()
@@ -160,7 +159,8 @@ export default function CodePreview() {
               }}
             >
               <Masonry>
-                {dataUser?.data.pseudo === dataCode.data.idAuthor ? (
+                {dataUser?.data.pseudo === dataCode.data.idAuthor ||
+                superAdmin.includes(dataUser?.data.pseudo) ? (
                   <CardCodeAdmin
                     key={searchParams.get("code-preview")}
                     id={searchParams.get("code-preview")}

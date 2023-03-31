@@ -24,28 +24,6 @@ import {
   Trash,
   Verified,
 } from "lucide-react"
-
-import { cn } from "@/lib/utils"
-import Loader from "@/components/loader"
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import "prism-themes/themes/prism-one-dark.min.css"
 import { useForm } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
 import {
@@ -64,9 +42,29 @@ import {
 } from "react-share"
 import * as yup from "yup"
 
+import { cn } from "@/lib/utils"
+import Loader from "@/components/loader"
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export default function CardCodeAdmin({
   id,
@@ -485,10 +483,21 @@ export default function CardCodeAdmin({
                     className="h-6 w-6 rounded-full bg-gradient-to-br from-red-500 to-pink-600"
                     onClick={handleChangeBgImg5}
                   ></button>
+                  <input
+                    type="color"
+                    className="h-8 w-8 cursor-pointer appearance-none rounded-full border-0 bg-transparent p-0"
+                    value={backgroundImage}
+                    onChange={(e) => {
+                      setBackgroundImage(`${e.target.value}`)
+                    }}
+                  />
                 </div>
                 <div
                   ref={domRefImage}
                   className={`flex max-w-[1280px] flex-col items-center justify-center ${backgroundImage} p-8`}
+                  style={{
+                    backgroundColor: `${backgroundImage}`,
+                  }}
                 >
                   <h3 className="mb-2 text-center text-lg font-semibold text-white">
                     sharuco.lndev.me

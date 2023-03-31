@@ -1,5 +1,6 @@
 "use client"
 
+import { useRef, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
@@ -9,7 +10,30 @@ import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
 import highlight from "@/utils/highlight"
 import * as htmlToImage from "html-to-image"
-import { Copy, Github, Loader2, Save, Share, Verified } from "lucide-react"
+import {
+  Copy,
+  Flag,
+  Github,
+  Loader2,
+  Save,
+  Share,
+  Verified,
+} from "lucide-react"
+import toast, { Toaster } from "react-hot-toast"
+import {
+  EmailIcon,
+  EmailShareButton,
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  TelegramIcon,
+  TelegramShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+} from "react-share"
 
 import { cn } from "@/lib/utils"
 import Loader from "@/components/loader"
@@ -31,23 +55,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import "prism-themes/themes/prism-one-dark.min.css"
-import { useRef, useState } from "react"
-import toast, { Toaster } from "react-hot-toast"
-import {
-  EmailIcon,
-  EmailShareButton,
-  FacebookIcon,
-  FacebookShareButton,
-  LinkedinIcon,
-  LinkedinShareButton,
-  TelegramIcon,
-  TelegramShareButton,
-  TwitterIcon,
-  TwitterShareButton,
-  WhatsappIcon,
-  WhatsappShareButton,
-} from "react-share"
 
 export default function CardCode({
   id,
@@ -150,7 +157,7 @@ export default function CardCode({
           <span className="text-xs font-medium text-white">
             {language.toLowerCase()}
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <span
               className="flex cursor-pointer items-center p-1 text-xs font-medium text-white"
               onClick={() => {
@@ -200,10 +207,21 @@ export default function CardCode({
                     className="h-6 w-6 rounded-full bg-gradient-to-br from-red-500 to-pink-600"
                     onClick={handleChangeBgImg5}
                   ></button>
+                  <input
+                    type="color"
+                    className="h-8 w-8 cursor-pointer appearance-none rounded-full border-0 bg-transparent p-0"
+                    value={backgroundImage}
+                    onChange={(e) => {
+                      setBackgroundImage(`${e.target.value}`)
+                    }}
+                  />
                 </div>
                 <div
                   ref={domRefImage}
                   className={`flex max-w-[1280px] flex-col items-center justify-center ${backgroundImage} p-8`}
+                  style={{
+                    backgroundColor: `${backgroundImage}`,
+                  }}
                 >
                   <h3 className="mb-2 text-center text-lg font-semibold text-white">
                     sharuco.lndev.me
@@ -227,6 +245,34 @@ export default function CardCode({
                     </pre>
                   </div>
                 </div>
+              </AlertDialogContent>
+            </AlertDialog>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button className="cursor-pointer text-white">
+                  <Flag className="h-4 w-4 cursor-pointer" />
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Report this code</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Please, report this code if you think it&apos;s
+                    inappropriate.
+                    <br />
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <a
+                    className={cn(
+                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    )}
+                    href={`mailto:sharuco@leonelngoya.com?subject=REPORTING%20A%20CODE%20ON%20SHARUCO&body=Hello,%20%0D%0A%0D%0AI%20want%20to%20report%20this%20code%20https://sharuco.lndev.me/code-preview/${id}%20that%20I%20saw%20on%20Sharuco.%0D%0AThank%20you`}
+                  >
+                    Report Code
+                  </a>
+                </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
           </div>

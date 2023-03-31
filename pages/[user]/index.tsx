@@ -15,7 +15,6 @@ import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { buttonVariants } from "@/components/ui/button"
-import "prism-themes/themes/prism-one-dark.min.css"
 
 export default function User() {
   const searchParams = useSearchParams()

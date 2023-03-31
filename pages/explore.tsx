@@ -10,7 +10,6 @@ import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
-import "prism-themes/themes/prism-one-dark.min.css"
 
 export default function Explore() {
   const { user } = useAuthContext()
