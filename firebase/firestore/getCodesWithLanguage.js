@@ -1,32 +1,30 @@
-import {
-  collection,
-  getDocs,
-  getFirestore,
-  query,
-  where,
-} from "firebase/firestore"
+import { collection, getFirestore, query, where } from "firebase/firestore"
 import { useQuery } from "react-query"
-
 import firebase_app from "../config"
 
 const db = getFirestore(firebase_app)
 
-const getCodesWithLanguage = async (language) => {
-  const querySnapshot = await getDocs(
-    query(collection(db, "codes"), where("language", "==", language))
-  )
-  const codes = querySnapshot.docs.map((doc) => {
-    const data = doc.data()
-    data.id = doc.id
-    return data
-  })
-  return codes
-}
+const useGetCodesWithLanguage = (language) => {
+  const searchKey = language ? language.trim().toLowerCase() : ""
 
-const useGetCodesWithLanguage = (searchTerm) => {
-  return useQuery([`code-description`, "codes"], () =>
-    getCodesWithLanguage(searchTerm)
+  const { isLoading, isError, data: documents = [] } = useQuery(
+    ["search-documents-by-language", searchKey],
+    async () => {
+      if (!searchKey) return []
+
+      const q = query(collection(db, "documents"), where("language", "==", searchKey))
+      const snapshot = await q.get()
+
+      return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    }
   )
+
+  return {
+    documents,
+    isLoading,
+    isError,
+  }
 }
 
 export { useGetCodesWithLanguage }
+

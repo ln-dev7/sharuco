@@ -14,15 +14,24 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-export default function SearchCode({ dataCodes }: { dataCodes: any }) {
+export default function SearchCode({ dataCodes, isLoadingCodes, isErrorCodes }: { dataCodes: any,
+  isLoadingCodes: boolean,
+  isErrorCodes: boolean
+ }) {
   const [searchTerm, setSearchTerm] = useState("")
   const [searchLanguage, setSearchLanguage] = useState("")
 
   const {
     isLoading: isLoadingCodesWithDescription,
     isError: isErrorCodesWithDescription,
-    data: dataCodesWithDescription,
-  } = useGetCodesByDescription(searchTerm)
+    codes: dataCodesWithDescription,
+  } = useGetCodesByDescription("This code generates random")
+
+  console.log(dataCodesWithDescription)
+
+  const handleTermChange = (event) => {
+    setSearchTerm(event.target.value)
+  }
 
   const {
     isLoading: isLoadingCodesWithLanguage,
@@ -37,8 +46,8 @@ export default function SearchCode({ dataCodes }: { dataCodes: any }) {
           type="text"
           placeholder="Search code with description"
           className="w-full"
+          value={searchTerm} onChange={handleTermChange}
         />
-        <Button type="submit">Search</Button>
       </div>
       <Select>
         <SelectTrigger className="w-full sm:w-[240px]">
@@ -55,6 +64,7 @@ export default function SearchCode({ dataCodes }: { dataCodes: any }) {
                     (language: any, index: any, self: any) =>
                       self.indexOf(language) === index
                   )
+                  .sort((a: any, b: any) => a.localeCompare(b))
                   .map((language) => (
                     <SelectItem key={language} value={language}>
                       {language}
