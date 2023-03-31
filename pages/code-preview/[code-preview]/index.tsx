@@ -3,6 +3,7 @@
 import Head from "next/head"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { superAdmin } from "@/contants/super-admin"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -158,7 +159,8 @@ export default function CodePreview() {
               }}
             >
               <Masonry>
-                {dataUser?.data.pseudo === dataCode.data.idAuthor ? (
+                {dataUser?.data.pseudo === dataCode.data.idAuthor ||
+                superAdmin.includes(dataUser?.data.pseudo) ? (
                   <CardCodeAdmin
                     key={searchParams.get("code-preview")}
                     id={searchParams.get("code-preview")}
