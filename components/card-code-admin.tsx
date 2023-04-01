@@ -3,7 +3,11 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { allLanguages, languagesName } from "@/contants/languages"
+import {
+  allLanguages,
+  getLanguageColor,
+  languagesName,
+} from "@/contants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
@@ -321,7 +325,6 @@ export default function CardCodeAdmin({
                           {language.name}
                         </option>
                       ))}
-                      <option value="other">Other</option>
                     </select>
                     <p className="text-sm text-red-500">
                       {errors.language && <>{errors.language.message}</>}
@@ -509,9 +512,21 @@ export default function CardCodeAdmin({
                   </h3>
                   <div className="max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
                     <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
-                      <span className="text-xs font-medium text-white">
-                        {language.toLowerCase()}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`
+                          flex h-4 w-4 items-center rounded-full p-1 text-xs font-medium text-white
+                        `}
+                          style={{
+                            backgroundColor: `${
+                              language !== "" && getLanguageColor(language)
+                            }`,
+                          }}
+                        ></span>
+                        <span className="text-xs font-medium text-white">
+                          {language.toLowerCase()}
+                        </span>
+                      </div>
                       <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
                         @ {idAuthor}
                       </span>

@@ -285,7 +285,6 @@ export default function Dashboard() {
                           {language.name}
                         </option>
                       ))}
-                      <option value="other">Other</option>
                     </select>
                     <p className="text-sm text-red-500">
                       {errors.language && <>{errors.language.message}</>}

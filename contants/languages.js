@@ -37,8 +37,14 @@ export const allLanguages = [
   { name: "XML", color: "#555555", extension: ".xml" },
   { name: "XSLT", color: "#EB8CEB", extension: ".xslt" },
   { name: "YAML", color: "#cb171e", extension: ".yaml" },
+  { name: "Other", color: "#cccccc", extension: "" },
 ]
 
 export const languagesName = allLanguages.map((language) =>
   language.name.toLocaleLowerCase()
 )
+
+export const getLanguageColor = (language) => {
+  const languageIndex = languagesName.indexOf(language.toLocaleLowerCase())
+  return allLanguages[languageIndex].color
+}

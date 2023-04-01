@@ -1,9 +1,13 @@
 "use client"
 
+import {
+  allLanguages,
+  getLanguageColor,
+  languagesName,
+} from "@/contants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import highlight from "@/utils/highlight"
-import { languagesName, allLanguages } from "@/contants/languages"
 import linearizeCode from "@/utils/linearizeCode"
 import hljs from "highlight.js"
 
@@ -234,15 +238,14 @@ export default function IndexPage() {
                   onChange={(e) => setLanguageImage(e.target.value)}
                 >
                   <option value="" disabled selected>
-                        {" "}
-                        The code is written in what language ?
-                      </option>
-                      {allLanguages.map((language) => (
-                        <option value={language.name.toLocaleLowerCase()}>
-                          {language.name}
-                        </option>
-                      ))}
-                      <option value="other">Other</option>
+                    {" "}
+                    The code is written in what language ?
+                  </option>
+                  {allLanguages.map((language) => (
+                    <option value={language.name.toLocaleLowerCase()}>
+                      {language.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <AlertDialog>
@@ -319,9 +322,22 @@ export default function IndexPage() {
                     </h3>
                     <div className="max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
                       <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
-                        <span className="text-xs font-medium text-white">
-                          {languageImage}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`
+                          flex h-4 w-4 items-center rounded-full p-1 text-xs font-medium text-white
+                        `}
+                            style={{
+                              backgroundColor: `${
+                                languageImage !== "" &&
+                                getLanguageColor(languageImage)
+                              }`,
+                            }}
+                          ></span>
+                          <span className="text-xs font-medium text-white">
+                            {languageImage}
+                          </span>
+                        </div>
                         {user && (
                           <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
                             @ {pseudo}
@@ -332,9 +348,7 @@ export default function IndexPage() {
                         <code
                           className="text-sm text-white"
                           dangerouslySetInnerHTML={{
-                            __html: highlight(codeImage,
-                              languageImage
-                            ),
+                            __html: highlight(codeImage, languageImage),
                           }}
                         />
                       </pre>
