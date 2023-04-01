@@ -423,12 +423,10 @@ export default function CodePreview() {
                 </div>
               </div>
               <Separator className="my-4" />
-              <div
-                className="mt-4 flex w-full flex-col items-start justify-center gap-4"
-              >
-                <h3
-                  className="text-xl font-semibold text-slate-900 dark:text-slate-100"
-                >Who likes this code</h3>
+              <div className="mt-4 flex w-full flex-col items-start justify-center gap-4">
+                <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+                  Who likes this code
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   {dataCode.data.favoris.map((person) => (
                     <div
@@ -436,14 +434,16 @@ export default function CodePreview() {
                       className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-slate-100"
                     >
                       <User className="h-4 w-4" />
-                      <Link
-                        href={`/${person}`}
-                        className="hover:underline"
-                      >
+                      <Link href={`/${person}`} className="hover:underline">
                         {person}
                       </Link>
                     </div>
                   ))}
+                  {dataCode.data.favoris.length === 0 && (
+                    <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                      No one likes this code yet
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
