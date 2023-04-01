@@ -12,7 +12,7 @@ import copyToClipboard from "@/utils/copyToClipboard"
 import highlight from "@/utils/highlight"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { Copy, Github, Loader2, Trash2, Verified } from "lucide-react"
+import { Copy, Github, Loader2, Trash2, User, Verified } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
@@ -147,6 +147,24 @@ export default function CodePreview() {
                  useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sharuco" />
+        <meta name="twitter:description" content="View this code on Sharuco" />
+        <meta
+          name="twitter:image"
+          content="https://sharuco.lndev.me/sharuco-code.png"
+        />
+
+        <meta property="og:title" content="Sharuco" />
+        <meta property="og:description" content="View this code on Sharuco" />
+        <meta
+          property="og:image"
+          content="https://sharuco.lndev.me/sharuco-code.png"
+        />
+        <meta property="og:url" content="https://sharuco.lndev.me/" />
+        <meta property="og:type" content="website" />
+
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-0 pt-6 pb-8 md:py-10">
@@ -191,7 +209,7 @@ export default function CodePreview() {
               </Masonry>
             </ResponsiveMasonry>
             <div className="flex w-full flex-col items-start gap-2">
-              <div className="flex flex-col w-full items-start">
+              <div className="flex w-full flex-col items-start">
                 <h2 className="text-2xl font-bold">
                   {dataCode.data.comments.length} Comment(s)
                 </h2>
@@ -402,6 +420,30 @@ export default function CodePreview() {
                       Login with Github to comment
                     </button>
                   )}
+                </div>
+              </div>
+              <Separator className="my-4" />
+              <div
+                className="mt-4 flex w-full flex-col items-start justify-center gap-4"
+              >
+                <h3
+                  className="text-xl font-semibold text-slate-900 dark:text-slate-100"
+                >Who is like this code</h3>
+                <div className="flex flex-wrap gap-2">
+                  {dataCode.data.favoris.map((person) => (
+                    <div
+                      key={person}
+                      className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-slate-100"
+                    >
+                      <User className="h-4 w-4" />
+                      <Link
+                        href={`/${person}`}
+                        className="hover:underline"
+                      >
+                        {person}
+                      </Link>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

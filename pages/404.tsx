@@ -17,6 +17,30 @@ export default function Custom404() {
       useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sharuco" />
+        <meta
+          name="twitter:description"
+          content="This page does not exist."
+        />
+        <meta
+          name="twitter:image"
+          content="https://sharuco.lndev.me/sharuco.png"
+        />
+
+<meta property="og:title" content="Sharuco" />
+        <meta
+          property="og:description"
+          content="This page does not exist."
+        />
+        <meta
+          property="og:image"
+          content="https://sharuco.lndev.me/sharuco.png"
+        />
+        <meta property="og:url" content="https://sharuco.lndev.me/404/404" />
+        <meta property="og:type" content="website" />
+
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-8 pt-6 pb-8 md:py-10">

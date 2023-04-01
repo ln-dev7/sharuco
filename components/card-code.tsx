@@ -3,6 +3,7 @@
 import { useRef, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { getLanguageColor } from "@/contants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -228,9 +229,21 @@ export default function CardCode({
                   </h3>
                   <div className="max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
                     <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
-                      <span className="text-xs font-medium text-white">
-                        {language.toLowerCase()}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`
+                          flex h-4 w-4 items-center rounded-full p-1 text-xs font-medium text-white
+                        `}
+                          style={{
+                            backgroundColor: `${
+                              language !== "" && getLanguageColor(language)
+                            }`,
+                          }}
+                        ></span>
+                        <span className="text-xs font-medium text-white">
+                          {language.toLowerCase()}
+                        </span>
+                      </div>
                       <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
                         @ {idAuthor}
                       </span>

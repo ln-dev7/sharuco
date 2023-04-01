@@ -3,6 +3,11 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import {
+  allLanguages,
+  getLanguageColor,
+  languagesName,
+} from "@/contants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
@@ -13,6 +18,7 @@ import highlight from "@/utils/highlight"
 import indentCode from "@/utils/indentCode"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
+import hljs from "highlight.js"
 import * as htmlToImage from "html-to-image"
 import {
   Copy,
@@ -242,6 +248,20 @@ export default function CardCodeAdmin({
     link.click()
   }
 
+  function detectLanguage(code) {
+    const language = hljs.highlightAuto(code).language
+    return language || "text"
+  }
+
+  function handleCodeChange(code) {
+    const detectedLanguage = detectLanguage(code)
+    if (!languagesName.includes(detectedLanguage)) {
+      setValue("language", "other")
+      return
+    }
+    setValue("language", detectedLanguage)
+  }
+
   return (
     <div key={id} className="flex flex-col gap-2">
       <Toaster position="top-right" reverseOrder={false} />
@@ -268,6 +288,10 @@ export default function CardCodeAdmin({
                       placeholder="Insert your code here..."
                       id="code"
                       {...register("code")}
+                      className="h-32"
+                      onChange={(e) => {
+                        handleCodeChange(e.target.value)
+                      }}
                     />
                     <p className="text-sm text-red-500">
                       {errors.code && <>{errors.code.message}</>}
@@ -296,27 +320,11 @@ export default function CardCodeAdmin({
                         {" "}
                         The code is written in what language ?
                       </option>
-                      <option value="c">C</option>
-                      <option value="csharp">C#</option>
-                      <option value="css">CSS</option>
-                      <option value="dart">Dart</option>
-                      <option value="graphql">GraphQL</option>
-                      <option value="html">HTML</option>
-                      <option value="java">Java</option>
-                      <option value="javascript">Javascript</option>
-                      <option value="json">JSON</option>
-                      <option value="kotlin">Kotlin</option>
-                      <option value="markdown">Markdown</option>
-                      <option value="typescript">Typescript</option>
-                      <option value="php">PHP</option>
-                      <option value="python">Python</option>
-                      <option value="ruby">Ruby</option>
-                      <option value="scss">SCSS</option>
-                      <option value="sql">SQL</option>
-                      <option value="swift">Swift</option>
-                      <option value="xml">XML</option>
-                      <option value="yaml">YAML</option>
-                      <option value="other">Other</option>
+                      {allLanguages.map((language) => (
+                        <option value={language.name.toLocaleLowerCase()}>
+                          {language.name}
+                        </option>
+                      ))}
                     </select>
                     <p className="text-sm text-red-500">
                       {errors.language && <>{errors.language.message}</>}
@@ -504,9 +512,21 @@ export default function CardCodeAdmin({
                   </h3>
                   <div className="max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
                     <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
-                      <span className="text-xs font-medium text-white">
-                        {language.toLowerCase()}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`
+                          flex h-4 w-4 items-center rounded-full p-1 text-xs font-medium text-white
+                        `}
+                          style={{
+                            backgroundColor: `${
+                              language !== "" && getLanguageColor(language)
+                            }`,
+                          }}
+                        ></span>
+                        <span className="text-xs font-medium text-white">
+                          {language.toLowerCase()}
+                        </span>
+                      </div>
                       <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
                         @ {idAuthor}
                       </span>

@@ -37,6 +37,30 @@ export default function Explore() {
       useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sharuco" />
+        <meta
+          name="twitter:description"
+          content="Discover little bits of code that can help you."
+        />
+        <meta
+          name="twitter:image"
+          content="https://sharuco.lndev.me/sharuco-explore.png"
+        />
+
+        <meta property="og:title" content="Sharuco Explore" />
+        <meta
+          property="og:description"
+          content="Discover little bits of code that can help you."
+        />
+        <meta
+          property="og:image"
+          content="https://sharuco.lndev.me/sharuco-explore.png"
+        />
+        <meta property="og:url" content="https://sharuco.lndev.me/explore" />
+        <meta property="og:type" content="website" />
+
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-8 pt-6 pb-8 md:py-10">

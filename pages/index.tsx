@@ -1,13 +1,23 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import Head from "next/head"
-import Image from "next/image"
-import Link from "next/link"
+import {
+  allLanguages,
+  getLanguageColor,
+  languagesName,
+} from "@/contants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import highlight from "@/utils/highlight"
 import linearizeCode from "@/utils/linearizeCode"
+import hljs from "highlight.js"
+
+import "highlight.js/styles/vs.css"
+import { useEffect, useRef, useState } from "react"
+
+import "highlight.js/styles/vs.css"
+import Head from "next/head"
+import Image from "next/image"
+import Link from "next/link"
 import * as htmlToImage from "html-to-image"
 import { Code2, Github, Loader2 } from "lucide-react"
 import { toast } from "react-hot-toast"
@@ -80,6 +90,22 @@ export default function IndexPage() {
     link.click()
   }
   //
+
+  function detectLanguage(code) {
+    const language = hljs.highlightAuto(code).language
+    return language || "text"
+  }
+
+  function handleCodeChange(code) {
+    const detectedLanguage = detectLanguage(code)
+    if (!languagesName.includes(detectedLanguage)) {
+      setCodeImage(linearizeCode(code))
+      setLanguageImage("other")
+      return
+    }
+    setCodeImage(linearizeCode(code))
+    setLanguageImage(detectedLanguage)
+  }
   return (
     <Layout>
       <Head>
@@ -90,6 +116,30 @@ export default function IndexPage() {
           useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sharuco" />
+        <meta
+          name="twitter:description"
+          content="Share your code with everyone"
+        />
+        <meta
+          name="twitter:image"
+          content="https://sharuco.lndev.me/sharuco-banner.png"
+        />
+
+        <meta property="og:title" content="Sharuco" />
+        <meta
+          property="og:description"
+          content="Share your code with everyone"
+        />
+        <meta
+          property="og:image"
+          content="https://sharuco.lndev.me/sharuco-banner.png"
+        />
+        <meta property="og:url" content="https://sharuco.lndev.me" />
+        <meta property="og:type" content="website" />
+
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
@@ -175,7 +225,7 @@ export default function IndexPage() {
                 <Textarea
                   placeholder="Insert your code here"
                   id="codeImage"
-                  onChange={(e) => setCodeImage(e.target.value)}
+                  onChange={(e) => handleCodeChange(e.target.value)}
                   className="h-44"
                 />
               </div>
@@ -184,33 +234,18 @@ export default function IndexPage() {
                   className="flex h-10 w-full rounded-md border border-slate-300 bg-white py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                   name="languageImage"
                   id="languageImage"
+                  value={languageImage}
                   onChange={(e) => setLanguageImage(e.target.value)}
                 >
                   <option value="" disabled selected>
                     {" "}
                     The code is written in what language ?
                   </option>
-                  <option value="c">C</option>
-                  <option value="csharp">C#</option>
-                  <option value="css">CSS</option>
-                  <option value="dart">Dart</option>
-                  <option value="graphql">GraphQL</option>
-                  <option value="html">HTML</option>
-                  <option value="java">Java</option>
-                  <option value="javascript">Javascript</option>
-                  <option value="json">JSON</option>
-                  <option value="kotlin">Kotlin</option>
-                  <option value="markdown">Markdown</option>
-                  <option value="typescript">Typescript</option>
-                  <option value="php">PHP</option>
-                  <option value="python">Python</option>
-                  <option value="ruby">Ruby</option>
-                  <option value="scss">SCSS</option>
-                  <option value="sql">SQL</option>
-                  <option value="swift">Swift</option>
-                  <option value="xml">XML</option>
-                  <option value="yaml">YAML</option>
-                  <option value="other">Other</option>
+                  {allLanguages.map((language) => (
+                    <option value={language.name.toLocaleLowerCase()}>
+                      {language.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <AlertDialog>
@@ -287,9 +322,22 @@ export default function IndexPage() {
                     </h3>
                     <div className="max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
                       <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
-                        <span className="text-xs font-medium text-white">
-                          {languageImage}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`
+                          flex h-4 w-4 items-center rounded-full p-1 text-xs font-medium text-white
+                        `}
+                            style={{
+                              backgroundColor: `${
+                                languageImage !== "" &&
+                                getLanguageColor(languageImage)
+                              }`,
+                            }}
+                          ></span>
+                          <span className="text-xs font-medium text-white">
+                            {languageImage}
+                          </span>
+                        </div>
                         {user && (
                           <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
                             @ {pseudo}
@@ -300,10 +348,7 @@ export default function IndexPage() {
                         <code
                           className="text-sm text-white"
                           dangerouslySetInnerHTML={{
-                            __html: highlight(
-                              linearizeCode(codeImage),
-                              languageImage
-                            ),
+                            __html: highlight(codeImage, languageImage),
                           }}
                         />
                       </pre>
