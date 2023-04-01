@@ -86,17 +86,15 @@ export default function IndexPage() {
   }
   //
 
-  const codeTextArea = useRef(null)
-  function detectLanguage() {
-    const code = codeTextArea.current.value
+  function detectLanguage(code) {
     const language = hljs.highlightAuto(code).language
     return language || "text"
   }
-  const [language, setLanguage] = useState(null)
 
-  function handleChange() {
-    const detectedLanguage = detectLanguage()
-    setLanguage(detectedLanguage)
+  function handleChange(code) {
+    const detectedLanguage = detectLanguage(code)
+    setCodeImage(linearizeCode(code))
+    setLanguageImage(detectedLanguage)
   }
   return (
     <Layout>
@@ -217,22 +215,16 @@ export default function IndexPage() {
                 <Textarea
                   placeholder="Insert your code here"
                   id="codeImage"
-                  //onChange={(e) => setCodeImage(e.target.value)}
-                  ref={codeTextArea}
-                  onChange={handleChange}
+                  onChange={(e) => handleChange(e.target.value)}
                   className="h-44"
                 />
               </div>
-              {language && (
-                <p className="text-xl text-slate-700 dark:text-slate-400">
-                  Le langage détecté est : {language}
-                </p>
-              )}
               <div className="flex w-full flex-col items-start gap-1.5">
                 <select
                   className="flex h-10 w-full rounded-md border border-slate-300 bg-white py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                   name="languageImage"
                   id="languageImage"
+                  value={languageImage}
                   onChange={(e) => setLanguageImage(e.target.value)}
                 >
                   <option value="" disabled selected>
@@ -349,8 +341,7 @@ export default function IndexPage() {
                         <code
                           className="text-sm text-white"
                           dangerouslySetInnerHTML={{
-                            __html: highlight(
-                              linearizeCode(codeImage),
+                            __html: highlight(codeImage,
                               languageImage
                             ),
                           }}
