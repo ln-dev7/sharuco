@@ -3,6 +3,7 @@
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import highlight from "@/utils/highlight"
+import { languagesName, allLanguages } from "@/contants/languages"
 import linearizeCode from "@/utils/linearizeCode"
 import hljs from "highlight.js"
 
@@ -91,8 +92,13 @@ export default function IndexPage() {
     return language || "text"
   }
 
-  function handleChange(code) {
+  function handleCodeChange(code) {
     const detectedLanguage = detectLanguage(code)
+    if (!languagesName.includes(detectedLanguage)) {
+      setCodeImage(linearizeCode(code))
+      setLanguageImage("other")
+      return
+    }
     setCodeImage(linearizeCode(code))
     setLanguageImage(detectedLanguage)
   }
@@ -215,7 +221,7 @@ export default function IndexPage() {
                 <Textarea
                   placeholder="Insert your code here"
                   id="codeImage"
-                  onChange={(e) => handleChange(e.target.value)}
+                  onChange={(e) => handleCodeChange(e.target.value)}
                   className="h-44"
                 />
               </div>
@@ -228,30 +234,15 @@ export default function IndexPage() {
                   onChange={(e) => setLanguageImage(e.target.value)}
                 >
                   <option value="" disabled selected>
-                    {" "}
-                    The code is written in what language ?
-                  </option>
-                  <option value="c">C</option>
-                  <option value="csharp">C#</option>
-                  <option value="css">CSS</option>
-                  <option value="dart">Dart</option>
-                  <option value="graphql">GraphQL</option>
-                  <option value="html">HTML</option>
-                  <option value="java">Java</option>
-                  <option value="javascript">Javascript</option>
-                  <option value="json">JSON</option>
-                  <option value="kotlin">Kotlin</option>
-                  <option value="markdown">Markdown</option>
-                  <option value="typescript">Typescript</option>
-                  <option value="php">PHP</option>
-                  <option value="python">Python</option>
-                  <option value="ruby">Ruby</option>
-                  <option value="scss">SCSS</option>
-                  <option value="sql">SQL</option>
-                  <option value="swift">Swift</option>
-                  <option value="xml">XML</option>
-                  <option value="yaml">YAML</option>
-                  <option value="other">Other</option>
+                        {" "}
+                        The code is written in what language ?
+                      </option>
+                      {allLanguages.map((language) => (
+                        <option value={language.name.toLocaleLowerCase()}>
+                          {language.name}
+                        </option>
+                      ))}
+                      <option value="other">Other</option>
                 </select>
               </div>
               <AlertDialog>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { allLanguages, languagesName } from "@/contants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
@@ -13,6 +14,7 @@ import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
+import hljs from "highlight.js"
 import { Eye, EyeOff, Loader2, Plus, Settings, Star, User } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
@@ -108,10 +110,26 @@ export default function Dashboard() {
     register,
     handleSubmit,
     reset,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   })
+
+  function detectLanguage(code) {
+    const language = hljs.highlightAuto(code).language
+    return language || "text"
+  }
+
+  function handleCodeChange(code) {
+    const detectedLanguage = detectLanguage(code)
+    if (!languagesName.includes(detectedLanguage)) {
+      setValue("language", "other")
+      return
+    }
+    setValue("language", detectedLanguage)
+  }
 
   const { createDocument, isLoading, isError, isSuccess }: any =
     useCreateDocument("codes")
@@ -231,6 +249,9 @@ export default function Dashboard() {
                       id="code"
                       {...register("code")}
                       className="h-32"
+                      onChange={(e) => {
+                        handleCodeChange(e.target.value)
+                      }}
                     />
                     <p className="text-sm text-red-500">
                       {errors.code && <>{errors.code.message}</>}
@@ -259,26 +280,11 @@ export default function Dashboard() {
                         {" "}
                         The code is written in what language ?
                       </option>
-                      <option value="c">C</option>
-                      <option value="csharp">C#</option>
-                      <option value="css">CSS</option>
-                      <option value="dart">Dart</option>
-                      <option value="graphql">GraphQL</option>
-                      <option value="html">HTML</option>
-                      <option value="java">Java</option>
-                      <option value="javascript">Javascript</option>
-                      <option value="json">JSON</option>
-                      <option value="kotlin">Kotlin</option>
-                      <option value="markdown">Markdown</option>
-                      <option value="typescript">Typescript</option>
-                      <option value="php">PHP</option>
-                      <option value="python">Python</option>
-                      <option value="ruby">Ruby</option>
-                      <option value="scss">SCSS</option>
-                      <option value="sql">SQL</option>
-                      <option value="swift">Swift</option>
-                      <option value="xml">XML</option>
-                      <option value="yaml">YAML</option>
+                      {allLanguages.map((language) => (
+                        <option value={language.name.toLocaleLowerCase()}>
+                          {language.name}
+                        </option>
+                      ))}
                       <option value="other">Other</option>
                     </select>
                     <p className="text-sm text-red-500">
