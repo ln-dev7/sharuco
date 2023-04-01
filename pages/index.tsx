@@ -1,13 +1,18 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import Head from "next/head"
-import Image from "next/image"
-import Link from "next/link"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import highlight from "@/utils/highlight"
 import linearizeCode from "@/utils/linearizeCode"
+import hljs from "highlight.js"
+
+import "highlight.js/styles/vs.css"
+import { useEffect, useRef, useState } from "react"
+
+import "highlight.js/styles/vs.css"
+import Head from "next/head"
+import Image from "next/image"
+import Link from "next/link"
 import * as htmlToImage from "html-to-image"
 import { Code2, Github, Loader2 } from "lucide-react"
 import { toast } from "react-hot-toast"
@@ -80,6 +85,19 @@ export default function IndexPage() {
     link.click()
   }
   //
+
+  const codeTextArea = useRef(null)
+  function detectLanguage() {
+    const code = codeTextArea.current.value
+    const language = hljs.highlightAuto(code).language
+    return language || "text"
+  }
+  const [language, setLanguage] = useState(null)
+
+  function handleChange() {
+    const detectedLanguage = detectLanguage()
+    setLanguage(detectedLanguage)
+  }
   return (
     <Layout>
       <Head>
@@ -90,6 +108,30 @@ export default function IndexPage() {
           useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sharuco" />
+        <meta
+          name="twitter:description"
+          content="Share your code with everyone"
+        />
+        <meta
+          name="twitter:image"
+          content="https://sharuco.lndev.me/sharuco-banner.png"
+        />
+
+        <meta property="og:title" content="Sharuco" />
+        <meta
+          property="og:description"
+          content="Share your code with everyone"
+        />
+        <meta
+          property="og:image"
+          content="https://sharuco.lndev.me/sharuco-banner.png"
+        />
+        <meta property="og:url" content="https://sharuco.lndev.me" />
+        <meta property="og:type" content="website" />
+
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
@@ -175,10 +217,17 @@ export default function IndexPage() {
                 <Textarea
                   placeholder="Insert your code here"
                   id="codeImage"
-                  onChange={(e) => setCodeImage(e.target.value)}
+                  //onChange={(e) => setCodeImage(e.target.value)}
+                  ref={codeTextArea}
+                  onChange={handleChange}
                   className="h-44"
                 />
               </div>
+              {language && (
+                <p className="text-xl text-slate-700 dark:text-slate-400">
+                  Le langage détecté est : {language}
+                </p>
+              )}
               <div className="flex w-full flex-col items-start gap-1.5">
                 <select
                   className="flex h-10 w-full rounded-md border border-slate-300 bg-white py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
