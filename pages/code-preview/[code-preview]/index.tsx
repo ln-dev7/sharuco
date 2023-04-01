@@ -428,7 +428,7 @@ export default function CodePreview() {
               >
                 <h3
                   className="text-xl font-semibold text-slate-900 dark:text-slate-100"
-                >Who is like this code</h3>
+                >Who likes this code</h3>
                 <div className="flex flex-wrap gap-2">
                   {dataCode.data.favoris.map((person) => (
                     <div
