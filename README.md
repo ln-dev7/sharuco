@@ -2,22 +2,58 @@
 
 Share your code with everyone.
 
-## Installation
+## Features
 
-To install the application, follow these steps:
+- Create snippets of your code and share.
+- Generate images from your snippets and share on Social Network.
 
-1. Clone the repository with `git clone https://github.com/ln-dev7/sharuco`.
-2. Install the dependencies with `npm install`.
-3. Create a Firebase project on the Firebase console and enable Firestore and Firebase Github Auth.
-4. Set up Firebase environment variables in a `.env` file. The required variables.
-   - `NEXT_PUBLIC_FIREBASE_API_KEY`: Your Firebase API Key.
-   - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`: Your Firebase Auth Domain.
-   - `NEXT_PUBLIC_FIREBASE_PROJECT_ID`: Your Firebase Project ID.
-   - `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`: Your Firebase Storage Bucket.
-   - `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`: Your Firebase Messaging Sender ID.
-   - `NEXT_PUBLIC_FIREBASE_APP_ID`: Your Firebase App ID.
-   - `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID`: Your Firebase Measurement ID.
-5. Start the development server with `npm run dev`.
+## Requirements
+
+- Node (>14 recommended) + npm
+- docker + docker-compose
+- make (for Makefile targets)
+-
+
+## How to Install
+
+```bash
+# clone the repository and cd into it:
+git clone https://github.com/ln-dev7/sharuco && cd sharuco
+
+# Tips : make help to see all make target
+
+## --- WITH DOCKER ---
+# build and up the whole stack and start it with one command:
+# note, all env are available in the example
+make docker-build-up
+
+# to build the app container only:
+make docker-build
+
+# to run the app container:
+make docker-run
+
+## --- NO DOCKER ---
+# copy the .env.example to .env and fill all env variables
+cp .env.example .env
+
+#   - `NEXT_PUBLIC_FIREBASE_API_KEY`: Your Firebase API Key.
+#   - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`: Your Firebase Auth Domain.
+#   - `NEXT_PUBLIC_FIREBASE_PROJECT_ID`: Your Firebase Project ID.
+#   - `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`: Your Firebase Storage Bucket.
+#   - `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`: Your Firebase Messaging Sender ID.
+#   - `NEXT_PUBLIC_FIREBASE_APP_ID`: Your Firebase App ID.
+#   - `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID`: Your Firebase Measurement ID.
+
+# Install dependencies:
+make install
+
+# build and start
+make build && make start
+
+# or on dev mode
+make dev
+```
 
 ## Usage
 
