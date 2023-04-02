@@ -12,7 +12,6 @@ Share your code with everyone.
 - Node (>14 recommended) + npm
 - docker + docker-compose
 - make (for Makefile targets)
--
 
 ## How to Install
 

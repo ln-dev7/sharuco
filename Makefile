@@ -39,4 +39,4 @@ help : Makefile
 	@sed -n 's/^##//p' $<
 
 
-.PHONY: start build dev install preview lint docker-build docker-build-run docker-run
+.PHONY: start build dev install preview lint docker-build docker-build-up docker-run
