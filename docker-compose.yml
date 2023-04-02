@@ -1,0 +1,30 @@
+version: '3.9'
+
+
+services:
+
+  firebase:
+    image: spine3/firebase-emulator
+    environment:
+      - GCP_PROJECT=sharuco
+      - ENABLE_UI=true
+    ports:
+      - "9000:9000"
+      - "8080:8080"
+      - "4000:4000"
+      - "9099:9099"
+      - "8085:8085"
+      - "5001:5001"
+      - "9199:9199"
+
+  sharuco:
+    image: ln-dev7/sharuco:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - firebase
+
+
