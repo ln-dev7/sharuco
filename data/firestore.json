@@ -1,0 +1,26 @@
+{
+  "codes": [
+    {
+      "id": "00000000-000-000000-01",
+      "idAuthor": "001",
+      "language": "php",
+      "code": "<?=\"test-php?>",
+      "description": "description of the test php",
+      "tags": [],
+      "favoris": [],
+      "isPrivate": false,
+      "comments": []
+    }
+  ],
+  "users": [
+    {
+      "pseudo": "sharuco",
+      "displayName": "sharuco",
+      "email": "email@email.com",
+      "photoURL": "http://sharuco.com/test",
+      "createdAt": "-----",
+      "lastLoginAt": "-----",
+      "isCertified": false
+    }
+  ]
+}
