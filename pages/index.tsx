@@ -1,5 +1,6 @@
 "use client"
 
+import { contributors } from "@/contants/contributors"
 import {
   allLanguages,
   getLanguageColor,
@@ -358,6 +359,40 @@ export default function IndexPage() {
               </AlertDialog>
             </div>
           </div>
+        </div>
+
+        <div>
+          <div className="flex items-center space-x-2 text-base">
+            <h4
+              className="
+              text-sm font-semibold text-slate-900 dark:text-slate-100
+            "
+            >
+              Contributors
+            </h4>
+            <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">
+              {contributors.length}
+            </span>
+          </div>
+          <div className="mt-3 flex -space-x-2">
+            {contributors.slice(0, 10).map((user) => (
+              <a href={user.github}>
+                <img
+                  className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
+                  src={user.image}
+                  alt={user.name}
+                />
+              </a>
+            ))}
+          </div>
+          {contributors.length > 6 && (
+            <div className="mt-3 text-sm font-medium">
+              <a href="https://github.com/ln-dev7/sharuco/graphs/contributors" className="text-blue-500">
+                + {contributors.length - 6} contributors
+              </a>
+            </div>
+          )}
+          {/* https://tailwindcss.com/docs/reusing-styles */}
         </div>
       </section>
     </Layout>
