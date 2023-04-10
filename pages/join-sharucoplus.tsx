@@ -4,7 +4,11 @@ import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 
 import "highlight.js/styles/vs.css"
+import { useState } from "react"
 import Head from "next/head"
+import Image from "next/image"
+import Link from "next/link"
+import { Check, CheckCheck } from "lucide-react"
 
 import { Layout } from "@/components/layout"
 
@@ -14,6 +18,8 @@ export default function IndexPage() {
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
   //
+
+  const [premium, setPremium] = useState(false)
 
   return (
     <Layout>
@@ -51,23 +57,52 @@ export default function IndexPage() {
 
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="bg-[#02040A]">
+      <section className="border-b border-b-slate-700 bg-[#02040A]">
         <div className="container relative grid items-center  gap-6 overflow-hidden pt-6 pb-8 md:py-10">
           <div className=" flex flex-col  items-start gap-2">
             <h1 className="font-display inline bg-gradient-to-r from-green-300 via-blue-500 to-green-300 bg-clip-text text-3xl font-extrabold leading-tight tracking-tight text-transparent sm:text-3xl md:text-5xl lg:text-6xl">
-              Join Sharuco Plus
+              {premium ? <>Sharuco Plus</> : <>Join Sharuco Plus</>}
             </h1>
 
             <p className="max-w-[700px] text-lg text-slate-400 sm:text-xl">
-              Enjoy all the features of Sharuco by joining our premium community
+              {premium ? (
+                <>
+                  You are part of the elite, currently you have access to all
+                  the features of Sharuco.
+                </>
+              ) : (
+                <>
+                  Enjoy all the features of Sharuco by joining our premium
+                  community.
+                </>
+              )}
             </p>
+            {premium ? (
+              <Link
+                href="/popular"
+                className="group relative mb-2 mr-2 mt-4 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 p-0.5 text-sm font-bold text-white group-hover:from-cyan-500 group-hover:to-blue-500"
+              >
+                <span className="relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0">
+                  Popular code
+                </span>
+              </Link>
+            ) : (
+              <Link
+                href="#pricing"
+                className="group relative mb-2 mr-2 mt-4 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 p-0.5 text-sm font-bold text-white group-hover:from-cyan-500 group-hover:to-blue-500"
+              >
+                <span className="relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0">
+                  Compare plans
+                </span>
+              </Link>
+            )}
             <svg
               aria-hidden="true"
               viewBox="0 0 668 1069"
               width="668"
               height="1069"
               fill="none"
-              className="absolute top-1/2 left-1/2 hidden -translate-y-1/2 lg:block lg:translate-y-[-50%]"
+              className="absolute top-1/2 left-1/2 block -translate-y-1/2 lg:translate-y-[-50%]"
             >
               <defs>
                 <clipPath id=":R1l6:-clip-path">
@@ -245,6 +280,43 @@ export default function IndexPage() {
                 ></circle>
               </g>
             </svg>
+          </div>
+        </div>
+      </section>
+      {/* <section id="features" className="border-b border-b-slate-700">
+        <div className="container relative grid items-center  gap-6 overflow-hidden pt-6 pb-8 md:py-10">
+          <h2></h2>
+          <p>
+          </p>
+        </div>
+      </section> */}
+      <section id="pricing" className="relative overflow-hidden bg-[#02040A]">
+        <Image
+          src="/bg-plus.webp"
+          alt="Sharuco Plus banner"
+          width={3200}
+          height={2960}
+          className="absolute top-1/2 block w-[150%]  -translate-y-1/2 lg:translate-y-[-50%]"
+        />
+        <div className="container relative grid items-center  gap-6 overflow-hidden pt-6 pb-8 md:py-10">
+          <h2>Has access to all features</h2>
+          <p>
+            Choose the premium plan to have access to all Sharuco features. Keep
+            and share your code easily 🏄🏾‍♂️
+          </p>
+          <div>
+            <div>
+              <ul>
+                <li>
+                  <Check className="mr-2 h-4 w-4 text-[#0EA5E9]" />
+                  <span>Badge on your profile</span>
+                </li>
+                <li>
+                  <CheckCheck className="mr-2 h-4 w-4 text-[#0EA5E9]" />
+                  <span>Image </span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
