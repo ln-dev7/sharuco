@@ -1,20 +1,19 @@
-import axios from 'axios';
-import { useQuery } from 'react-query';
+import axios from "axios"
+import { useQuery } from "react-query"
 
-const NOTCH_PAY_PUBLIC_KEY = 'VOTRE_CLÉ_PUBLIQUE';
-const NOTCH_PAY_API_URL = 'https://api.notchpay.co/payments/initialize';
+const initializeUrl = process.env.NOTCH_PAY_API_URL + "/initialize"
 
 export const initializePayment = async (data) => {
   const config = {
     headers: {
-      Accept: 'application/json',
-      Authorization: NOTCH_PAY_PUBLIC_KEY,
+      Accept: "application/json",
+      Authorization: process.env.NOTCH_PAY_PUBLIC_KEY,
     },
-  };
-  const response = await axios.post(NOTCH_PAY_API_URL, data, config);
-  return response.data;
-};
+  }
+  const response = await axios.post(initializeUrl, data, config)
+  return response.data
+}
 
 export const usePayment = (data) => {
-  return useQuery('payment', () => initializePayment(data));
-};
+  return useQuery("payment", () => initializePayment(data))
+}

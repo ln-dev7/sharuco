@@ -18,7 +18,6 @@ export const siteConfig: SiteConfig = {
     {
       title: "Explore",
       href: "/explore",
-      pined: true,
       support: false,
     },
     {
@@ -26,6 +25,13 @@ export const siteConfig: SiteConfig = {
       href: "/popular",
       disabled: true,
       support: false,
+    },
+    {
+      title: "Sharuco plus",
+      href: "/join-sharucoplus",
+      disabled: false,
+      support: false,
+      pined: true,
     },
     {
       title: "Product Hunt",
