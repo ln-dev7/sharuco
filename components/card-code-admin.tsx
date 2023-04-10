@@ -83,8 +83,24 @@ export default function CardCodeAdmin({
   isPrivate,
   comments: commentsInit,
 }) {
-  const notifyCodeCopied = () => toast.success("Code copied to clipboard")
-  const notifyUrlCopied = () => toast.success("Url of code copied to clipboard")
+  const notifyCodeCopied = () =>
+    toast.custom((t) => (
+      <div
+        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+        role="alert"
+      >
+        Code copied to clipboard
+      </div>
+    ))
+  const notifyUrlCopied = () =>
+    toast.custom((t) => (
+      <div
+        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+        role="alert"
+      >
+        Url of code copied to clipboard
+      </div>
+    ))
 
   const searchParams = useSearchParams()
 
@@ -203,7 +219,14 @@ export default function CardCodeAdmin({
       isPrivate: isPrivateUpdate,
     })
     setCheckboxOn(isPrivateUpdate)
-    toast.success("Your code has been updated successfully !")
+    toast.custom((t) => (
+      <div
+        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+        role="alert"
+      >
+        Your code has been updated successfully !
+      </div>
+    ))
   }
 
   //

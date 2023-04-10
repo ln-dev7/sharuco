@@ -40,7 +40,14 @@ export default function IndexPage() {
   const { login, isPending } = useGitHubLoign()
 
   const notifyCodeAdded = () =>
-    toast.success("Your code has been added successfully !")
+    toast.custom((t) => (
+      <div
+        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+        role="alert"
+      >
+        Your code has been added successfully !
+      </div>
+    ))
 
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
@@ -387,7 +394,10 @@ export default function IndexPage() {
           </div>
           {contributors.length > 6 && (
             <div className="mt-3 text-sm font-medium">
-              <a href="https://github.com/ln-dev7/sharuco/graphs/contributors" className="text-blue-500">
+              <a
+                href="https://github.com/ln-dev7/sharuco/graphs/contributors"
+                className="text-blue-500"
+              >
                 + {contributors.length - 6} contributors
               </a>
             </div>
