@@ -8,7 +8,6 @@ import { useState } from "react"
 import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
-import { Check, CheckCheck } from "lucide-react"
 
 import { Layout } from "@/components/layout"
 
@@ -298,25 +297,317 @@ export default function IndexPage() {
           height={2960}
           className="absolute top-1/2 block w-[150%]  -translate-y-1/2 lg:translate-y-[-50%]"
         />
-        <div className="container relative grid items-center  gap-6 overflow-hidden pt-6 pb-8 md:py-10">
-          <h2>Has access to all features</h2>
-          <p>
+        <div className="container relative grid items-center gap-6 pt-6 pb-8 md:py-10">
+          <h2 className="text-center text-2xl font-extrabold leading-tight tracking-tighter text-white sm:text-2xl md:text-4xl lg:text-4xl">
+            Has access to all features
+          </h2>
+          <p className="text-center font-medium text-white">
             Choose the premium plan to have access to all Sharuco features. Keep
-            and share your code easily 🏄🏾‍♂️
+            and share your code easily 🏄🏾‍♂️ <br />
           </p>
-          <div>
-            <div>
-              <ul>
-                <li>
-                  <Check className="mr-2 h-4 w-4 text-[#0EA5E9]" />
-                  <span>Badge on your profile</span>
+          <div className="flex flex-col-reverse items-center justify-center gap-4 md:flex-row md:items-start">
+            <div className="w-full max-w-sm rounded-lg border  border-gray-700 bg-gray-800 p-4 shadow sm:p-8">
+              <h5 className="mb-4 text-xl font-bold text-gray-400">
+                Sharuco Basic
+              </h5>
+              <div className="flex items-baseline text-white">
+                <span className="text-5xl font-extrabold tracking-tight">
+                  0
+                </span>
+                <span className="text-3xl font-semibold">€</span>
+                <span className="ml-1 text-xl font-normal text-gray-400">
+                  /month
+                </span>
+              </div>
+              <ul role="list" className="space-y-5 my-7">
+                <li className="flex space-x-3 line-through decoration-gray-500">
+                  <svg
+                    aria-hidden="true"
+                    className="flex-shrink-0 w-5 h-5 text-gray-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>Check icon</title>
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="text-base font-normal leading-tight text-gray-500">
+                    Generate your images without the « sharuco.lndev.me »
+                  </span>
                 </li>
-                <li>
-                  <CheckCheck className="mr-2 h-4 w-4 text-[#0EA5E9]" />
-                  <span>Image </span>
+                <li className="flex space-x-3">
+                  <svg
+                    aria-hidden="true"
+                    className="flex-shrink-0 w-5 h-5 text-[#4794E9]"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>Check icon</title>
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="text-base font-normal leading-tight text-gray-400">
+                    Publish maximum 5 codes per day ( max. 2 private )
+                  </span>
+                </li>
+                <li className="flex space-x-3 line-through decoration-gray-500">
+                  <svg
+                    aria-hidden="true"
+                    className="flex-shrink-0 w-5 h-5 text-gray-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>Check icon</title>
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="text-base font-normal leading-tight text-gray-500">
+                    View the most popular codes
+                  </span>
+                </li>
+                <li className="flex space-x-3">
+                  <svg
+                    aria-hidden="true"
+                    className="flex-shrink-0 w-5 h-5 text-[#4794E9]"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>Check icon</title>
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="text-base font-normal leading-tight text-gray-400">
+                    Your codes will have a limited length
+                  </span>
+                </li>
+                <li className="flex space-x-3 line-through decoration-gray-500">
+                  <svg
+                    aria-hidden="true"
+                    className="flex-shrink-0 w-5 h-5 text-gray-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>Check icon</title>
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="text-base font-normal leading-tight text-gray-500">
+                    Add code from different programming languages into a single
+                    block of code
+                  </span>
+                </li>
+                <li className="flex space-x-3 line-through decoration-gray-500">
+                  <svg
+                    aria-hidden="true"
+                    className="flex-shrink-0 w-5 h-5 text-gray-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>Check icon</title>
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span className="text-base font-normal leading-tight text-gray-500">
+                    Get a badge on your profile
+                  </span>
                 </li>
               </ul>
+              <h6 className="text-md text-center font-bold text-gray-400">
+                Your current plan
+              </h6>
             </div>
+
+            <div className="relative flex w-full max-w-sm shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 lg:max-w-lg">
+              <div className="w-full max-w-sm rounded-lg border border-gray-700 bg-gray-800 p-4 shadow sm:p-8 lg:max-w-lg">
+                <h5 className="mb-4 text-xl font-bold text-gray-400">
+                  Sharuco Plus 🏄🏾‍♂️
+                </h5>
+                <div className="flex items-baseline text-white">
+                  <span className="text-5xl font-extrabold tracking-tight">
+                    2
+                  </span>
+                  <span className="text-3xl font-semibold">€</span>
+                  <span className="ml-1 text-xl font-normal text-gray-400">
+                    /month
+                  </span>
+                </div>
+                <ul role="list" className="my-7 space-y-5">
+                  <li className="flex space-x-3">
+                    <svg
+                      aria-hidden="true"
+                      className="h-5 w-5 flex-shrink-0 text-[#4794E9]"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <title>Check icon</title>
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span className="text-base font-normal leading-tight text-gray-400">
+                      Generate your images without the « sharuco.lndev.me »
+                    </span>
+                  </li>
+                  <li className="flex space-x-3">
+                    <svg
+                      aria-hidden="true"
+                      className="flex-shrink-0 w-5 h-5 text-[#4794E9]"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <title>Check icon</title>
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span className="text-base font-normal leading-tight text-gray-400">
+                      Publish an infinite amount of code per day ( private and
+                      public ){" "}
+                    </span>
+                  </li>
+                  <li className="flex space-x-3">
+                    <svg
+                      aria-hidden="true"
+                      className="flex-shrink-0 w-5 h-5 text-[#4794E9]"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <title>Check icon</title>
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span className="text-base font-normal leading-tight text-gray-400">
+                      View the most popular codes
+                    </span>
+                  </li>
+                  <li className="flex space-x-3">
+                    <svg
+                      aria-hidden="true"
+                      className="flex-shrink-0 w-5 h-5 text-[#4794E9]"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <title>Check icon</title>
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span className="text-base font-normal leading-tight text-gray-400">
+                      Save a code regardless of its length
+                    </span>
+                  </li>
+                  <li className="flex space-x-3">
+                    <svg
+                      aria-hidden="true"
+                      className="flex-shrink-0 w-5 h-5 text-[#4794E9]"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <title>Check icon</title>
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span className="text-base font-normal leading-tight text-gray-400">
+                      Add code from different programming languages into a
+                      single block of code
+                      <span className="ml-2 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
+                        Soon
+                      </span>
+                    </span>
+                  </li>
+                  <li className="flex space-x-3">
+                    <svg
+                      aria-hidden="true"
+                      className="flex-shrink-0 w-5 h-5 text-[#4794E9]"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <title>Check icon</title>
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                    <span className="text-base font-normal leading-tight text-gray-400">
+                      Get a badge on your profile
+                    </span>
+                  </li>
+                </ul>
+
+                <div className="flex flex-col items-center gap-2">
+                  <button className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900">
+                    <span className="w-full flex items-center justify-center relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in">
+                      Buy 2 € / month
+                    </span>
+                  </button>
+                  <span className="flex items-center justify-center text-base font-normal leading-tight text-gray-400">
+                    or
+                  </span>
+                  <div className="flex w-full flex-col items-center gap-4 lg:flex-row">
+                    <button className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900">
+                      <span className="w-full flex items-center justify-center relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in">
+                        18 € / year
+                      </span>
+                    </button>
+                    <button className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900">
+                      <span className="w-full flex items-center justify-center relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in">
+                        30 € for life
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <a href="mailto:sharuco@leonelngoya.com">
+              <button className="rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-bold text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                Contact us for all your questions
+              </button>
+            </a>
           </div>
         </div>
       </section>
