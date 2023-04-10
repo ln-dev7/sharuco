@@ -24,7 +24,7 @@ export const siteConfig: SiteConfig = {
     {
       title: "Popular code",
       href: "/popular",
-      disabled: true,
+      disabled: false,
       support: false,
     },
     {
