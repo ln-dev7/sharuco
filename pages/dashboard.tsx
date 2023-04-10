@@ -55,7 +55,14 @@ export default function Dashboard() {
 
   const { logout } = useGitHubLogout()
   const notifyCodeAdded = () =>
-    toast.success("Your code has been added successfully !")
+    toast.custom((t) => (
+      <div
+        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+        role="alert"
+      >
+        Your code has been added successfully !
+      </div>
+    ))
 
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
