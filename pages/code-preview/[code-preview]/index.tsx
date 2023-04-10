@@ -45,7 +45,15 @@ export default function CodePreview() {
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
 
-  const notifyCodeCopied = () => toast.success("Code copied to clipboard")
+  const notifyCodeCopied = () =>
+    toast.custom((t) => (
+      <div
+        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+        role="alert"
+      >
+        Code copied to clipboard
+      </div>
+    ))
 
   const { login, isPending } = useGitHubLoign()
 
@@ -120,7 +128,14 @@ export default function CodePreview() {
       comment: "",
     })
 
-    toast.success("Comment submitted successfully")
+    toast.custom((t) => (
+      <div
+        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+        role="alert"
+      >
+        Comment submitted successfully
+      </div>
+    ))
   }
 
   const handleDeletComment = async (idComment) => {
@@ -134,7 +149,14 @@ export default function CodePreview() {
 
     await updateCodeDocument({ id, updatedCodeData })
 
-    toast.success("Comment deleted successfully")
+    toast.custom((t) => (
+      <div
+        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+        role="alert"
+      >
+        Comment deleted successfully
+      </div>
+    ))
   }
 
   return (
