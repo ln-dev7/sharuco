@@ -21,12 +21,6 @@ export const siteConfig: SiteConfig = {
       support: false,
     },
     {
-      title: "Popular code",
-      href: "/popular",
-      disabled: true,
-      support: false,
-    },
-    {
       title: "Sharuco plus",
       href: "/join-sharucoplus",
       disabled: false,
