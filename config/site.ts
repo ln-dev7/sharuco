@@ -18,13 +18,13 @@ export const siteConfig: SiteConfig = {
     {
       title: "Explore",
       href: "/explore",
-      pined: true,
+      pined: false,
       support: false,
     },
     {
       title: "Popular code",
       href: "/popular",
-      disabled: false,
+      pined: true,
       support: false,
     },
     {
