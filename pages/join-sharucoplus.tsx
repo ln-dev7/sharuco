@@ -2,6 +2,7 @@
 
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
+import { usePayment } from "@/sharucoplus/payment/init.js"
 
 import "highlight.js/styles/vs.css"
 import { useState } from "react"
@@ -19,6 +20,18 @@ export default function IndexPage() {
   //
 
   const [premium, setPremium] = useState(false)
+
+  const currentData = {
+    email: "leonelngoya@gmail.com",
+    currency: "XAF",
+    amount: "1000",
+    phone: "699792097",
+    description: "Pay for bill",
+  }
+
+  const { data, isLoading, isError } = usePayment(currentData)
+
+  console.log("payment", data)
 
   return (
     <Layout>

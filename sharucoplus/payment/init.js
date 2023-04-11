@@ -1,13 +1,13 @@
 import axios from "axios"
 import { useQuery } from "react-query"
 
-const initializeUrl = process.env.NOTCH_PAY_API_URL + "/initialize"
+const initializeUrl = `https://api.notchpay.co/payments/initialize`
 
 export const initializePayment = async (data) => {
   const config = {
     headers: {
       Accept: "application/json",
-      Authorization: process.env.NOTCH_PAY_PUBLIC_KEY,
+        Authorization: "b.Aqeus5ZknbURn32X",
     },
   }
   const response = await axios.post(initializeUrl, data, config)
