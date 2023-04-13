@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { auth } from "@/firebase/config"
-import { GithubAuthProvider, signInWithPopup } from "firebase/auth"
+import { GithubAuthProvider, signInWithPopup, signOut } from "firebase/auth"
 import {
   collection,
   doc,
