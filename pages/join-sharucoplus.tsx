@@ -2,7 +2,8 @@
 
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
-import { usePayment } from "@/sharucoplus/payment/init.js"
+import usePaymentInitialization from "@/sharucoplus/initializePayment.js"
+import axios from "axios"
 
 import "highlight.js/styles/vs.css"
 import { useState } from "react"
@@ -11,6 +12,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { Layout } from "@/components/layout"
+import { Button } from "@/components/ui/button"
 
 export default function IndexPage() {
   const { login, isPending } = useGitHubLoign()
@@ -21,17 +23,15 @@ export default function IndexPage() {
 
   const [premium, setPremium] = useState(false)
 
-  const currentData = {
-    email: "leonelngoya@gmail.com",
-    currency: "XAF",
-    amount: "1000",
-    phone: "699792097",
-    description: "Pay for bill",
+  const { initializePayment, isLoading, isError } = usePaymentInitialization()
+
+  const handlePaymentClick = () => {
+    initializePayment(
+      "leonelngoya@gmail.com",
+      "1000",
+      "Payment for Sharuco Plus"
+    )
   }
-
-  const { data, isLoading, isError } = usePayment(currentData)
-
-  console.log("payment", data)
 
   return (
     <Layout>
@@ -71,6 +71,9 @@ export default function IndexPage() {
       </Head>
       <section className="border-b border-b-slate-700 bg-[#02040A]">
         <div className="container relative grid items-center  gap-6 overflow-hidden pt-6 pb-8 md:py-10">
+          {isLoading && <p>Loading...</p>}
+          {isError && <p>Error initializing payment</p>}
+          <Button onClick={handlePaymentClick}>Initialize payment</Button>
           <div className=" flex flex-col  items-start gap-2">
             <h1 className="font-display inline bg-gradient-to-r from-green-300 via-blue-500 to-green-300 bg-clip-text text-3xl font-extrabold leading-tight tracking-tight text-transparent sm:text-3xl md:text-5xl lg:text-6xl">
               {premium ? <>Sharuco Plus</> : <>Join Sharuco Plus</>}
