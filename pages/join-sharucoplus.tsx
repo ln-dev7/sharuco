@@ -10,6 +10,7 @@ import { useState } from "react"
 import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
+import { Github, Loader2 } from "lucide-react"
 
 import { Layout } from "@/components/layout"
 import { Button } from "@/components/ui/button"
@@ -23,14 +24,22 @@ export default function IndexPage() {
 
   const [premium, setPremium] = useState(false)
 
-  const { initializePayment, isLoading, isError } = usePaymentInitialization()
+  const {
+    initializePayment,
+    isLoading: isLoadingInitializePayment,
+    isError: isErrorInitializePayment,
+  } = usePaymentInitialization()
 
-  const handlePaymentClick = () => {
-    initializePayment(
-      "leonelngoya@gmail.com",
-      "1000",
-      "Payment for Sharuco Plus"
-    )
+  const handlePaymentClickForMonth = (email, amount, description) => {
+    initializePayment(email, amount, description)
+  }
+
+  const handlePaymentClickForYear = (email, amount, description) => {
+    initializePayment(email, amount, description)
+  }
+
+  const handlePaymentClickForLife = (email, amount, description) => {
+    initializePayment(email, amount, description)
   }
 
   return (
@@ -71,9 +80,6 @@ export default function IndexPage() {
       </Head>
       <section className="border-b border-b-slate-700 bg-[#02040A]">
         <div className="container relative grid items-center  gap-6 overflow-hidden pt-6 pb-8 md:py-10">
-          {isLoading && <p>Loading...</p>}
-          {isError && <p>Error initializing payment</p>}
-          <Button onClick={handlePaymentClick}>Initialize payment</Button>
           <div className=" flex flex-col  items-start gap-2">
             <h1 className="font-display inline bg-gradient-to-r from-green-300 via-blue-500 to-green-300 bg-clip-text text-3xl font-extrabold leading-tight tracking-tight text-transparent sm:text-3xl md:text-5xl lg:text-6xl">
               {premium ? <>Sharuco Plus</> : <>Join Sharuco Plus</>}
@@ -593,28 +599,88 @@ export default function IndexPage() {
                   </li>
                 </ul>
 
-                <div className="flex flex-col items-center gap-2">
-                  <button className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900">
+                {user ? (
+                  <div className="flex flex-col items-center gap-2">
+                    <button
+                      className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900"
+                      onClick={() =>
+                        handlePaymentClickForMonth(
+                          "leonelngoya@gmail.com",
+                          500,
+                          "Monthly subscription"
+                        )
+                      }
+                      disabled={isLoadingInitializePayment}
+                    >
+                      <span className="w-full flex items-center justify-center relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in">
+                        Buy 2 € / month
+                      </span>
+                    </button>
+                    <span className="flex items-center justify-center text-base font-normal leading-tight text-gray-400">
+                      or
+                    </span>
+                    <div className="flex w-full flex-col items-center gap-4 lg:flex-row">
+                      <button
+                        className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900"
+                        onClick={() =>
+                          handlePaymentClickForYear(
+                            "leonelngoya@gmail.com",
+                            500,
+                            "Monthly subscription"
+                          )
+                        }
+                        disabled={isLoadingInitializePayment}
+                      >
+                        <span className="w-full flex items-center justify-center relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in">
+                          18 € / year
+                        </span>
+                      </button>
+                      <button
+                        className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900"
+                        onClick={() =>
+                          handlePaymentClickForLife(
+                            "leonelngoya@gmail.com",
+                            500,
+                            "Monthly subscription"
+                          )
+                        }
+                        disabled={isLoadingInitializePayment}
+                      >
+                        <span className="w-full flex items-center justify-center relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in">
+                          30 € for life
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900"
+                    disabled={isPending}
+                    onClick={login}
+                  >
                     <span className="w-full flex items-center justify-center relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in">
-                      Buy 2 € / month
+                      {isPending ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <Github className="mr-2 h-4 w-4" />
+                      )}
+                      Login with github to pay
                     </span>
                   </button>
-                  <span className="flex items-center justify-center text-base font-normal leading-tight text-gray-400">
-                    or
-                  </span>
-                  <div className="flex w-full flex-col items-center gap-4 lg:flex-row">
-                    <button className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900">
-                      <span className="w-full flex items-center justify-center relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in">
-                        18 € / year
+                )}
+
+                {isErrorInitializePayment || isLoadingInitializePayment ? (
+                  <div className="flex w-full items-center justify-center pt-6">
+                    {isLoadingInitializePayment ? (
+                      <Loader2 className="mr-2 h-8 w-8 animate-spin text-white" />
+                    ) : null}
+                    {isErrorInitializePayment ? (
+                      <span className="text-base font-medium leading-tight text-red-500">
+                        An error occurred, please try again
                       </span>
-                    </button>
-                    <button className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900">
-                      <span className="w-full flex items-center justify-center relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in">
-                        30 € for life
-                      </span>
-                    </button>
+                    ) : null}
                   </div>
-                </div>
+                ) : null}
               </div>
             </div>
           </div>
