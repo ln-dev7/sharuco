@@ -18,7 +18,7 @@ export default function usePaymentInitialization() {
 
     const data = {
       email,
-      currency: "XAF",
+      currency: "EUR",
       amount,
       description,
       callback: "https://sharuco.lndev.me/join-sharucoplus",
@@ -36,7 +36,7 @@ export default function usePaymentInitialization() {
       window.open(authorizationUrl, "_blank")
     } catch (error) {
       setIsError(true)
-      console.error(error)
+      // console.error(error)
     } finally {
       setIsLoading(false)
     }

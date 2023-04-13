@@ -20,6 +20,7 @@ export default function IndexPage() {
 
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
+  const userEmail = user?.email
   //
 
   const [premium, setPremium] = useState(false)
@@ -605,9 +606,9 @@ export default function IndexPage() {
                       className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900"
                       onClick={() =>
                         handlePaymentClickForMonth(
-                          "leonelngoya@gmail.com",
-                          500,
-                          "Monthly subscription"
+                          userEmail,
+                          2,
+                          "Monthly subscription for Sharuco Plus"
                         )
                       }
                       disabled={isLoadingInitializePayment}
@@ -624,9 +625,9 @@ export default function IndexPage() {
                         className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900"
                         onClick={() =>
                           handlePaymentClickForYear(
-                            "leonelngoya@gmail.com",
-                            500,
-                            "Monthly subscription"
+                            userEmail,
+                            18,
+                            "Yearly subscription for Sharuco Plus"
                           )
                         }
                         disabled={isLoadingInitializePayment}
@@ -639,9 +640,9 @@ export default function IndexPage() {
                         className="w-full group relative flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 text-sm font-bold text-white hover:to-gray-900 hover:from-gray-900"
                         onClick={() =>
                           handlePaymentClickForLife(
-                            "leonelngoya@gmail.com",
-                            500,
-                            "Monthly subscription"
+                            userEmail,
+                            30,
+                            "Life subscription for Sharuco Plus"
                           )
                         }
                         disabled={isLoadingInitializePayment}
