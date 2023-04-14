@@ -21,8 +21,8 @@ export default function usePaymentInitialization() {
       currency: "EUR",
       amount,
       description,
-      callback: "http://localhost:3000/join-sharucoplus",
-      // callback: "https://sharuco.lndev.me/join-sharucoplus",
+      // callback: "http://localhost:3000/join-sharucoplus",
+      callback: "https://sharuco.lndev.me/join-sharucoplus",
     }
 
     try {
