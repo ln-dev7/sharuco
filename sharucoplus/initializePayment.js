@@ -2,7 +2,7 @@ import { useState } from "react"
 import axios from "axios"
 
 const NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY =
-  process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY
+  process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY_TEST
 
 const NEXT_PUBLIC_NOTCH_PAY_API_URL = process.env.NEXT_PUBLIC_NOTCH_PAY_API_URL
 
@@ -21,7 +21,8 @@ export default function usePaymentInitialization() {
       currency: "EUR",
       amount,
       description,
-      callback: "https://sharuco.lndev.me/join-sharucoplus",
+      callback: "http://localhost:3000/join-sharucoplus",
+      // callback: "https://sharuco.lndev.me/join-sharucoplus",
     }
 
     try {
@@ -33,7 +34,15 @@ export default function usePaymentInitialization() {
       })
 
       const authorizationUrl = response.data.authorization_url
+      // console.log(response.data)
+      // stock la reference dans le local storage
+      localStorage.setItem(
+        "transaction-reference",
+        response.data.transaction.reference
+      )
+      localStorage.setItem("customer-id", response.data.transaction.customer.id)
       window.open(authorizationUrl, "_blank")
+      // https://sharuco.lndev.me/join-sharucoplus?reference=bTPFKcLzeicWRYBCfV1ewePbrLBamZ5N&trxref=bTPFKcLzeicWRYBCfV1ewePbrLBamZ5N&status=complete&hash=50151a846e1288f9cd53ee7c7c58763d&np-callback=callback&notchpay_txnref=
     } catch (error) {
       setIsError(true)
       // console.error(error)

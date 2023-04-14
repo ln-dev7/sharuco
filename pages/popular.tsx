@@ -1,6 +1,7 @@
 "use client"
 
 import Head from "next/head"
+import Link from "next/link"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
@@ -67,50 +68,70 @@ export default function Popular() {
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Discover the 20 most popular codes.
           </h1>
+          {!(dataUser?.data.premium && user) ? (
+            <p className="max-w-[700px] text-lg text-slate-700 dark:text-slate-400 sm:text-xl">
+              This page is reserved for premium members.
+            </p>
+          ) : null}
+
           {/* <SearchCode
             dataCodes={dataPublicCodes}
             isLoadingCodes={isLoadingPublicCodes}
             isErrorCodes={isErrorPublicCodes}
           /> */}
         </div>
-        <div className="">
-          {isLoadingPublicCodes && <Loader />}
-          {dataPublicCodes && (
-            <ResponsiveMasonry
-              columnsCountBreakPoints={{
-                659: 1,
-                660: 2,
-                720: 2,
-                990: 3,
-              }}
-              className="w-full"
+        {/* page reserver aux premium */}
+        {dataUser?.data.premium && user ? (
+          <div className="">
+            {isLoadingPublicCodes && <Loader />}
+            {dataPublicCodes && (
+              <ResponsiveMasonry
+                columnsCountBreakPoints={{
+                  659: 1,
+                  660: 2,
+                  720: 2,
+                  990: 3,
+                }}
+                className="w-full"
+              >
+                <Masonry gutter="1rem">
+                  {dataPublicCodes
+                    .sort((a, b) => {
+                      return b.favoris.length - a.favoris.length
+                    })
+                    .slice(0, 20)
+                    .map((code) => (
+                      <CardCode
+                        key={code.id}
+                        id={code.id}
+                        idAuthor={code.idAuthor}
+                        language={code.language}
+                        code={code.code}
+                        description={code.description}
+                        tags={code.tags}
+                        favoris={code.favoris}
+                        isPrivate={code.isPrivate}
+                        currentUser={dataUser?.data}
+                        comments={code.comments}
+                      />
+                    ))}
+                </Masonry>
+              </ResponsiveMasonry>
+            )}
+            {isErrorPublicCodes && <Error />}
+          </div>
+        ) : (
+          <div className="">
+            <Link
+              href="/join-sharucoplus"
+              className="group relative mb-2 mr-2 mt-4 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 p-0.5 text-sm font-bold text-white group-hover:from-cyan-500 group-hover:to-blue-500"
             >
-              <Masonry gutter="1rem">
-                {dataPublicCodes
-                  .sort((a, b) => {
-                    return b.favoris.length - a.favoris.length
-                  })
-                  .slice(0, 20)
-                  .map((code) => (
-                    <CardCode
-                      key={code.id}
-                      id={code.id}
-                      idAuthor={code.idAuthor}
-                      language={code.language}
-                      code={code.code}
-                      description={code.description}
-                      tags={code.tags}
-                      favoris={code.favoris}
-                      isPrivate={code.isPrivate}
-                      currentUser={dataUser?.data}
-                      comments={code.comments}
-                    />
-                  ))}
-              </Masonry>
-            </ResponsiveMasonry>
-          )}
-          {isErrorPublicCodes && <Error />}
-        </div>
+              <span className="relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in group-hover:bg-opacity-0">
+                Join Sharuco Plus
+              </span>
+            </Link>
+          </div>
+        )}
       </section>
     </Layout>
   )
