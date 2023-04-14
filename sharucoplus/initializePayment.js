@@ -2,7 +2,7 @@ import { useState } from "react"
 import axios from "axios"
 
 const NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY =
-  process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY_TEST
+  process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY
 
 const NEXT_PUBLIC_NOTCH_PAY_API_URL = process.env.NEXT_PUBLIC_NOTCH_PAY_API_URL
 

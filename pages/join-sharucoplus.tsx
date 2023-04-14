@@ -61,7 +61,7 @@ export default function IndexPage() {
         {
           headers: {
             Accept: "application/json",
-            Authorization: process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY_TEST,
+            Authorization: process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
           },
         }
       )

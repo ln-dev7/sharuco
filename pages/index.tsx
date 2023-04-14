@@ -19,6 +19,7 @@ import "highlight.js/styles/vs.css"
 import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
+import { useDocument } from "@/firebase/firestore/getDocument.js"
 import * as htmlToImage from "html-to-image"
 import { Code2, Github, Loader2 } from "lucide-react"
 import { toast } from "react-hot-toast"
@@ -51,6 +52,12 @@ export default function IndexPage() {
 
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
+
+  const {
+    data: dataUser,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+  } = useDocument(pseudo, "users")
 
   const [userCountry, setUserCountry] = useState("")
   useEffect(() => {
@@ -325,9 +332,11 @@ export default function IndexPage() {
                       backgroundColor: `${backgroundImage}`,
                     }}
                   >
-                    <h3 className="mb-2 text-center text-lg font-semibold text-white">
-                      sharuco.lndev.me
-                    </h3>
+                    {dataUser && dataUser.data.premium ? null : (
+                      <h3 className="mb-2 text-center text-lg font-semibold text-white">
+                        sharuco.lndev.me
+                      </h3>
+                    )}
                     <div className="max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
                       <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
                         <div className="flex items-center gap-2">
