@@ -7,7 +7,7 @@ import {
   allLanguages,
   getLanguageColor,
   languagesName,
-} from "@/contants/languages"
+} from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"

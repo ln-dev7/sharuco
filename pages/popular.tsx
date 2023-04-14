@@ -1,10 +1,18 @@
 "use client"
 
+import { useEffect } from "react"
 import Head from "next/head"
 import Link from "next/link"
+import {
+  PAYMENT_STATUS,
+  SUBSCRIPTIONS_PRICE,
+  SUBSCRIPTIONS_TYPE,
+} from "@/constants/subscriptions-infos.js"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
+import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument.js"
+import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import CardCode from "@/components/card-code"
@@ -15,6 +23,8 @@ import Loader from "@/components/loader"
 export default function Popular() {
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
+
+  const { updateUserDocument }: any = useUpdateUserDocument("users")
 
   const {
     data: dataUser,

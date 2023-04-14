@@ -4,7 +4,8 @@ import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { allLanguages, languagesName } from "@/contants/languages"
+import { allLanguages, languagesName } from "@/constants/languages"
+import { SUBSCRIPTIONS_TYPE } from "@/constants/subscriptions-infos.js"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
@@ -12,6 +13,7 @@ import { useGetCodeFromUser } from "@/firebase/firestore/getCodeFromUser"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
+import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument.js"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
 import hljs from "highlight.js"
@@ -66,6 +68,8 @@ export default function Dashboard() {
 
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
+
+  const { updateUserDocument }: any = useUpdateUserDocument("users")
 
   const {
     data: dataUser,

@@ -9,6 +9,8 @@ import "prism-themes/themes/prism-one-dark.min.css"
 //import "prism-themes/themes/prism-night-owl.css"
 import { QueryClient, QueryClientProvider } from "react-query"
 
+import CheckStaus from "@/components/check-status"
+
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -57,6 +59,7 @@ export default function App({ Component, pageProps }: AppProps) {
             }}
           />
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <CheckStaus />
             <Component {...pageProps} />
             {/* <ReactQueryDevtools initialIsOpen={false} /> */}
           </ThemeProvider>

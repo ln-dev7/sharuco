@@ -10,9 +10,15 @@ import { useEffect, useState } from "react"
 import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
+import {
+  PAYMENT_STATUS,
+  SUBSCRIPTIONS_PRICE,
+  SUBSCRIPTIONS_TYPE,
+} from "@/constants/subscriptions-infos.js"
 import { useDocument } from "@/firebase/firestore/getDocument.js"
 import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument.js"
 import { Github, Loader2 } from "lucide-react"
+import moment from "moment"
 
 import { Layout } from "@/components/layout"
 import { Button } from "@/components/ui/button"
@@ -23,6 +29,9 @@ export default function IndexPage() {
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
   const userEmail = user?.email
+
+  const { updateUserDocument }: any = useUpdateUserDocument("users")
+
   //
 
   const {
@@ -30,8 +39,6 @@ export default function IndexPage() {
     isLoading: isLoadingUser,
     isError: isErrorUser,
   } = useDocument(pseudo, "users")
-
-  const { updateUserDocument }: any = useUpdateUserDocument("users")
 
   const [isLoadingPaymentStatus, setIsLoadingPaymentStatus] = useState(false)
   const [isErrorPaymentStatus, setIsErrorPaymentStatus] = useState(false)
@@ -61,13 +68,43 @@ export default function IndexPage() {
 
       console.log("Data", response.data)
       const paymentStatus = response.data.transaction.status
+      const paymentDescription = response.data.transaction.description
 
-      if (paymentStatus === "complete") {
+      if (paymentStatus === PAYMENT_STATUS.COMPLETE) {
         console.log("payment completed")
-        const updatedUserData = {
-          premium: true,
+        if (paymentDescription === SUBSCRIPTIONS_TYPE.MONTHLY) {
+          updateUserDocument({
+            pseudo,
+            updatedUserData: {
+              premium: true,
+              premiumType: SUBSCRIPTIONS_TYPE.MONTHLY,
+              premiumPrice: SUBSCRIPTIONS_PRICE.MONTHLY,
+              premiumStartDay: moment().valueOf(),
+            },
+          })
         }
-        updateUserDocument({ pseudo, updatedUserData })
+        if (paymentDescription === SUBSCRIPTIONS_TYPE.YEARLY) {
+          updateUserDocument({
+            pseudo,
+            updatedUserData: {
+              premium: true,
+              premiumType: SUBSCRIPTIONS_TYPE.YEARLY,
+              premiumPrice: SUBSCRIPTIONS_PRICE.YEARLY,
+              premiumStartDay: moment().valueOf(),
+            },
+          })
+        }
+        if (paymentDescription === SUBSCRIPTIONS_TYPE.LIFE) {
+          updateUserDocument({
+            pseudo,
+            updatedUserData: {
+              premium: true,
+              premiumType: SUBSCRIPTIONS_TYPE.LIFE,
+              premiumPrice: SUBSCRIPTIONS_PRICE.LIFE,
+              premiumStartDay: moment().valueOf(),
+            },
+          })
+        }
         localStorage.removeItem("transaction-reference")
       } else {
         console.log("payment not completed")
@@ -408,7 +445,25 @@ export default function IndexPage() {
                 <div className="relative flex w-full max-w-sm shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#82EAAE] to-[#3F89F0] p-0.5 lg:max-w-lg">
                   <div className="w-full max-w-sm rounded-lg border border-gray-700 bg-gray-800 p-4 shadow sm:p-8 lg:max-w-lg">
                     <p className="text-center font-bold mb-6 text-white">
-                      Your subscription is active until ...
+                      Your subscription is active until :{" "}
+                      {dataUser?.data.premiumType ===
+                        SUBSCRIPTIONS_TYPE.MONTHLY && (
+                        <>
+                          {moment(dataUser?.data.premiumStartDay)
+                            .add(1, "months")
+                            .format("DD MMMM YYYY")}
+                        </>
+                      )}
+                      {dataUser?.data.premiumType ===
+                        SUBSCRIPTIONS_TYPE.YEARLY && (
+                        <>
+                          {moment(dataUser?.data.premiumStartDay)
+                            .add(1, "years")
+                            .format("DD MMMM YYYY")}
+                        </>
+                      )}
+                      {dataUser?.data.premiumType ===
+                        SUBSCRIPTIONS_TYPE.LIFE && <>never</>}
                     </p>
                     <ul role="list" className="mt-0 mb-7 space-y-5">
                       <li className="flex space-x-3">
@@ -838,8 +893,8 @@ export default function IndexPage() {
                           onClick={() =>
                             handlePaymentClickForMonth(
                               userEmail,
-                              2,
-                              "Monthly subscription for Sharuco Plus"
+                              SUBSCRIPTIONS_PRICE.MONTHLY,
+                              SUBSCRIPTIONS_TYPE.MONTHLY
                             )
                           }
                           disabled={isLoadingInitializePayment}
@@ -857,8 +912,8 @@ export default function IndexPage() {
                             onClick={() =>
                               handlePaymentClickForYear(
                                 userEmail,
-                                18,
-                                "Yearly subscription for Sharuco Plus"
+                                SUBSCRIPTIONS_PRICE.YEARLY,
+                                SUBSCRIPTIONS_TYPE.YEARLY
                               )
                             }
                             disabled={isLoadingInitializePayment}
@@ -872,8 +927,8 @@ export default function IndexPage() {
                             onClick={() =>
                               handlePaymentClickForLife(
                                 userEmail,
-                                30,
-                                "Life subscription for Sharuco Plus"
+                                SUBSCRIPTIONS_PRICE.LIFE,
+                                SUBSCRIPTIONS_TYPE.LIFE
                               )
                             }
                             disabled={isLoadingInitializePayment}
