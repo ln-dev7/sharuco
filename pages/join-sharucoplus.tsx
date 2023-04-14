@@ -757,7 +757,7 @@ export default function IndexPage() {
                     </h5>
                     <div className="flex items-baseline text-white">
                       <span className="text-5xl font-extrabold tracking-tight">
-                        2
+                        {SUBSCRIPTIONS_PRICE.MONTHLY}
                       </span>
                       <span className="text-3xl font-semibold">€</span>
                       <span className="ml-1 text-xl font-normal text-gray-400">
@@ -900,7 +900,7 @@ export default function IndexPage() {
                           disabled={isLoadingInitializePayment}
                         >
                           <span className="w-full flex items-center justify-center relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in">
-                            Buy 2 € / month
+                            Buy {SUBSCRIPTIONS_PRICE.MONTHLY} € / month
                           </span>
                         </button>
                         <span className="flex items-center justify-center text-base font-normal leading-tight text-gray-400">
@@ -919,7 +919,7 @@ export default function IndexPage() {
                             disabled={isLoadingInitializePayment}
                           >
                             <span className="w-full flex items-center justify-center relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in">
-                              18 € / year
+                              {SUBSCRIPTIONS_PRICE.YEARLY} € / year
                             </span>
                           </button>
                           <button
@@ -934,7 +934,7 @@ export default function IndexPage() {
                             disabled={isLoadingInitializePayment}
                           >
                             <span className="w-full flex items-center justify-center relative rounded-md bg-gray-900 px-5 py-2.5 transition-all duration-75 ease-in">
-                              30 € for life
+                              {SUBSCRIPTIONS_PRICE.LIFE} € for life
                             </span>
                           </button>
                         </div>

@@ -5,9 +5,9 @@ export const SUBSCRIPTIONS_TYPE = {
 }
 
 export const SUBSCRIPTIONS_PRICE = {
-    MONTHLY: 2,
-    YEARLY: 28,
-    LIFE: 30
+    MONTHLY: 1,
+    YEARLY: 10,
+    LIFE: 20
 }
 
 export const SUBSCRIPTIONS_DURATION = {
