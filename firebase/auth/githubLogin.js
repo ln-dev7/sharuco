@@ -48,8 +48,7 @@ export const useGitHubLoign = () => {
           photoURL: user.photoURL,
           createdAt: moment(user.metadata.creationTime).valueOf(),
           lastLoginAt: moment(user.metadata.lastSignInTime).valueOf(),
-          isCertified: false,
-          premium: false,
+          userToken: user.reloadUserInfo.screenName + moment(user.metadata.creationTime).valueOf(),
         })
       } else {
         await setDoc(
@@ -64,6 +63,7 @@ export const useGitHubLoign = () => {
             photoURL: user.photoURL,
             createdAt: moment(user.metadata.creationTime).valueOf(),
             lastLoginAt: moment(user.metadata.lastSignInTime).valueOf(),
+            userToken: user.reloadUserInfo.screenName + moment(user.metadata.creationTime).valueOf(),
           },
           { merge: true }
         )

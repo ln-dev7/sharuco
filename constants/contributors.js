@@ -9,9 +9,4 @@ export const contributors = [
     github: "https://github.com/Sanix-Darker",
     image: "https://avatars.githubusercontent.com/u/22576758?v=4",
   },
-  {
-    name: "mckenziearts",
-    github: "https://github.com/mckenziearts",
-    image: "https://avatars.githubusercontent.com/u/14105989?v=4",
-  },
 ]

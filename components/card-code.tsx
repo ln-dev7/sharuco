@@ -127,6 +127,9 @@ export default function CardCode({
       favoris: favorisInit.includes(pseudo)
         ? favorisInit.filter((item) => item !== pseudo)
         : [...favorisInit, pseudo],
+      favorisCount: favorisInit.includes(pseudo)
+        ? favorisInit.filter((item) => item !== pseudo).length
+        : [...favorisInit, pseudo].length,
     }
 
     updateCodeDocument({ id, updatedCodeData })
@@ -358,7 +361,7 @@ export default function CardCode({
             </span>
             {dataAuthor && dataAuthor.exists && (
               <span>
-                {dataAuthor.data.isCertified && (
+                {dataAuthor.data.premium && (
                   <Verified className="h-4 w-4 text-green-500" />
                 )}
               </span>
