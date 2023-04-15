@@ -12,17 +12,16 @@ import {
   import { useQuery } from "react-query"
   
   import firebase_app from "../config"
+import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes.js"
   
   const db = getFirestore(firebase_app)
-  
-  const PAGE_SIZE = 15
   
   const getIsPrivateCodeWithPagination = async (isPrivate, lastDoc) => {
     let codesQuery = query(
       collection(db, "codes"),
       where("isPrivate", "==", isPrivate),
       orderBy("createdAt", "desc"),
-      limit(PAGE_SIZE)
+      limit(NBR_OF_CODES_PER_PAGE)
     )
   
     if (lastDoc) {
@@ -31,7 +30,7 @@ import {
         where("isPrivate", "==", isPrivate),
         orderBy("createdAt", "desc"),
         startAfter(lastDoc),
-        limit(PAGE_SIZE)
+        limit(NBR_OF_CODES_PER_PAGE)
       )
     }
   

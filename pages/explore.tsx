@@ -15,6 +15,7 @@ import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
+import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes.js"
 
 export default function Explore() {
   const { user } = useAuthContext()
@@ -54,7 +55,7 @@ export default function Explore() {
       await getIsPrivateCodeWithPagination(false, lastDocc)
     setLastDocc(newLastDoc)
     setCurrentData([...currentData, ...collections])
-    if (collections.length < 15) {
+    if (collections.length < NBR_OF_CODES_PER_PAGE) {
       setHasMore(false)
     }
   }
@@ -113,7 +114,7 @@ export default function Explore() {
               dataLength={currentData.length}
               next={fetchMorePublicCodes}
               hasMore={!isLoadingPublicCodes && hasMore}
-              loader={currentData.length >= 15 && <Loader />}
+              loader={currentData.length >= NBR_OF_CODES_PER_PAGE && <Loader />}
               className="scrollbar-hide"
             >
               <ResponsiveMasonry
