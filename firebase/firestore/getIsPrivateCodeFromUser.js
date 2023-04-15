@@ -16,7 +16,8 @@ const getIsPrivateCodeFromUser = async (isPrivate, userId) => {
     query(
       collection(db, "codes"),
       where("isPrivate", "==", isPrivate),
-      where("idAuthor", "==", userId)
+      where("idAuthor", "==", userId),
+      
     )
   )
   const collections = querySnapshot.docs.map((doc) => {

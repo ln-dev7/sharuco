@@ -114,9 +114,6 @@ export default function Dashboard() {
                 >
                   <Masonry gutter="1rem">
                     {dataCodes
-                      .sort((a, b) => {
-                        return b.createdAt - a.createdAt
-                      })
                       .map(
                         (code: {
                           id: string
@@ -171,9 +168,6 @@ export default function Dashboard() {
               >
                 <Masonry gutter="1rem">
                   {dataUsers
-                    .sort((a, b) => {
-                      return b.createdAt - a.createdAt
-                    })
                     .map(
                       (dataUser: {
                         pseudo: string

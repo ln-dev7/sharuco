@@ -447,36 +447,32 @@ export default function Dashboard() {
                   className="w-full"
                 >
                   <Masonry gutter="1rem">
-                    {dataCodes
-                      .sort((a, b) => {
-                        return b.createdAt - a.createdAt
-                      })
-                      .map(
-                        (code: {
-                          id: string
-                          idAuthor: string
-                          language: string
-                          code: string
-                          description: string
-                          tags: string[]
-                          favoris: string[]
-                          isPrivate: boolean
-                          comments: any
-                        }) => (
-                          <CardCodeAdmin
-                            key={code.id}
-                            id={code.id}
-                            idAuthor={code.idAuthor}
-                            language={code.language}
-                            code={code.code}
-                            description={code.description}
-                            tags={code.tags}
-                            favoris={code.favoris}
-                            isPrivate={code.isPrivate}
-                            comments={code.comments}
-                          />
-                        )
-                      )}
+                    {dataCodes.map(
+                      (code: {
+                        id: string
+                        idAuthor: string
+                        language: string
+                        code: string
+                        description: string
+                        tags: string[]
+                        favoris: string[]
+                        isPrivate: boolean
+                        comments: any
+                      }) => (
+                        <CardCodeAdmin
+                          key={code.id}
+                          id={code.id}
+                          idAuthor={code.idAuthor}
+                          language={code.language}
+                          code={code.code}
+                          description={code.description}
+                          tags={code.tags}
+                          favoris={code.favoris}
+                          isPrivate={code.isPrivate}
+                          comments={code.comments}
+                        />
+                      )
+                    )}
                   </Masonry>
                 </ResponsiveMasonry>
                 {dataPublicCodes.length == 0 && (
@@ -504,38 +500,34 @@ export default function Dashboard() {
                   className="w-full"
                 >
                   <Masonry gutter="1rem">
-                    {dataPublicCodes
-                      .sort((a, b) => {
-                        return b.createdAt - a.createdAt
-                      })
-                      .map(
-                        (code: {
-                          id: string
-                          idAuthor: string
-                          language: string
-                          code: string
-                          description: string
-                          tags: string[]
-                          favoris: string[]
-                          isPrivate: boolean
-                          currentUser: any
-                          comments: any
-                        }) => (
-                          <CardCode
-                            key={code.id}
-                            id={code.id}
-                            idAuthor={code.idAuthor}
-                            language={code.language}
-                            code={code.code}
-                            description={code.description}
-                            tags={code.tags}
-                            favoris={code.favoris}
-                            isPrivate={code.isPrivate}
-                            currentUser={dataUser?.data}
-                            comments={code.comments}
-                          />
-                        )
-                      )}
+                    {dataPublicCodes.map(
+                      (code: {
+                        id: string
+                        idAuthor: string
+                        language: string
+                        code: string
+                        description: string
+                        tags: string[]
+                        favoris: string[]
+                        isPrivate: boolean
+                        currentUser: any
+                        comments: any
+                      }) => (
+                        <CardCode
+                          key={code.id}
+                          id={code.id}
+                          idAuthor={code.idAuthor}
+                          language={code.language}
+                          code={code.code}
+                          description={code.description}
+                          tags={code.tags}
+                          favoris={code.favoris}
+                          isPrivate={code.isPrivate}
+                          currentUser={dataUser?.data}
+                          comments={code.comments}
+                        />
+                      )
+                    )}
                   </Masonry>
                 </ResponsiveMasonry>
                 {dataPublicCodes.length == 0 && (
@@ -563,38 +555,34 @@ export default function Dashboard() {
                   className="w-full"
                 >
                   <Masonry gutter="1rem">
-                    {dataPrivateCodes
-                      .sort((a, b) => {
-                        return b.createdAt - a.createdAt
-                      })
-                      .map(
-                        (code: {
-                          id: string
-                          idAuthor: string
-                          language: string
-                          code: string
-                          description: string
-                          tags: string[]
-                          favoris: string[]
-                          isPrivate: boolean
-                          currentUser: any
-                          comments: any
-                        }) => (
-                          <CardCode
-                            key={code.id}
-                            id={code.id}
-                            idAuthor={code.idAuthor}
-                            language={code.language}
-                            code={code.code}
-                            description={code.description}
-                            tags={code.tags}
-                            favoris={code.favoris}
-                            isPrivate={code.isPrivate}
-                            currentUser={dataUser?.data}
-                            comments={code.comments}
-                          />
-                        )
-                      )}
+                    {dataPrivateCodes.map(
+                      (code: {
+                        id: string
+                        idAuthor: string
+                        language: string
+                        code: string
+                        description: string
+                        tags: string[]
+                        favoris: string[]
+                        isPrivate: boolean
+                        currentUser: any
+                        comments: any
+                      }) => (
+                        <CardCode
+                          key={code.id}
+                          id={code.id}
+                          idAuthor={code.idAuthor}
+                          language={code.language}
+                          code={code.code}
+                          description={code.description}
+                          tags={code.tags}
+                          favoris={code.favoris}
+                          isPrivate={code.isPrivate}
+                          currentUser={dataUser?.data}
+                          comments={code.comments}
+                        />
+                      )
+                    )}
                   </Masonry>
                 </ResponsiveMasonry>
                 {dataPrivateCodes.length == 0 && (
@@ -622,38 +610,34 @@ export default function Dashboard() {
                   className="w-full"
                 >
                   <Masonry gutter="1rem">
-                    {dataFavoriteCodes
-                      .sort((a, b) => {
-                        return b.createdAt - a.createdAt
-                      })
-                      .map(
-                        (code: {
-                          id: string
-                          idAuthor: string
-                          language: string
-                          code: string
-                          description: string
-                          tags: string[]
-                          favoris: string[]
-                          isPrivate: boolean
-                          currentUser: any
-                          comments: any
-                        }) => (
-                          <CardCode
-                            key={code.id}
-                            id={code.id}
-                            idAuthor={code.idAuthor}
-                            language={code.language}
-                            code={code.code}
-                            description={code.description}
-                            tags={code.tags}
-                            favoris={code.favoris}
-                            isPrivate={code.isPrivate}
-                            currentUser={dataUser?.data}
-                            comments={code.comments}
-                          />
-                        )
-                      )}
+                    {dataFavoriteCodes.map(
+                      (code: {
+                        id: string
+                        idAuthor: string
+                        language: string
+                        code: string
+                        description: string
+                        tags: string[]
+                        favoris: string[]
+                        isPrivate: boolean
+                        currentUser: any
+                        comments: any
+                      }) => (
+                        <CardCode
+                          key={code.id}
+                          id={code.id}
+                          idAuthor={code.idAuthor}
+                          language={code.language}
+                          code={code.code}
+                          description={code.description}
+                          tags={code.tags}
+                          favoris={code.favoris}
+                          isPrivate={code.isPrivate}
+                          currentUser={dataUser?.data}
+                          comments={code.comments}
+                        />
+                      )
+                    )}
                   </Masonry>
                 </ResponsiveMasonry>
                 {dataFavoriteCodes.length == 0 && (

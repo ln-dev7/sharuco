@@ -2,6 +2,7 @@ import {
   collection,
   getDocs,
   getFirestore,
+  orderBy,
   query,
   where,
 } from "firebase/firestore"
@@ -13,7 +14,11 @@ const db = getFirestore(firebase_app)
 
 const getIsPrivateCodes = async (isPrivate) => {
   const querySnapshot = await getDocs(
-    query(collection(db, "codes"), where("isPrivate", "==", isPrivate))
+    query(
+      collection(db, "codes"),
+      where("isPrivate", "==", isPrivate),
+      orderBy("createdAt", "desc")
+    )
   )
   const collections = querySnapshot.docs.map((doc) => {
     const data = doc.data()

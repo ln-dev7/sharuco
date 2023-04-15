@@ -2,6 +2,7 @@ import {
   collection,
   getDocs,
   getFirestore,
+  orderBy,
   query,
   where,
 } from "firebase/firestore"
@@ -13,7 +14,11 @@ const db = getFirestore(firebase_app)
 
 const getFavoriteCode = async (userId) => {
   const querySnapshot = await getDocs(
-    query(collection(db, "codes"), where("favoris", "array-contains", userId))
+    query(
+      collection(db, "codes"),
+      where("favoris", "array-contains", userId),
+      orderBy("createdAt", "desc")
+    )
   )
   const collections = querySnapshot.docs.map((doc) => {
     const data = doc.data()
