@@ -15,7 +15,16 @@ import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCo
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
 import hljs from "highlight.js"
-import { Eye, EyeOff, Loader2, Plus, Settings, Star, User } from "lucide-react"
+import {
+  Eye,
+  EyeOff,
+  FileCog,
+  Loader2,
+  Plus,
+  Settings,
+  Star,
+  User,
+} from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
 import toast, { Toaster } from "react-hot-toast"
@@ -44,6 +53,7 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
+import copyToClipboard from "@/utils/copyToClipboard.js"
 
 export default function Dashboard() {
   const router = useRouter()
@@ -61,6 +71,16 @@ export default function Dashboard() {
         role="alert"
       >
         Your code has been added successfully !
+      </div>
+    ))
+
+  const notifyUserTokenCopied = () =>
+    toast.custom((t) => (
+      <div
+        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+        role="alert"
+      >
+        Your user token has been copied to your clipboard !
       </div>
     ))
 
@@ -368,13 +388,25 @@ export default function Dashboard() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <Link
-            href={`/${pseudo}`}
-            className={buttonVariants({ size: "lg", variant: "outline" })}
-          >
-            <User className="mr-2 h-4 w-4" />
-            Your profile
-          </Link>
+          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
+            <Link
+              href={`/${pseudo}`}
+              className={buttonVariants({ size: "lg", variant: "outline" })}
+            >
+              <User className="mr-2 h-4 w-4" />
+              Your profile
+            </Link>
+            <button
+              className={buttonVariants({ size: "lg", variant: "subtle" })}
+              onClick={() => {
+                copyToClipboard(dataUser?.data?.userToken)
+                notifyUserTokenCopied()
+              }}
+            >
+              <FileCog className="mr-2 h-4 w-4" />
+              Copy your userToken
+            </button>
+          </div>
         </div>
         <Separator className="my-4" />
         <Tabs defaultValue="manage-code" className="w-full">
