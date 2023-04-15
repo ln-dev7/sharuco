@@ -1,9 +1,10 @@
 "use client"
 
 import Head from "next/head"
+import { NBR_OF_POPULAR_CODES } from "@/constants/nbr-codes.js"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
+import { useGetPopularCodes } from "@/firebase/firestore/getPopularCodes.js"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import CardCode from "@/components/card-code"
@@ -22,10 +23,11 @@ export default function Popular() {
   } = useDocument(pseudo, "users")
 
   const {
-    isLoading: isLoadingPublicCodes,
-    isError: isErrorPublicCodes,
-    data: dataPublicCodes,
-  } = useGetIsPrivateCodes(false)
+    isLoading: isLoadingPopularCodes,
+    isError: isErrorPopularCodes,
+    data: dataPopularCodes,
+  } = useGetPopularCodes()
+
   return (
     <Layout>
       <Head>
@@ -65,17 +67,17 @@ export default function Popular() {
       <section className="container grid items-center gap-8 pt-6 pb-8 md:py-10">
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
-            Discover the 20 most popular codes.
+            Discover the {NBR_OF_POPULAR_CODES} most popular codes.
           </h1>
           {/* <SearchCode
-            dataCodes={dataPublicCodes}
-            isLoadingCodes={isLoadingPublicCodes}
-            isErrorCodes={isErrorPublicCodes}
+            dataCodes={dataPopularCodes}
+            isLoadingCodes={isLoadingPopularCodes}
+            isErrorCodes={isErrorPopularCodes}
           /> */}
         </div>
         <div className="">
-          {isLoadingPublicCodes && <Loader />}
-          {dataPublicCodes && (
+          {isLoadingPopularCodes && <Loader />}
+          {dataPopularCodes && (
             <ResponsiveMasonry
               columnsCountBreakPoints={{
                 659: 1,
@@ -86,30 +88,25 @@ export default function Popular() {
               className="w-full"
             >
               <Masonry gutter="1rem">
-                {dataPublicCodes
-                  .sort((a, b) => {
-                    return b.favoris.length - a.favoris.length
-                  })
-                  .slice(0, 20)
-                  .map((code) => (
-                    <CardCode
-                      key={code.id}
-                      id={code.id}
-                      idAuthor={code.idAuthor}
-                      language={code.language}
-                      code={code.code}
-                      description={code.description}
-                      tags={code.tags}
-                      favoris={code.favoris}
-                      isPrivate={code.isPrivate}
-                      currentUser={dataUser?.data}
-                      comments={code.comments}
-                    />
-                  ))}
+                {dataPopularCodes.map((code) => (
+                  <CardCode
+                    key={code.id}
+                    id={code.id}
+                    idAuthor={code.idAuthor}
+                    language={code.language}
+                    code={code.code}
+                    description={code.description}
+                    tags={code.tags}
+                    favoris={code.favoris}
+                    isPrivate={code.isPrivate}
+                    currentUser={dataUser?.data}
+                    comments={code.comments}
+                  />
+                ))}
               </Masonry>
             </ResponsiveMasonry>
           )}
-          {isErrorPublicCodes && <Error />}
+          {isErrorPopularCodes && <Error />}
         </div>
       </section>
     </Layout>

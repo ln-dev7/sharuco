@@ -196,6 +196,7 @@ export default function CardCodeAdmin({
       language: string
       tags: string[]
       favoris?: string[]
+      favorisCount?: number
       comments?: any[]
     } = {
       code: linearCode,
@@ -205,6 +206,10 @@ export default function CardCodeAdmin({
       tags: tabTabs,
       favoris:
         isPrivateUpdate === true && isPrivate === false ? [] : favorisInit,
+      favorisCount:
+        isPrivateUpdate === true && isPrivate === false
+          ? 0
+          : favorisInit.length,
       comments:
         isPrivateUpdate === true && isPrivate === false ? [] : commentsInit,
     }
