@@ -27,7 +27,7 @@ export default function SearchCode({ dataCodes, isLoadingCodes, isErrorCodes }: 
     codes: dataCodesWithDescription,
   } = useGetCodesByDescription("This code generates random")
 
-  console.log(dataCodesWithDescription)
+ console.log(dataCodesWithDescription)
 
   const handleTermChange = (event) => {
     setSearchTerm(event.target.value)

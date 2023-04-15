@@ -65,13 +65,10 @@ export default function IndexPage() {
           },
         }
       )
-
-      console.log("Data", response.data)
       const paymentStatus = response.data.transaction.status
       const paymentDescription = response.data.transaction.description
 
       if (paymentStatus === PAYMENT_STATUS.COMPLETE) {
-        console.log("payment completed")
         if (paymentDescription === SUBSCRIPTIONS_TYPE.MONTHLY) {
           updateUserDocument({
             pseudo,
@@ -107,7 +104,7 @@ export default function IndexPage() {
         }
         localStorage.removeItem("transaction-reference")
       } else {
-        console.log("payment not completed")
+        // console.log("payment not completed")
       }
     } catch (error) {
       setIsErrorPaymentStatus(false)
