@@ -31,8 +31,6 @@ export const useGitHubLoign = () => {
 
       const user = res.user
 
-      console.log(user)
-
       const documentRef = doc(
         collection(db, "users"),
         user.reloadUserInfo.screenName
