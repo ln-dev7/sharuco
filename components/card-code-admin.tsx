@@ -7,7 +7,7 @@ import {
   allLanguages,
   getLanguageColor,
   languagesName,
-} from "@/contants/languages"
+} from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
@@ -620,7 +620,7 @@ export default function CardCodeAdmin({
             </span>
             {dataUser && dataUser.exists && (
               <span>
-                {dataUser.data.isCertified && (
+                {dataUser.data.premium && (
                   <Verified className="h-4 w-4 text-green-500" />
                 )}
               </span>

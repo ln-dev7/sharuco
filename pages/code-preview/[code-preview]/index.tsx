@@ -3,7 +3,7 @@
 import Head from "next/head"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { superAdmin } from "@/contants/super-admin"
+import { SUPER_ADMIN } from "@/constants/super-admin"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -113,7 +113,7 @@ export default function CodePreview() {
           comment: comment,
           createdAt: moment().valueOf(),
           photoURL: dataUser?.data.photoURL,
-          isCertified: dataUser?.data.isCertified,
+          premium: dataUser?.data.premium,
           code: linearCode,
         },
       ],
@@ -200,7 +200,7 @@ export default function CodePreview() {
             >
               <Masonry>
                 {dataUser?.data.pseudo === dataCode.data.idAuthor ||
-                superAdmin.includes(dataUser?.data.pseudo) ? (
+                SUPER_ADMIN.includes(dataUser?.data.pseudo) ? (
                   <CardCodeAdmin
                     key={searchParams.get("code-preview")}
                     id={searchParams.get("code-preview")}
@@ -230,6 +230,11 @@ export default function CodePreview() {
                 )}
               </Masonry>
             </ResponsiveMasonry>
+            <p className="mb-6">
+              <span className="text-gray-500 font-bold text-sm dark:text-gray-400">
+                Published {moment(dataCode.data.createdAt).fromNow()}
+              </span>
+            </p>
             <div className="flex w-full flex-col items-start gap-2">
               <div className="flex w-full flex-col items-start">
                 <h2 className="text-2xl font-bold">
@@ -275,7 +280,7 @@ export default function CodePreview() {
                                   {comment.idAuthor}{" "}
                                 </span>
                                 <span>
-                                  {comment.isCertified && (
+                                  {comment.premium && (
                                     <Verified className="h-4 w-4 text-green-500" />
                                   )}
                                 </span>
