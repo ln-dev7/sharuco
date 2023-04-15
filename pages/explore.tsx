@@ -1,9 +1,14 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Head from "next/head"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetIsPrivateCodes } from "@/firebase/firestore/getIsPrivateCodes"
+import {
+  getIsPrivateCodeWithPagination,
+  useGetIsPrivateCodeWithPagination,
+} from "@/firebase/firestore/getIsPrivateCodeWithPagination"
+import InfiniteScroll from "react-infinite-scroll-component"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import CardCode from "@/components/card-code"
@@ -21,11 +26,38 @@ export default function Explore() {
     isError: isErrorUser,
   } = useDocument(pseudo, "users")
 
+  // const {
+  //   isLoading: isLoadingPublicCodes,
+  //   isError: isErrorPublicCodes,
+  //   data: dataPublicCodes,
+  // } = useGetIsPrivateCodes(false)
+
+  const [currentData, setCurrentData] = useState([])
+  const [lastDocc, setLastDocc] = useState(null)
+  const [hasMore, setHasMore] = useState(true)
+
   const {
     isLoading: isLoadingPublicCodes,
     isError: isErrorPublicCodes,
-    data: dataPublicCodes,
-  } = useGetIsPrivateCodes(false)
+    data,
+  } = useGetIsPrivateCodeWithPagination(false)
+
+  useEffect(() => {
+    if (data) {
+      setCurrentData(data.collections)
+      setLastDocc(data.lastDoc)
+    }
+  }, [data])
+
+  const fetchMorePublicCodes = async () => {
+    const { collections, lastDoc: newLastDoc } =
+      await getIsPrivateCodeWithPagination(false, lastDocc)
+    setLastDocc(newLastDoc)
+    setCurrentData([...currentData, ...collections])
+    if (collections.length < 15) {
+      setHasMore(false)
+    }
+  }
 
   return (
     <Layout>
@@ -76,22 +108,25 @@ export default function Explore() {
         </div>
         <div className="">
           {isLoadingPublicCodes && <Loader />}
-          {dataPublicCodes && (
-            <ResponsiveMasonry
-              columnsCountBreakPoints={{
-                659: 1,
-                660: 2,
-                720: 2,
-                990: 3,
-              }}
-              className="w-full"
+          {currentData && (
+            <InfiniteScroll
+              dataLength={currentData.length}
+              next={fetchMorePublicCodes}
+              hasMore={!isLoadingPublicCodes && hasMore}
+              loader={currentData.length >= 15 && <Loader />}
+              className="scrollbar-hide"
             >
-              <Masonry gutter="1rem">
-                {dataPublicCodes
-                  .sort((a, b) => {
-                    return b.createdAt - a.createdAt
-                  })
-                  .map(
+              <ResponsiveMasonry
+                columnsCountBreakPoints={{
+                  659: 1,
+                  660: 2,
+                  720: 2,
+                  990: 3,
+                }}
+                className="w-full"
+              >
+                <Masonry gutter="1rem">
+                  {currentData.map(
                     (code: {
                       id: string
                       idAuthor: string
@@ -119,8 +154,9 @@ export default function Explore() {
                       />
                     )
                   )}
-              </Masonry>
-            </ResponsiveMasonry>
+                </Masonry>
+              </ResponsiveMasonry>
+            </InfiniteScroll>
           )}
           {isErrorPublicCodes && <Error />}
         </div>
