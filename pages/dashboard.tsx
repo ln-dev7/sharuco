@@ -12,6 +12,7 @@ import { useGetCodeFromUser } from "@/firebase/firestore/getCodeFromUser"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
+import copyToClipboard from "@/utils/copyToClipboard.js"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
 import hljs from "highlight.js"
@@ -53,7 +54,6 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import copyToClipboard from "@/utils/copyToClipboard.js"
 
 export default function Dashboard() {
   const router = useRouter()
@@ -396,16 +396,18 @@ export default function Dashboard() {
               <User className="mr-2 h-4 w-4" />
               Your profile
             </Link>
-            <button
-              className={buttonVariants({ size: "lg", variant: "subtle" })}
-              onClick={() => {
-                copyToClipboard(dataUser?.data?.userToken)
-                notifyUserTokenCopied()
-              }}
-            >
-              <FileCog className="mr-2 h-4 w-4" />
-              Copy your userToken
-            </button>
+            {dataUser?.data?.userToken ? (
+              <button
+                className={buttonVariants({ size: "lg", variant: "subtle" })}
+                onClick={() => {
+                  copyToClipboard(dataUser?.data?.userToken)
+                  notifyUserTokenCopied()
+                }}
+              >
+                <FileCog className="mr-2 h-4 w-4" />
+                Copy your userToken
+              </button>
+            ) : null}
           </div>
         </div>
         <Separator className="my-4" />
