@@ -127,6 +127,9 @@ export default function CardCode({
       favoris: favorisInit.includes(pseudo)
         ? favorisInit.filter((item) => item !== pseudo)
         : [...favorisInit, pseudo],
+      favorisCount: favorisInit.includes(pseudo)
+        ? favorisInit.filter((item) => item !== pseudo).length
+        : [...favorisInit, pseudo].length,
     }
 
     updateCodeDocument({ id, updatedCodeData })

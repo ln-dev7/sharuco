@@ -179,6 +179,7 @@ export default function Dashboard() {
       tags: tabTabs,
       createdAt: moment().valueOf(),
       favoris: [],
+      favorisCount: 0,
       idAuthor: pseudo,
       comments: [],
     }
