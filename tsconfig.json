@@ -18,6 +18,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "firebase/firestore/updateCodeDocument.jst.jsfirebase/firestore/updateCodeDocument.jsument.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "firebase/firestore/updateCodeDocument.jst.jsfirebase/firestore/updateCodeDocument.jsument.js", "firebase/firestore/getIsPrivateCodes.js", "firebase/firestore/getIsPrivateCodes.js"],
   "exclude": ["node_modules"]
 }

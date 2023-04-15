@@ -29,6 +29,7 @@ const useDeleteDocument = (collectionName) => {
         queryClient.invalidateQueries("codes")
         queryClient.invalidateQueries("documents-codes")
         queryClient.invalidateQueries("documents-users")
+        queryClient.invalidateQueries("popular-codes")
       },
     }
   )
