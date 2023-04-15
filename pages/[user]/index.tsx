@@ -93,7 +93,7 @@ export default function User() {
                   )}
                 </h1>
                 <span className="ml-2">
-                  {data.data.isCertified && (
+                  {data.data.premium && (
                     <Verified className="h-6 w-6 text-green-500" />
                   )}
                 </span>

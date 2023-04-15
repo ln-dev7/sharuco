@@ -1,11 +1,11 @@
 "use client"
 
-import { contributors } from "@/contants/contributors"
+import { contributors } from "@/constants/contributors"
 import {
   allLanguages,
   getLanguageColor,
   languagesName,
-} from "@/contants/languages"
+} from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLoign } from "@/firebase/auth/githubLogin"
 import highlight from "@/utils/highlight"

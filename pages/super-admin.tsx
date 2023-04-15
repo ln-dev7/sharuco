@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 import Head from "next/head"
 import { useRouter } from "next/navigation"
-import { superAdmin } from "@/contants/super-admin"
+import { SUPER_ADMIN } from "@/constants/super-admin"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
@@ -24,7 +24,7 @@ export default function Dashboard() {
   const { user } = useAuthContext()
   const router = useRouter()
   useEffect(() => {
-    if (!user || !superAdmin.includes(user.reloadUserInfo.screenName)) {
+    if (!user || !SUPER_ADMIN.includes(user.reloadUserInfo.screenName)) {
       router.push("/")
     }
   })
