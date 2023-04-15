@@ -87,38 +87,34 @@ export default function Explore() {
               className="w-full"
             >
               <Masonry gutter="1rem">
-                {dataPublicCodes
-                  .sort((a, b) => {
-                    return b.createdAt - a.createdAt
-                  })
-                  .map(
-                    (code: {
-                      id: string
-                      idAuthor: string
-                      language: string
-                      code: string
-                      description: string
-                      tags: string[]
-                      favoris: string[]
-                      isPrivate: boolean
-                      currentUser: any
-                      comments: any
-                    }) => (
-                      <CardCode
-                        key={code.id}
-                        id={code.id}
-                        idAuthor={code.idAuthor}
-                        language={code.language}
-                        code={code.code}
-                        description={code.description}
-                        tags={code.tags}
-                        favoris={code.favoris}
-                        isPrivate={code.isPrivate}
-                        currentUser={dataUser?.data}
-                        comments={code.comments}
-                      />
-                    )
-                  )}
+                {dataPublicCodes.map(
+                  (code: {
+                    id: string
+                    idAuthor: string
+                    language: string
+                    code: string
+                    description: string
+                    tags: string[]
+                    favoris: string[]
+                    isPrivate: boolean
+                    currentUser: any
+                    comments: any
+                  }) => (
+                    <CardCode
+                      key={code.id}
+                      id={code.id}
+                      idAuthor={code.idAuthor}
+                      language={code.language}
+                      code={code.code}
+                      description={code.description}
+                      tags={code.tags}
+                      favoris={code.favoris}
+                      isPrivate={code.isPrivate}
+                      currentUser={dataUser?.data}
+                      comments={code.comments}
+                    />
+                  )
+                )}
               </Masonry>
             </ResponsiveMasonry>
           )}

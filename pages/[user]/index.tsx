@@ -121,9 +121,6 @@ export default function User() {
                 >
                   <Masonry gutter="1rem">
                     {dataPublicCodes
-                      .sort((a, b) => {
-                        return b.createdAt - a.createdAt
-                      })
                       .map(
                         (code: {
                           id: string
