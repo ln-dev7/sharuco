@@ -123,8 +123,8 @@ export default function Dashboard() {
 
   const [checkboxOn, setCheckboxOn] = useState(false)
   const [gistCheckboxOn, setGistCheckboxOn] = useState(false)
-  const [githubGistInfos, setGithubGistInfos] = useState(null)
-  const [addOnGithubGist, setAddOnGithubGist] = useState(false)
+  const [isLoadingAddOnGithubGist, setIsLoadingAddOnGithubGist] =
+    useState(false)
 
   const schema = yup.object().shape({
     code: yup.string().required(),
@@ -183,7 +183,7 @@ export default function Dashboard() {
 
     if (isGithubGist && dataUser?.data?.personalAccessToken) {
       try {
-        setAddOnGithubGist(true)
+        setIsLoadingAddOnGithubGist(true)
         const response = await fetch("https://api.github.com/gists", {
           method: "POST",
           headers: {
@@ -192,9 +192,9 @@ export default function Dashboard() {
           },
           body: JSON.stringify({
             description: description,
-            public: !!isPrivate,
+            public: !isPrivate,
             files: {
-              [`index.${extension}`]: {
+              [`sharuco-index${extension}`]: {
                 content: indentCode(linearCode),
               },
             },
@@ -203,28 +203,60 @@ export default function Dashboard() {
         const data = await response.json()
         const gistUrl = data.html_url
         const id = data.id
-        setGithubGistInfos({ gistUrl, id })
+        copyToClipboard(gistUrl)
+
+        toast.custom(
+          (t) => (
+            <div
+              className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+              role="alert"
+            >
+              Your code has been added on your GitHub Gist !
+              <br />
+              Link of your has been copied to your clipboard !
+            </div>
+          ),
+          {
+            duration: 3500,
+          }
+        )
+
+        const newDocument = {
+          code: linearCode,
+          description: description,
+          isPrivate: !!isPrivate,
+          language: language.toLowerCase(),
+          tags: tabTabs,
+          createdAt: moment().valueOf(),
+          favoris: [],
+          favorisCount: 0,
+          idAuthor: pseudo,
+          comments: [],
+          githubGistInfos: { gistUrl, id },
+        }
+
+        createDocument(newDocument)
       } catch (error) {
+        console.log(error)
       } finally {
-        setAddOnGithubGist(false)
+        setIsLoadingAddOnGithubGist(false)
       }
-    }
+    } else {
+      const newDocument = {
+        code: linearCode,
+        description: description,
+        isPrivate: !!isPrivate,
+        language: language.toLowerCase(),
+        tags: tabTabs,
+        createdAt: moment().valueOf(),
+        favoris: [],
+        favorisCount: 0,
+        idAuthor: pseudo,
+        comments: [],
+      }
 
-    const newDocument = {
-      code: linearCode,
-      description: description,
-      isPrivate: !!isPrivate,
-      language: language.toLowerCase(),
-      tags: tabTabs,
-      createdAt: moment().valueOf(),
-      favoris: [],
-      favorisCount: 0,
-      idAuthor: pseudo,
-      comments: [],
-      githubGistInfos: githubGistInfos,
+      createDocument(newDocument)
     }
-
-    createDocument(newDocument)
 
     reset({
       code: "",
@@ -423,7 +455,7 @@ export default function Dashboard() {
                         checked={gistCheckboxOn}
                         onChange={() => setGistCheckboxOn(!gistCheckboxOn)}
                       />
-                      <Label htmlFor="isPrivate">
+                      <Label htmlFor="isGithubGist">
                         Do you also want to publish this code on your Github
                         Gist ?{" "}
                         {gistCheckboxOn ? (
@@ -458,10 +490,14 @@ export default function Dashboard() {
                   className={cn(
                     "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                   )}
-                  disabled={isLoading}
-                  onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
+                  disabled={isLoading || isLoadingAddOnGithubGist}
+                  onClick={
+                    !(isLoading || isLoadingAddOnGithubGist)
+                      ? handleSubmit(onSubmit)
+                      : undefined
+                  }
                 >
-                  {isLoading && (
+                  {(isLoading || isLoadingAddOnGithubGist) && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   Add
