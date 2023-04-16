@@ -125,6 +125,7 @@ export default function Dashboard() {
   const [gistCheckboxOn, setGistCheckboxOn] = useState(false)
   const [isLoadingAddOnGithubGist, setIsLoadingAddOnGithubGist] =
     useState(false)
+  const [isErrorAddOnGithubGist, setIsErrorAddOnGithubGist] = useState(false)
 
   const schema = yup.object().shape({
     code: yup.string().required(),
@@ -184,6 +185,7 @@ export default function Dashboard() {
     if (isGithubGist && dataUser?.data?.personalAccessToken) {
       try {
         setIsLoadingAddOnGithubGist(true)
+        setIsErrorAddOnGithubGist(false)
         const response = await fetch("https://api.github.com/gists", {
           method: "POST",
           headers: {
@@ -237,7 +239,7 @@ export default function Dashboard() {
 
         createDocument(newDocument)
       } catch (error) {
-        console.log(error)
+        setIsErrorAddOnGithubGist(true)
       } finally {
         setIsLoadingAddOnGithubGist(false)
       }
@@ -477,7 +479,7 @@ export default function Dashboard() {
                       </Link>
                     </div>
                   )}
-                  {isError && (
+                  {(isError || isErrorAddOnGithubGist) && (
                     <p className="pt-4 text-sm font-bold text-red-500">
                       An error has occurred, please try again later.
                     </p>
