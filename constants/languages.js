@@ -37,8 +37,16 @@ export const allLanguages = [
   { name: "XML", color: "#555555", extension: ".xml" },
   { name: "XSLT", color: "#EB8CEB", extension: ".xslt" },
   { name: "YAML", color: "#cb171e", extension: ".yaml" },
-  { name: "Other", color: "#cccccc", extension: "" },
+  { name: "Other", color: "#cccccc", extension: ".txt" },
 ]
+
+export const getExtensionByName = (name) => {
+  const lowercaseName = name.toLowerCase()
+  const language = allLanguages.find(
+    (lang) => lang.name.toLowerCase() === lowercaseName
+  )
+  return language ? language.extension : null
+}
 
 export const languagesName = allLanguages.map((language) =>
   language.name.toLocaleLowerCase()

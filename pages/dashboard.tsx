@@ -4,7 +4,11 @@ import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { allLanguages, languagesName } from "@/constants/languages"
+import {
+  allLanguages,
+  getExtensionByName,
+  languagesName,
+} from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
@@ -13,6 +17,7 @@ import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import copyToClipboard from "@/utils/copyToClipboard.js"
+import indentCode from "@/utils/indentCode.js"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
 import hljs from "highlight.js"
@@ -56,6 +61,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 
 export default function Dashboard() {
+  const { user } = useAuthContext()
   const router = useRouter()
   useEffect(() => {
     if (!user) {
@@ -83,8 +89,6 @@ export default function Dashboard() {
         Your user token has been copied to your clipboard !
       </div>
     ))
-
-  const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
 
   const {
@@ -118,6 +122,9 @@ export default function Dashboard() {
   } = useGetFavoriteCode(pseudo)
 
   const [checkboxOn, setCheckboxOn] = useState(false)
+  const [gistCheckboxOn, setGistCheckboxOn] = useState(false)
+  const [githubGistInfos, setGithubGistInfos] = useState(null)
+  const [addOnGithubGist, setAddOnGithubGist] = useState(false)
 
   const schema = yup.object().shape({
     code: yup.string().required(),
@@ -131,6 +138,7 @@ export default function Dashboard() {
         (val) => !val || /^[a-zA-Z, ]*$/.test(val)
       ),
     isPrivate: yup.boolean(),
+    isGithubGist: yup.boolean(),
   })
 
   const {
@@ -162,13 +170,44 @@ export default function Dashboard() {
     useCreateDocument("codes")
 
   const onSubmit = async (data) => {
-    const { code, description, language, tags, isPrivate } = data
+    const { code, description, language, tags, isPrivate, isGithubGist } = data
     const linearCode = linearizeCode(code)
     const tabTabs = tags
       ? tags.split(",").map((word) => word.trim().toLowerCase())
       : []
     if (tabTabs[tabTabs.length - 1] === "") {
       tabTabs.pop()
+    }
+
+    const extension = getExtensionByName(language)
+
+    if (isGithubGist && dataUser?.data?.personalAccessToken) {
+      try {
+        setAddOnGithubGist(true)
+        const response = await fetch("https://api.github.com/gists", {
+          method: "POST",
+          headers: {
+            Authorization: `token ${dataUser?.data?.personalAccessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            description: description,
+            public: !!isPrivate,
+            files: {
+              [`index.${extension}`]: {
+                content: indentCode(linearCode),
+              },
+            },
+          }),
+        })
+        const data = await response.json()
+        const gistUrl = data.html_url
+        const id = data.id
+        setGithubGistInfos({ gistUrl, id })
+      } catch (error) {
+      } finally {
+        setAddOnGithubGist(false)
+      }
     }
 
     const newDocument = {
@@ -182,6 +221,7 @@ export default function Dashboard() {
       favorisCount: 0,
       idAuthor: pseudo,
       comments: [],
+      githubGistInfos: githubGistInfos,
     }
 
     createDocument(newDocument)
@@ -192,8 +232,10 @@ export default function Dashboard() {
       language: "",
       tags: "",
       isPrivate: false,
+      isGithubGist: false,
     })
     setCheckboxOn(false)
+    setGistCheckboxOn(false)
   }
 
   useEffect(() => {
@@ -253,6 +295,15 @@ export default function Dashboard() {
             </span>{" "}
             section.
           </p>
+
+          <Link
+            href="/add-personal-access-token"
+            className="mt-2 inline-flex items-center rounded-full border border-green-200 bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green-800 dark:bg-gray-800 dark:text-green-300 dark:border-none"
+          >
+            <span className="mr-1 h-2 w-2 shrink-0 rounded-full bg-green-500"></span>
+            To be able to add code to your Gitthub Gist, make sure you follow
+            this guide.
+          </Link>
         </div>
         <div className="flex flex-col justify-between gap-2 sm:flex-row">
           <AlertDialog>
@@ -358,13 +409,42 @@ export default function Dashboard() {
                       )}
                     </Label>
                   </div>
-                  {/* <div
-                    className="mt-4 rounded-lg bg-yellow-50 p-4 text-sm text-yellow-800 dark:bg-gray-800 dark:text-yellow-300"
-                    role="alert"
-                  >
-                    <span className="font-medium">Warning alert!</span> :
-                    Currently the modification of a code are not available
-                  </div> */}
+                  {dataUser?.data?.personalAccessToken ? (
+                    <div className="mt-4 flex items-center gap-4">
+                      <input
+                        type="checkbox"
+                        {...register("isGithubGist")}
+                        name="isGithubGist"
+                        id="isGithubGist"
+                        className={`h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none ring-slate-500
+                           ring-offset-0 focus:ring-slate-400 focus:ring-offset-slate-900 dark:bg-slate-800
+                          ${gistCheckboxOn ? "ring-2" : "ring-0"}
+                          `}
+                        checked={gistCheckboxOn}
+                        onChange={() => setGistCheckboxOn(!gistCheckboxOn)}
+                      />
+                      <Label htmlFor="isPrivate">
+                        Do you also want to publish this code on your Github
+                        Gist ?{" "}
+                        {gistCheckboxOn ? (
+                          <span className="font-bold text-teal-300">Yes</span>
+                        ) : (
+                          <span className="font-bold text-teal-300">No</span>
+                        )}
+                      </Label>
+                    </div>
+                  ) : (
+                    <div
+                      className="mt-4 rounded-lg bg-yellow-50 p-4 text-sm text-yellow-800 dark:bg-gray-800 dark:text-yellow-300"
+                      role="alert"
+                    >
+                      <Link href="/add-personal-access-token">
+                        You cannot publish code on your Github Gist because you
+                        have not yet followed{" "}
+                        <span className="underline">this guide</span>.
+                      </Link>
+                    </div>
+                  )}
                   {isError && (
                     <p className="pt-4 text-sm font-bold text-red-500">
                       An error has occurred, please try again later.
@@ -389,7 +469,7 @@ export default function Dashboard() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
+          <div className="flex flex-col gap-2 sm:flex-row">
             <Link
               href={`/${pseudo}`}
               className={buttonVariants({ size: "lg", variant: "outline" })}
@@ -397,7 +477,7 @@ export default function Dashboard() {
               <User className="mr-2 h-4 w-4" />
               Your profile
             </Link>
-            {dataUser?.data?.userToken ? (
+            {/* {dataUser?.data?.userToken ? (
               <button
                 className={buttonVariants({ size: "lg", variant: "subtle" })}
                 onClick={() => {
@@ -408,7 +488,7 @@ export default function Dashboard() {
                 <FileCog className="mr-2 h-4 w-4" />
                 Copy your userToken
               </button>
-            ) : null}
+            ) : null} */}
           </div>
         </div>
         <Separator className="my-4" />
