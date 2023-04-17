@@ -585,7 +585,14 @@ export default function CardCodeAdmin({
             </pre>
           </Link>
         ) : (
-          <pre className="w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
+          <pre
+            className={`${
+              searchParams.get("code-preview") === null &&
+              isPrivate &&
+              "max-h-[200px] "
+            }
+          w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black`}
+          >
             <code
               className="text-white"
               dangerouslySetInnerHTML={{
