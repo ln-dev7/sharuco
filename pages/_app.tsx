@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app"
 import { AuthContextProvider } from "@/context/AuthContext"
+import GoogleAnalytics from "@bradgarropy/next-google-analytics"
 import { Inter as FontSans } from "@next/font/google"
 import { NextSeo } from "next-seo"
 import { ThemeProvider } from "next-themes"
@@ -56,6 +57,7 @@ export default function App({ Component, pageProps }: AppProps) {
               cardType: "summary_large_image",
             }}
           />
+          <GoogleAnalytics measurementId="G-4FTGXMJNPY" />
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Component {...pageProps} />
             {/* <ReactQueryDevtools initialIsOpen={false} /> */}
