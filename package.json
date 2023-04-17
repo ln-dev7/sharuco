@@ -13,6 +13,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache"
   },
   "dependencies": {
+    "@bradgarropy/next-google-analytics": "^1.0.2",
     "@hookform/resolvers": "^3.0.0",
     "@next/font": "^13.1.6",
     "@radix-ui/react-accessible-icon": "^1.0.1",
