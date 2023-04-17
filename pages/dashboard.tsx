@@ -568,7 +568,7 @@ export default function Dashboard() {
                   }}
                   className="w-full"
                 >
-                  <Masonry gutter="1rem">
+                  <Masonry gutter="2rem">
                     {dataCodes.map(
                       (code: {
                         id: string
@@ -615,13 +615,13 @@ export default function Dashboard() {
                 <ResponsiveMasonry
                   columnsCountBreakPoints={{
                     659: 1,
-                    660: 2,
-                    720: 2,
-                    990: 3,
+                    660: 1,
+                    720: 1,
+                    1200: 2,
                   }}
                   className="w-full"
                 >
-                  <Masonry gutter="1rem">
+                  <Masonry gutter="2rem">
                     {dataPublicCodes.map(
                       (code: {
                         id: string
@@ -670,13 +670,13 @@ export default function Dashboard() {
                 <ResponsiveMasonry
                   columnsCountBreakPoints={{
                     659: 1,
-                    660: 2,
-                    720: 2,
-                    990: 3,
+                    660: 1,
+                    720: 1,
+                    1200: 2,
                   }}
                   className="w-full"
                 >
-                  <Masonry gutter="1rem">
+                  <Masonry gutter="2rem">
                     {dataPrivateCodes.map(
                       (code: {
                         id: string
@@ -725,13 +725,13 @@ export default function Dashboard() {
                 <ResponsiveMasonry
                   columnsCountBreakPoints={{
                     659: 1,
-                    660: 2,
-                    720: 2,
-                    990: 3,
+                    660: 1,
+                    720: 1,
+                    1200: 2,
                   }}
                   className="w-full"
                 >
-                  <Masonry gutter="1rem">
+                  <Masonry gutter="2rem">
                     {dataFavoriteCodes.map(
                       (code: {
                         id: string

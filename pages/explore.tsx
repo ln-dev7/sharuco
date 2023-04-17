@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Head from "next/head"
+import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes.js"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import {
@@ -15,7 +16,6 @@ import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
-import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes.js"
 
 export default function Explore() {
   const { user } = useAuthContext()
@@ -33,7 +33,7 @@ export default function Explore() {
   //   data: dataPublicCodes,
   // } = useGetIsPrivateCodes(false)
 
-  const [currentData, setCurrentData] = useState([])
+  const [currentData, setCurrentData] = useState(null)
   const [lastDocc, setLastDocc] = useState(null)
   const [hasMore, setHasMore] = useState(true)
 
@@ -108,25 +108,28 @@ export default function Explore() {
           /> */}
         </div>
         <div className="">
-          {isLoadingPublicCodes && <Loader />}
-          {currentData && (
+          {/* {isLoadingPublicCodes && <Loader />} */}
+          {currentData ? (
             <InfiniteScroll
               dataLength={currentData.length}
               next={fetchMorePublicCodes}
               hasMore={!isLoadingPublicCodes && hasMore}
               loader={currentData.length >= NBR_OF_CODES_PER_PAGE && <Loader />}
               className="scrollbar-hide"
+              style={{
+                overflow: "visible",
+              }}
             >
               <ResponsiveMasonry
                 columnsCountBreakPoints={{
                   659: 1,
-                  660: 2,
-                  720: 2,
-                  990: 3,
+                  660: 1,
+                  720: 1,
+                  1200: 2,
                 }}
                 className="w-full"
               >
-                <Masonry gutter="1rem">
+                <Masonry gutter="2rem">
                   {currentData.map(
                     (code: {
                       id: string
@@ -158,6 +161,8 @@ export default function Explore() {
                 </Masonry>
               </ResponsiveMasonry>
             </InfiniteScroll>
+          ) : (
+            <Loader />
           )}
           {isErrorPublicCodes && <Error />}
         </div>

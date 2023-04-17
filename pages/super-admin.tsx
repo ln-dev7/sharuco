@@ -112,7 +112,7 @@ export default function Dashboard() {
                   }}
                   className="w-full"
                 >
-                  <Masonry gutter="1rem">
+                  <Masonry gutter="2rem">
                     {dataCodes
                       .map(
                         (code: {
@@ -166,7 +166,7 @@ export default function Dashboard() {
                 }}
                 className="w-full"
               >
-                <Masonry gutter="1rem">
+                <Masonry gutter="2rem">
                   {dataUsers
                     .map(
                       (dataUser: {

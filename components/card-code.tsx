@@ -170,7 +170,7 @@ export default function CardCode({
   }
 
   return (
-    <div key={id} className="mb-4 flex flex-col gap-2">
+    <div key={id} className="mb-0 flex flex-col gap-2">
       <Toaster position="top-right" reverseOrder={false} />
       <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
         <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
@@ -309,14 +309,27 @@ export default function CardCode({
             </AlertDialog>
           </div>
         </div>
-        <pre className="max-h-[480px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
-          <code
-            className="text-white"
-            dangerouslySetInnerHTML={{
-              __html: highlight(code, language),
-            }}
-          />
-        </pre>
+        {searchParams.get("code-preview") === null && !isPrivate ? (
+          <Link href={`/code-preview/${id}`}>
+            <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
+              <code
+                className="text-white"
+                dangerouslySetInnerHTML={{
+                  __html: highlight(code, language),
+                }}
+              />
+            </pre>
+          </Link>
+        ) : (
+          <pre className="w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
+            <code
+              className="text-white"
+              dangerouslySetInnerHTML={{
+                __html: highlight(code, language),
+              }}
+            />
+          </pre>
+        )}
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Link
@@ -374,7 +387,7 @@ export default function CardCode({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
-                    href={`/code-preview/${id}`}
+                    href={`/code-preview/${id}#commentsCode`}
                     className="flex gap-1 text-slate-700 hover:text-slate-500 dark:text-slate-400  hover:dark:text-white"
                   >
                     <svg

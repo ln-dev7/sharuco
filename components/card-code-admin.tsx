@@ -291,7 +291,7 @@ export default function CardCodeAdmin({
   }
 
   return (
-    <div key={id} className="mb-4 flex flex-col gap-2">
+    <div key={id} className="mb-0 flex flex-col gap-2">
       <Toaster position="top-right" reverseOrder={false} />
       <div className="flex w-full items-center justify-end">
         <div className="flex items-center gap-2">
@@ -573,14 +573,27 @@ export default function CardCodeAdmin({
             </AlertDialog>
           </div>
         </div>
-        <pre className="max-h-[480px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
-          <code
-            className="text-white"
-            dangerouslySetInnerHTML={{
-              __html: highlight(code, language),
-            }}
-          />
-        </pre>
+        {searchParams.get("code-preview") === null && !isPrivate ? (
+          <Link href={`/code-preview/${id}`}>
+            <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
+              <code
+                className="text-white"
+                dangerouslySetInnerHTML={{
+                  __html: highlight(code, language),
+                }}
+              />
+            </pre>
+          </Link>
+        ) : (
+          <pre className="w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
+            <code
+              className="text-white"
+              dangerouslySetInnerHTML={{
+                __html: highlight(code, language),
+              }}
+            />
+          </pre>
+        )}
       </div>
       <div className="flex items-center justify-between gap-4">
         <Link
@@ -638,7 +651,7 @@ export default function CardCodeAdmin({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
-                    href={`/code-preview/${id}`}
+                    href={`/code-preview/${id}#commentsCode`}
                     className="flex gap-1 text-slate-700 hover:text-slate-500 dark:text-slate-400 hover:dark:text-white"
                   >
                     {commentsInit.length}
