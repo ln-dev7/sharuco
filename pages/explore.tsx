@@ -18,6 +18,7 @@ import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import LoaderCodes from "@/components/loader-codes"
 import { Skeleton } from "@/components/ui/skeleton"
+import LoaderCode from "@/components/loader-code"
 
 export default function Explore() {
   const { user } = useAuthContext()
@@ -116,7 +117,7 @@ export default function Explore() {
               dataLength={currentData.length}
               next={fetchMorePublicCodes}
               hasMore={!isLoadingPublicCodes && hasMore}
-              loader={currentData.length >= NBR_OF_CODES_PER_PAGE && <Loader />}
+              loader={currentData.length >= NBR_OF_CODES_PER_PAGE && <LoaderCode />}
               className="scrollbar-hide"
               style={{
                 overflow: "visible",
