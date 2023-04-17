@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
@@ -168,6 +169,13 @@ export default function CodePreview() {
     ))
   }
 
+  useEffect(() => {
+    if (window.location.hash === "#commentsCode" && dataCode) {
+      const el = document.querySelector("#commentsCode")
+      el.scrollIntoView()
+    }
+  }, [dataCode])
+
   return (
     <Layout>
       <Head>
@@ -239,7 +247,7 @@ export default function CodePreview() {
                 )}
               </Masonry>
             </ResponsiveMasonry>
-            <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-between sm:items-center">
+            <div className="mb-6 mt-4 flex flex-col sm:flex-row gap-4 justify-between sm:items-center">
               <p>
                 <span className="text-gray-500 font-bold text-sm dark:text-gray-400">
                   Published {moment(dataCode.data.createdAt).fromNow()}
@@ -257,7 +265,10 @@ export default function CodePreview() {
               ) : null}
             </div>
             <div className="flex w-full flex-col items-start gap-2">
-              <div className="flex w-full flex-col items-start">
+              <div
+                id="commentsCode"
+                className="flex w-full flex-col items-start"
+              >
                 <h2 className="text-2xl font-bold">
                   {dataCode.data.comments.length} Comment(s)
                 </h2>
