@@ -13,6 +13,7 @@ import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
+import LoaderCodes from "@/components/loader-codes"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { buttonVariants } from "@/components/ui/button"
 
@@ -61,7 +62,7 @@ export default function User() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
-        {isLoading && <Loader />}
+        {isLoading && <LoaderCodes isUserProfile={true} />}
         {data && data.exists && (
           <div className="flex flex-col items-center gap-4">
             <Avatar className="h-40 w-40 cursor-pointer">
@@ -107,7 +108,7 @@ export default function User() {
                 </p>
               </div>
             </div>
-            {isLoadingPublicCodes && <Loader />}
+            {isLoadingPublicCodes && <LoaderCodes />}
             {dataPublicCodes && (
               <>
                 <ResponsiveMasonry

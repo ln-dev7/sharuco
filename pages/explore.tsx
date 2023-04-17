@@ -16,6 +16,8 @@ import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
+import LoaderCodes from "@/components/loader-codes"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Explore() {
   const { user } = useAuthContext()
@@ -162,7 +164,7 @@ export default function Explore() {
               </ResponsiveMasonry>
             </InfiniteScroll>
           ) : (
-            <Loader />
+            <LoaderCodes />
           )}
           {isErrorPublicCodes && <Error />}
         </div>

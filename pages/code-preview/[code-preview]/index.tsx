@@ -49,6 +49,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
+import LoaderCode from "@/components/loader-code"
 
 export default function CodePreview() {
   const searchParams = useSearchParams()
@@ -207,7 +208,7 @@ export default function CodePreview() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-0 pt-6 pb-8 md:py-10">
-        {isLoadingCode && <Loader />}
+        {isLoadingCode && <LoaderCode />}
         {dataCode && dataCode.exists && !dataCode.data.isPrivate && (
           <div className="w-full">
             <ResponsiveMasonry
