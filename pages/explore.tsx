@@ -33,7 +33,7 @@ export default function Explore() {
   //   data: dataPublicCodes,
   // } = useGetIsPrivateCodes(false)
 
-  const [currentData, setCurrentData] = useState([])
+  const [currentData, setCurrentData] = useState(null)
   const [lastDocc, setLastDocc] = useState(null)
   const [hasMore, setHasMore] = useState(true)
 
@@ -108,25 +108,28 @@ export default function Explore() {
           /> */}
         </div>
         <div className="">
-          {isLoadingPublicCodes && <Loader />}
-          {currentData && (
+          {/* {isLoadingPublicCodes && <Loader />} */}
+          {currentData ? (
             <InfiniteScroll
               dataLength={currentData.length}
               next={fetchMorePublicCodes}
               hasMore={!isLoadingPublicCodes && hasMore}
               loader={currentData.length >= NBR_OF_CODES_PER_PAGE && <Loader />}
               className="scrollbar-hide"
+              style={{
+                overflow: "visible",
+              }}
             >
               <ResponsiveMasonry
                 columnsCountBreakPoints={{
                   659: 1,
                   660: 1,
                   720: 1,
-                  990: 2,
+                  1200: 2,
                 }}
                 className="w-full"
               >
-                <Masonry gutter="1rem">
+                <Masonry gutter="2rem">
                   {currentData.map(
                     (code: {
                       id: string
@@ -158,6 +161,8 @@ export default function Explore() {
                 </Masonry>
               </ResponsiveMasonry>
             </InfiniteScroll>
+          ) : (
+            <Loader />
           )}
           {isErrorPublicCodes && <Error />}
         </div>

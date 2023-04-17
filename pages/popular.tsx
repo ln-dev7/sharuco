@@ -83,11 +83,11 @@ export default function Popular() {
                 659: 1,
                 660: 1,
                 720: 1,
-                990: 2,
+                1200: 2,
               }}
               className="w-full"
             >
-              <Masonry gutter="1rem">
+              <Masonry gutter="2rem">
                 {dataPopularCodes.map((code) => (
                   <CardCode
                     key={code.id}
