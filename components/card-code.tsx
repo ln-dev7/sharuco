@@ -170,7 +170,7 @@ export default function CardCode({
   }
 
   return (
-    <div key={id} className="flex flex-col gap-2">
+    <div key={id} className="mb-4 flex flex-col gap-2">
       <Toaster position="top-right" reverseOrder={false} />
       <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
         <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
@@ -601,20 +601,18 @@ export default function CardCode({
           {description}
         </p>
       )}
-      <div className="mb-4 flex items-center justify-start gap-2">
-        {tags && tags.length > 0 && (
-          <div className="flex w-full flex-wrap items-center justify-start gap-2">
-            {tags?.map((tag: string) => (
-              <span
-                key={tag}
-                className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+      {tags && tags.length > 0 && (
+        <div className="flex w-full flex-wrap items-center justify-start gap-2">
+          {tags?.map((tag: string) => (
+            <span
+              key={tag}
+              className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

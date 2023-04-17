@@ -12,7 +12,16 @@ import copyToClipboard from "@/utils/copyToClipboard"
 import highlight from "@/utils/highlight"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { Copy, Github, Loader2, Trash2, User, Verified } from "lucide-react"
+import {
+  Copy,
+  Github,
+  Link2,
+  Loader2,
+  Trash2,
+  User,
+  Verified,
+  View,
+} from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
@@ -230,11 +239,23 @@ export default function CodePreview() {
                 )}
               </Masonry>
             </ResponsiveMasonry>
-            <p className="mb-6">
-              <span className="text-gray-500 font-bold text-sm dark:text-gray-400">
-                Published {moment(dataCode.data.createdAt).fromNow()}
-              </span>
-            </p>
+            <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-between sm:items-center">
+              <p>
+                <span className="text-gray-500 font-bold text-sm dark:text-gray-400">
+                  Published {moment(dataCode.data.createdAt).fromNow()}
+                </span>
+              </p>
+              {dataCode?.data?.githubGistInfos ? (
+                <Link
+                  href={dataCode?.data?.githubGistInfos?.gistUrl}
+                  target="_blank"
+                  className={buttonVariants({ size: "lg", variant: "subtle" })}
+                >
+                  <View className="mr-2 h-4 w-4" />
+                  View on Github Gist
+                </Link>
+              ) : null}
+            </div>
             <div className="flex w-full flex-col items-start gap-2">
               <div className="flex w-full flex-col items-start">
                 <h2 className="text-2xl font-bold">
