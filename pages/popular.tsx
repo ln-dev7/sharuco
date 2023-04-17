@@ -12,6 +12,7 @@ import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
+import LoaderCodes from "@/components/loader-codes"
 
 export default function Popular() {
   const { user } = useAuthContext()
@@ -83,7 +84,7 @@ export default function Popular() {
           /> */}
         </div>
         <div className="">
-          {isLoadingPopularCodes && <Loader />}
+          {isLoadingPopularCodes && <LoaderCodes />}
           {dataPopularCodes && (
             <ResponsiveMasonry
               columnsCountBreakPoints={{
