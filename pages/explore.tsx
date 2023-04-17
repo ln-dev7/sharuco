@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Head from "next/head"
+import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes.js"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import {
@@ -15,7 +16,6 @@ import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
-import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes.js"
 
 export default function Explore() {
   const { user } = useAuthContext()
@@ -120,9 +120,9 @@ export default function Explore() {
               <ResponsiveMasonry
                 columnsCountBreakPoints={{
                   659: 1,
-                  660: 2,
-                  720: 2,
-                  990: 3,
+                  660: 1,
+                  720: 1,
+                  990: 2,
                 }}
                 className="w-full"
               >

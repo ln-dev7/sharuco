@@ -81,9 +81,9 @@ export default function Popular() {
             <ResponsiveMasonry
               columnsCountBreakPoints={{
                 659: 1,
-                660: 2,
-                720: 2,
-                990: 3,
+                660: 1,
+                720: 1,
+                990: 2,
               }}
               className="w-full"
             >
