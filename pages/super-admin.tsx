@@ -17,6 +17,7 @@ import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import LoaderCodes from "@/components/loader-codes"
 
 export default function Dashboard() {
   const { logout } = useGitHubLogout()
@@ -100,7 +101,7 @@ export default function Dashboard() {
             </div>
           </TabsList>
           <TabsContent className="border-none p-0 pt-4" value="all-codes">
-            {isLoadingCodes && <Loader />}
+            {isLoadingCodes && <LoaderCodes />}
             {dataCodes && (
               <>
                 <ResponsiveMasonry

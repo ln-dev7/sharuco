@@ -59,6 +59,7 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
+import LoaderCodes from "@/components/loader-codes"
 
 export default function Dashboard() {
   const { user } = useAuthContext()
@@ -592,7 +593,7 @@ export default function Dashboard() {
             </div>
           </TabsList>
           <TabsContent className="border-none p-0 pt-4" value="manage-code">
-            {isLoadingCodes && <Loader />}
+            {isLoadingCodes && <LoaderCodes />}
             {dataCodes && (
               <>
                 <ResponsiveMasonry
@@ -645,7 +646,7 @@ export default function Dashboard() {
             {(isErrorPublicCodes || isErrorPrivateCodes) && <Error />}
           </TabsContent>
           <TabsContent className="border-none p-0 pt-4" value="public-code">
-            {isLoadingPublicCodes && <Loader />}
+            {isLoadingPublicCodes && <LoaderCodes />}
             {dataPublicCodes && (
               <>
                 <ResponsiveMasonry
@@ -700,7 +701,7 @@ export default function Dashboard() {
             {isErrorPublicCodes && <Error />}
           </TabsContent>
           <TabsContent className="border-none p-0 pt-4" value="private-code">
-            {isLoadingPrivateCodes && <Loader />}
+            {isLoadingPrivateCodes && <LoaderCodes />}
             {dataPrivateCodes && (
               <>
                 <ResponsiveMasonry
@@ -755,7 +756,7 @@ export default function Dashboard() {
             {isErrorFavoriteCodes && <Error />}
           </TabsContent>
           <TabsContent className="border-none p-0 pt-4" value="favorite-code">
-            {isLoadingFavoriteCodes && <Loader />}
+            {isLoadingFavoriteCodes && <LoaderCodes />}
             {dataFavoriteCodes && (
               <>
                 <ResponsiveMasonry
