@@ -129,7 +129,10 @@ export default function Dashboard() {
   const [gistCheckboxOn, setGistCheckboxOn] = useState(false)
   const [isLoadingAddOnGithubGist, setIsLoadingAddOnGithubGist] =
     useState(false)
-  const [isErrorAddOnGithubGist, setIsErrorAddOnGithubGist] = useState(false)
+  const [isErrorAddOnGithubGist, setIsErrorAddOnGithubGist] = useState({
+    isError: false,
+    isUnauthorized: false,
+  })
 
   const schema = yup.object().shape({
     code: yup.string().required(),
@@ -189,7 +192,10 @@ export default function Dashboard() {
     if (isGithubGist && dataUser?.data?.personalAccessToken) {
       try {
         setIsLoadingAddOnGithubGist(true)
-        setIsErrorAddOnGithubGist(false)
+        setIsErrorAddOnGithubGist({
+          isError: false,
+          isUnauthorized: false,
+        })
         const response = await fetch("https://api.github.com/gists", {
           method: "POST",
           headers: {
@@ -206,6 +212,16 @@ export default function Dashboard() {
             },
           }),
         })
+
+        if (response.status === 401) {
+          setIsErrorAddOnGithubGist({
+            isError: true,
+            isUnauthorized: true,
+          })
+          setIsLoadingAddOnGithubGist(false)
+          return
+        }
+
         const data = await response.json()
         const gistUrl = data.html_url
         const id = data.id
@@ -243,7 +259,10 @@ export default function Dashboard() {
 
         createDocument(newDocument)
       } catch (error) {
-        setIsErrorAddOnGithubGist(true)
+        setIsErrorAddOnGithubGist({
+          isError: true,
+          isUnauthorized: false,
+        })
       } finally {
         setIsLoadingAddOnGithubGist(false)
       }
@@ -479,14 +498,35 @@ export default function Dashboard() {
                       <Link href="/add-personal-access-token">
                         You cannot publish code on your Github Gist because you
                         have not yet followed{" "}
-                        <span className="underline">this guide</span>.
+                        <span className="underline underline-offset-4">
+                          this guide
+                        </span>
+                        .
                       </Link>
                     </div>
                   )}
-                  {(isError || isErrorAddOnGithubGist) && (
+                  {(isError ||
+                    (isErrorAddOnGithubGist.isError &&
+                      !isErrorAddOnGithubGist.isUnauthorized)) && (
                     <p className="pt-4 text-sm font-bold text-red-500">
                       An error has occurred, please try again later.
                     </p>
+                  )}
+                  {isErrorAddOnGithubGist.isUnauthorized && (
+                    <div
+                      className="p-4 mt-4 w-full lg:w-3/4 text-sm leading-6 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 font-medium"
+                      role="alert"
+                    >
+                      <Link href="/add-personal-access-token">
+                        Your personal access token is not valid. <br />
+                        So you can&apos;t add code to your Github Gist. <br />
+                        Please create a new one and update it by following{" "}
+                        <span className="underline underline-offset-4">
+                          this guide
+                        </span>
+                        .
+                      </Link>
+                    </div>
                   )}
                 </AlertDialogDescription>
               </AlertDialogHeader>
