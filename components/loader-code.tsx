@@ -15,7 +15,7 @@ export default function LoaderCode() {
       className="w-full"
     >
       <Masonry gutter="2rem">
-        <div className="mb-0 flex flex-col gap-2">
+        <div className="mt-4 flex flex-col gap-2">
           <Skeleton className="overflow-hidden h-[200px] rounded-lg bg-slate-200 dark:bg-slate-800" />
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center justify-start gap-2">

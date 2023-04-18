@@ -1,3 +1,4 @@
+import { useState } from "react"
 import {
   collection,
   getDocs,
@@ -9,20 +10,19 @@ import {
 import { useQuery } from "react-query"
 
 import firebase_app from "../config"
-import { useState } from "react"
 
 const db = getFirestore(firebase_app)
 
-export const useGetCodesWithLanguage = () => {
+export const useGetCodesWithTag = () => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const getCodesWithLanguage = async (language) => {
+  const getCodesWithTag = async (tag) => {
     setIsLoading(true)
     try {
       const querySnapshot = await getDocs(
         query(
           collection(db, "codes"),
-          where("language", "==", language),
+          where("tags", "array-contains", tag),
           orderBy("createdAt", "desc")
         )
       )
@@ -38,5 +38,5 @@ export const useGetCodesWithLanguage = () => {
     }
   }
 
-  return { getCodesWithLanguage, isLoading }
+  return { getCodesWithTag, isLoading }
 }

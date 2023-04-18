@@ -192,6 +192,7 @@ export default function CardCodeAdmin({
     let updatedCodeData: {
       code: string
       description: string
+      descriptionInArray: string[]
       isPrivate: boolean
       language: string
       tags: string[]
@@ -201,6 +202,7 @@ export default function CardCodeAdmin({
     } = {
       code: linearCode,
       description: descriptionUpdate,
+      descriptionInArray: descriptionUpdate.toLowerCase().split(" "),
       isPrivate: !!isPrivateUpdate,
       language: languageUpdate.toLowerCase(),
       tags: tabTabs,

@@ -1,34 +1,44 @@
-import { collection, getDocs, getFirestore, query, where } from "firebase/firestore"
+import { useState } from "react"
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore"
 import { useQuery } from "react-query"
 
 import firebase_app from "../config"
 
 const db = getFirestore(firebase_app)
 
-const searchDocumentsByDescription = async (description) => {
-  const q = query(
-    collection(db, "codes"),
-    where("description", "==", description)
-  )
-  const querySnapshot = await getDocs(q)
-  const codes = []
-  querySnapshot.forEach((doc) => {
-    codes.push({ ...doc.data() })
-  })
-  return codes
-}
+export const useGetCodesWithDescription = () => {
+  const [isLoading, setIsLoading] = useState(false)
 
-const useGetCodesByDescription = (description) => {
-  const { data, isLoading, isError } = useQuery(
-    ["search-codes-by-description", description],
-    () => searchDocumentsByDescription(description)
-  )
+  const getCodesWithDescription = async (description) => {
+    setIsLoading(true)
+    try {
+      const words = description.toLowerCase().split(" ")
+      const querySnapshot = await getDocs(
+        query(
+          collection(db, "codes"),
+          where("descriptionInArray", "array-contains-any", words),
+          orderBy("createdAt", "desc")
+        )
+      )
+      const collections = querySnapshot.docs.map((doc) => {
+        const data = doc.data()
+        data.id = doc.id
 
-  return {
-    codes: data,
-    isLoading,
-    isError,
+        return data
+      })
+      return collections
+    } catch (e) {
+    } finally {
+      setIsLoading(false)
+    }
   }
-}
 
-export { useGetCodesByDescription }
+  return { getCodesWithDescription, isLoading }
+}

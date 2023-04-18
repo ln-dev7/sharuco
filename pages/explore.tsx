@@ -4,6 +4,9 @@ import { useEffect, useState } from "react"
 import Head from "next/head"
 import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes.js"
 import { useAuthContext } from "@/context/AuthContext"
+import { useGetCodesWithDescription } from "@/firebase/firestore/getCodesWithDescription"
+import { useGetCodesWithLanguage } from "@/firebase/firestore/getCodesWithLanguage"
+import { useGetCodesWithTag } from "@/firebase/firestore/getCodesWithTag"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import {
   getIsPrivateCodeWithPagination,
@@ -16,9 +19,19 @@ import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
-import LoaderCodes from "@/components/loader-codes"
-import { Skeleton } from "@/components/ui/skeleton"
 import LoaderCode from "@/components/loader-code"
+import LoaderCodes from "@/components/loader-codes"
+import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Explore() {
   const { user } = useAuthContext()
@@ -29,12 +42,6 @@ export default function Explore() {
     isLoading: isLoadingUser,
     isError: isErrorUser,
   } = useDocument(pseudo, "users")
-
-  // const {
-  //   isLoading: isLoadingPublicCodes,
-  //   isError: isErrorPublicCodes,
-  //   data: dataPublicCodes,
-  // } = useGetIsPrivateCodes(false)
 
   const [currentData, setCurrentData] = useState(null)
   const [lastDocc, setLastDocc] = useState(null)
@@ -61,6 +68,65 @@ export default function Explore() {
     if (collections.length < NBR_OF_CODES_PER_PAGE) {
       setHasMore(false)
     }
+  }
+
+  const { getCodesWithTag, isLoading: isLoadingWithTag } = useGetCodesWithTag()
+  const [tagSelected, setTagSelected] = useState(false)
+  const [languageSelected, setLanguageSelected] = useState(false)
+  const [searchSelected, setSearchSelected] = useState(false)
+
+  const fetchCodesWithTag = async (tag) => {
+    setTagSelected(true)
+    setLanguageSelected(false)
+    setSearchSelected(false)
+    if (tag === "all") {
+      setCurrentData(data.collections)
+      setHasMore(true)
+      setTagSelected(false)
+      return data.collections
+    }
+    const collections = await getCodesWithTag(tag)
+    setCurrentData(collections)
+    setHasMore(false)
+    return collections
+  }
+
+  const { getCodesWithLanguage, isLoading: isLoadingWithLanguage } =
+    useGetCodesWithLanguage()
+
+  const fetchCodesWithLanguage = async (language) => {
+    setTagSelected(false)
+    setLanguageSelected(true)
+    setSearchSelected(false)
+    if (language === "all") {
+      setCurrentData(data.collections)
+      setHasMore(true)
+      setLanguageSelected(false)
+      return data.collections
+    }
+    const collections = await getCodesWithLanguage(language)
+    setCurrentData(collections)
+    setHasMore(false)
+    return collections
+  }
+
+  const { getCodesWithDescription, isLoading: isLoadingWithDescription } =
+    useGetCodesWithDescription()
+
+  const fetchCodesWithDescription = async (description) => {
+    setTagSelected(false)
+    setLanguageSelected(false)
+    setSearchSelected(true)
+    if (description === "") {
+      setCurrentData(data.collections)
+      setHasMore(true)
+      setSearchSelected(false)
+      return data.collections
+    }
+    const collections = await getCodesWithDescription(description)
+    setCurrentData(collections)
+    setHasMore(false)
+    return collections
   }
 
   return (
@@ -104,20 +170,99 @@ export default function Explore() {
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Discover little bits of code that can help you.
           </h1>
-          {/* <SearchCode
-            dataCodes={dataPublicCodes}
-            isLoadingCodes={isLoadingPublicCodes}
-            isErrorCodes={isErrorPublicCodes}
-          /> */}
+          <div className="mt-2 flex w-full flex-col gap-2 sm:flex-row sm:justify-end">
+            {/* <div className="flex w-full items-center space-x-2 relative">
+            {searchSelected && (
+                <span className="absolute top-0 right-0 w-2 h-2 bg-sky-500 rounded-full"></span>
+              )}
+              <Input
+                type="text"
+                placeholder="Search code with description"
+                className="w-full"
+                // value={searchTerm}
+                // onChange={handleTermChange}
+              />
+            </div> */}
+            <div className="flex items-center justify-center relative">
+              {languageSelected && (
+                <span className="absolute top-0 right-0 w-2 h-2 bg-sky-500 rounded-full"></span>
+              )}
+              <Select onValueChange={(value) => fetchCodesWithLanguage(value)}>
+                <SelectTrigger className="w-full sm:w-[240px]">
+                  <SelectValue placeholder="Select a language" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Languages</SelectLabel>
+                    <SelectItem value="all">All languages</SelectItem>
+                    {data && data.collections && (
+                      <>
+                        {data.collections
+                          .map((code: any) => code.language)
+                          .filter(
+                            (language: any, index: any, self: any) =>
+                              self.indexOf(language) === index
+                          )
+                          .sort((a: any, b: any) => a.localeCompare(b))
+                          .map((language) => (
+                            <SelectItem key={language} value={language}>
+                              {language}
+                            </SelectItem>
+                          ))}
+                      </>
+                    )}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center justify-center relative">
+              {tagSelected && (
+                <span className="absolute top-0 right-0 w-2 h-2 bg-sky-500 rounded-full"></span>
+              )}
+              <Select onValueChange={(value) => fetchCodesWithTag(value)}>
+                <SelectTrigger className="w-full sm:w-[240px]">
+                  <SelectValue placeholder="Select a tag" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Tags</SelectLabel>
+                    <SelectItem value="all">All tags</SelectItem>
+                    {data && data.collections && (
+                      <>
+                        {data.collections
+                          .map((code: any) => code.tags)
+                          .flat()
+                          .filter(
+                            (tag: any, index: any, self: any) =>
+                              self.indexOf(tag) === index
+                          )
+                          .sort((a: any, b: any) => a.localeCompare(b))
+                          .map((tag) => (
+                            <SelectItem
+                              key={tag.replace(/\s+/g, "")}
+                              value={tag}
+                            >
+                              {tag}
+                            </SelectItem>
+                          ))}
+                      </>
+                    )}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </div>
         <div className="">
           {/* {isLoadingPublicCodes && <Loader />} */}
-          {currentData ? (
+          {currentData && !isLoadingWithTag && !isLoadingWithLanguage ? (
             <InfiniteScroll
               dataLength={currentData.length}
               next={fetchMorePublicCodes}
               hasMore={!isLoadingPublicCodes && hasMore}
-              loader={currentData.length >= NBR_OF_CODES_PER_PAGE && <LoaderCode />}
+              loader={
+                currentData.length >= NBR_OF_CODES_PER_PAGE && <LoaderCode />
+              }
               className="scrollbar-hide"
               style={{
                 overflow: "visible",
