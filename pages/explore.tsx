@@ -70,10 +70,11 @@ export default function Explore() {
     }
   }
 
-  const { getCodesWithTag, isLoading: isLoadingWithTag } = useGetCodesWithTag()
   const [tagSelected, setTagSelected] = useState(false)
   const [languageSelected, setLanguageSelected] = useState(false)
   const [searchSelected, setSearchSelected] = useState(false)
+
+  const { getCodesWithTag, isLoading: isLoadingWithTag } = useGetCodesWithTag()
 
   const fetchCodesWithTag = async (tag) => {
     setTagSelected(true)
@@ -85,7 +86,7 @@ export default function Explore() {
       setTagSelected(false)
       return data.collections
     }
-    const collections = await getCodesWithTag(tag)
+    const collections = await getCodesWithTag(tag, false)
     setCurrentData(collections)
     setHasMore(false)
     return collections
@@ -104,7 +105,7 @@ export default function Explore() {
       setLanguageSelected(false)
       return data.collections
     }
-    const collections = await getCodesWithLanguage(language)
+    const collections = await getCodesWithLanguage(language, false)
     setCurrentData(collections)
     setHasMore(false)
     return collections
@@ -123,7 +124,7 @@ export default function Explore() {
       setSearchSelected(false)
       return data.collections
     }
-    const collections = await getCodesWithDescription(description)
+    const collections = await getCodesWithDescription(description, false)
     setCurrentData(collections)
     setHasMore(false)
     return collections

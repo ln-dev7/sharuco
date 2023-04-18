@@ -16,13 +16,14 @@ const db = getFirestore(firebase_app)
 export const useGetCodesWithLanguage = () => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const getCodesWithLanguage = async (language) => {
+  const getCodesWithLanguage = async (language, isPrivate) => {
     setIsLoading(true)
     try {
       const querySnapshot = await getDocs(
         query(
           collection(db, "codes"),
           where("language", "==", language),
+          where("isPrivate", "==", isPrivate),
           orderBy("createdAt", "desc")
         )
       )
