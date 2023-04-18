@@ -1,6 +1,5 @@
 "use client"
 
-import { contributors } from "@/constants/contributors"
 import {
   allLanguages,
   getLanguageColor,
@@ -57,6 +56,15 @@ export default function IndexPage() {
     setUserCountry(window.navigator.language.split("-")[1])
   }, [])
 
+  // Contributors
+  const [contributors, setContributors] = useState([])
+
+  useEffect(() => {
+    fetch("https://api.github.com/repos/ln-dev7/sharuco/contributors")
+      .then((response) => response.json())
+      .then((data) => setContributors(data))
+      .catch((error) => console.error(error))
+  }, [])
   //
 
   const [codeImage, setCodeImage] = useState("")
@@ -382,15 +390,22 @@ export default function IndexPage() {
             </span>
           </div>
           <div className="mt-3 flex -space-x-2">
-            {contributors.slice(0, 10).map((user) => (
-              <a href={user.github}>
-                <img
-                  className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
-                  src={user.image}
-                  alt={user.name}
-                />
-              </a>
-            ))}
+            {contributors
+              .sort((a, b) => b.contributions - a.contributions)
+              .slice(0, 10)
+              .map((user) => (
+                <a
+                  href={"https://github.com/" + user.login}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    className="inline-block h-12 w-12 rounded-full ring-2 ring-white hover:ring-sky-500"
+                    src={user.avatar_url}
+                    alt={user.login}
+                  />
+                </a>
+              ))}
           </div>
           {contributors.length > 6 && (
             <div className="mt-3 text-sm font-medium">
