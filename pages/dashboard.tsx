@@ -355,7 +355,7 @@ export default function Dashboard() {
             className="mt-2 inline-flex items-center rounded-full border border-green-200 bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green-800 dark:bg-gray-800 dark:text-green-300 dark:border-none"
           >
             <span className="mr-1 h-2 w-2 shrink-0 rounded-full bg-green-500"></span>
-            To be able to add code to your Gitthub Gist, make sure you follow
+            To be able to add code to your Github Gist, make sure you follow
             this guide.
           </Link>
         </div>
