@@ -16,7 +16,7 @@ const db = getFirestore(firebase_app)
 export const useGetCodesWithDescription = () => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const getCodesWithDescription = async (description) => {
+  const getCodesWithDescription = async (description, isPrivate) => {
     setIsLoading(true)
     try {
       const words = description.toLowerCase().split(" ")
@@ -24,6 +24,7 @@ export const useGetCodesWithDescription = () => {
         query(
           collection(db, "codes"),
           where("descriptionInArray", "array-contains-any", words),
+          where("isPrivate", "==", isPrivate),
           orderBy("createdAt", "desc")
         )
       )
