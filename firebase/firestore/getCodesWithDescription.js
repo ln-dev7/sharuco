@@ -19,11 +19,9 @@ export const useGetCodesWithDescription = () => {
   const getCodesWithDescription = async (description, isPrivate) => {
     setIsLoading(true)
     try {
-      const words = description.toLowerCase().split(" ")
       const querySnapshot = await getDocs(
         query(
           collection(db, "codes"),
-          where("descriptionInArray", "array-contains-any", words),
           where("isPrivate", "==", isPrivate),
           orderBy("createdAt", "desc")
         )
