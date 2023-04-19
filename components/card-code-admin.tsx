@@ -18,6 +18,7 @@ import highlight from "@/utils/highlight"
 import indentCode from "@/utils/indentCode"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
+import algoliasearch from "algoliasearch"
 import hljs from "highlight.js"
 import * as htmlToImage from "html-to-image"
 import {
@@ -112,15 +113,22 @@ export default function CardCodeAdmin({
 
   //
 
+  const ALGOLIA_INDEX_NAME = "codes"
+
+  const client = algoliasearch(
+    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
+    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
+  )
+  const index = client.initIndex(ALGOLIA_INDEX_NAME)
+
   const {
     deleteDocument,
-    isLoading: isLoadingDD,
-    isError: isErrorDD,
-    isSuccess: isSuccessDD,
+    isLoading: isLoadingDelete,
   }: any = useDeleteDocument("codes")
 
   const handleDeleteDocument = () => {
     deleteDocument(id)
+    index.deleteObject(id)
   }
 
   //
@@ -192,7 +200,6 @@ export default function CardCodeAdmin({
     let updatedCodeData: {
       code: string
       description: string
-      descriptionInArray: string[]
       isPrivate: boolean
       language: string
       tags: string[]
@@ -202,7 +209,6 @@ export default function CardCodeAdmin({
     } = {
       code: linearCode,
       description: descriptionUpdate,
-      descriptionInArray: descriptionUpdate.toLowerCase().split(" "),
       isPrivate: !!isPrivateUpdate,
       language: languageUpdate.toLowerCase(),
       tags: tabTabs,
@@ -216,7 +222,15 @@ export default function CardCodeAdmin({
         isPrivateUpdate === true && isPrivate === false ? [] : commentsInit,
     }
 
-    updateCodeDocument({ id, updatedCodeData })
+    await updateCodeDocument({ id, updatedCodeData })
+
+    await index.partialUpdateObject({
+      objectID: id,
+      description: descriptionUpdate,
+      isPrivate: !!isPrivateUpdate,
+      language: languageUpdate.toLowerCase(),
+      tags: tabTabs,
+    })
 
     reset({
       code: indentCode(linearCode),
@@ -453,10 +467,10 @@ export default function CardCodeAdmin({
                   className={cn(
                     "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                   )}
-                  disabled={isLoadingDD}
-                  onClick={!isLoadingDD ? handleDeleteDocument : undefined}
+                  disabled={isLoadingDelete}
+                  onClick={!isLoadingDelete ? handleDeleteDocument : undefined}
                 >
-                  {isLoadingDD && (
+                  {isLoadingDelete && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   Delete

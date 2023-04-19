@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Head from "next/head"
+import { addCodesOnAlgolia } from "@/algolia/addCodesOnAlgolia"
 import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes.js"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGetCodesWithDescription } from "@/firebase/firestore/getCodesWithDescription"
@@ -110,6 +111,8 @@ export default function Explore() {
     setHasMore(false)
     return collections
   }
+
+ //addCodesOnAlgolia()
 
   const { getCodesWithDescription, isLoading: isLoadingWithDescription } =
     useGetCodesWithDescription()

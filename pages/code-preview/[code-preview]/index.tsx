@@ -132,7 +132,7 @@ export default function CodePreview() {
 
     const id = searchParams.get("code-preview")
 
-    updateCodeDocument({ id, updatedCodeData })
+    await updateCodeDocument({ id, updatedCodeData })
 
     reset({
       code: "",
