@@ -1,3 +1,4 @@
+import algoliasearch from "algoliasearch"
 import { addDoc, collection, getFirestore } from "firebase/firestore"
 import moment from "moment"
 import { useMutation, useQueryClient } from "react-query"
@@ -6,12 +7,29 @@ import firebase_app from "../config"
 
 const db = getFirestore(firebase_app)
 
+const ALGOLIA_INDEX_NAME = "codes"
+
+const client = algoliasearch(
+  process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
+  process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
+)
+const index = client.initIndex(ALGOLIA_INDEX_NAME)
+
 const createDocument = async (newData, collectionName) => {
   const docRef = await addDoc(collection(db, collectionName), newData)
   const newCollection = {
     ...newData,
     id: docRef.id,
   }
+  index.saveObject({
+    objectID: newCollection.id,
+    description: newCollection.description,
+    isPrivate: newCollection.isPrivate,
+    createdAt: newCollection.createdAt,
+    tags: newCollection.tags,
+    language: newCollection.language,
+    idAuthor: newCollection.pseudo,
+  })
   return newCollection
 }
 

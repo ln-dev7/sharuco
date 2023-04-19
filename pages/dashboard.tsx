@@ -43,6 +43,7 @@ import CardCodeAdmin from "@/components/card-code-admin"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
+import LoaderCodes from "@/components/loader-codes"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -59,7 +60,6 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import LoaderCodes from "@/components/loader-codes"
 
 export default function Dashboard() {
   const { user } = useAuthContext()
@@ -186,6 +186,19 @@ export default function Dashboard() {
 
     const extension = getExtensionByName(language)
 
+    let newDocument = {
+      code: linearCode,
+      description: description,
+      isPrivate: !!isPrivate,
+      language: language.toLowerCase(),
+      tags: tabTabs,
+      createdAt: moment().valueOf(),
+      favoris: [],
+      favorisCount: 0,
+      idAuthor: pseudo,
+      comments: [],
+    }
+
     if (isGithubGist && dataUser?.data?.personalAccessToken) {
       try {
         setIsLoadingAddOnGithubGist(true)
@@ -240,21 +253,12 @@ export default function Dashboard() {
           }
         )
 
-        const newDocument = {
-          code: linearCode,
-          description: description,
-          isPrivate: !!isPrivate,
-          language: language.toLowerCase(),
-          tags: tabTabs,
-          createdAt: moment().valueOf(),
-          favoris: [],
-          favorisCount: 0,
-          idAuthor: pseudo,
-          comments: [],
+        const newDocumentWithGist = {
+          ...newDocument,
           githubGistInfos: { gistUrl, id },
         }
 
-        createDocument(newDocument)
+        createDocument(newDocumentWithGist)
       } catch (error) {
         setIsErrorAddOnGithubGist({
           isError: true,
@@ -264,19 +268,6 @@ export default function Dashboard() {
         setIsLoadingAddOnGithubGist(false)
       }
     } else {
-      const newDocument = {
-        code: linearCode,
-        description: description,
-        isPrivate: !!isPrivate,
-        language: language.toLowerCase(),
-        tags: tabTabs,
-        createdAt: moment().valueOf(),
-        favoris: [],
-        favorisCount: 0,
-        idAuthor: pseudo,
-        comments: [],
-      }
-
       createDocument(newDocument)
     }
 

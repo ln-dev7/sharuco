@@ -15,7 +15,7 @@ const useUpdateCodeDocument = (collectionName) => {
   const queryClient = useQueryClient()
   const mutation = useMutation(
     (params) => {
-      updateCodeDocument(params, collectionName)
+      return updateCodeDocument(params, collectionName)
     },
     {
       onSuccess: (data, variables, context) => {
