@@ -9,7 +9,7 @@ import {
   languagesName,
 } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLoign } from "@/firebase/auth/githubLogin"
+import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
@@ -107,7 +107,7 @@ export default function CardCodeAdmin({
 
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
-  const { login, isPending } = useGitHubLoign()
+  const { login, isPending } = useGitHubLogin()
 
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
 

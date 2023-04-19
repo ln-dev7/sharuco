@@ -6,7 +6,7 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { SUPER_ADMIN } from "@/constants/super-admin"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLoign } from "@/firebase/auth/githubLogin"
+import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
@@ -66,7 +66,7 @@ export default function CodePreview() {
       </div>
     ))
 
-  const { login, isPending } = useGitHubLoign()
+  const { login, isPending } = useGitHubLogin()
 
   const {
     data: dataUser,

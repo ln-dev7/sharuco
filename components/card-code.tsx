@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { getLanguageColor } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLoign } from "@/firebase/auth/githubLogin"
+import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
@@ -104,7 +104,7 @@ export default function CardCode({
 
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
-  const { login, isPending } = useGitHubLoign()
+  const { login, isPending } = useGitHubLogin()
 
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
 
