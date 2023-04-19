@@ -28,7 +28,7 @@ const createDocument = async (newData, collectionName) => {
     createdAt: newCollection.createdAt,
     tags: newCollection.tags,
     language: newCollection.language,
-    idAuthor: newCollection.pseudo,
+    idAuthor: newCollection.idAuthor,
   })
   return newCollection
 }
