@@ -1,6 +1,6 @@
 import Link from "next/link"
 import algoliasearch from "algoliasearch"
-import { SearchIcon, Trash2 } from "lucide-react"
+import { Search, SearchIcon, Trash2 } from "lucide-react"
 import {
   Highlight,
   Hits,
@@ -10,6 +10,8 @@ import {
 
 import Loader from "@/components/loader"
 import LoaderCode from "@/components/loader-code"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
 
 // https://www.algolia.com/doc/guides/building-search-ui/getting-started/react-hooks/#before-you-start
 
@@ -22,24 +24,24 @@ export default function AlgoliaSearch() {
   return (
     <InstantSearch indexName="codes" searchClient={client}>
       <SearchBox
-        placeholder="Search codes here..."
-        submitIconComponent={() => (
-          <SearchIcon className="absolute top-0 right-0 bottom-0 w-6" />
+        placeholder="Search publics codes..."
+        submitIconComponent={() => <Search className="w-4 h-4" />}
+        resetIconComponent={() => <Trash2 />}
+        loadingIconComponent={() => (
+          <div className="w-full px-6 py-4">
+            <LoaderCode />
+          </div>
         )}
-        resetIconComponent={() => (
-          <Trash2 className="absolute top-0 right-0 bottom-0 w-6" />
-        )}
-        loadingIconComponent={() => <LoaderCode />}
         classNames={{
-          root: "w-full mt-6 mb-3",
+          root: "w-full mt-12 mb-3",
           form: "w-full relative",
           input:
-            "outline-none w-full p-4 text-sm text-gray-900 border-2 border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
-          submit: "hidden",
+            "outline-none w-full p-4 pl-12 text-sm text-gray-900 border border-x-0 border-gray-300 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
+          submit: "absolute left-[14px] top-[19px]",
           reset: "hidden",
         }}
       />
-      <Hits hitComponent={Hit} />
+      <Hits className="px-6" hitComponent={Hit} />
     </InstantSearch>
   )
 }
@@ -49,13 +51,12 @@ function Hit({ hit }) {
     <Link href={`/code-preview/${hit.objectID}`}>
       <div className="w-full mb-4 p-4 rounded-lg border hover:border-sky-500 dark:border-slate-300 dark:hover:border-sky-500 overflow-hidden">
         <div className="flex flex-col items-start">
-          <h3 className="text-lg font-semibold leading-none tracking-tight text-slate-700 dark:text-slate-300 ">
+          <h3 className="mb-2 text-lg font-semibold leading-none tracking-tight text-slate-700 dark:text-slate-300 ">
             {hit.idAuthor}
           </h3>
-          <p className="text-sm text-muted-foreground text-slate-700 dark:text-slate-300 ">
-            {hit.language}
-          </p>
+          <Badge variant="outline">{hit.language}</Badge>
         </div>
+        <Separator className="my-2" />
         <div>
           <Highlight
             attribute="description"
