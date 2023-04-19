@@ -6,7 +6,7 @@ import {
   languagesName,
 } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLoign } from "@/firebase/auth/githubLogin"
+import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import highlight from "@/utils/highlight"
 import linearizeCode from "@/utils/linearizeCode"
 import hljs from "highlight.js"
@@ -36,7 +36,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 
 export default function IndexPage() {
-  const { login, isPending } = useGitHubLoign()
+  const { login, isPending } = useGitHubLogin()
 
   const notifyCodeAdded = () =>
     toast.custom((t) => (
