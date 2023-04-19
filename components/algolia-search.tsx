@@ -10,15 +10,6 @@ import {
 
 import Loader from "@/components/loader"
 import LoaderCode from "@/components/loader-code"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
 
 // https://www.algolia.com/doc/guides/building-search-ui/getting-started/react-hooks/#before-you-start
 
@@ -43,7 +34,7 @@ export default function AlgoliaSearch() {
           root: "w-full mt-6 mb-3",
           form: "w-full relative",
           input:
-            "flex h-10 w-full rounded-md border-2 border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            "outline-none w-full p-4 text-sm text-gray-900 border-2 border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
           submit: "hidden",
           reset: "hidden",
         }}
@@ -56,15 +47,26 @@ export default function AlgoliaSearch() {
 function Hit({ hit }) {
   return (
     <Link href={`/code-preview/${hit.objectID}`}>
-      <Card className="w-full mb-4 max-h-[200px] overflow-hidden">
-        <CardHeader>
-          <CardTitle>{hit.idAuthor}</CardTitle>
-          <CardDescription>{hit.language}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Highlight attribute="description" hit={hit} />
-        </CardContent>
-      </Card>
+      <div className="w-full mb-4 p-4 rounded-lg border hover:border-sky-500 dark:border-slate-300 dark:hover:border-sky-500 overflow-hidden">
+        <div className="flex flex-col items-start">
+          <h3 className="text-lg font-semibold leading-none tracking-tight text-slate-700 dark:text-slate-300 ">
+            {hit.idAuthor}
+          </h3>
+          <p className="text-sm text-muted-foreground text-slate-700 dark:text-slate-300 ">
+            {hit.language}
+          </p>
+        </div>
+        <div>
+          <Highlight
+            attribute="description"
+            classNames={{
+              root: "text-sm text-muted-foreground text-slate-700 dark:text-slate-300 ",
+              highlighted: "bg-sky-500 text-white",
+            }}
+            hit={hit}
+          />
+        </div>
+      </div>
     </Link>
   )
 }
