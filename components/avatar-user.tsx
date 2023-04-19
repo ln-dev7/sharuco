@@ -7,17 +7,21 @@ import { auth } from "@/firebase/config"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { signOut } from "firebase/auth"
 
+import { siteConfig } from "@/config/site"
+import { Icons } from "@/components/icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Sheet,
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import Loader from "./loader"
+import { Separator } from "./ui/separator"
 
 export const useGitHubLogout = () => {
   const router = useRouter()
@@ -92,6 +96,7 @@ export function AvatarUser() {
         </SheetHeader>
         <div className="flex flex-col gap-2">
           <Link
+            defaultChecked
             href="/dashboard"
             className={buttonVariants({ size: "lg", variant: "outline" })}
           >
@@ -106,6 +111,44 @@ export function AvatarUser() {
             Logout
           </Button>
         </div>
+        {user && (
+          <>
+            <Separator className="mt-8 mb-4" />
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">Follow Sharuco on </p>
+            <Link
+              href={siteConfig.links.github}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <div
+                className={buttonVariants({
+                  size: "sm",
+                  variant: "ghost",
+                  className: "text-slate-700 dark:text-slate-400",
+                })}
+              >
+                <Icons.gitHub className="h-5 w-5" />
+                <span className="sr-only">GitHub</span>
+              </div>
+            </Link>
+            <Link
+              href={siteConfig.links.twitter}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <div
+                className={buttonVariants({
+                  size: "sm",
+                  variant: "ghost",
+                  className: "text-slate-700 dark:text-slate-400",
+                })}
+              >
+                <Icons.twitter className="h-5 w-5 fill-current" />
+                <span className="sr-only">Twitter</span>
+              </div>
+            </Link>
+          </>
+        )}
       </SheetContent>
     </Sheet>
   )

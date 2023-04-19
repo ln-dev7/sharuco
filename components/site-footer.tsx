@@ -1,3 +1,11 @@
+"use client"
+
+import Link from "next/link"
+
+import { siteConfig } from "@/config/site"
+import { Icons } from "@/components/icons"
+import { buttonVariants } from "@/components/ui/button"
+
 export function SiteFooter() {
   return (
     <footer className="container">
@@ -20,7 +28,7 @@ export function SiteFooter() {
           <p className="text-center text-sm leading-loose text-slate-600 dark:text-slate-400 md:text-left">
             Built by{" "}
             <a
-              href="https://twitter.com/ln_dev7"
+              href="https://lndev.me"
               target="_blank"
               rel="noreferrer"
               className="font-semibold underline underline-offset-4"
@@ -30,6 +38,36 @@ export function SiteFooter() {
             {"  "}
             🇨🇲
           </p>
+        </div>
+        <div>
+          <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">
+            <div
+              className={buttonVariants({
+                size: "sm",
+                variant: "ghost",
+                className: "text-slate-700 dark:text-slate-400",
+              })}
+            >
+              <Icons.gitHub className="h-5 w-5" />
+              <span className="sr-only">GitHub</span>
+            </div>
+          </Link>
+          <Link
+            href="https://twitter.com/ln_dev7"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <div
+              className={buttonVariants({
+                size: "sm",
+                variant: "ghost",
+                className: "text-slate-700 dark:text-slate-400",
+              })}
+            >
+              <Icons.twitter className="h-5 w-5 fill-current" />
+              <span className="sr-only">Twitter</span>
+            </div>
+          </Link>
         </div>
       </div>
     </footer>
