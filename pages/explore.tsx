@@ -5,7 +5,6 @@ import Head from "next/head"
 import { addCodesOnAlgolia } from "@/algolia/addCodesOnAlgolia"
 import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes.js"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGetCodesWithDescription } from "@/firebase/firestore/getCodesWithDescription"
 import { useGetCodesWithLanguage } from "@/firebase/firestore/getCodesWithLanguage"
 import { useGetCodesWithTag } from "@/firebase/firestore/getCodesWithTag"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -13,15 +12,34 @@ import {
   getIsPrivateCodeWithPagination,
   useGetIsPrivateCodeWithPagination,
 } from "@/firebase/firestore/getIsPrivateCodeWithPagination"
+import algoliasearch from "algoliasearch"
+import { SearchIcon, Trash2 } from "lucide-react"
 import InfiniteScroll from "react-infinite-scroll-component"
+import {
+  Highlight,
+  Hits,
+  InstantSearch,
+  SearchBox,
+} from "react-instantsearch-hooks-web"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
+import AlgoliaSearch from "@/components/algolia-search"
 import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import LoaderCode from "@/components/loader-code"
 import LoaderCodes from "@/components/loader-codes"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -73,14 +91,12 @@ export default function Explore() {
 
   const [tagSelected, setTagSelected] = useState(false)
   const [languageSelected, setLanguageSelected] = useState(false)
-  const [searchSelected, setSearchSelected] = useState(false)
 
   const { getCodesWithTag, isLoading: isLoadingWithTag } = useGetCodesWithTag()
 
   const fetchCodesWithTag = async (tag) => {
     setTagSelected(true)
     setLanguageSelected(false)
-    setSearchSelected(false)
     if (tag === "all") {
       setCurrentData(data.collections)
       setHasMore(true)
@@ -99,7 +115,6 @@ export default function Explore() {
   const fetchCodesWithLanguage = async (language) => {
     setTagSelected(false)
     setLanguageSelected(true)
-    setSearchSelected(false)
     if (language === "all") {
       setCurrentData(data.collections)
       setHasMore(true)
@@ -107,27 +122,6 @@ export default function Explore() {
       return data.collections
     }
     const collections = await getCodesWithLanguage(language, false)
-    setCurrentData(collections)
-    setHasMore(false)
-    return collections
-  }
-
- //addCodesOnAlgolia()
-
-  const { getCodesWithDescription, isLoading: isLoadingWithDescription } =
-    useGetCodesWithDescription()
-
-  const fetchCodesWithDescription = async (description) => {
-    setTagSelected(false)
-    setLanguageSelected(false)
-    setSearchSelected(true)
-    if (description === "") {
-      setCurrentData(data.collections)
-      setHasMore(true)
-      setSearchSelected(false)
-      return data.collections
-    }
-    const collections = await getCodesWithDescription(description, false)
     setCurrentData(collections)
     setHasMore(false)
     return collections
@@ -174,86 +168,93 @@ export default function Explore() {
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Discover little bits of code that can help you.
           </h1>
-          <div className="mt-2 flex w-full flex-col gap-2 sm:flex-row sm:justify-end">
-            {/* <div className="flex w-full items-center space-x-2 relative">
-            {searchSelected && (
-                <span className="absolute top-0 right-0 w-2 h-2 bg-sky-500 rounded-full"></span>
-              )}
-              <Input
-                type="text"
-                placeholder="Search code with description"
-                className="w-full"
-                // value={searchTerm}
-                // onChange={handleTermChange}
-              />
-            </div> */}
-            <div className="flex items-center justify-center relative">
-              {languageSelected && (
-                <span className="absolute top-0 right-0 w-2 h-2 bg-sky-500 rounded-full"></span>
-              )}
-              <Select onValueChange={(value) => fetchCodesWithLanguage(value)}>
-                <SelectTrigger className="w-full sm:w-[240px]">
-                  <SelectValue placeholder="Select a language" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Languages</SelectLabel>
-                    <SelectItem value="all">All languages</SelectItem>
-                    {data && data.collections && (
-                      <>
-                        {data.collections
-                          .map((code: any) => code.language)
-                          .filter(
-                            (language: any, index: any, self: any) =>
-                              self.indexOf(language) === index
-                          )
-                          .sort((a: any, b: any) => a.localeCompare(b))
-                          .map((language) => (
-                            <SelectItem key={language} value={language}>
-                              {language}
-                            </SelectItem>
-                          ))}
-                      </>
-                    )}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+          <div className="mt-2 flex w-full flex-col gap-2 lg:flex-row">
+            <div className="flex w-full items-center space-x-2 relative">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    className="w-full flex justify-start"
+                    variant="outline"
+                  >
+                    Search codes ...
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+                  <AlgoliaSearch />
+                </DialogContent>
+              </Dialog>
             </div>
-            <div className="flex items-center justify-center relative">
-              {tagSelected && (
-                <span className="absolute top-0 right-0 w-2 h-2 bg-sky-500 rounded-full"></span>
-              )}
-              <Select onValueChange={(value) => fetchCodesWithTag(value)}>
-                <SelectTrigger className="w-full sm:w-[240px]">
-                  <SelectValue placeholder="Select a tag" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Tags</SelectLabel>
-                    <SelectItem value="all">All tags</SelectItem>
-                    {data && data.collections && (
-                      <>
-                        {data.collections
-                          .map((code: any) => code.tags)
-                          .flat()
-                          .filter(
-                            (tag: any, index: any, self: any) =>
-                              self.indexOf(tag) === index
-                          )
-                          .sort((a: any, b: any) => a.localeCompare(b))
-                          .map((tag) => (
-                            <SelectItem
-                              key={tag.replace(/\s+/g, "")}
-                              value={tag}
-                            >
-                              {tag}
-                            </SelectItem>
-                          ))}
-                      </>
-                    )}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+            <div className="flex gap-2 flex-row">
+              <div className="w-full flex items-center justify-center relative">
+                {languageSelected && (
+                  <span className="absolute top-0 right-0 w-2 h-2 bg-sky-500 rounded-full"></span>
+                )}
+                <Select
+                  onValueChange={(value) => fetchCodesWithLanguage(value)}
+                >
+                  <SelectTrigger className="w-full lg:w-[240px]">
+                    <SelectValue placeholder="Select a language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Languages</SelectLabel>
+                      <SelectItem value="all">All languages</SelectItem>
+                      {data && data.collections && (
+                        <>
+                          {data.collections
+                            .map((code: any) => code.language)
+                            .filter(
+                              (language: any, index: any, self: any) =>
+                                self.indexOf(language) === index
+                            )
+                            .sort((a: any, b: any) => a.localeCompare(b))
+                            .map((language) => (
+                              <SelectItem key={language} value={language}>
+                                {language}
+                              </SelectItem>
+                            ))}
+                        </>
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="w-full flex items-center justify-center relative">
+                {tagSelected && (
+                  <span className="absolute top-0 right-0 w-2 h-2 bg-sky-500 rounded-full"></span>
+                )}
+                <Select onValueChange={(value) => fetchCodesWithTag(value)}>
+                  <SelectTrigger className="w-full lg:w-[240px]">
+                    <SelectValue placeholder="Select a tag" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Tags</SelectLabel>
+                      <SelectItem value="all">All tags</SelectItem>
+                      {data && data.collections && (
+                        <>
+                          {data.collections
+                            .map((code: any) => code.tags)
+                            .flat()
+                            .filter(
+                              (tag: any, index: any, self: any) =>
+                                self.indexOf(tag) === index
+                            )
+                            .sort((a: any, b: any) => a.localeCompare(b))
+                            .map((tag) => (
+                              <SelectItem
+                                key={tag.replace(/\s+/g, "")}
+                                value={tag}
+                              >
+                                {tag}
+                              </SelectItem>
+                            ))}
+                        </>
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
         </div>
