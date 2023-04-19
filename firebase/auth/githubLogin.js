@@ -41,7 +41,10 @@ export const useGitHubLogin = () => {
         documentRef,
         {
           pseudo: user.reloadUserInfo.screenName,
-          displayName: "p",
+          displayName:
+            user.displayName !== null
+              ? user.displayName
+              : user.reloadUserInfo.screenName,
           email: user.email,
           photoURL: user.photoURL,
           createdAt: moment(user.metadata.creationTime).valueOf(),
