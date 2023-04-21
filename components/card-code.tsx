@@ -90,18 +90,6 @@ export default function CardCode({
 
   const searchParams = useSearchParams()
 
-  const alertAddFavoris = () =>
-    toast.custom((t) => (
-      <div
-        className="mt-4 rounded-lg border-2 border-yellow-800 bg-yellow-50 p-4 text-sm text-yellow-800 dark:bg-gray-800 dark:text-yellow-300"
-        role="alert"
-      >
-        <span className="font-medium">Warning alert!</span> Adding/deleting a
-        bookmark takes time before it is visible on the screen, so please
-        don&apos;t click many times.
-      </div>
-    ))
-
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
   const { login, isPending } = useGitHubLogin()
