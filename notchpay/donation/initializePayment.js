@@ -1,9 +1,6 @@
 import { useState } from "react"
 import axios from "axios"
 
-const NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY =
-  process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY
-
 const NEXT_PUBLIC_NOTCH_PAY_API_URL = process.env.NEXT_PUBLIC_NOTCH_PAY_API_URL
 
 const INITIALIZE_URL = `${NEXT_PUBLIC_NOTCH_PAY_API_URL}/initialize`
@@ -29,7 +26,7 @@ export default function usePaymentInitialization() {
       const response = await axios.post(INITIALIZE_URL, data, {
         headers: {
           Accept: "application/json",
-          Authorization: NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
+          Authorization: process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
         },
       })
 
@@ -37,7 +34,7 @@ export default function usePaymentInitialization() {
       // console.log(response.data)
       // stock la reference dans le local storage
       localStorage.setItem(
-        "transaction-reference",
+        "transaction-donation-reference",
         response.data.transaction.reference
       )
       window.open(authorizationUrl, "_blank")

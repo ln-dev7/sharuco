@@ -19,19 +19,20 @@ import { Input } from "@/components/ui/input"
 
 export default function Donation() {
   const { user } = useAuthContext()
+  const [paymentDone, setPaymentDone] = useState(false)
 
   const checkPaymentStatus = async () => {
-    const transactionReference = localStorage.getItem(
+    const transactionDonationReference = localStorage.getItem(
       "transaction-donation-reference"
     )
 
-    if (!transactionReference) {
+    if (!transactionDonationReference) {
       return
     }
 
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_NOTCH_PAY_API_URL}/${transactionReference}`,
+        `${process.env.NEXT_PUBLIC_NOTCH_PAY_API_URL}/${transactionDonationReference}`,
         {
           headers: {
             Accept: "application/json",
@@ -43,6 +44,7 @@ export default function Donation() {
 
       if (paymentStatus === "complete") {
         localStorage.removeItem("transaction-donation-reference")
+        setPaymentDone(true)
       }
     } catch (error) {}
   }
@@ -117,12 +119,12 @@ export default function Donation() {
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
         <div className="flex max-w-[980px] flex-col items-start gap-2">
           <h1 className="text-2xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-5xl">
-            You can support Sharuco
-            <br className="hidden sm:inline" /> by making a donation
+            Support Sharuco
           </h1>
           <p className="max-w-[700px] text-lg text-slate-700 dark:text-slate-400 sm:text-xl">
-            Sharuco is a free and open source project. If you want to support
-            the project, you can make a donation.
+            Sharuco is a free and open source project.
+            <br className="hidden sm:inline" /> If you want to support the
+            project, you can make a donation.
           </p>
         </div>
         <div className="flex flex-col sm:flex-row items-start w-full gap-2">
@@ -161,8 +163,17 @@ export default function Donation() {
             Make a donation
           </Button>
         </div>
-        <div className="inline-flex items-center rounded-lg border border-green-200 bg-green-100 p-4 text-sm font-medium text-green-800 dark:bg-gray-800 dark:text-green-300 dark:border-none">
-          Thanks you for your donation!
+        {paymentDone ? (
+          <div className="inline-flex items-center rounded-lg border border-green-200 bg-green-100 p-4 text-sm font-medium text-green-800 dark:bg-gray-800 dark:text-green-300 dark:border-none">
+            Thanks you for your donation!
+          </div>
+        ) : null}
+        <div
+          className="mt-0 rounded-lg border-[1px] border-yellow-800 bg-yellow-50 p-4 text-sm text-yellow-800 dark:bg-gray-800 dark:text-yellow-300"
+          role="alert"
+        >
+          The balances collected at the end of each month will be divided by 2
+          and shared with the contributors to the project for that month.
         </div>
       </section>
     </Layout>
