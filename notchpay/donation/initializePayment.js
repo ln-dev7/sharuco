@@ -18,8 +18,8 @@ export default function usePaymentInitialization() {
       currency: "EUR",
       amount,
       description,
-      callback: "http://localhost:3000/donation",
-      //callback: "https://sharuco.lndev.me/donation",
+      // callback: "http://localhost:3000/donation",
+      callback: "https://sharuco.lndev.me/donation",
     }
 
     try {
