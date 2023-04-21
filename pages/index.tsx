@@ -5,12 +5,14 @@ import {
   getLanguageColor,
   languagesName,
 } from "@/constants/languages"
+import { PARTNERS } from "@/constants/partner.js"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import highlight from "@/utils/highlight"
 import linearizeCode from "@/utils/linearizeCode"
 import hljs from "highlight.js"
 
+import { Separator } from "@/components/ui/separator"
 import "highlight.js/styles/vs.css"
 import { useEffect, useRef, useState } from "react"
 
@@ -20,6 +22,7 @@ import Image from "next/image"
 import Link from "next/link"
 import * as htmlToImage from "html-to-image"
 import { Code2, Github, Loader2 } from "lucide-react"
+import { useTheme } from "next-themes"
 import { toast } from "react-hot-toast"
 
 import { siteConfig } from "@/config/site"
@@ -37,6 +40,7 @@ import { Textarea } from "@/components/ui/textarea"
 
 export default function IndexPage() {
   const { login, isPending } = useGitHubLogin()
+  const { theme } = useTheme()
 
   const notifyCodeAdded = () =>
     toast.custom((t) => (
@@ -375,7 +379,35 @@ export default function IndexPage() {
             </div>
           </div>
         </div>
-
+        <Separator className="my-2" />
+        <div className="flex my-8 flex-col items-center gap-8">
+          <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
+            THOSE WHO SUPPORT US
+          </h2>
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            {PARTNERS.map((partner) => (
+              <a
+                className="shrink-0 w-[200px]"
+                href={partner.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={
+                    theme === "dark"
+                      ? partner.image
+                      : partner.imageDark
+                      ? partner.imageDark
+                      : partner.image
+                  }
+                  className="cursor-pointer grayscale hover:grayscale-0"
+                  alt={partner.name}
+                />
+              </a>
+            ))}
+          </div>
+        </div>
+        <Separator className="my-2" />
         <div>
           <div className="flex items-center space-x-2 text-base">
             <h4
