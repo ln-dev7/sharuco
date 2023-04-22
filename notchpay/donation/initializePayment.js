@@ -1,9 +1,7 @@
 import { useState } from "react"
 import axios from "axios"
 
-const NEXT_PUBLIC_NOTCH_PAY_API_URL = process.env.NEXT_PUBLIC_NOTCH_PAY_API_URL
-
-const INITIALIZE_URL = `${NEXT_PUBLIC_NOTCH_PAY_API_URL}/initialize`
+const INITIALIZE_URL = `${process.env.NEXT_PUBLIC_NOTCH_PAY_API_URL}/initialize`
 
 export default function usePaymentInitialization() {
   const [isLoading, setIsLoading] = useState(false)
