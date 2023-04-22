@@ -1,7 +1,7 @@
 import { useState } from "react"
 import axios from "axios"
 
-const INITIALIZE_URL = `${process.env.NEXT_PUBLIC_NOTCH_PAY_API_URL}/initialize`
+const INITIALIZE_URL = "https://api.notchpay.co/payments/initialize"
 
 export default function usePaymentInitialization() {
   const [isLoading, setIsLoading] = useState(false)

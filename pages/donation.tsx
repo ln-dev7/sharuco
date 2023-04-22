@@ -20,11 +20,12 @@ import { Input } from "@/components/ui/input"
 export default function Donation() {
   const { user } = useAuthContext()
   const [paymentDone, setPaymentDone] = useState(false)
-
+ 
   const checkPaymentStatus = async () => {
     const transactionDonationReference = localStorage.getItem(
       "transaction-donation-reference"
     )
+    const CAPTURE_URL = `https://api.notchpay.co/payments/${transactionDonationReference}`
 
     if (!transactionDonationReference) {
       return
@@ -32,7 +33,7 @@ export default function Donation() {
 
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_NOTCH_PAY_API_URL}/${transactionDonationReference}`,
+        CAPTURE_URL,
         {
           headers: {
             Accept: "application/json",
