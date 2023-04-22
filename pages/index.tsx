@@ -5,7 +5,7 @@ import {
   getLanguageColor,
   languagesName,
 } from "@/constants/languages"
-import { PARTNERS } from "@/constants/partner.js"
+import { COMPANIES, INDIVIDUALS } from "@/constants/supports.js"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import highlight from "@/utils/highlight"
@@ -380,39 +380,11 @@ export default function IndexPage() {
           </div>
         </div>
         <Separator className="my-2" />
-        <div className="flex my-8 flex-col items-center gap-8">
-          <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
-            THOSE WHO SUPPORT US
-          </h2>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
-            {PARTNERS.map((partner) => (
-              <a
-                className="shrink-0 w-[200px]"
-                href={partner.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={
-                    theme === "dark"
-                      ? partner.image
-                      : partner.imageDark
-                      ? partner.imageDark
-                      : partner.image
-                  }
-                  className="cursor-pointer grayscale hover:grayscale-0"
-                  alt={partner.name}
-                />
-              </a>
-            ))}
-          </div>
-        </div>
-        <Separator className="my-2" />
         <div>
           <div className="flex items-center space-x-2 text-base">
             <h4
               className="
-              text-sm font-semibold text-slate-900 dark:text-slate-100
+              text-lg font-semibold text-slate-900 dark:text-slate-100
             "
             >
               Contributors
@@ -432,7 +404,7 @@ export default function IndexPage() {
                   rel="noopener noreferrer"
                 >
                   <img
-                    className="inline-block h-12 w-12 rounded-full ring-2 ring-white hover:ring-sky-500"
+                    className="inline-block h-16 w-16 rounded-full ring-2 ring-white hover:ring-sky-500"
                     src={user.avatar_url}
                     alt={user.login}
                   />
@@ -450,6 +422,56 @@ export default function IndexPage() {
             </div>
           )}
           {/* https://tailwindcss.com/docs/reusing-styles */}
+        </div>
+        <Separator className="my-2" />
+        <div className="flex my-8 flex-col items-center gap-8">
+          <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
+            THOSE WHO SUPPORT US
+          </h2>
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            {COMPANIES.map((support) => (
+              <a
+                className="shrink-0 w-[200px]"
+                href={support.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={
+                    theme === "dark"
+                      ? support.image
+                      : support.imageDark
+                      ? support.imageDark
+                      : support.image
+                  }
+                  className="cursor-pointer grayscale hover:grayscale-0"
+                  alt={support.name}
+                />
+              </a>
+            ))}
+          </div>
+          <h3 className="text-lg font-bold leading-tight tracking-tighter sm:text-xl md:text-2xl lg:text-xl">
+            INDIVIDUALS
+          </h3>
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            {INDIVIDUALS.map((support) => (
+              <a
+                className="shrink-0 w-14 h-14"
+                href={support.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={support.image}
+                  className="cursor-pointer rounded-full"
+                  alt={support.name}
+                />
+              </a>
+            ))}
+          </div>
+          <Link href="/donation" className="text-blue-500 hover:underline hover:underline-offset-4">
+            Become a supporter
+          </Link>
         </div>
       </section>
     </Layout>
