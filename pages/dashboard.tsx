@@ -171,6 +171,7 @@ export default function Dashboard() {
     setValue("language", detectedLanguage)
   }
 
+  const [openDialog, setOpenDialog] = useState(false)
   const { createDocument, isLoading, isError, isSuccess }: any =
     useCreateDocument("codes")
 
@@ -286,6 +287,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (isSuccess) {
       notifyCodeAdded()
+      setOpenDialog(!isSuccess)
     }
   }, [isSuccess])
 
@@ -351,9 +353,12 @@ export default function Dashboard() {
           </Link>
         </div>
         <div className="flex flex-col justify-between gap-2 sm:flex-row">
-          <AlertDialog>
+          <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
             <AlertDialogTrigger asChild>
-              <button className={buttonVariants({ size: "lg" })}>
+              <button
+                className={buttonVariants({ size: "lg" })}
+                onClick={() => setOpenDialog(true)}
+              >
                 <Plus className="mr-2 h-4 w-4" />
                 Add new code
               </button>
