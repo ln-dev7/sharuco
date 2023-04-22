@@ -14,14 +14,13 @@ import { useForm } from "react-hook-form"
 import * as yup from "yup"
 
 import { Layout } from "@/components/layout"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
 
 export default function Donation() {
   const { user } = useAuthContext()
   const [paymentDone, setPaymentDone] = useState(false)
-
+ 
   const checkPaymentStatus = async () => {
     const transactionDonationReference = localStorage.getItem(
       "transaction-donation-reference"
@@ -33,12 +32,15 @@ export default function Donation() {
     }
 
     try {
-      const response = await axios.get(CAPTURE_URL, {
-        headers: {
-          Accept: "application/json",
-          Authorization: process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
-        },
-      })
+      const response = await axios.get(
+        CAPTURE_URL,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
+          },
+        }
+      )
       const paymentStatus = response.data.transaction.status
 
       if (paymentStatus === "complete") {
@@ -167,17 +169,12 @@ export default function Donation() {
             Thanks you for your donation!
           </div>
         ) : null}
-        <div className="w-full flex items-center justify-center">
-          <span className="text-lg font-bold">OR</span>
-        </div>
-        <div className="w-full flex items-center justify-center">
-          <a
-            href="https://www.buymeacoffee.com/lndev"
-            target="_blank"
-            className={buttonVariants({ size: "lg", variant: "default" })}
-          >
-            Support with Buy me a coffee
-          </a>
+        <div
+          className="mt-0 rounded-lg border-[1px] border-yellow-800 bg-yellow-50 p-4 text-sm text-yellow-800 dark:bg-gray-800 dark:text-yellow-300"
+          role="alert"
+        >
+          The balances collected at the end of each month will be divided by 2
+          and shared with the contributors to the project for that month.
         </div>
       </section>
     </Layout>
