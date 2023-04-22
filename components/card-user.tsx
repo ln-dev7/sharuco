@@ -34,7 +34,7 @@ export default function CardUser({
         <div>
           <h1 className="text-2xl font-bold">{displayName}</h1>
           <Link
-            href={`/${pseudo}`}
+            href={`/user/${pseudo}`}
             className="text-slate-600 hover:underline dark:text-slate-400"
           >
             {pseudo}

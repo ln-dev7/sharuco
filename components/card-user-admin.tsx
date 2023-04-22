@@ -48,7 +48,7 @@ export default function CardUserAdmin({
             {displayName !== null ? displayName : pseudo}
           </h1>
           <Link
-            href={`/${pseudo}`}
+            href={`/user/${pseudo}`}
             className="text-slate-600 hover:underline dark:text-slate-400"
           >
             {pseudo}

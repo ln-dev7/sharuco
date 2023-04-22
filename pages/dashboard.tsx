@@ -541,7 +541,7 @@ export default function Dashboard() {
           </AlertDialog>
           <div className="flex flex-col gap-2 sm:flex-row">
             <Link
-              href={`/${pseudo}`}
+              href={`/user/${pseudo}`}
               className={buttonVariants({ size: "lg", variant: "outline" })}
             >
               <User className="mr-2 h-4 w-4" />
