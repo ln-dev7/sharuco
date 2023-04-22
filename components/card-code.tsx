@@ -323,7 +323,7 @@ export default function CardCode({
         )}
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <Link
+        <a
           href={`/user/${idAuthor}`}
           className="flex items-center justify-start gap-2"
         >
@@ -371,7 +371,7 @@ export default function CardCode({
               </span>
             )}
           </div>
-        </Link>
+        </a>
         <div className="flex shrink-0 items-center justify-end gap-3">
           {searchParams.get("code-preview") === null && !isPrivate && (
             <TooltipProvider>
@@ -491,12 +491,12 @@ export default function CardCode({
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     Join Sharuco now to let{" "}
-                    <Link
+                    <a
                       href={`/user/${idAuthor}`}
                       className="font-semibold text-slate-900 dark:text-slate-100"
                     >
                       {idAuthor}
-                    </Link>{" "}
+                    </a>{" "}
                     know you like.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
