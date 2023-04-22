@@ -121,10 +121,8 @@ export default function CardCodeAdmin({
   )
   const index = client.initIndex(ALGOLIA_INDEX_NAME)
 
-  const {
-    deleteDocument,
-    isLoading: isLoadingDelete,
-  }: any = useDeleteDocument("codes")
+  const { deleteDocument, isLoading: isLoadingDelete }: any =
+    useDeleteDocument("codes")
 
   const handleDeleteDocument = () => {
     deleteDocument(id)
@@ -620,7 +618,7 @@ export default function CardCodeAdmin({
       </div>
       <div className="flex items-center justify-between gap-4">
         <Link
-          href={`/${idAuthor}`}
+          href={`/user/${idAuthor}`}
           className="flex items-center justify-start gap-2"
         >
           <Avatar className="h-8 w-8 cursor-pointer">
@@ -701,27 +699,29 @@ export default function CardCodeAdmin({
               </Tooltip>
             </TooltipProvider>
           )}
-          <div className="flex items-center text-slate-700 dark:text-slate-400 ">
-            {user && favorisInit.includes(pseudo) ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="#F9197F"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="#F9197F"
-                className="mr-2 h-5 w-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                />
-              </svg>
-            ) : (
-              <Star className="mr-2 h-5 w-5" />
-            )}
-            {favorisInit.length}
-          </div>
+          {isPrivate ? null : (
+            <div className="flex items-center text-slate-700 dark:text-slate-400 ">
+              {user && favorisInit.includes(pseudo) ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#F9197F"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="#F9197F"
+                  className="mr-2 h-5 w-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                  />
+                </svg>
+              ) : (
+                <Star className="mr-2 h-5 w-5" />
+              )}
+              {favorisInit.length}
+            </div>
+          )}
 
           {!isPrivate && (
             <AlertDialog>
