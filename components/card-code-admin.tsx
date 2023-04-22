@@ -110,6 +110,10 @@ export default function CardCodeAdmin({
   const { login, isPending } = useGitHubLogin()
 
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
+  
+  const [openShareDialog, setOpenShareDialog] = useState(false)
+
+  const [openEditDialog, setOpenEditDialog] = useState(false)
 
   //
 
@@ -238,6 +242,9 @@ export default function CardCodeAdmin({
       isPrivate: isPrivateUpdate,
     })
     setCheckboxOn(isPrivateUpdate)
+
+    setOpenEditDialog(false)
+    
     toast.custom((t) => (
       <div
         className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
@@ -309,7 +316,9 @@ export default function CardCodeAdmin({
       <Toaster position="top-right" reverseOrder={false} />
       <div className="flex w-full items-center justify-end">
         <div className="flex items-center gap-2">
-          <AlertDialog>
+          <AlertDialog
+              open={openEditDialog}
+              onOpenChange={setOpenEditDialog}>
             <AlertDialogTrigger asChild>
               <Button variant="outline">
                 Edit
@@ -724,7 +733,10 @@ export default function CardCodeAdmin({
           )}
 
           {!isPrivate && (
-            <AlertDialog>
+            <AlertDialog
+              open={openShareDialog}
+              onOpenChange={setOpenShareDialog}
+            >
               <AlertDialogTrigger asChild>
                 <span className="flex cursor-pointer items-center justify-center rounded-full p-1 text-slate-700 duration-200 hover:bg-[#1C9BEF] hover:text-white dark:text-slate-400 dark:hover:text-white">
                   <Share className="h-5 w-5" />
@@ -740,6 +752,7 @@ export default function CardCodeAdmin({
                   <FacebookShareButton
                     url={shareUrl}
                     quote={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                    onClick={() => setOpenShareDialog(false)}
                   >
                     <FacebookIcon size={38} round />
                   </FacebookShareButton>
@@ -747,6 +760,7 @@ export default function CardCodeAdmin({
                     url={shareUrl}
                     title={`I discovered this code on @sharuco_app , I share it with you here. - « ${description} »`}
                     hashtags={["CaParleDev", "ShareWithSharuco"]}
+                    onClick={() => setOpenShareDialog(false)}
                   >
                     <TwitterIcon size={38} round />
                   </TwitterShareButton>
@@ -754,6 +768,7 @@ export default function CardCodeAdmin({
                     url={shareUrl}
                     title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
                     source="https://sharuco.lndev.me"
+                    onClick={() => setOpenShareDialog(false)}
                   >
                     <LinkedinIcon size={38} round />
                   </LinkedinShareButton>
@@ -761,18 +776,21 @@ export default function CardCodeAdmin({
                     url={shareUrl}
                     subject={`Share code on sharuco.lndev.me`}
                     body={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                    onClick={() => setOpenShareDialog(false)}
                   >
                     <EmailIcon size={38} round />
                   </EmailShareButton>
                   <WhatsappShareButton
                     url={shareUrl}
                     title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                    onClick={() => setOpenShareDialog(false)}
                   >
                     <WhatsappIcon size={38} round />
                   </WhatsappShareButton>
                   <TelegramShareButton
                     url={shareUrl}
                     title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                    onClick={() => setOpenShareDialog(false)}
                   >
                     <TelegramIcon size={38} round />
                   </TelegramShareButton>
@@ -782,6 +800,7 @@ export default function CardCodeAdmin({
                     onClick={() => {
                       copyToClipboard(shareUrl)
                       notifyUrlCopied()
+                      setOpenShareDialog(false)
                     }}
                   >
                     <Copy className="h-4 w-4" />

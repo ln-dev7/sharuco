@@ -97,6 +97,8 @@ export default function CardCode({
 
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
 
+  const [openShareDialog, setOpenShareDialog] = useState(false)
+
   const {
     data: dataAuthor,
     isLoading: isLoadingAuthor,
@@ -519,7 +521,10 @@ export default function CardCode({
             </AlertDialog>
           )}
           {!isPrivate && (
-            <AlertDialog>
+            <AlertDialog
+              open={openShareDialog}
+              onOpenChange={setOpenShareDialog}
+            >
               <AlertDialogTrigger asChild>
                 <span className="flex cursor-pointer items-center justify-center rounded-full p-1 text-slate-700 duration-200 hover:bg-[#1C9BEF] hover:text-white dark:text-slate-400 dark:hover:text-white">
                   <Share className="h-5 w-5" />
@@ -535,6 +540,7 @@ export default function CardCode({
                   <FacebookShareButton
                     url={shareUrl}
                     quote={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                    onClick={() => setOpenShareDialog(false)}
                   >
                     <FacebookIcon size={38} round />
                   </FacebookShareButton>
@@ -542,6 +548,7 @@ export default function CardCode({
                     url={shareUrl}
                     title={`I discovered this code on @sharuco_app , I share it with you here. - « ${description} »`}
                     hashtags={["CaParleDev", "ShareWithSharuco"]}
+                    onClick={() => setOpenShareDialog(false)}
                   >
                     <TwitterIcon size={38} round />
                   </TwitterShareButton>
@@ -549,6 +556,7 @@ export default function CardCode({
                     url={shareUrl}
                     title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
                     source="https://sharuco.lndev.me"
+                    onClick={() => setOpenShareDialog(false)}
                   >
                     <LinkedinIcon size={38} round />
                   </LinkedinShareButton>
@@ -556,18 +564,21 @@ export default function CardCode({
                     url={shareUrl}
                     subject={`Share code on sharuco.lndev.me`}
                     body={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                    onClick={() => setOpenShareDialog(false)}
                   >
                     <EmailIcon size={38} round />
                   </EmailShareButton>
                   <WhatsappShareButton
                     url={shareUrl}
                     title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                    onClick={() => setOpenShareDialog(false)}
                   >
                     <WhatsappIcon size={38} round />
                   </WhatsappShareButton>
                   <TelegramShareButton
                     url={shareUrl}
                     title={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
+                    onClick={() => setOpenShareDialog(false)}
                   >
                     <TelegramIcon size={38} round />
                   </TelegramShareButton>
@@ -577,6 +588,7 @@ export default function CardCode({
                     onClick={() => {
                       copyToClipboard(shareUrl)
                       notifyUrlCopied()
+                      setOpenShareDialog(false)
                     }}
                   >
                     <Copy className="h-4 w-4" />
