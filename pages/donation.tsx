@@ -16,7 +16,6 @@ import * as yup from "yup"
 import { Layout } from "@/components/layout"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
 
 export default function Donation() {
   const { user } = useAuthContext()
@@ -174,6 +173,7 @@ export default function Donation() {
           <a
             href="https://www.buymeacoffee.com/lndev"
             target="_blank"
+            rel="noopener noreferrer"
             className={buttonVariants({ size: "lg", variant: "default" })}
           >
             Support with Buy me a coffee
