@@ -23,7 +23,13 @@ export const INDIVIDUALS = [
   {
     name: "alexistambie",
     image:
-      "	https://pbs.twimg.com/profile_images/1438622387780702208/8qvBFe3o_400x400.jpg",
+      "https://pbs.twimg.com/profile_images/1438622387780702208/8qvBFe3o_400x400.jpg",
     link: "https://twitter.com/alexistambie",
+  },
+  {
+    name: "gabriel_thecode",
+    image:
+      "https://pbs.twimg.com/profile_images/1647626152297607168/IivNbzIw_400x400.jpg",
+    link: "https://twitter.com/gabriel_thecode",
   },
 ]
