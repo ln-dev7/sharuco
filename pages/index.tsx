@@ -396,7 +396,7 @@ export default function IndexPage() {
           <div className="mt-3 flex -space-x-2">
             {contributors
               .sort((a, b) => b.contributions - a.contributions)
-              .slice(0, 10)
+              .slice(0, 6)
               .map((user) => (
                 <a
                   href={"https://github.com/" + user.login}
@@ -404,7 +404,7 @@ export default function IndexPage() {
                   rel="noopener noreferrer"
                 >
                   <img
-                    className="inline-block h-16 w-16 rounded-full ring-2 ring-white hover:ring-sky-500"
+                    className="inline-block h-14 w-14 rounded-full ring-2 ring-white hover:ring-sky-500"
                     src={user.avatar_url}
                     alt={user.login}
                   />
