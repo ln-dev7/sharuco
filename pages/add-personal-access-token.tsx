@@ -171,7 +171,7 @@ export default function AddPersonalAccessToken() {
               4- Scroll down and select the{" "}
               <span className="font-medium">« gist »</span> box, then scroll
               down again and click on{" "}
-              <span className="font-medium">« Geneate token »</span>.
+              <span className="font-medium">« Generate token »</span>.
             </p>
             <Image
               src="/guides/add-personal-access-token-2.png"
