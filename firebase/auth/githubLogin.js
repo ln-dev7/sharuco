@@ -55,9 +55,20 @@ export const useGitHubLogin = () => {
         },
         { merge: true }
       )
+      
+      // Vérifier si les données ont été mises à jour avec succès
+      const docSnap = await getDoc(documentRef)
+      const userData = docSnap.data()
+
+      if (!userData) {
+        throw new Error("Failed to update user data")
+      }
+
     } catch (error) {
       //console.log(error)
       setError(error.message)
+      // Déconnecter l'utilisateur en cas d'erreur
+      await signOut(auth)
     } finally {
       setIsPending(false)
     }
