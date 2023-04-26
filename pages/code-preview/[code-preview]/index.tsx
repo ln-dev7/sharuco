@@ -494,7 +494,7 @@ export default function CodePreview() {
                       className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-slate-100"
                     >
                       <User className="h-4 w-4" />
-                      <Link href={`/${person}`} className="hover:underline">
+                      <Link href={`/user/${person}`} className="hover:underline">
                         {person}
                       </Link>
                     </div>
