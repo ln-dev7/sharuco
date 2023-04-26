@@ -287,7 +287,7 @@ export default function CodePreview() {
                         >
                           <div className="flex flex-wrap items-center">
                             <Link
-                              href={`/${comment.idAuthor}`}
+                              href={`/user/${comment.idAuthor}`}
                               className="flex items-center mr-2 justify-start gap-2"
                             >
                               <Avatar className="h-8 w-8 cursor-pointer">
