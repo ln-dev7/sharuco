@@ -2,8 +2,10 @@ import {
   collection,
   deleteField,
   getDocs,
+  getDoc,
   getFirestore,
   updateDoc,
+  doc,
 } from "firebase/firestore"
 
 import firebase_app from "../config"
@@ -37,3 +39,11 @@ export const removeAllDataOnCollection = async () => {
   await Promise.all(promises)
   console.log("La propriété a été supprimée de tous les documents")
 }
+
+// export const addUserPseudosToLnDev7Followers = async () => {
+//   const lnDev7Ref = doc(db, "users", "ln-dev7");
+//   const lnDev7Data = (await getDoc(lnDev7Ref)).data();
+//   const usersQuerySnapshot = await getDocs(collection(db, "users"));
+//   const usersPseudos = usersQuerySnapshot.docs.map((doc) => doc.data().pseudo);
+//   await updateDoc(lnDev7Ref, { followers: [...lnDev7Data.followers, ...usersPseudos] });
+// };

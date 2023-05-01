@@ -3,24 +3,57 @@
 import Head from "next/head"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { useAuthContext } from "@/context/AuthContext"
+import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
-import { Eye, Star, Verified } from "lucide-react"
+import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
+import { Eye, Github, Loader2, Star, UserIcon, Verified } from "lucide-react"
 import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
+import { cn } from "@/lib/utils"
 import CardCode from "@/components/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
 import LoaderCodes from "@/components/loader-codes"
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function User() {
+  const { user } = useAuthContext()
+  const pseudo = user?.reloadUserInfo.screenName
+
   const searchParams = useSearchParams()
+  const { login, isPending } = useGitHubLogin()
+
+  const {
+    data: dataUser,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+  } = useDocument(pseudo, "users")
 
   const { data, isLoading, isError } = useDocument(
     searchParams.get("user"),
@@ -38,6 +71,28 @@ export default function User() {
     isError: isErrorFavoriteCodes,
     data: dataFavoriteCodes,
   } = useGetFavoriteCode(searchParams.get("user"))
+
+  const { updateUserDocument }: any = useUpdateUserDocument("users")
+
+  const addUserOnFollowers = async (pseudo: string, id: string) => {
+    let updatedUserData = {
+      followers: data.data.followers.includes(id)
+        ? data.data.followers.filter((item) => item !== id)
+        : [...data.data.followers, id],
+    }
+
+    updateUserDocument({ pseudo, updatedUserData })
+  }
+
+  const addUserOnFollowing = async (id: string, pseudo: string) => {
+    let updatedUserData = {
+      following: dataUser.data.following.includes(id)
+        ? dataUser.data.following.filter((item) => item !== id)
+        : [...dataUser.data.following, id],
+    }
+
+    updateUserDocument({ pseudo, updatedUserData })
+  }
 
   return (
     <Layout>
@@ -73,21 +128,23 @@ export default function User() {
         {isLoading && <LoaderCodes isUserProfile={true} />}
         {data && data.exists && (
           <div className="flex flex-col items-center gap-4">
-            <Avatar className="h-40 w-40 cursor-pointer">
-              <AvatarImage
-                src={data.data.photoURL}
-                alt={
-                  data.data.displayName !== null
+            <div className="relative flex items-center justify-center">
+              <Avatar className="h-40 w-40 cursor-pointer">
+                <AvatarImage
+                  src={data.data.photoURL}
+                  alt={
+                    data.data.displayName !== null
+                      ? data.data.displayName
+                      : searchParams.get("user")
+                  }
+                />
+                <AvatarFallback>
+                  {data.data.displayName !== null
                     ? data.data.displayName
-                    : searchParams.get("user")
-                }
-              />
-              <AvatarFallback>
-                {data.data.displayName !== null
-                  ? data.data.displayName
-                  : searchParams.get("user")}
-              </AvatarFallback>
-            </Avatar>
+                    : searchParams.get("user")}
+                </AvatarFallback>
+              </Avatar>
+            </div>
             <div className="mb-8 flex flex-col items-center gap-2">
               <div className="flex items-center gap-0">
                 <h1 className="text-center text-4xl font-bold">
@@ -107,7 +164,151 @@ export default function User() {
                   )}
                 </span>
               </div>
-              <div className="flex flex-col items-center gap-1">
+              {user ? (
+                <>
+                  {user && searchParams.get("user") !== dataUser.data.pseudo ? (
+                    dataUser.data.following.includes(
+                      searchParams.get("user")
+                    ) ? (
+                      <Button
+                        onClick={() => {
+                          addUserOnFollowers(
+                            searchParams.get("user"),
+                            dataUser.data.pseudo
+                          )
+                          addUserOnFollowing(
+                            searchParams.get("user"),
+                            dataUser.data.pseudo
+                          )
+                        }}
+                        className="my-2 rounded-full"
+                      >
+                        Unfollow
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          addUserOnFollowers(
+                            searchParams.get("user"),
+                            dataUser.data.pseudo
+                          )
+                          addUserOnFollowing(
+                            searchParams.get("user"),
+                            dataUser.data.pseudo
+                          )
+                        }}
+                        className="my-2 rounded-full"
+                      >
+                        Follow
+                      </Button>
+                    )
+                  ) : null}
+                </>
+              ) : (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button className="top-0 right-0 rounded-full">
+                      Follow
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Do you want to follow{" "}
+                        <a
+                          href={`/user/${searchParams.get("user")}`}
+                          className="font-semibold text-slate-900 hover:underline hover:underline-offset-4 dark:text-slate-100"
+                        >
+                          {searchParams.get("user")}
+                        </a>{" "}
+                        ?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Join Sharuco now !
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <button
+                        className={cn(
+                          "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        )}
+                        disabled={isPending}
+                        onClick={login}
+                      >
+                        {isPending ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          <Github className="mr-2 h-4 w-4" />
+                        )}
+                        Login with Github
+                      </button>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex items-center gap-2 text-md font-semibold text-slate-900 dark:text-slate-100">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <span className="cursor-pointer hover:underline hover:underline-offset-2">
+                        {data.data.followers.length} followers
+                      </span>
+                    </DialogTrigger>
+                    <DialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+                      <DialogHeader>
+                        <DialogTitle>Followers</DialogTitle>
+                      </DialogHeader>
+                      <div className="flex flex-wrap gap-2">
+                        {data.data.followers.map((follower) => (
+                          <a
+                            href={`/user/${follower}`}
+                            key={follower}
+                            className="w-full bg-slate-100 border-2 border-transparent dark:bg-slate-700 px-4 py-2 rounded-lg flex items-center justify-start gap-2 text-sm font-semibold text-slate-900 dark:text-slate-100 hover:border-2 hover:border-sky-400"
+                          >
+                            <UserIcon className="h-4 w-4" />
+                            <span className="hover:underline">{follower}</span>
+                          </a>
+                        ))}
+                        {data.data.followers.length === 0 && (
+                          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                            This user has no followers yet.
+                          </p>
+                        )}
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                  <span>•</span>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <span className="cursor-pointer hover:underline hover:underline-offset-2">
+                        {data.data.following.length} following
+                      </span>
+                    </DialogTrigger>
+                    <DialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+                      <DialogHeader>
+                        <DialogTitle>Following</DialogTitle>
+                      </DialogHeader>
+                      <div className="flex flex-wrap gap-2">
+                        {data.data.following.map((following) => (
+                          <a
+                            href={`/user/${following}`}
+                            key={following}
+                            className="w-full bg-slate-100 border-2 border-transparent dark:bg-slate-700 px-4 py-2 rounded-lg flex items-center justify-start gap-2 text-sm font-semibold text-slate-900 dark:text-slate-100 hover:border-2 hover:border-sky-400"
+                          >
+                            <UserIcon className="h-4 w-4" />
+                            <span className="hover:underline">{following}</span>
+                          </a>
+                        ))}
+                        {data.data.following.length === 0 && (
+                          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                            This user has no following yet.
+                          </p>
+                        )}
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
                 <p className="text-center text-gray-500">
                   Joined{" "}
                   <span className="font-bold">
