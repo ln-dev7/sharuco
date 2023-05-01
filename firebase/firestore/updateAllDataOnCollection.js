@@ -1,12 +1,14 @@
+import { auth } from "@/firebase/config"
+import { getAuth } from "firebase/auth"
 import {
   collection,
+  deleteDoc,
   deleteField,
+  doc,
   getDoc,
   getDocs,
   getFirestore,
   updateDoc,
-  deleteDoc,
-  doc
 } from "firebase/firestore"
 
 import firebase_app from "../config"
