@@ -12,6 +12,7 @@ import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
 import { Eye, Github, Loader2, Star, UserIcon, Verified } from "lucide-react"
 import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import {updateAllDatataOnCollection} from "@/firebase/firestore/updateAllDataOnCollection"
 
 import { cn } from "@/lib/utils"
 import CardCode from "@/components/card-code"
@@ -47,6 +48,10 @@ export default function User() {
   const pseudo = user?.reloadUserInfo.screenName
 
   const searchParams = useSearchParams()
+  const idCurrent = searchParams.get("user").toLowerCase()
+
+  console.log(searchParams.get("user").toLowerCase())
+
   const { login, isPending } = useGitHubLogin()
 
   const {
@@ -55,22 +60,19 @@ export default function User() {
     isError: isErrorUser,
   } = useDocument(pseudo, "users")
 
-  const { data, isLoading, isError } = useDocument(
-    searchParams.get("user"),
-    "users"
-  )
+  const { data, isLoading, isError } = useDocument(idCurrent, "users")
 
   const {
     isLoading: isLoadingPublicCodes,
     isError: isErrorPublicCodes,
     data: dataPublicCodes,
-  } = useGetIsPrivateCodeFromUser(false, searchParams.get("user"))
+  } = useGetIsPrivateCodeFromUser(false, idCurrent)
 
   const {
     isLoading: isLoadingFavoriteCodes,
     isError: isErrorFavoriteCodes,
     data: dataFavoriteCodes,
-  } = useGetFavoriteCode(searchParams.get("user"))
+  } = useGetFavoriteCode(idCurrent)
 
   const { updateUserDocument }: any = useUpdateUserDocument("users")
 
@@ -93,6 +95,8 @@ export default function User() {
 
     updateUserDocument({ pseudo, updatedUserData })
   }
+
+  //updateAllDatataOnCollection()
 
   return (
     <Layout>
@@ -135,13 +139,13 @@ export default function User() {
                   alt={
                     data.data.displayName !== null
                       ? data.data.displayName
-                      : searchParams.get("user")
+                      : idCurrent
                   }
                 />
                 <AvatarFallback>
                   {data.data.displayName !== null
                     ? data.data.displayName
-                    : searchParams.get("user")}
+                    : idCurrent}
                 </AvatarFallback>
               </Avatar>
             </div>
@@ -155,7 +159,7 @@ export default function User() {
                         data.data.displayName.split(" ")[1]}
                     </>
                   ) : (
-                    searchParams.get("user")
+                    idCurrent
                   )}
                 </h1>
                 <span className="ml-2">
@@ -166,20 +170,12 @@ export default function User() {
               </div>
               {user ? (
                 <>
-                  {user && searchParams.get("user") !== dataUser.data.pseudo ? (
-                    dataUser.data.following.includes(
-                      searchParams.get("user")
-                    ) ? (
+                  {user && idCurrent !== dataUser.data.pseudo ? (
+                    dataUser.data.following.includes(idCurrent) ? (
                       <Button
                         onClick={() => {
-                          addUserOnFollowers(
-                            searchParams.get("user"),
-                            dataUser.data.pseudo
-                          )
-                          addUserOnFollowing(
-                            searchParams.get("user"),
-                            dataUser.data.pseudo
-                          )
+                          addUserOnFollowers(idCurrent, dataUser.data.pseudo)
+                          addUserOnFollowing(idCurrent, dataUser.data.pseudo)
                         }}
                         className="my-2 rounded-full"
                       >
@@ -188,14 +184,8 @@ export default function User() {
                     ) : (
                       <Button
                         onClick={() => {
-                          addUserOnFollowers(
-                            searchParams.get("user"),
-                            dataUser.data.pseudo
-                          )
-                          addUserOnFollowing(
-                            searchParams.get("user"),
-                            dataUser.data.pseudo
-                          )
+                          addUserOnFollowers(idCurrent, dataUser.data.pseudo)
+                          addUserOnFollowing(idCurrent, dataUser.data.pseudo)
                         }}
                         className="my-2 rounded-full"
                       >
@@ -216,10 +206,10 @@ export default function User() {
                       <AlertDialogTitle>
                         Do you want to follow{" "}
                         <a
-                          href={`/user/${searchParams.get("user")}`}
+                          href={`/user/${idCurrent}`}
                           className="font-semibold text-slate-900 hover:underline hover:underline-offset-4 dark:text-slate-100"
                         >
-                          {searchParams.get("user")}
+                          {idCurrent}
                         </a>{" "}
                         ?
                       </AlertDialogTitle>
@@ -309,12 +299,6 @@ export default function User() {
                     </DialogContent>
                   </Dialog>
                 </div>
-                <p className="text-center text-gray-500">
-                  Joined{" "}
-                  <span className="font-bold">
-                    {moment(data.data.createdAt).fromNow()}
-                  </span>
-                </p>
               </div>
             </div>
             <Tabs defaultValue="public-code" className="w-full">

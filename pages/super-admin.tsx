@@ -25,7 +25,7 @@ export default function Dashboard() {
   const { user } = useAuthContext()
   const router = useRouter()
   useEffect(() => {
-    if (!user || !SUPER_ADMIN.includes(user.reloadUserInfo.screenName)) {
+    if (!user || !SUPER_ADMIN.includes(user.reloadUserInfo.screenName.toLowerCase())) {
       router.push("/")
     }
   })
