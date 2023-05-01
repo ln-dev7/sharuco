@@ -85,9 +85,9 @@ export default function User() {
 
   const addUserOnFollowing = async (id: string, pseudo: string) => {
     let updatedUserData = {
-      following: dataUser.data.following.includes(id)
-        ? dataUser.data.following.filter((item) => item !== id)
-        : [...dataUser.data.following, id],
+      following: dataUser?.data?.following.includes(id)
+        ? dataUser?.data?.following.filter((item) => item !== id)
+        : [...dataUser?.data?.following, id],
     }
 
     updateUserDocument({ pseudo, updatedUserData })
@@ -165,12 +165,12 @@ export default function User() {
               </div>
               {user ? (
                 <>
-                  {user && idCurrent !== dataUser.data.pseudo ? (
-                    dataUser.data.following.includes(idCurrent) ? (
+                  {user && idCurrent !== dataUser?.data?.pseudo ? (
+                    dataUser?.data?.following.includes(idCurrent) ? (
                       <Button
                         onClick={() => {
-                          addUserOnFollowers(idCurrent, dataUser.data.pseudo)
-                          addUserOnFollowing(idCurrent, dataUser.data.pseudo)
+                          addUserOnFollowers(idCurrent, dataUser?.data?.pseudo)
+                          addUserOnFollowing(idCurrent, dataUser?.data?.pseudo)
                         }}
                         className="my-2 rounded-full"
                       >
@@ -179,8 +179,8 @@ export default function User() {
                     ) : (
                       <Button
                         onClick={() => {
-                          addUserOnFollowers(idCurrent, dataUser.data.pseudo)
-                          addUserOnFollowing(idCurrent, dataUser.data.pseudo)
+                          addUserOnFollowers(idCurrent, dataUser?.data?.pseudo)
+                          addUserOnFollowing(idCurrent, dataUser?.data?.pseudo)
                         }}
                         className="my-2 rounded-full"
                       >
