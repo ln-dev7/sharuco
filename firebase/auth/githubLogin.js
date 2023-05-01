@@ -34,28 +34,28 @@ export const useGitHubLogin = () => {
 
       const documentRef = doc(
         collection(db, "users"),
-        user.reloadUserInfo.screenName
+        user.reloadUserInfo.screenName.toLowerCase()
       )
 
       await setDoc(
         documentRef,
         {
-          pseudo: user.reloadUserInfo.screenName,
+          pseudo: user.reloadUserInfo.screenName.toLowerCase(),
           displayName:
             user.displayName !== null
               ? user.displayName
-              : user.reloadUserInfo.screenName,
+              : user.reloadUserInfo.screenName.toLowerCase(),
           email: user.email,
           photoURL: user.photoURL,
           createdAt: moment(user.metadata.creationTime).valueOf(),
           lastLoginAt: moment(user.metadata.lastSignInTime).valueOf(),
           userToken:
-            user.reloadUserInfo.screenName +
+            user.reloadUserInfo.screenName.toLowerCase() +
             moment(user.metadata.creationTime).valueOf(),
         },
         { merge: true }
       )
-      
+
       // Vérifier si les données ont été mises à jour avec succès
       const docSnap = await getDoc(documentRef)
       const userData = docSnap.data()
@@ -63,7 +63,6 @@ export const useGitHubLogin = () => {
       if (!userData) {
         throw new Error("Failed to update user data")
       }
-
     } catch (error) {
       //console.log(error)
       setError(error.message)
