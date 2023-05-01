@@ -37,28 +37,51 @@ export const useGitHubLogin = () => {
         user.reloadUserInfo.screenName.toLowerCase()
       )
 
-      await setDoc(
-        documentRef,
-        {
-          pseudo: user.reloadUserInfo.screenName.toLowerCase(),
-          displayName:
-            user.displayName !== null
-              ? user.displayName
-              : user.reloadUserInfo.screenName.toLowerCase(),
-          email: user.email,
-          photoURL: user.photoURL,
-          createdAt: moment(user.metadata.creationTime).valueOf(),
-          lastLoginAt: moment(user.metadata.lastSignInTime).valueOf(),
-          userToken:
-            user.reloadUserInfo.screenName.toLowerCase() +
-            moment(user.metadata.creationTime).valueOf(),
-        },
-        { merge: true }
-      )
-
       // Vérifier si les données ont été mises à jour avec succès
       const docSnap = await getDoc(documentRef)
       const userData = docSnap.data()
+
+      if (docSnap.exists()) {
+        await setDoc(
+          documentRef,
+          {
+            pseudo: user.reloadUserInfo.screenName.toLowerCase(),
+            displayName:
+              user.displayName !== null
+                ? user.displayName
+                : user.reloadUserInfo.screenName.toLowerCase(),
+            email: user.email,
+            photoURL: user.photoURL,
+            createdAt: moment(user.metadata.creationTime).valueOf(),
+            lastLoginAt: moment(user.metadata.lastSignInTime).valueOf(),
+            userToken:
+              user.reloadUserInfo.screenName.toLowerCase() +
+              moment(user.metadata.creationTime).valueOf(),
+          },
+          { merge: true }
+        )
+      } else {
+        await setDoc(
+          documentRef,
+          {
+            pseudo: user.reloadUserInfo.screenName.toLowerCase(),
+            displayName:
+              user.displayName !== null
+                ? user.displayName
+                : user.reloadUserInfo.screenName.toLowerCase(),
+            email: user.email,
+            photoURL: user.photoURL,
+            createdAt: moment(user.metadata.creationTime).valueOf(),
+            lastLoginAt: moment(user.metadata.lastSignInTime).valueOf(),
+            userToken:
+              user.reloadUserInfo.screenName.toLowerCase() +
+              moment(user.metadata.creationTime).valueOf(),
+            following: ["ln-dev7"],
+            followers: [],
+          },
+          { merge: true }
+        )
+      }
 
       if (!userData) {
         throw new Error("Failed to update user data")

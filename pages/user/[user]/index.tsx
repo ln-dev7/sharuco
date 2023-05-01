@@ -8,11 +8,11 @@ import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
+import { updateAllDatataOnCollection } from "@/firebase/firestore/updateAllDataOnCollection"
 import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
 import { Eye, Github, Loader2, Star, UserIcon, Verified } from "lucide-react"
 import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
-import {updateAllDatataOnCollection} from "@/firebase/firestore/updateAllDataOnCollection"
 
 import { cn } from "@/lib/utils"
 import CardCode from "@/components/card-code"
@@ -299,6 +299,12 @@ export default function User() {
                     </DialogContent>
                   </Dialog>
                 </div>
+                <p className="text-center text-gray-500">
+                  Joined{" "}
+                  <span className="font-bold">
+                    {moment(data.data.createdAt).fromNow()}
+                  </span>
+                </p>
               </div>
             </div>
             <Tabs defaultValue="public-code" className="w-full">
