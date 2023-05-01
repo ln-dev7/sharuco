@@ -8,7 +8,6 @@ import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
-import { updateAllDatataOnCollection } from "@/firebase/firestore/updateAllDataOnCollection"
 import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
 import { Eye, Github, Loader2, Star, UserIcon, Verified } from "lucide-react"
 import moment from "moment"
@@ -49,8 +48,6 @@ export default function User() {
 
   const searchParams = useSearchParams()
   const idCurrent = searchParams.get("user").toLowerCase()
-
-  console.log(searchParams.get("user").toLowerCase())
 
   const { login, isPending } = useGitHubLogin()
 
@@ -95,9 +92,7 @@ export default function User() {
 
     updateUserDocument({ pseudo, updatedUserData })
   }
-
-  //updateAllDatataOnCollection()
-
+  
   return (
     <Layout>
       <Head>

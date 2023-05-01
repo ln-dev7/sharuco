@@ -76,7 +76,7 @@ export const useGitHubLogin = () => {
             userToken:
               user.reloadUserInfo.screenName.toLowerCase() +
               moment(user.metadata.creationTime).valueOf(),
-            following: ["ln-dev7"],
+            following: [],
             followers: [],
           },
           { merge: true }
