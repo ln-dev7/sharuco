@@ -31,9 +31,8 @@ export const useGitHubLogout = () => {
     }
     try {
       await signOut(auth)
-      console.log("user logged out")
     } catch (error) {
-      console.log(error.message)
+      console.error(error.message)
     }
   }
 
@@ -114,7 +113,9 @@ export function AvatarUser() {
         {user && (
           <>
             <Separator className="mt-8 mb-4" />
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">Follow Sharuco on </p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">
+              Follow Sharuco on{" "}
+            </p>
             <Link
               href={siteConfig.links.github}
               target="_blank"
