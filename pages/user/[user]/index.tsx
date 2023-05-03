@@ -45,9 +45,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 export default function User() {
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName
-
   const searchParams = useSearchParams()
-  const idCurrent = searchParams.get("user").toLowerCase()
+  const idCurrent = searchParams?.get("user")?.toLowerCase()
 
   const { login, isPending } = useGitHubLogin()
 
@@ -92,7 +91,6 @@ export default function User() {
 
     updateUserDocument({ pseudo, updatedUserData })
   }
-  
   return (
     <Layout>
       <Head>

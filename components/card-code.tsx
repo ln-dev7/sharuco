@@ -494,7 +494,11 @@ export default function CardCode({
                   <AlertDialogDescription>
                     Join Sharuco now to let{" "}
                     <a
-                      href={`/user/${idAuthor}`}
+                      href={
+                        dataAuthor && dataAuthor.exists
+                          ? `/user/${idAuthor}`
+                          : "#"
+                      }
                       className="font-semibold text-slate-900 dark:text-slate-100"
                     >
                       {idAuthor}
