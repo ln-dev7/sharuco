@@ -110,7 +110,7 @@ export default function CardCodeAdmin({
   const { login, isPending } = useGitHubLogin()
 
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
-  
+
   const [openShareDialog, setOpenShareDialog] = useState(false)
 
   const [openEditDialog, setOpenEditDialog] = useState(false)
@@ -244,7 +244,7 @@ export default function CardCodeAdmin({
     setCheckboxOn(isPrivateUpdate)
 
     setOpenEditDialog(false)
-    
+
     toast.custom((t) => (
       <div
         className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
@@ -316,9 +316,7 @@ export default function CardCodeAdmin({
       <Toaster position="top-right" reverseOrder={false} />
       <div className="flex w-full items-center justify-end">
         <div className="flex items-center gap-2">
-          <AlertDialog
-              open={openEditDialog}
-              onOpenChange={setOpenEditDialog}>
+          <AlertDialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
             <AlertDialogTrigger asChild>
               <Button variant="outline">
                 Edit
@@ -626,8 +624,8 @@ export default function CardCodeAdmin({
         )}
       </div>
       <div className="flex items-center justify-between gap-4">
-        <Link
-          href={`/user/${idAuthor}`}
+        <a
+          href={dataUser && dataUser.exists ? `/user/${idAuthor}` : "#"}
           className="flex items-center justify-start gap-2"
         >
           <Avatar className="h-8 w-8 cursor-pointer">
@@ -636,7 +634,7 @@ export default function CardCodeAdmin({
                 <Loader />
               </AvatarFallback>
             )}
-            {dataUser && dataUser.exists && (
+            {dataUser && dataUser.exists ? (
               <>
                 <AvatarImage
                   src={dataUser.data.photoURL}
@@ -660,6 +658,8 @@ export default function CardCodeAdmin({
                   )}
                 </AvatarFallback>
               </>
+            ) : (
+              <AvatarFallback>{idAuthor[0] + idAuthor[1]}</AvatarFallback>
             )}
           </Avatar>
           <div className="flex items-center justify-start gap-1">
@@ -674,7 +674,7 @@ export default function CardCodeAdmin({
               </span>
             )}
           </div>
-        </Link>
+        </a>
         <div className="flex shrink-0 items-center gap-4">
           {searchParams.get("code-preview") === null && !isPrivate && (
             <TooltipProvider>

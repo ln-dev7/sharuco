@@ -324,7 +324,7 @@ export default function CardCode({
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <a
-          href={`/user/${idAuthor}`}
+          href={dataAuthor && dataAuthor.exists ? `/user/${idAuthor}` : "#"}
           className="flex items-center justify-start gap-2"
         >
           <Avatar className="h-8 w-8 cursor-pointer">
@@ -333,7 +333,7 @@ export default function CardCode({
                 <Loader />
               </AvatarFallback>
             )}
-            {dataAuthor && dataAuthor.exists && (
+            {dataAuthor && dataAuthor.exists ? (
               <>
                 <AvatarImage
                   src={dataAuthor.data.photoURL}
@@ -357,6 +357,8 @@ export default function CardCode({
                   )}
                 </AvatarFallback>
               </>
+            ) : (
+              <AvatarFallback>{idAuthor[0] + idAuthor[1]}</AvatarFallback>
             )}
           </Avatar>
           <div className="flex items-center justify-start gap-1">
