@@ -35,6 +35,7 @@ import CardCodeAdmin from "@/components/card-code-admin"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
+import LoaderCode from "@/components/loader-code"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -49,7 +50,6 @@ import { buttonVariants } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import LoaderCode from "@/components/loader-code"
 
 export default function CodePreview() {
   const searchParams = useSearchParams()
@@ -59,7 +59,7 @@ export default function CodePreview() {
   const notifyCodeCopied = () =>
     toast.custom((t) => (
       <div
-        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+        className="p-4 mt-4 text-sm text-green-600 border-2 border-green-600 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-300"
         role="alert"
       >
         Code copied to clipboard
@@ -141,7 +141,7 @@ export default function CodePreview() {
 
     toast.custom((t) => (
       <div
-        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+        className="p-4 mt-4 text-sm text-green-600 border-2 border-green-600 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-300"
         role="alert"
       >
         Comment submitted successfully
@@ -162,7 +162,7 @@ export default function CodePreview() {
 
     toast.custom((t) => (
       <div
-        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
+        className="p-4 mt-4 text-sm text-green-600 border-2 border-green-600 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-300"
         role="alert"
       >
         Comment deleted successfully
@@ -248,9 +248,9 @@ export default function CodePreview() {
                 )}
               </Masonry>
             </ResponsiveMasonry>
-            <div className="mb-6 mt-4 flex flex-col sm:flex-row gap-4 justify-between sm:items-center">
+            <div className="flex flex-col justify-between gap-4 mt-4 mb-6 sm:flex-row sm:items-center">
               <p>
-                <span className="text-gray-500 font-bold text-sm dark:text-gray-400">
+                <span className="text-sm font-bold text-gray-500 dark:text-gray-400">
                   Published {moment(dataCode.data.createdAt).fromNow()}
                 </span>
               </p>
@@ -260,23 +260,23 @@ export default function CodePreview() {
                   target="_blank"
                   className={buttonVariants({ size: "lg", variant: "subtle" })}
                 >
-                  <View className="mr-2 h-4 w-4" />
+                  <View className="w-4 h-4 mr-2" />
                   View on Github Gist
                 </Link>
               ) : null}
             </div>
-            <div className="flex w-full flex-col items-start gap-2">
+            <div className="flex flex-col items-start w-full gap-2">
               <div
                 id="commentsCode"
-                className="flex w-full flex-col items-start"
+                className="flex flex-col items-start w-full"
               >
                 <h2 className="text-2xl font-bold">
                   {dataCode.data.comments.length} Comment(s)
                 </h2>
                 <Separator className="my-4" />
               </div>
-              <div className="flex w-full flex-col-reverse items-center gap-4 lg:flex-row lg:items-start">
-                <div className="flex w-full flex-col gap-8">
+              <div className="flex flex-col-reverse items-center w-full gap-4 lg:flex-row lg:items-start">
+                <div className="flex flex-col w-full gap-8">
                   {dataCode.data.comments &&
                     dataCode.data.comments
                       //.sort((a, b) => b.createdAt - a.createdAt)
@@ -288,9 +288,9 @@ export default function CodePreview() {
                           <div className="flex flex-wrap items-center">
                             <Link
                               href={`/user/${comment.idAuthor}`}
-                              className="flex items-center mr-2 justify-start gap-2"
+                              className="flex items-center justify-start gap-2 mr-2"
                             >
-                              <Avatar className="h-8 w-8 cursor-pointer">
+                              <Avatar className="w-8 h-8 cursor-pointer">
                                 {isLoadingUser && (
                                   <AvatarFallback>
                                     <Loader />
@@ -309,12 +309,12 @@ export default function CodePreview() {
                                 </AvatarFallback>
                               </Avatar>
                               <div className="flex items-center justify-start gap-1">
-                                <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
+                                <span className="font-bold text-md text-slate-700 hover:underline dark:text-slate-400 ">
                                   {comment.idAuthor}{" "}
                                 </span>
                                 <span>
                                   {comment.premium && (
-                                    <Verified className="h-4 w-4 text-green-500" />
+                                    <Verified className="w-4 h-4 text-green-500" />
                                   )}
                                 </span>
                               </div>
@@ -332,15 +332,15 @@ export default function CodePreview() {
                               </span>
                             </div>
                           </div>
-                          <div className="flex w-full flex-col gap-2 rounded-md bg-slate-100 p-4 dark:bg-slate-800">
-                            <p className="text-md font-semibold text-slate-900 dark:text-white">
+                          <div className="flex flex-col w-full gap-2 p-4 rounded-md bg-slate-100 dark:bg-slate-800">
+                            <p className="font-semibold text-md text-slate-900 dark:text-white">
                               {comment.comment}
                             </p>
                             {/* <p
                               dangerouslySetInnerHTML={{
                                 __html: comment.comment,
                               }}
-                              className="text-md font-semibold text-slate-900 dark:text-white"
+                              className="font-semibold text-md text-slate-900 dark:text-white"
                             ></p> */}
 
                             {comment.code && (
@@ -356,13 +356,13 @@ export default function CodePreview() {
                                         {dataCode.data.language.toLowerCase()}
                                       </span>
                                       <span
-                                        className="flex items-center py-1 px-1 text-xs font-medium text-white cursor-pointer"
+                                        className="flex items-center px-1 py-1 text-xs font-medium text-white cursor-pointer"
                                         onClick={() => {
                                           copyToClipboard(comment.code)
                                           notifyCodeCopied()
                                         }}
                                       >
-                                        <Copy className="mr-2 h-4 w-4" />
+                                        <Copy className="w-4 h-4 mr-2" />
                                         Copy code
                                       </span>
                                     </div>
@@ -389,7 +389,7 @@ export default function CodePreview() {
                               <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                   <button className="flex items-center justify-center gap-2 text-sm font-semibold text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500">
-                                    <Trash2 className="h-4 w-4" />
+                                    <Trash2 className="w-4 h-4" />
                                     <span>Delete</span>
                                   </button>
                                 </AlertDialogTrigger>
@@ -459,7 +459,7 @@ export default function CodePreview() {
                         }
                       >
                         {isLoadingAddComment && (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                         )}
                         Add comment
                       </button>
@@ -473,9 +473,9 @@ export default function CodePreview() {
                       onClick={login}
                     >
                       {isPending ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                       ) : (
-                        <Github className="mr-2 h-4 w-4" />
+                        <Github className="w-4 h-4 mr-2" />
                       )}
                       Login with Github to comment
                     </button>
@@ -483,7 +483,7 @@ export default function CodePreview() {
                 </div>
               </div>
               <Separator className="my-4" />
-              <div className="mt-4 flex w-full flex-col items-start justify-center gap-4">
+              <div className="flex flex-col items-start justify-center w-full gap-4 mt-4">
                 <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
                   Who likes this code
                 </h3>
@@ -493,8 +493,11 @@ export default function CodePreview() {
                       key={person}
                       className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-slate-100"
                     >
-                      <User className="h-4 w-4" />
-                      <Link href={`/user/${person}`} className="hover:underline">
+                      <User className="w-4 h-4" />
+                      <Link
+                        href={`/user/${person}`}
+                        className="hover:underline"
+                      >
                         {person}
                       </Link>
                     </div>
