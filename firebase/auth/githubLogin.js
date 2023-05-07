@@ -45,6 +45,7 @@ export const useGitHubLogin = () => {
         await setDoc(
           documentRef,
           {
+            uid: user.uid,
             pseudo: user.reloadUserInfo.screenName.toLowerCase(),
             displayName:
               user.displayName !== null
@@ -64,6 +65,7 @@ export const useGitHubLogin = () => {
         await setDoc(
           documentRef,
           {
+            uid: user.uid,
             pseudo: user.reloadUserInfo.screenName.toLowerCase(),
             displayName:
               user.displayName !== null
