@@ -39,7 +39,6 @@ export const useGitHubLogin = () => {
 
       // Vérifier si les données ont été mises à jour avec succès
       const docSnap = await getDoc(documentRef)
-      const userData = docSnap.data()
 
       if (docSnap.exists()) {
         await setDoc(
@@ -85,9 +84,6 @@ export const useGitHubLogin = () => {
         )
       }
 
-      if (!userData) {
-        throw new Error("Failed to update user data")
-      }
     } catch (error) {
       //console.log(error)
       setError(error.message)
