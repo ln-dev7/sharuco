@@ -1,5 +1,11 @@
 export const COMPANIES = [
   {
+    name: "Laravel Cameroon",
+    image: "/partner/laravelcm.svg",
+    imageDark: "/partner/laravelcm-dark.svg",
+    link: "https://laravel.cm/",
+  },
+  {
     name: "NotchPay",
     image: "/partner/notchpay.svg",
     imageDark: "/partner/notchpay-dark.svg",
