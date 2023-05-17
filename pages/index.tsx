@@ -444,7 +444,7 @@ export default function IndexPage() {
                       ? support.imageDark
                       : support.image
                   }
-                  className="cursor-pointer grayscale hover:grayscale-0"
+                  className="cursor-pointer"
                   alt={support.name}
                 />
               </a>
