@@ -426,7 +426,7 @@ export default function IndexPage() {
         <Separator className="my-2" />
         <div className="flex my-8 flex-col items-center gap-8">
           <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
-            THOSE WHO SUPPORT US
+            OUR SPONSORS
           </h2>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             {COMPANIES.map((support) => (
@@ -450,28 +450,6 @@ export default function IndexPage() {
               </a>
             ))}
           </div>
-          <h3 className="text-lg font-bold leading-tight tracking-tighter sm:text-xl md:text-2xl lg:text-xl">
-            INDIVIDUALS
-          </h3>
-          <div className="flex items-center justify-center gap-2 flex-wrap">
-            {INDIVIDUALS.map((support) => (
-              <a
-                className="shrink-0 w-14 h-14"
-                href={support.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={support.image}
-                  className="cursor-pointer rounded-full"
-                  alt={support.name}
-                />
-              </a>
-            ))}
-          </div>
-          <Link href="/donation" className="text-blue-500 hover:underline hover:underline-offset-4">
-            Become a supporter
-          </Link>
         </div>
       </section>
     </Layout>
