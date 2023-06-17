@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -130,6 +130,8 @@ export default function Dashboard() {
     isError: false,
     isUnauthorized: false,
   })
+
+  const [otherCodes, setOtherCodes] = useState([])
 
   const schema = yup.object().shape({
     code: yup.string().required(),
@@ -386,18 +388,7 @@ export default function Dashboard() {
                       {errors.code && <>{errors.code.message}</>}
                     </p>
                   </div>
-                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                      placeholder="What does this code do ?"
-                      id="description"
-                      {...register("description")}
-                    />
-                    <p className="text-sm text-red-500">
-                      {errors.description && <>{errors.description.message}</>}
-                    </p>
-                  </div>
-                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
+                  <div className="mb-1 flex w-full flex-col items-start gap-1.5">
                     <Label htmlFor="language">Language</Label>
                     <select
                       className="flex h-10 w-full rounded-md border border-slate-300 bg-white py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
@@ -417,6 +408,85 @@ export default function Dashboard() {
                     </select>
                     <p className="text-sm text-red-500">
                       {errors.language && <>{errors.language.message}</>}
+                    </p>
+                  </div>
+                  {otherCodes.length > 0 &&
+                    otherCodes.map((code, index) => (
+                      <React.Fragment key={index}>
+                        <Separator className="my-4" />
+                        <div className="mb-4 flex w-full flex-col items-start gap-1.5">
+                          <Label htmlFor="code">Insert your code</Label>
+                          <Textarea
+                            placeholder="Insert your code here..."
+                            id="code"
+                            {...register("code")}
+                            className="h-32"
+                            onChange={(e) => {
+                              handleCodeChange(e.target.value)
+                            }}
+                          />
+                          <p className="text-sm text-red-500">
+                            {errors.code && <>{errors.code.message}</>}
+                          </p>
+                        </div>
+                        <div className="mb-1 flex w-full flex-col items-start gap-1.5">
+                          <Label htmlFor="language">Language</Label>
+                          <select
+                            className="flex h-10 w-full rounded-md border border-slate-300 bg-white py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                            name="language"
+                            id="language"
+                            {...register("language")}
+                          >
+                            <option value="" disabled selected>
+                              {" "}
+                              The code is written in what language ?
+                            </option>
+                            {allLanguages.map((language) => (
+                              <option value={language.name.toLocaleLowerCase()}>
+                                {language.name}
+                              </option>
+                            ))}
+                          </select>
+                          <p className="text-sm text-red-500">
+                            {errors.language && <>{errors.language.message}</>}
+                          </p>
+                        </div>
+                      </React.Fragment>
+                    ))}
+                  <div
+                    className={cn(
+                      "mb-6 flex w-full gap-1.5",
+                      otherCodes.length > 0 ? "justify-between" : "justify-end"
+                    )}
+                  >
+                    {otherCodes.length > 0 && (
+                      <span
+                        className="text-red-500 text-sm cursor-pointer underline underline-offset-2"
+                        onClick={() => {
+                          setOtherCodes(otherCodes.slice(0, -1))
+                        }}
+                      >
+                        Delete code
+                      </span>
+                    )}
+                    <span
+                      className="text-sky-500 text-sm cursor-pointer underline underline-offset-2"
+                      onClick={() => {
+                        setOtherCodes([...otherCodes, ""])
+                      }}
+                    >
+                      Add code
+                    </span>
+                  </div>
+                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea
+                      placeholder="What does this code do ?"
+                      id="description"
+                      {...register("description")}
+                    />
+                    <p className="text-sm text-red-500">
+                      {errors.description && <>{errors.description.message}</>}
                     </p>
                   </div>
                   <div className="mb-4 flex w-full flex-col items-start gap-1.5">
