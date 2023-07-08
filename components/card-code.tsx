@@ -57,6 +57,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { Input } from "./ui/input"
 
 export default function CardCode({
   id,
@@ -150,12 +151,14 @@ export default function CardCode({
     setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600")
   }
 
+  const [nameOfImage, setNameOfImage] = useState("")
+
   const downloadImage = async () => {
     const dataUrl = await htmlToImage.toPng(domRefImage.current)
 
     // download image
     const link = document.createElement("a")
-    link.download = `sharuco-code-${id}.png`
+    link.download = nameOfImage !== "" ? nameOfImage : `sharuco-code-${id}.png`
     link.href = dataUrl
     link.click()
   }
@@ -224,6 +227,18 @@ export default function CardCode({
                     value={backgroundImage}
                     onChange={(e) => {
                       setBackgroundImage(`${e.target.value}`)
+                    }}
+                  />
+                </div>
+                <div className="flex w-full items-center justify-center gap-2">
+                  <Input
+                    className="w-full"
+                    type="text"
+                    id="tags"
+                    placeholder="Name of your image"
+                    value={nameOfImage}
+                    onChange={(e) => {
+                      setNameOfImage(`${e.target.value}`)
                     }}
                   />
                 </div>

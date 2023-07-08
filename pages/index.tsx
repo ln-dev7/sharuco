@@ -36,6 +36,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { buttonVariants } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
 export default function IndexPage() {
@@ -98,14 +99,17 @@ export default function IndexPage() {
     setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600")
   }
 
+  const [nameOfImage, setNameOfImage] = useState("")
+
   const downloadImage = async () => {
     const dataUrl = await htmlToImage.toPng(domRefImage.current)
 
     // download image
     const link = document.createElement("a")
-    link.download = `sharuco-code-${Math.random()
-      .toString(36)
-      .substring(7)}.png`
+    link.download =
+      nameOfImage !== ""
+        ? nameOfImage
+        : `sharuco-code-${Math.random().toString(36).substring(7)}.png`
     link.href = dataUrl
     link.click()
   }
@@ -327,6 +331,18 @@ export default function IndexPage() {
                       value={backgroundImage}
                       onChange={(e) => {
                         setBackgroundImage(`${e.target.value}`)
+                      }}
+                    />
+                  </div>
+                  <div className="flex w-full items-center justify-center gap-2">
+                    <Input
+                      className="w-full"
+                      type="text"
+                      id="tags"
+                      placeholder="Name of your image"
+                      value={nameOfImage}
+                      onChange={(e) => {
+                        setNameOfImage(`${e.target.value}`)
                       }}
                     />
                   </div>
