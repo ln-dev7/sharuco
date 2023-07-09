@@ -74,7 +74,7 @@ export default function Donation() {
     const emailToUse = user ? user.email : email
     initializePayment(emailToUse, parseInt(price), "Donation for Sharuco")
     reset({
-      price: "",
+      price: 0,
     })
   }
 
@@ -125,7 +125,7 @@ export default function Donation() {
             project, you can make a donation.
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row items-start w-full gap-2">
+        {/* <div className="flex flex-col sm:flex-row items-start w-full gap-2">
           <div className="w-full flex flex-col sm:flex-row items-start gap-2">
             <div className="w-full flex flex-col items-start gap-2">
               <Input
@@ -168,7 +168,7 @@ export default function Donation() {
         ) : null}
         <div className="w-full flex items-center justify-center">
           <span className="text-lg font-bold">OR</span>
-        </div>
+        </div> */}
         <div className="w-full flex items-center justify-center">
           <a
             href="https://www.buymeacoffee.com/lndev"
