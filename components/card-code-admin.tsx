@@ -106,7 +106,7 @@ export default function CardCodeAdmin({
   const searchParams = useSearchParams()
 
   const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName
+  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
   const { login, isPending } = useGitHubLogin()
 
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`

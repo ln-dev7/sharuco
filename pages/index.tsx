@@ -54,7 +54,7 @@ export default function IndexPage() {
     ))
 
   const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName
+  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
   const [userCountry, setUserCountry] = useState("")
   useEffect(() => {

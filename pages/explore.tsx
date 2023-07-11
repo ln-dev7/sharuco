@@ -46,7 +46,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Explore() {
   const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName
+  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
   const {
     data: dataUser,

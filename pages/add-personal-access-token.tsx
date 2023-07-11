@@ -18,7 +18,7 @@ import { Separator } from "@/components/ui/separator"
 
 export default function AddPersonalAccessToken() {
   const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName
+  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
   const router = useRouter()
   useEffect(() => {
     if (!user) {

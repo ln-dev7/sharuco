@@ -90,7 +90,7 @@ export default function Dashboard() {
         Your user token has been copied to your clipboard !
       </div>
     ))
-  const pseudo = user?.reloadUserInfo.screenName
+  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
   const {
     data: dataUser,
