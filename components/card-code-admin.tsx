@@ -423,14 +423,16 @@ export default function CardCodeAdmin({
                       </Label>
                     </div>
                   )}
-                  <div
-                    className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
-                    role="alert"
-                  >
-                    <span className="font-semibold">Warning alert !</span> If
-                    you change your code from public to private, you will lose
-                    all the favourites and comments of this code
-                  </div>
+                  {searchParams.get("code-preview") === null && (
+                    <div
+                      className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
+                      role="alert"
+                    >
+                      <span className="font-semibold">Warning alert !</span> If
+                      you change your code from public to private, you will lose
+                      all the favourites and comments of this code
+                    </div>
+                  )}
                   {isError && (
                     <p className="pt-4 text-sm font-bold text-red-500">
                       An error has occurred, please try again later.
