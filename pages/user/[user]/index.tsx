@@ -44,7 +44,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function User() {
   const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName
+  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
   const searchParams = useSearchParams()
   const idCurrent = searchParams?.get("user")?.toLowerCase()
 

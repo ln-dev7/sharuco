@@ -15,7 +15,7 @@ import LoaderCodes from "@/components/loader-codes"
 
 export default function Popular() {
   const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName
+  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
   const {
     data: dataUser,

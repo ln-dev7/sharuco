@@ -54,7 +54,7 @@ import { Textarea } from "@/components/ui/textarea"
 export default function CodePreview() {
   const searchParams = useSearchParams()
   const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName
+  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
   const notifyCodeCopied = () =>
     toast.custom((t) => (

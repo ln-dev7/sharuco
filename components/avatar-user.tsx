@@ -42,7 +42,7 @@ export const useGitHubLogout = () => {
 export function AvatarUser() {
   const { logout } = useGitHubLogout()
   const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName
+  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
   const { data, isLoading, isError } = useDocument(pseudo, "users")
   return (
     <Sheet>
