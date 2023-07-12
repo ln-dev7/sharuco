@@ -32,7 +32,6 @@ import {
   Verified,
 } from "lucide-react"
 import { useForm } from "react-hook-form"
-import toast, { Toaster } from "react-hot-toast"
 import {
   EmailIcon,
   EmailShareButton,
@@ -66,12 +65,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { ToastAction } from "@/components/ui/toast"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function CardCodeAdmin({
   id,
@@ -84,24 +85,19 @@ export default function CardCodeAdmin({
   isPrivate,
   comments: commentsInit,
 }) {
+  const { toast } = useToast()
   const notifyCodeCopied = () =>
-    toast.custom((t) => (
-      <div
-        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
-        role="alert"
-      >
-        Code copied to clipboard
-      </div>
-    ))
+    toast({
+      title: "Code copied to clipboard",
+      description: "You can paste it wherever you want",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
   const notifyUrlCopied = () =>
-    toast.custom((t) => (
-      <div
-        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
-        role="alert"
-      >
-        Url of code copied to clipboard
-      </div>
-    ))
+    toast({
+      title: "Url of code copied to clipboard",
+      description: "You can share it wherever you want",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
 
   const searchParams = useSearchParams()
 
@@ -195,7 +191,12 @@ export default function CardCodeAdmin({
       tagsUpdate === tags.join(",") &&
       isPrivateUpdate === isPrivate
     ) {
-      toast.error("You have not made any changes")
+      toast({
+        variant: "destructive",
+        title: "You have not made any changes",
+        description: "Please make changes to update your code",
+        action: <ToastAction altText="Okay">Okay</ToastAction>,
+      })
       return
     }
 
@@ -244,15 +245,10 @@ export default function CardCodeAdmin({
     setCheckboxOn(isPrivateUpdate)
 
     setOpenEditDialog(false)
-
-    toast.custom((t) => (
-      <div
-        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
-        role="alert"
-      >
-        Your code has been updated successfully !
-      </div>
-    ))
+    toast({
+      title: "Your code has been updated successfully !",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
   }
 
   //
@@ -315,7 +311,6 @@ export default function CardCodeAdmin({
 
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
-      <Toaster position="top-right" reverseOrder={false} />
       <div className="flex w-full items-center justify-end">
         <div className="flex items-center gap-2">
           <AlertDialog open={openEditDialog} onOpenChange={setOpenEditDialog}>

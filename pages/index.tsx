@@ -23,7 +23,6 @@ import Link from "next/link"
 import * as htmlToImage from "html-to-image"
 import { Code2, Github, Loader2 } from "lucide-react"
 import { useTheme } from "next-themes"
-import { toast } from "react-hot-toast"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -42,16 +41,6 @@ import { Textarea } from "@/components/ui/textarea"
 export default function IndexPage() {
   const { login, isPending } = useGitHubLogin()
   const { theme } = useTheme()
-
-  const notifyCodeAdded = () =>
-    toast.custom((t) => (
-      <div
-        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
-        role="alert"
-      >
-        Your code has been added successfully !
-      </div>
-    ))
 
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName.toLowerCase()

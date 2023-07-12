@@ -25,7 +25,6 @@ import {
 } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
-import toast from "react-hot-toast"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
@@ -50,21 +49,22 @@ import { buttonVariants } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
+import { ToastAction } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function CodePreview() {
   const searchParams = useSearchParams()
   const { user } = useAuthContext()
   const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
+  const { toast } = useToast()
+
   const notifyCodeCopied = () =>
-    toast.custom((t) => (
-      <div
-        className="p-4 mt-4 text-sm text-green-600 border-2 border-green-600 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-300"
-        role="alert"
-      >
-        Code copied to clipboard
-      </div>
-    ))
+    toast({
+      title: "Code copied to clipboard",
+      description: "You can paste it wherever you want",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
 
   const { login, isPending } = useGitHubLogin()
 
@@ -139,14 +139,11 @@ export default function CodePreview() {
       comment: "",
     })
 
-    toast.custom((t) => (
-      <div
-        className="p-4 mt-4 text-sm text-green-600 border-2 border-green-600 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-300"
-        role="alert"
-      >
-        Comment submitted successfully
-      </div>
-    ))
+    toast({
+      title: "Comment submitted successfully",
+      description: "Your comment has been submitted successfully",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
   }
 
   const handleDeletComment = async (idComment) => {
@@ -160,14 +157,11 @@ export default function CodePreview() {
 
     await updateCodeDocument({ id, updatedCodeData })
 
-    toast.custom((t) => (
-      <div
-        className="p-4 mt-4 text-sm text-green-600 border-2 border-green-600 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-300"
-        role="alert"
-      >
-        Comment deleted successfully
-      </div>
-    ))
+    toast({
+      title: "Comment deleted successfully",
+      description: "Your comment has been deleted successfully",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
   }
 
   useEffect(() => {

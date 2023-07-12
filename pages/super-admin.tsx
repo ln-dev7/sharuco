@@ -8,7 +8,6 @@ import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
 import { Code, UserIcon } from "lucide-react"
-import { Toaster } from "react-hot-toast"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import CardCodeAdmin from "@/components/card-code-admin"
@@ -16,8 +15,8 @@ import CardUserAdmin from "@/components/card-user-admin"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import LoaderCodes from "@/components/loader-codes"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function Dashboard() {
   const { logout } = useGitHubLogout()
@@ -25,7 +24,10 @@ export default function Dashboard() {
   const { user } = useAuthContext()
   const router = useRouter()
   useEffect(() => {
-    if (!user || !SUPER_ADMIN.includes(user.reloadUserInfo.screenName.toLowerCase())) {
+    if (
+      !user ||
+      !SUPER_ADMIN.includes(user.reloadUserInfo.screenName.toLowerCase())
+    ) {
       router.push("/")
     }
   })
@@ -73,7 +75,6 @@ export default function Dashboard() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
-        <Toaster position="top-right" reverseOrder={false} />
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Hello Admin
@@ -114,33 +115,32 @@ export default function Dashboard() {
                   className="w-full"
                 >
                   <Masonry gutter="2rem">
-                    {dataCodes
-                      .map(
-                        (code: {
-                          id: string
-                          idAuthor: string
-                          language: string
-                          code: string
-                          description: string
-                          tags: string[]
-                          favoris: string[]
-                          isPrivate: boolean
-                          comments: any
-                        }) => (
-                          <CardCodeAdmin
-                            key={code.id}
-                            id={code.id}
-                            idAuthor={code.idAuthor}
-                            language={code.language}
-                            code={code.code}
-                            description={code.description}
-                            tags={code.tags}
-                            favoris={code.favoris}
-                            isPrivate={code.isPrivate}
-                            comments={code.comments}
-                          />
-                        )
-                      )}
+                    {dataCodes.map(
+                      (code: {
+                        id: string
+                        idAuthor: string
+                        language: string
+                        code: string
+                        description: string
+                        tags: string[]
+                        favoris: string[]
+                        isPrivate: boolean
+                        comments: any
+                      }) => (
+                        <CardCodeAdmin
+                          key={code.id}
+                          id={code.id}
+                          idAuthor={code.idAuthor}
+                          language={code.language}
+                          code={code.code}
+                          description={code.description}
+                          tags={code.tags}
+                          favoris={code.favoris}
+                          isPrivate={code.isPrivate}
+                          comments={code.comments}
+                        />
+                      )
+                    )}
                   </Masonry>
                 </ResponsiveMasonry>
                 {dataCodes.length == 0 && (
@@ -168,25 +168,24 @@ export default function Dashboard() {
                 className="w-full"
               >
                 <Masonry gutter="2rem">
-                  {dataUsers
-                    .map(
-                      (dataUser: {
-                        pseudo: string
-                        displayName: string
-                        photoURL: string
-                      }) => (
-                        <CardUserAdmin
-                          key={dataUser.pseudo}
-                          pseudo={dataUser.pseudo}
-                          displayName={
-                            dataUser.displayName
-                              ? dataUser.displayName.split(" ")[0]
-                              : dataUser.pseudo
-                          }
-                          photoURL={dataUser.photoURL}
-                        />
-                      )
-                    )}
+                  {dataUsers.map(
+                    (dataUser: {
+                      pseudo: string
+                      displayName: string
+                      photoURL: string
+                    }) => (
+                      <CardUserAdmin
+                        key={dataUser.pseudo}
+                        pseudo={dataUser.pseudo}
+                        displayName={
+                          dataUser.displayName
+                            ? dataUser.displayName.split(" ")[0]
+                            : dataUser.pseudo
+                        }
+                        photoURL={dataUser.photoURL}
+                      />
+                    )
+                  )}
                 </Masonry>
               </ResponsiveMasonry>
             )}
