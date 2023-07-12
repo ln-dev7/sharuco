@@ -9,6 +9,7 @@ import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
+import formatDateTime from "@/utils/formatDateTime.js"
 import { Eye, Github, Loader2, Star, UserIcon, Verified } from "lucide-react"
 import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
@@ -295,7 +296,7 @@ export default function User() {
                 <p className="text-center text-gray-500">
                   Joined{" "}
                   <span className="font-bold">
-                    {moment(data.data.createdAt).fromNow()}
+                    {formatDateTime(moment(data.data.createdAt))}
                   </span>
                 </p>
               </div>
