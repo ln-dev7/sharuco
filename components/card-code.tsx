@@ -21,7 +21,6 @@ import {
   Star,
   Verified,
 } from "lucide-react"
-import toast, { Toaster } from "react-hot-toast"
 import {
   EmailIcon,
   EmailShareButton,
@@ -51,12 +50,14 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { ToastAction } from "@/components/ui/toast"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { useToast } from "@/components/ui/use-toast"
 import { Input } from "./ui/input"
 
 export default function CardCode({
@@ -71,24 +72,19 @@ export default function CardCode({
   currentUser,
   comments,
 }) {
+  const { toast } = useToast()
   const notifyCodeCopied = () =>
-    toast.custom((t) => (
-      <div
-        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
-        role="alert"
-      >
-        Code copied to clipboard
-      </div>
-    ))
+    toast({
+      title: "Code copied to clipboard",
+      description: "You can paste it wherever you want",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
   const notifyUrlCopied = () =>
-    toast.custom((t) => (
-      <div
-        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
-        role="alert"
-      >
-        Url of code copied to clipboard
-      </div>
-    ))
+    toast({
+      title: "Url of code copied to clipboard",
+      description: "You can share it wherever you want",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
 
   const searchParams = useSearchParams()
 
@@ -165,7 +161,6 @@ export default function CardCode({
 
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
-      <Toaster position="top-right" reverseOrder={false} />
       <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
         <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
           <span className="text-xs font-medium text-white">

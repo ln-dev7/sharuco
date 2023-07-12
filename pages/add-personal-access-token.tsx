@@ -8,13 +8,14 @@ import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument.j
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
-import toast, { Toaster } from "react-hot-toast"
 import * as yup from "yup"
 
 import { Layout } from "@/components/layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { ToastAction } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function AddPersonalAccessToken() {
   const { user } = useAuthContext()
@@ -25,6 +26,8 @@ export default function AddPersonalAccessToken() {
       router.push("/")
     }
   })
+
+  const { toast } = useToast()
 
   const {
     data: dataUser,
@@ -62,14 +65,11 @@ export default function AddPersonalAccessToken() {
     reset({
       personalAccessToken: "",
     })
-    toast.custom((t) => (
-      <div
-        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
-        role="alert"
-      >
-        Your personal access token has been added / updated
-      </div>
-    ))
+    toast({
+      title: "Your personal access token has been added / updated",
+      description: "You can now add your code to your Github Gist",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
   }
 
   return (
@@ -109,7 +109,6 @@ export default function AddPersonalAccessToken() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-8 pt-6 pb-8 md:py-10">
-        <Toaster position="top-right" reverseOrder={false} />
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Guides to add your personal access token on Sharuco

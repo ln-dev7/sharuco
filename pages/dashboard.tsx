@@ -33,7 +33,6 @@ import {
 } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
-import toast, { Toaster } from "react-hot-toast"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
@@ -60,6 +59,8 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
+import { ToastAction } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function Dashboard() {
   const { user } = useAuthContext()
@@ -70,26 +71,22 @@ export default function Dashboard() {
     }
   })
 
+  const { toast } = useToast()
+
   const { logout } = useGitHubLogout()
   const notifyCodeAdded = () =>
-    toast.custom((t) => (
-      <div
-        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
-        role="alert"
-      >
-        Your code has been added successfully !
-      </div>
-    ))
+    toast({
+      title: "Your code has been added successfully !",
+      description: "You can find it in the manage code section.",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
 
   const notifyUserTokenCopied = () =>
-    toast.custom((t) => (
-      <div
-        className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
-        role="alert"
-      >
-        Your user token has been copied to your clipboard !
-      </div>
-    ))
+    toast({
+      title: "Your user token has been copied to your clipboard !",
+      description: "You can find it in your profile section.",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
   const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
   const {
@@ -238,21 +235,11 @@ export default function Dashboard() {
         const id = data.id
         copyToClipboard(gistUrl)
 
-        toast.custom(
-          (t) => (
-            <div
-              className="mt-4 rounded-lg border-2 border-green-600 bg-green-50 p-4 text-sm text-green-600 dark:bg-gray-800 dark:text-green-300"
-              role="alert"
-            >
-              Your code has been added on your GitHub Gist !
-              <br />
-              Link of your has been copied to your clipboard !
-            </div>
-          ),
-          {
-            duration: 3500,
-          }
-        )
+        toast({
+          title: "Your code has been added on your GitHub Gist !",
+          description: "Link of your has been copied to your clipboard !",
+          action: <ToastAction altText="Okay">Okay</ToastAction>,
+        })
 
         const newDocumentWithGist = {
           ...newDocument,
@@ -322,7 +309,6 @@ export default function Dashboard() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
-        <Toaster position="top-right" reverseOrder={false} />
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Dashboard

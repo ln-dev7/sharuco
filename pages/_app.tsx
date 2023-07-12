@@ -5,6 +5,7 @@ import { Inter as FontSans } from "@next/font/google"
 import { NextSeo } from "next-seo"
 import { ThemeProvider } from "next-themes"
 
+import { Toaster } from "@/components/ui/toaster"
 import "@/styles/globals.css"
 import "prism-themes/themes/prism-one-dark.min.css"
 //import "prism-themes/themes/prism-night-owl.css"
@@ -59,6 +60,7 @@ export default function App({ Component, pageProps }: AppProps) {
           />
           <GoogleAnalytics measurementId="G-4FTGXMJNPY" />
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Toaster />
             <Component {...pageProps} />
             {/* <ReactQueryDevtools initialIsOpen={false} /> */}
           </ThemeProvider>
