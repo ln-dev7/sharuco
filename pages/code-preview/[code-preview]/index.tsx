@@ -4,6 +4,11 @@ import { useEffect } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import {
+  allLanguages,
+  getExtensionByName,
+  languagesName,
+} from "@/constants/languages"
 import { SUPER_ADMIN } from "@/constants/super-admin"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
@@ -13,6 +18,7 @@ import copyToClipboard from "@/utils/copyToClipboard"
 import highlight from "@/utils/highlight"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
+import hljs from "highlight.js"
 import {
   Copy,
   Github,
@@ -83,16 +89,32 @@ export default function CodePreview() {
   const schema = yup.object().shape({
     code: yup.string(),
     comment: yup.string().required(),
+    language: yup.string(),
   })
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   })
+
+  function detectLanguage(code) {
+    const language = hljs.highlightAuto(code).language
+    return language || "text"
+  }
+
+  function handleCodeChange(code) {
+    const detectedLanguage = detectLanguage(code)
+    if (!languagesName.includes(detectedLanguage)) {
+      setValue("language", "other")
+      return
+    }
+    setValue("language", detectedLanguage)
+  }
 
   const {
     updateCodeDocument,
@@ -108,7 +130,7 @@ export default function CodePreview() {
   }
 
   const onSubmit = async (data) => {
-    const { code, comment } = data
+    const { code, comment, language } = data
 
     const linearCode = linearizeCode(code)
 
@@ -126,6 +148,7 @@ export default function CodePreview() {
           photoURL: dataUser?.data.photoURL,
           premium: dataUser?.data.premium,
           code: linearCode,
+          language: language,
         },
       ],
     }
@@ -137,6 +160,7 @@ export default function CodePreview() {
     reset({
       code: "",
       comment: "",
+      language: "",
     })
 
     toast({
@@ -347,7 +371,7 @@ export default function CodePreview() {
                                   <div className="w-full overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
                                     <div className="flex justify-between items-center bg-[#343541] py-1 px-4">
                                       <span className="text-xs font-medium text-white">
-                                        {dataCode.data.language.toLowerCase()}
+                                        {comment.language.toLowerCase()}
                                       </span>
                                       <span
                                         className="flex items-center px-1 py-1 text-xs font-medium text-white cursor-pointer"
@@ -366,7 +390,7 @@ export default function CodePreview() {
                                         dangerouslySetInnerHTML={{
                                           __html: highlight(
                                             comment.code,
-                                            dataCode.data.language
+                                            comment.language.toLowerCase()
                                           ),
                                         }}
                                       />
@@ -377,8 +401,8 @@ export default function CodePreview() {
                             )}
                           </div>
                           {(comment.idAuthor === dataUser?.data.pseudo ||
-                            dataCode.data.idAuthor ===
-                              dataUser?.data.pseudo) && (
+                            dataCode.data.idAuthor === dataUser?.data.pseudo ||
+                            SUPER_ADMIN.includes(dataUser?.data.pseudo)) && (
                             <div>
                               <AlertDialog>
                                 <AlertDialogTrigger asChild>
@@ -436,9 +460,36 @@ export default function CodePreview() {
                           placeholder="Insert your code review here..."
                           id="code"
                           {...register("code")}
+                          onChange={(e) => {
+                            handleCodeChange(e.target.value)
+                          }}
                         />
                         <p className="text-sm text-red-500">
                           {errors.code && <>{errors.code.message}</>}
+                        </p>
+                      </div>
+                      <div className="mb-2 flex w-full flex-col items-start gap-1.5">
+                        <Label htmlFor="language">
+                          Language of code review
+                        </Label>
+                        <select
+                          className="flex h-10 w-full rounded-md border border-slate-300 bg-white py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                          name="language"
+                          id="language"
+                          {...register("language")}
+                        >
+                          <option value="" disabled selected>
+                            {" "}
+                            The code is written in what language ?
+                          </option>
+                          {allLanguages.map((language) => (
+                            <option value={language.name.toLocaleLowerCase()}>
+                              {language.name}
+                            </option>
+                          ))}
+                        </select>
+                        <p className="text-sm text-red-500">
+                          {errors.language && <>{errors.language.message}</>}
                         </p>
                       </div>
                       <button
