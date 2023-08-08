@@ -12,10 +12,10 @@ import firebase_app from "../config"
 
 const db = getFirestore(firebase_app)
 
-const getCodeFromUser = async (userId) => {
+const getDocumentFromUser = async (userId, document) => {
   const querySnapshot = await getDocs(
     query(
-      collection(db, "codes"),
+      collection(db, document),
       where("idAuthor", "==", userId),
       orderBy("createdAt", "desc")
     )
@@ -28,8 +28,10 @@ const getCodeFromUser = async (userId) => {
   return collections
 }
 
-const useGetCodeFromUser = (userId) => {
-  return useQuery(["code-from-user", "codes"], () => getCodeFromUser(userId))
+const useGetDocumentFromUser = (userId, document) => {
+  return useQuery([`${document}-from-user`, document], () =>
+    getDocumentFromUser(userId, document)
+  )
 }
 
-export { useGetCodeFromUser }
+export { useGetDocumentFromUser }

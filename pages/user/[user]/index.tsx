@@ -10,12 +10,21 @@ import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
 import formatDateTime from "@/utils/formatDateTime.js"
-import { Eye, Github, Loader2, Star, UserIcon, Verified } from "lucide-react"
+import {
+  Eye,
+  FileCog,
+  Github,
+  Loader2,
+  Star,
+  UserIcon,
+  Verified,
+} from "lucide-react"
 import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import { cn } from "@/lib/utils"
 import CardCode from "@/components/card-code"
+import EmptyCard from "@/components/empty-card"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
@@ -318,52 +327,54 @@ export default function User() {
                 {isLoadingPublicCodes && <LoaderCodes />}
                 {dataPublicCodes && (
                   <>
-                    <ResponsiveMasonry
-                      columnsCountBreakPoints={{
-                        659: 1,
-                        660: 1,
-                        720: 1,
-                        1200: 2,
-                      }}
-                      className="w-full"
-                    >
-                      <Masonry gutter="2rem">
-                        {dataPublicCodes.map(
-                          (code: {
-                            id: string
-                            idAuthor: string
-                            language: string
-                            code: string
-                            description: string
-                            tags: string[]
-                            favoris: string[]
-                            isPrivate: boolean
-                            currentUser: any
-                            comments: any
-                          }) => (
-                            <CardCode
-                              key={code.id}
-                              id={code.id}
-                              idAuthor={code.idAuthor}
-                              language={code.language}
-                              code={code.code}
-                              description={code.description}
-                              tags={code.tags}
-                              favoris={code.favoris}
-                              isPrivate={code.isPrivate}
-                              currentUser={data?.data}
-                              comments={code.comments}
-                            />
-                          )
-                        )}
-                      </Masonry>
-                    </ResponsiveMasonry>
+                    {dataPublicCodes.length > 0 && (
+                      <ResponsiveMasonry
+                        columnsCountBreakPoints={{
+                          659: 1,
+                          660: 1,
+                          720: 1,
+                          1200: 2,
+                        }}
+                        className="w-full"
+                      >
+                        <Masonry gutter="2rem">
+                          {dataPublicCodes.map(
+                            (code: {
+                              id: string
+                              idAuthor: string
+                              language: string
+                              code: string
+                              description: string
+                              tags: string[]
+                              favoris: string[]
+                              isPrivate: boolean
+                              currentUser: any
+                              comments: any
+                            }) => (
+                              <CardCode
+                                key={code.id}
+                                id={code.id}
+                                idAuthor={code.idAuthor}
+                                language={code.language}
+                                code={code.code}
+                                description={code.description}
+                                tags={code.tags}
+                                favoris={code.favoris}
+                                isPrivate={code.isPrivate}
+                                currentUser={data?.data}
+                                comments={code.comments}
+                              />
+                            )
+                          )}
+                        </Masonry>
+                      </ResponsiveMasonry>
+                    )}
                     {dataPublicCodes.length == 0 && (
-                      <div className="flex flex-col items-center gap-4">
-                        <h1 className="text-center text-2xl font-bold">
-                          This user has not shared any code yet
-                        </h1>
-                      </div>
+                      <EmptyCard
+                        icon={<FileCog className="h-12 w-12" />}
+                        title="No code found"
+                        description="This user has not shared any code yet."
+                      />
                     )}
                   </>
                 )}
@@ -376,52 +387,54 @@ export default function User() {
                 {isLoadingFavoriteCodes && <LoaderCodes />}
                 {dataFavoriteCodes && (
                   <>
-                    <ResponsiveMasonry
-                      columnsCountBreakPoints={{
-                        659: 1,
-                        660: 1,
-                        720: 1,
-                        1200: 2,
-                      }}
-                      className="w-full"
-                    >
-                      <Masonry gutter="2rem">
-                        {dataFavoriteCodes.map(
-                          (code: {
-                            id: string
-                            idAuthor: string
-                            language: string
-                            code: string
-                            description: string
-                            tags: string[]
-                            favoris: string[]
-                            isPrivate: boolean
-                            currentUser: any
-                            comments: any
-                          }) => (
-                            <CardCode
-                              key={code.id}
-                              id={code.id}
-                              idAuthor={code.idAuthor}
-                              language={code.language}
-                              code={code.code}
-                              description={code.description}
-                              tags={code.tags}
-                              favoris={code.favoris}
-                              isPrivate={code.isPrivate}
-                              currentUser={data?.data}
-                              comments={code.comments}
-                            />
-                          )
-                        )}
-                      </Masonry>
-                    </ResponsiveMasonry>
+                    {dataFavoriteCodes.length > 0 && (
+                      <ResponsiveMasonry
+                        columnsCountBreakPoints={{
+                          659: 1,
+                          660: 1,
+                          720: 1,
+                          1200: 2,
+                        }}
+                        className="w-full"
+                      >
+                        <Masonry gutter="2rem">
+                          {dataFavoriteCodes.map(
+                            (code: {
+                              id: string
+                              idAuthor: string
+                              language: string
+                              code: string
+                              description: string
+                              tags: string[]
+                              favoris: string[]
+                              isPrivate: boolean
+                              currentUser: any
+                              comments: any
+                            }) => (
+                              <CardCode
+                                key={code.id}
+                                id={code.id}
+                                idAuthor={code.idAuthor}
+                                language={code.language}
+                                code={code.code}
+                                description={code.description}
+                                tags={code.tags}
+                                favoris={code.favoris}
+                                isPrivate={code.isPrivate}
+                                currentUser={data?.data}
+                                comments={code.comments}
+                              />
+                            )
+                          )}
+                        </Masonry>
+                      </ResponsiveMasonry>
+                    )}
                     {dataFavoriteCodes.length == 0 && (
-                      <div className="flex flex-col items-center gap-4">
-                        <h1 className="text-center text-2xl font-bold">
-                          This user has not favorite any code yet
-                        </h1>
-                      </div>
+                      <EmptyCard
+                        icon={<FileCog className="h-12 w-12" />}
+                        title="No code found"
+                        description="This user has not favorite any code yet."
+                      />
                     )}
                   </>
                 )}

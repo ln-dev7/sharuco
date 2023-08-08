@@ -7,11 +7,12 @@ import { SUPER_ADMIN } from "@/constants/super-admin"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
-import { Code, UserIcon } from "lucide-react"
+import { Code, FileCog, UserIcon } from "lucide-react"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import CardCodeAdmin from "@/components/card-code-admin"
 import CardUserAdmin from "@/components/card-user-admin"
+import EmptyCard from "@/components/empty-card"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
@@ -105,50 +106,52 @@ export default function Dashboard() {
             {isLoadingCodes && <LoaderCodes />}
             {dataCodes && (
               <>
-                <ResponsiveMasonry
-                  columnsCountBreakPoints={{
-                    659: 1,
-                    660: 2,
-                    720: 2,
-                    990: 3,
-                  }}
-                  className="w-full"
-                >
-                  <Masonry gutter="2rem">
-                    {dataCodes.map(
-                      (code: {
-                        id: string
-                        idAuthor: string
-                        language: string
-                        code: string
-                        description: string
-                        tags: string[]
-                        favoris: string[]
-                        isPrivate: boolean
-                        comments: any
-                      }) => (
-                        <CardCodeAdmin
-                          key={code.id}
-                          id={code.id}
-                          idAuthor={code.idAuthor}
-                          language={code.language}
-                          code={code.code}
-                          description={code.description}
-                          tags={code.tags}
-                          favoris={code.favoris}
-                          isPrivate={code.isPrivate}
-                          comments={code.comments}
-                        />
-                      )
-                    )}
-                  </Masonry>
-                </ResponsiveMasonry>
+                {dataCodes.length > 0 && (
+                  <ResponsiveMasonry
+                    columnsCountBreakPoints={{
+                      659: 1,
+                      660: 2,
+                      720: 2,
+                      990: 3,
+                    }}
+                    className="w-full"
+                  >
+                    <Masonry gutter="2rem">
+                      {dataCodes.map(
+                        (code: {
+                          id: string
+                          idAuthor: string
+                          language: string
+                          code: string
+                          description: string
+                          tags: string[]
+                          favoris: string[]
+                          isPrivate: boolean
+                          comments: any
+                        }) => (
+                          <CardCodeAdmin
+                            key={code.id}
+                            id={code.id}
+                            idAuthor={code.idAuthor}
+                            language={code.language}
+                            code={code.code}
+                            description={code.description}
+                            tags={code.tags}
+                            favoris={code.favoris}
+                            isPrivate={code.isPrivate}
+                            comments={code.comments}
+                          />
+                        )
+                      )}
+                    </Masonry>
+                  </ResponsiveMasonry>
+                )}
                 {dataCodes.length == 0 && (
-                  <div className="flex flex-col items-center gap-4">
-                    <h1 className="text-2xl font-bold">
-                      You don&apos;t have any public code yet
-                    </h1>
-                  </div>
+                  <EmptyCard
+                    icon={<FileCog className="h-12 w-12" />}
+                    title="No code found"
+                    description="You don't have any public code any yet."
+                  />
                 )}
               </>
             )}

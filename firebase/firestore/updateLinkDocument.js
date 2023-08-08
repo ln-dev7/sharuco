@@ -5,20 +5,17 @@ import firebase_app from "../config"
 
 const db = getFirestore(firebase_app)
 
-const updateUserDocument = async (params, collectionName) => {
-  const { pseudo, updatedUserData } = params
-  const docRef = await updateDoc(
-    doc(db, collectionName, pseudo),
-    updatedUserData
-  )
+const updateLinkDocument = async (params, collectionName) => {
+  const { id, updatedLinkData } = params
+  const docRef = await updateDoc(doc(db, collectionName, id), updatedLinkData)
   return docRef
 }
 
-const useUpdateUserDocument = (collectionName) => {
+const useUpdateLinkDocument = (collectionName) => {
   const queryClient = useQueryClient()
   const mutation = useMutation(
     (params) => {
-      updateUserDocument(params, collectionName)
+      return updateLinkDocument(params, collectionName)
     },
     {
       onSuccess: (data, variables, context) => {
@@ -41,11 +38,11 @@ const useUpdateUserDocument = (collectionName) => {
   )
 
   return {
-    updateUserDocument: mutation.mutate,
+    updateLinkDocument: mutation.mutate,
     isLoading: mutation.isLoading,
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,
   }
 }
 
-export { useUpdateUserDocument }
+export { useUpdateLinkDocument }
