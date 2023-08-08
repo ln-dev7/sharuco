@@ -40,7 +40,11 @@ export function SiteFooter() {
           </p>
         </div>
         <div>
-          <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">
+          <Link
+            href="https://github.com/ln-dev7"
+            target="_blank"
+            rel="noreferrer"
+          >
             <div
               className={buttonVariants({
                 size: "sm",

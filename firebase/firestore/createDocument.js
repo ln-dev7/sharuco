@@ -7,29 +7,45 @@ import firebase_app from "../config"
 
 const db = getFirestore(firebase_app)
 
-const ALGOLIA_INDEX_NAME = "codes"
-
-const client = algoliasearch(
-  process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
-  process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
-)
-const index = client.initIndex(ALGOLIA_INDEX_NAME)
-
 const createDocument = async (newData, collectionName) => {
+  const client = algoliasearch(
+    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
+    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
+  )
+  const index = client.initIndex(collectionName)
+
   const docRef = await addDoc(collection(db, collectionName), newData)
   const newCollection = {
     ...newData,
     id: docRef.id,
   }
-  index.saveObject({
-    objectID: newCollection.id,
-    description: newCollection.description,
-    isPrivate: newCollection.isPrivate,
-    createdAt: newCollection.createdAt,
-    tags: newCollection.tags,
-    language: newCollection.language,
-    idAuthor: newCollection.idAuthor,
-  })
+
+  switch (collectionName) {
+    case "codes":
+      await index.saveObject({
+        objectID: newCollection.id,
+        description: newCollection.description,
+        isPrivate: newCollection.isPrivate,
+        createdAt: newCollection.createdAt,
+        tags: newCollection.tags,
+        language: newCollection.language,
+        idAuthor: newCollection.idAuthor,
+      })
+      break
+    case "links":
+      index.saveObject({
+        objectID: newCollection.id,
+        link: newCollection.link,
+        name: newCollection.name,
+        createdAt: newCollection.createdAt,
+        tags: newCollection.tags,
+        idAuthor: newCollection.idAuthor,
+      })
+      break
+    default:
+      break
+  }
+
   return newCollection
 }
 
@@ -43,6 +59,7 @@ const useCreateDocument = (collectionName) => {
         queryClient.invalidateQueries("isprivate-code-from-user-false")
         queryClient.invalidateQueries("isprivate-code-from-user-true")
         queryClient.invalidateQueries("code-from-user")
+        queryClient.invalidateQueries("links-from-user")
         queryClient.invalidateQueries("favorites-codes")
         queryClient.invalidateQueries("isprivate-codes-true")
         queryClient.invalidateQueries("isprivate-codes-false")

@@ -12,8 +12,8 @@ import {
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
-import { useGetCodeFromUser } from "@/firebase/firestore/getCodeFromUser"
 import { useDocument } from "@/firebase/firestore/getDocument"
+import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import copyToClipboard from "@/utils/copyToClipboard.js"
@@ -25,6 +25,7 @@ import {
   Eye,
   EyeOff,
   FileCog,
+  LinkIcon,
   Loader2,
   Plus,
   Settings,
@@ -39,6 +40,7 @@ import * as yup from "yup"
 import { cn } from "@/lib/utils"
 import CardCode from "@/components/card-code"
 import CardCodeAdmin from "@/components/card-code-admin"
+import EmptyCard from "@/components/empty-card"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import Loader from "@/components/loader"
@@ -111,7 +113,7 @@ export default function Dashboard() {
     isLoading: isLoadingCodes,
     isError: isErrorCodes,
     data: dataCodes,
-  } = useGetCodeFromUser(pseudo)
+  } = useGetDocumentFromUser(pseudo, "codes")
 
   const {
     isLoading: isLoadingFavoriteCodes,
@@ -538,18 +540,13 @@ export default function Dashboard() {
               <User className="mr-2 h-4 w-4" />
               Your profile
             </Link>
-            {/* {dataUser?.data?.userToken ? (
-              <button
-                className={buttonVariants({ size: "lg", variant: "subtle" })}
-                onClick={() => {
-                  copyToClipboard(dataUser?.data?.userToken)
-                  notifyUserTokenCopied()
-                }}
-              >
-                <FileCog className="mr-2 h-4 w-4" />
-                Copy your userToken
-              </button>
-            ) : null} */}
+            <Link
+              href={`/links`}
+              className={buttonVariants({ size: "lg", variant: "subtle" })}
+            >
+              <LinkIcon className="mr-2 h-4 w-4" />
+              Your links
+            </Link>
           </div>
         </div>
         <Separator className="my-4" />
@@ -578,50 +575,52 @@ export default function Dashboard() {
             {isLoadingCodes && <LoaderCodes />}
             {dataCodes && (
               <>
-                <ResponsiveMasonry
-                  columnsCountBreakPoints={{
-                    659: 1,
-                    660: 2,
-                    720: 2,
-                    990: 3,
-                  }}
-                  className="w-full"
-                >
-                  <Masonry gutter="2rem">
-                    {dataCodes.map(
-                      (code: {
-                        id: string
-                        idAuthor: string
-                        language: string
-                        code: string
-                        description: string
-                        tags: string[]
-                        favoris: string[]
-                        isPrivate: boolean
-                        comments: any
-                      }) => (
-                        <CardCodeAdmin
-                          key={code.id}
-                          id={code.id}
-                          idAuthor={code.idAuthor}
-                          language={code.language}
-                          code={code.code}
-                          description={code.description}
-                          tags={code.tags}
-                          favoris={code.favoris}
-                          isPrivate={code.isPrivate}
-                          comments={code.comments}
-                        />
-                      )
-                    )}
-                  </Masonry>
-                </ResponsiveMasonry>
-                {dataPublicCodes.length == 0 && (
-                  <div className="flex flex-col items-center gap-4">
-                    <h1 className="text-2xl font-bold">
-                      You don&apos;t have any public code yet
-                    </h1>
-                  </div>
+                {dataCodes.length > 0 && (
+                  <ResponsiveMasonry
+                    columnsCountBreakPoints={{
+                      659: 1,
+                      660: 2,
+                      720: 2,
+                      990: 3,
+                    }}
+                    className="w-full"
+                  >
+                    <Masonry gutter="2rem">
+                      {dataCodes.map(
+                        (code: {
+                          id: string
+                          idAuthor: string
+                          language: string
+                          code: string
+                          description: string
+                          tags: string[]
+                          favoris: string[]
+                          isPrivate: boolean
+                          comments: any
+                        }) => (
+                          <CardCodeAdmin
+                            key={code.id}
+                            id={code.id}
+                            idAuthor={code.idAuthor}
+                            language={code.language}
+                            code={code.code}
+                            description={code.description}
+                            tags={code.tags}
+                            favoris={code.favoris}
+                            isPrivate={code.isPrivate}
+                            comments={code.comments}
+                          />
+                        )
+                      )}
+                    </Masonry>
+                  </ResponsiveMasonry>
+                )}
+                {dataCodes.length == 0 && (
+                  <EmptyCard
+                    icon={<FileCog className="h-12 w-12" />}
+                    title="No code found"
+                    description="You don't have any public code any yet."
+                  />
                 )}
               </>
             )}
@@ -631,52 +630,54 @@ export default function Dashboard() {
             {isLoadingPublicCodes && <LoaderCodes />}
             {dataPublicCodes && (
               <>
-                <ResponsiveMasonry
-                  columnsCountBreakPoints={{
-                    659: 1,
-                    660: 1,
-                    720: 1,
-                    1200: 2,
-                  }}
-                  className="w-full"
-                >
-                  <Masonry gutter="2rem">
-                    {dataPublicCodes.map(
-                      (code: {
-                        id: string
-                        idAuthor: string
-                        language: string
-                        code: string
-                        description: string
-                        tags: string[]
-                        favoris: string[]
-                        isPrivate: boolean
-                        currentUser: any
-                        comments: any
-                      }) => (
-                        <CardCode
-                          key={code.id}
-                          id={code.id}
-                          idAuthor={code.idAuthor}
-                          language={code.language}
-                          code={code.code}
-                          description={code.description}
-                          tags={code.tags}
-                          favoris={code.favoris}
-                          isPrivate={code.isPrivate}
-                          currentUser={dataUser?.data}
-                          comments={code.comments}
-                        />
-                      )
-                    )}
-                  </Masonry>
-                </ResponsiveMasonry>
+                {dataPublicCodes.length > 0 && (
+                  <ResponsiveMasonry
+                    columnsCountBreakPoints={{
+                      659: 1,
+                      660: 1,
+                      720: 1,
+                      1200: 2,
+                    }}
+                    className="w-full"
+                  >
+                    <Masonry gutter="2rem">
+                      {dataPublicCodes.map(
+                        (code: {
+                          id: string
+                          idAuthor: string
+                          language: string
+                          code: string
+                          description: string
+                          tags: string[]
+                          favoris: string[]
+                          isPrivate: boolean
+                          currentUser: any
+                          comments: any
+                        }) => (
+                          <CardCode
+                            key={code.id}
+                            id={code.id}
+                            idAuthor={code.idAuthor}
+                            language={code.language}
+                            code={code.code}
+                            description={code.description}
+                            tags={code.tags}
+                            favoris={code.favoris}
+                            isPrivate={code.isPrivate}
+                            currentUser={dataUser?.data}
+                            comments={code.comments}
+                          />
+                        )
+                      )}
+                    </Masonry>
+                  </ResponsiveMasonry>
+                )}
                 {dataPublicCodes.length == 0 && (
-                  <div className="flex flex-col items-center gap-4">
-                    <h1 className="text-2xl font-bold">
-                      You don&apos;t have any public code yet
-                    </h1>
-                  </div>
+                  <EmptyCard
+                    icon={<FileCog className="h-12 w-12" />}
+                    title="No code found"
+                    description="You don't have any public code any yet."
+                  />
                 )}
               </>
             )}
@@ -686,52 +687,54 @@ export default function Dashboard() {
             {isLoadingPrivateCodes && <LoaderCodes />}
             {dataPrivateCodes && (
               <>
-                <ResponsiveMasonry
-                  columnsCountBreakPoints={{
-                    659: 1,
-                    660: 1,
-                    720: 1,
-                    1200: 2,
-                  }}
-                  className="w-full"
-                >
-                  <Masonry gutter="2rem">
-                    {dataPrivateCodes.map(
-                      (code: {
-                        id: string
-                        idAuthor: string
-                        language: string
-                        code: string
-                        description: string
-                        tags: string[]
-                        favoris: string[]
-                        isPrivate: boolean
-                        currentUser: any
-                        comments: any
-                      }) => (
-                        <CardCode
-                          key={code.id}
-                          id={code.id}
-                          idAuthor={code.idAuthor}
-                          language={code.language}
-                          code={code.code}
-                          description={code.description}
-                          tags={code.tags}
-                          favoris={code.favoris}
-                          isPrivate={code.isPrivate}
-                          currentUser={dataUser?.data}
-                          comments={code.comments}
-                        />
-                      )
-                    )}
-                  </Masonry>
-                </ResponsiveMasonry>
+                {dataPrivateCodes.length > 0 && (
+                  <ResponsiveMasonry
+                    columnsCountBreakPoints={{
+                      659: 1,
+                      660: 1,
+                      720: 1,
+                      1200: 2,
+                    }}
+                    className="w-full"
+                  >
+                    <Masonry gutter="2rem">
+                      {dataPrivateCodes.map(
+                        (code: {
+                          id: string
+                          idAuthor: string
+                          language: string
+                          code: string
+                          description: string
+                          tags: string[]
+                          favoris: string[]
+                          isPrivate: boolean
+                          currentUser: any
+                          comments: any
+                        }) => (
+                          <CardCode
+                            key={code.id}
+                            id={code.id}
+                            idAuthor={code.idAuthor}
+                            language={code.language}
+                            code={code.code}
+                            description={code.description}
+                            tags={code.tags}
+                            favoris={code.favoris}
+                            isPrivate={code.isPrivate}
+                            currentUser={dataUser?.data}
+                            comments={code.comments}
+                          />
+                        )
+                      )}
+                    </Masonry>
+                  </ResponsiveMasonry>
+                )}
                 {dataPrivateCodes.length == 0 && (
-                  <div className="flex flex-col items-center gap-4">
-                    <h1 className="text-2xl font-bold">
-                      You don&apos;t have any private code yet
-                    </h1>
-                  </div>
+                  <EmptyCard
+                    icon={<FileCog className="h-12 w-12" />}
+                    title="No code found"
+                    description="You don't have any private code any yet."
+                  />
                 )}
               </>
             )}
@@ -741,60 +744,67 @@ export default function Dashboard() {
             {isLoadingFavoriteCodes && <LoaderCodes />}
             {dataFavoriteCodes && (
               <>
-                <ResponsiveMasonry
-                  columnsCountBreakPoints={{
-                    659: 1,
-                    660: 1,
-                    720: 1,
-                    1200: 2,
-                  }}
-                  className="w-full"
-                >
-                  <Masonry gutter="2rem">
-                    {dataFavoriteCodes.map(
-                      (code: {
-                        id: string
-                        idAuthor: string
-                        language: string
-                        code: string
-                        description: string
-                        tags: string[]
-                        favoris: string[]
-                        isPrivate: boolean
-                        currentUser: any
-                        comments: any
-                      }) => (
-                        <CardCode
-                          key={code.id}
-                          id={code.id}
-                          idAuthor={code.idAuthor}
-                          language={code.language}
-                          code={code.code}
-                          description={code.description}
-                          tags={code.tags}
-                          favoris={code.favoris}
-                          isPrivate={code.isPrivate}
-                          currentUser={dataUser?.data}
-                          comments={code.comments}
-                        />
-                      )
-                    )}
-                  </Masonry>
-                </ResponsiveMasonry>
+                {dataFavoriteCodes.length > 0 && (
+                  <ResponsiveMasonry
+                    columnsCountBreakPoints={{
+                      659: 1,
+                      660: 1,
+                      720: 1,
+                      1200: 2,
+                    }}
+                    className="w-full"
+                  >
+                    <Masonry gutter="2rem">
+                      {dataFavoriteCodes.map(
+                        (code: {
+                          id: string
+                          idAuthor: string
+                          language: string
+                          code: string
+                          description: string
+                          tags: string[]
+                          favoris: string[]
+                          isPrivate: boolean
+                          currentUser: any
+                          comments: any
+                        }) => (
+                          <CardCode
+                            key={code.id}
+                            id={code.id}
+                            idAuthor={code.idAuthor}
+                            language={code.language}
+                            code={code.code}
+                            description={code.description}
+                            tags={code.tags}
+                            favoris={code.favoris}
+                            isPrivate={code.isPrivate}
+                            currentUser={dataUser?.data}
+                            comments={code.comments}
+                          />
+                        )
+                      )}
+                    </Masonry>
+                  </ResponsiveMasonry>
+                )}
                 {dataFavoriteCodes.length == 0 && (
-                  <div className="flex flex-col items-center gap-4">
-                    <h1 className="text-2xl font-bold">
-                      You don&apos;t have any favorite code yet
-                    </h1>
-                    <Link
-                      href="/explore"
-                      className={buttonVariants({
-                        size: "lg",
-                        variant: "outline",
-                      })}
-                    >
-                      Explore code
-                    </Link>
+                  <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 dark:border-slate-700">
+                    <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
+                      <FileCog className="h-12 w-12" />
+                      <h3 className="mt-4 text-lg font-semibold">
+                        You don't have any favorite code yet
+                      </h3>
+                      <p className="mb-4 mt-2 text-sm text-muted-foreground">
+                        You can find your favorite code in the explore section.
+                      </p>
+                      <Link
+                        href="/explore"
+                        className={cn(
+                          "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        )}
+                      >
+                        Explore code
+                      </Link>
+                    </div>
                   </div>
                 )}
               </>
