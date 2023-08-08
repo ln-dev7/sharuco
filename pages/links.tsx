@@ -196,7 +196,7 @@ export default function Dashboard() {
                       </p>
                     </div>
                     <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                      <Label htmlFor="description">Name of link</Label>
+                      <Label htmlFor="description">Decription of link</Label>
                       <Input
                         placeholder="Insert description of your link here..."
                         id="description"
