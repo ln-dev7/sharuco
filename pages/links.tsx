@@ -63,7 +63,7 @@ export default function Dashboard() {
         "Invalid link format"
       )
       .required(),
-    name: yup.string().required(),
+    description: yup.string().required(),
     tags: yup
       .string()
       .test(
@@ -87,7 +87,7 @@ export default function Dashboard() {
     useCreateDocument("links")
 
   const onSubmit = async (data) => {
-    const { link, name, tags } = data
+    const { link, description, tags } = data
     const tabTabs = tags
       ? tags.split(",").map((word) => word.trim().toLowerCase())
       : []
@@ -97,7 +97,7 @@ export default function Dashboard() {
 
     let newDocument = {
       link: link,
-      name: name,
+      description: description,
       tags: tabTabs,
       createdAt: moment().valueOf(),
       idAuthor: pseudo,
@@ -107,7 +107,7 @@ export default function Dashboard() {
 
     reset({
       link: "",
-      name: "",
+      description: "",
       tags: "",
     })
   }
@@ -149,6 +149,7 @@ export default function Dashboard() {
 
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
@@ -197,12 +198,14 @@ export default function Dashboard() {
                     <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                       <Label htmlFor="description">Name of link</Label>
                       <Input
-                        placeholder="Insert name of your link here..."
+                        placeholder="Insert description of your link here..."
                         id="description"
-                        {...register("name")}
+                        {...register("description")}
                       />
                       <p className="text-sm text-red-500">
-                        {errors.name && <>{errors.name.message}</>}
+                        {errors.description && (
+                          <>{errors.description.message}</>
+                        )}
                       </p>
                     </div>
                     <div className="mb-4 flex w-full flex-col items-start gap-1.5">
@@ -281,7 +284,7 @@ export default function Dashboard() {
                           id: string
                           idAuthor: string
                           link: string
-                          name: string
+                          description: string
                           tags: string[]
                           createdAt: any
                         }) => (
@@ -290,7 +293,7 @@ export default function Dashboard() {
                             id={link.id}
                             idAuthor={link.idAuthor}
                             link={link.link}
-                            name={link.name}
+                            description={link.description}
                             tags={link.tags}
                             createdAt={link.createdAt}
                           />

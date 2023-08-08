@@ -36,7 +36,7 @@ const createDocument = async (newData, collectionName) => {
       index.saveObject({
         objectID: newCollection.id,
         link: newCollection.link,
-        name: newCollection.name,
+        description: newCollection.description,
         createdAt: newCollection.createdAt,
         tags: newCollection.tags,
         idAuthor: newCollection.idAuthor,
