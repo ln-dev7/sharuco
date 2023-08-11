@@ -12,6 +12,12 @@ export const COMPANIES = [
     link: "http://notchpay.co/",
   },
   {
+    name: "DarkCode",
+    image: "/partner/darkcode.svg",
+    imageDark: "/partner/darkcode-dark.svg",
+    link: "https://twitter.com/DarkCodeCompany",
+  },
+  {
     name: "DevStyle",
     image: "/partner/devstyle.png",
     imageDark: "/partner/devstyle-dark.png",
