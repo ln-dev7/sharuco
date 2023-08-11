@@ -198,33 +198,15 @@ export default function CodePreview() {
   return (
     <Layout>
       <Head>
-        <title>Sharuco</title>
+        <title>Sharuco - Code : {searchParams.get("code-preview")}</title>
         <meta
           name="description"
           content="Sharuco allows you to share code codes that you have found
-                 useful."
+          useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Sharuco" />
-        <meta name="twitter:description" content="View this code on Sharuco" />
-        <meta
-          name="twitter:image"
-          content="https://sharuco.lndev.me/sharuco-code.png"
-        />
-
-        <meta property="og:title" content="Sharuco" />
-        <meta property="og:description" content="View this code on Sharuco" />
-        <meta
-          property="og:image"
-          content="https://sharuco.lndev.me/sharuco-code.png"
-        />
-        <meta property="og:url" content="https://sharuco.lndev.me/" />
-        <meta property="og:type" content="website" />
-
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </Head>{" "}
       <section className="container grid items-center gap-0 pt-6 pb-8 md:py-10">
         {isLoadingCode && <LoaderCode />}
         {dataCode && dataCode.exists && !dataCode.data.isPrivate && (
