@@ -315,7 +315,7 @@ export default function Dashboard() {
               <EmptyCard
                 icon={<FileCog className="h-12 w-12" />}
                 title="An error has occurred"
-                description="An error has occurred, please try again later."
+                description="An error has occurred, please try again later or refresh the page."
               />
             )}
           </>

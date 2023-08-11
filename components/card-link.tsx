@@ -37,6 +37,7 @@ import {
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 import EmptyCard from "./empty-card"
+import { Skeleton } from "./ui/skeleton"
 
 export default function CardCodeAdmin({
   id,
@@ -167,7 +168,7 @@ export default function CardCodeAdmin({
 
   //
 
-  const fetchPreview = async (url: string) => {
+  const fetchLinkPreview = async (url: string) => {
     const response = await axios.get(`/api/link-preview?url=${url}`)
     return response.data
   }
@@ -176,7 +177,7 @@ export default function CardCodeAdmin({
     data: dataLinkPreview,
     error: errorLinkPreview,
     isLoading: isLoadingLinkPreview,
-  } = useQuery("preview", () => fetchPreview(link))
+  } = useQuery(["preview", link], () => fetchLinkPreview(link))
 
   return (
     <div
@@ -188,32 +189,54 @@ export default function CardCodeAdmin({
         target="_blank"
         className="h-64 flex items-center justify-center"
       >
-        {dataLinkPreview ? (
-          <img
-            className="w-full h-full object-cover"
-            src={dataLinkPreview.image}
-            alt={dataLinkPreview.title}
-          />
+        {isLoadingLinkPreview ? (
+          <Skeleton className="w-full h-full rounded-none bg-slate-200 dark:bg-slate-800" />
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center text-center rounded-t-xl bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 gap-2">
-            <XCircle className="h-8 w-8 text-slate-400" />
-            <h3 className="text-lg font-semibold">Failed to load image</h3>
-            <p className="text-sm text-muted-foreground">
-              The image could not be loaded for this link.
-            </p>
-          </div>
+          <>
+            {dataLinkPreview ? (
+              <img
+                className="w-full h-full object-cover"
+                src={dataLinkPreview.image}
+                alt={dataLinkPreview.title}
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center text-center rounded-t-xl bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 gap-2">
+                <XCircle className="h-8 w-8 text-slate-400" />
+                <h3 className="text-lg font-semibold">Failed to load image</h3>
+                <p className="text-sm text-muted-foreground">
+                  The image could not be loaded for this link.
+                </p>
+              </div>
+            )}
+          </>
         )}
       </a>
-      <div className="p-5">
+      <div className="p-4">
         <a href={link} target="_blank">
-          <h5 className="mb-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Noteworthy technology acquisitions 2021
-          </h5>
+          {isLoadingLinkPreview ? (
+            <>
+              <Skeleton className="w-full h-3 bg-slate-200 dark:bg-slate-800 mb-2" />
+              <Skeleton className="w-3/4 h-3 bg-slate-200 dark:bg-slate-800 mb-3" />
+            </>
+          ) : (
+            <h5 className="mb-2 line-clamp-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+              {dataLinkPreview.title}
+            </h5>
+          )}
         </a>
-        <p className="mb-3 font-normal text-md text-slate-700 dark:text-slate-400">
-          Here are the biggest enterprise technology acquisitions of 2021 so
-          far, in reverse chronological order.
-        </p>
+        {isLoadingLinkPreview ? (
+          <>
+            <Skeleton className="w-3/4 h-2 bg-slate-200 dark:bg-slate-800 mb-2" />
+            <Skeleton className="w-1/2 h-2 bg-slate-200 dark:bg-slate-800 mb-2" />
+            <Skeleton className="w-full h-2 bg-slate-200 dark:bg-slate-800 mb-2" />
+            <Skeleton className="w-4/5 h-2 bg-slate-200 dark:bg-slate-800 mb-3" />
+          </>
+        ) : (
+          <p className="mb-3 font-normal line-clamp-5 text-md text-slate-700 dark:text-slate-400">
+            {dataLinkPreview.description}
+          </p>
+        )}
+
         {tags && tags.length > 0 && (
           <div className="flex w-full flex-wrap items-center justify-start gap-2">
             {tags?.map((tag: string) => (
