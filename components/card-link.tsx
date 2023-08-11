@@ -10,7 +10,7 @@ import copyToClipboard from "@/utils/copyToClipboard"
 import { yupResolver } from "@hookform/resolvers/yup"
 import algoliasearch from "algoliasearch"
 import axios from "axios"
-import { Edit, Loader2, MoreHorizontal, Pencil, Trash } from "lucide-react"
+import { Loader2, MoreHorizontal, Pencil, Trash, XCircle } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { useQuery } from "react-query"
 import * as yup from "yup"
@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/popover"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
+import EmptyCard from "./empty-card"
 
 export default function CardCodeAdmin({
   id,
@@ -165,59 +166,72 @@ export default function CardCodeAdmin({
   }
 
   //
-  const [previewData, setPreviewData] = useState(null)
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(link)
-        const data = await response.text()
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(data, "text/html")
-        const title = doc.querySelector("title")?.textContent || ""
-        const description =
-          doc
-            .querySelector('meta[name="description"]')
-            ?.getAttribute("content") || ""
-        const image =
-          doc
-            .querySelector('meta[property="og:image"]')
-            ?.getAttribute("content") || ""
-
-        setPreviewData({ title, description, image })
-        setLoading(false)
-      } catch (error) {
-        console.error(error)
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [link])
-
-  if (loading) {
-    return <p>Loading...</p>
+  const fetchPreview = async (url: string) => {
+    const response = await axios.get(`/api/link-preview?url=${url}`)
+    return response.data
   }
 
-  if (!previewData) {
-    return <p>Failed to fetch link preview.</p>
-  }
-
-  const handleClick = () => {
-    window.open(link, "_blank")
-  }
+  const {
+    data: dataLinkPreview,
+    error: errorLinkPreview,
+    isLoading: isLoadingLinkPreview,
+  } = useQuery("preview", () => fetchPreview(link))
 
   return (
     <div
+      className="relative bg-white border border-slate-200 rounded-xl overflow-hidden dark:bg-slate-900 dark:border-slate-700"
       key={id}
-      className="mb-8 relative border border-slate-200 rounded-lg flex flex-col gap-2"
     >
+      <a
+        href={link}
+        target="_blank"
+        className="h-64 flex items-center justify-center"
+      >
+        {dataLinkPreview ? (
+          <img
+            className="w-full h-full object-cover"
+            src={dataLinkPreview.image}
+            alt={dataLinkPreview.title}
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center text-center rounded-t-xl bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 gap-2">
+            <XCircle className="h-8 w-8 text-slate-400" />
+            <h3 className="text-lg font-semibold">Failed to load image</h3>
+            <p className="text-sm text-muted-foreground">
+              The image could not be loaded for this link.
+            </p>
+          </div>
+        )}
+      </a>
+      <div className="p-5">
+        <a href={link} target="_blank">
+          <h5 className="mb-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+            Noteworthy technology acquisitions 2021
+          </h5>
+        </a>
+        <p className="mb-3 font-normal text-md text-slate-700 dark:text-slate-400">
+          Here are the biggest enterprise technology acquisitions of 2021 so
+          far, in reverse chronological order.
+        </p>
+        {tags && tags.length > 0 && (
+          <div className="flex w-full flex-wrap items-center justify-start gap-2">
+            {tags?.map((tag: string) => (
+              <span
+                key={tag}
+                className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="absolute top-4 right-4 rounded-full p-0 w-10 h-10"
+            className="absolute z-30 top-2 right-2 rounded-full p-0 w-10 h-10 bg-white dark:bg-slate-700"
           >
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -236,7 +250,7 @@ export default function CardCodeAdmin({
               <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
+                    <h3 className="text-lg font-medium leading-6 text-slate-900 dark:text-slate-100">
                       Edit a link
                     </h3>
                   </AlertDialogTitle>
@@ -345,44 +359,6 @@ export default function CardCodeAdmin({
           </div>
         </PopoverContent>
       </Popover>
-      <div onClick={handleClick} style={{ cursor: "pointer" }}>
-        <h3>{previewData.title}</h3>
-        <p>{previewData.description}</p>
-        {previewData.image && (
-          <img src={previewData.image} alt="Link Preview" />
-        )}
-      </div>
-      <div className="">
-        {previewData ? (
-          <div>
-            {previewData.image && (
-              <img
-                src={previewData.image}
-                alt={previewData.title}
-                className="mb-4 h-60 w-full object-cover"
-              />
-            )}
-            <h2 className="text-xl font-semibold">{previewData.title}</h2>
-            {previewData.description && (
-              <p className="text-gray-600">{previewData.description}</p>
-            )}
-          </div>
-        ) : (
-          <p>Aperçu indisponible</p>
-        )}
-      </div>
-      {tags && tags.length > 0 && (
-        <div className="flex w-full flex-wrap items-center justify-start gap-2">
-          {tags?.map((tag: string) => (
-            <span
-              key={tag}
-              className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
     </div>
   )
 }

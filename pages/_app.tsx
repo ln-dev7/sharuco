@@ -15,6 +15,7 @@ const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
+  preload: true,
 })
 
 export default function App({ Component, pageProps }: AppProps) {
