@@ -140,10 +140,12 @@ export default function IndexPage() {
           🚀
           <div
             data-orientation="vertical"
-            className="shrink-0 bg-slate-280 w-[1px] mx-2 h-4"
+            className="shrink-0 bg-slate-200 dark:bg-slate-700 w-[1px] mx-2 h-4"
           ></div>
-          <span className="sm:hidden">Sharuco Link, Store all your links.</span>
-          <span className="hidden sm:inline">
+          <span className="sm:hidden text-slate-800 dark:text-slate-200">
+            Sharuco Link, Store all your links.
+          </span>
+          <span className="hidden sm:inline text-slate-800 dark:text-slate-200">
             Introducing Sharuco Link, Store all your links.
           </span>
           <svg

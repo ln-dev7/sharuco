@@ -193,7 +193,7 @@ export default function CardCodeAdmin({
           <Skeleton className="w-full h-full rounded-none bg-slate-200 dark:bg-slate-800" />
         ) : (
           <>
-            {dataLinkPreview ? (
+            {dataLinkPreview.image ? (
               <img
                 className="w-full h-full object-cover"
                 src={dataLinkPreview.image}
@@ -219,9 +219,13 @@ export default function CardCodeAdmin({
               <Skeleton className="w-3/4 h-3 bg-slate-200 dark:bg-slate-800 mb-3" />
             </>
           ) : (
-            <h5 className="mb-2 line-clamp-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-              {dataLinkPreview.title}
-            </h5>
+            <>
+              {dataLinkPreview.title && (
+                <h5 className="mb-2 line-clamp-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                  {dataLinkPreview.title}
+                </h5>
+              )}
+            </>
           )}
         </a>
         {isLoadingLinkPreview ? (
@@ -232,9 +236,13 @@ export default function CardCodeAdmin({
             <Skeleton className="w-4/5 h-2 bg-slate-200 dark:bg-slate-800 mb-3" />
           </>
         ) : (
-          <p className="mb-3 font-normal line-clamp-5 text-md text-slate-700 dark:text-slate-400">
-            {dataLinkPreview.description}
-          </p>
+          <>
+            {dataLinkPreview.description && (
+              <p className="mb-3 font-normal line-clamp-5 text-md text-slate-700 dark:text-slate-400">
+                {dataLinkPreview.description}
+              </p>
+            )}
+          </>
         )}
 
         {tags && tags.length > 0 && (
