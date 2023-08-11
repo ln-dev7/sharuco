@@ -1,46 +1,14 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { DialogProps } from "@radix-ui/react-alert-dialog"
-import algoliasearch from "algoliasearch"
-import {
-  Circle,
-  File,
-  Laptop,
-  Moon,
-  Search,
-  SearchIcon,
-  SunMedium,
-  Trash2,
-} from "lucide-react"
-import { useTheme } from "next-themes"
-import {
-  Highlight,
-  Hits,
-  InstantSearch,
-  SearchBox,
-} from "react-instantsearch-hooks-web"
 
 import { cn } from "@/lib/utils"
-import Loader from "@/components/loader"
-import LoaderCode from "@/components/loader-code"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import AlgoliaSearch from "./algolia-search"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import AlgoliaSearchCode from "./../algolia/algolia-search-code"
 
-export function SearchBar({ ...props }: DialogProps) {
+export function SearchBarCode({ ...props }: DialogProps) {
   const [open, setOpen] = React.useState(false)
 
   React.useEffect(() => {
@@ -78,7 +46,7 @@ export function SearchBar({ ...props }: DialogProps) {
           </Button>
         </DialogTrigger>
         <DialogContent className="max-h-[640px] p-0 overflow-hidden overflow-y-auto scrollbar-hide">
-          <AlgoliaSearch />
+          <AlgoliaSearchCode />
         </DialogContent>
       </Dialog>
     </>

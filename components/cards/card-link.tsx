@@ -36,8 +36,8 @@ import {
 } from "@/components/ui/popover"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
-import EmptyCard from "./empty-card"
-import { Skeleton } from "./ui/skeleton"
+import EmptyCard from "./../empty-card"
+import { Skeleton } from "./../ui/skeleton"
 
 export default function CardCodeAdmin({
   id,

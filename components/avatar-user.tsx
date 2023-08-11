@@ -20,7 +20,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import Loader from "./loader"
+import Loader from "./loaders/loader"
 import { Separator } from "./ui/separator"
 
 export const useGitHubLogout = () => {

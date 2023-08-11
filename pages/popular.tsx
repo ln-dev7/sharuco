@@ -7,11 +7,10 @@ import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetPopularCodes } from "@/firebase/firestore/getPopularCodes.js"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
-import CardCode from "@/components/card-code"
+import CardCode from "@/components/cards/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
-import Loader from "@/components/loader"
-import LoaderCodes from "@/components/loader-codes"
+import LoaderCodes from "@/components/loaders/loader-codes"
 
 export default function Popular() {
   const { user } = useAuthContext()

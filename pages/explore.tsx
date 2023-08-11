@@ -15,13 +15,11 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
-import AlgoliaSearch from "@/components/algolia-search"
-import CardCode from "@/components/card-code"
+import CardCode from "@/components/cards/card-code"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
-import Loader from "@/components/loader"
-import LoaderCode from "@/components/loader-code"
-import LoaderCodes from "@/components/loader-codes"
+import LoaderCode from "@/components/loaders/loader-code"
+import LoaderCodes from "@/components/loaders/loader-codes"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,

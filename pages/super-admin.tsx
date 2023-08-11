@@ -10,13 +10,13 @@ import { useDocuments } from "@/firebase/firestore/getDocuments"
 import { Code, FileCog, UserIcon } from "lucide-react"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
-import CardCodeAdmin from "@/components/card-code-admin"
-import CardUserAdmin from "@/components/card-user-admin"
+import CardCodeAdmin from "@/components/cards/card-code-admin"
+import CardUserAdmin from "@/components/cards/card-user-admin"
 import EmptyCard from "@/components/empty-card"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
-import Loader from "@/components/loader"
-import LoaderCodes from "@/components/loader-codes"
+import Loader from "@/components/loaders/loader"
+import LoaderCodes from "@/components/loaders/loader-codes"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function Dashboard() {
