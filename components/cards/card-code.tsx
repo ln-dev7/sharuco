@@ -1,37 +1,26 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import {
-  allLanguages,
-  getLanguageColor,
-  languagesName,
-} from "@/constants/languages"
+import { getLanguageColor } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
-import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
 import highlight from "@/utils/highlight"
-import indentCode from "@/utils/indentCode"
-import linearizeCode from "@/utils/linearizeCode"
-import { yupResolver } from "@hookform/resolvers/yup"
-import algoliasearch from "algoliasearch"
-import hljs from "highlight.js"
 import * as htmlToImage from "html-to-image"
 import {
   Copy,
-  Edit,
+  Flag,
+  Github,
   Loader2,
   Save,
   Share,
   Star,
-  Trash,
   Verified,
 } from "lucide-react"
-import { useForm } from "react-hook-form"
 import {
   EmailIcon,
   EmailShareButton,
@@ -46,10 +35,9 @@ import {
   WhatsappIcon,
   WhatsappShareButton,
 } from "react-share"
-import * as yup from "yup"
 
 import { cn } from "@/lib/utils"
-import Loader from "@/components/loader"
+import Loader from "@/components/loaders/loader"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -62,9 +50,6 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { ToastAction } from "@/components/ui/toast"
 import {
   Tooltip,
@@ -73,8 +58,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { useToast } from "@/components/ui/use-toast"
+import { Input } from "./../ui/input"
 
-export default function CardCodeAdmin({
+export default function CardCode({
   id,
   idAuthor,
   language,
@@ -83,7 +69,8 @@ export default function CardCodeAdmin({
   tags,
   favoris: favorisInit,
   isPrivate,
-  comments: commentsInit,
+  currentUser,
+  comments,
 }) {
   const { toast } = useToast()
   const notifyCodeCopied = () =>
@@ -109,155 +96,32 @@ export default function CardCodeAdmin({
 
   const [openShareDialog, setOpenShareDialog] = useState(false)
 
-  const [openEditDialog, setOpenEditDialog] = useState(false)
-
-  //
-
-  const ALGOLIA_INDEX_NAME = "codes"
-
-  const client = algoliasearch(
-    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
-    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
-  )
-  const index = client.initIndex(ALGOLIA_INDEX_NAME)
-
-  const { deleteDocument, isLoading: isLoadingDelete }: any =
-    useDeleteDocument("codes")
-
-  const handleDeleteDocument = () => {
-    deleteDocument(id)
-    index.deleteObject(id)
-  }
-
-  //
-  const [checkboxOn, setCheckboxOn] = useState(isPrivate)
-
-  const schema = yup.object().shape({
-    code: yup.string().required(),
-    description: yup.string().required(),
-    language: yup.string().required(),
-    tags: yup
-      .string()
-      .test(
-        "tags",
-        "The tags field must contain only letters, commas and/or spaces",
-        (val) => !val || /^[a-zA-Z, ]*$/.test(val)
-      ),
-    isPrivate: yup.boolean(),
-  })
-
   const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  })
-
-  useEffect(() => {
-    setValue("code", indentCode(code))
-    setValue("description", description)
-    setValue("language", language)
-    setValue("tags", tags.join().trim().replace(/\s+/g, ""))
-    setValue("isPrivate", checkboxOn)
-  }, [code, description, language, tags, checkboxOn, setValue])
-
-  const { updateCodeDocument, isLoading, isError, isSuccess }: any =
-    useUpdateCodeDocument("codes")
-
-  const onSubmit = async (data) => {
-    const {
-      code: codeUpdate,
-      description: descriptionUpdate,
-      language: languageUpdate,
-      tags: tagsUpdate,
-      isPrivate: isPrivateUpdate,
-    } = data
-
-    const linearCode = linearizeCode(codeUpdate)
-    const tabTabs = tagsUpdate
-      ? tagsUpdate.split(",").map((word) => word.trim().toLowerCase())
-      : []
-    if (tabTabs[tabTabs.length - 1] === "") {
-      tabTabs.pop()
-    }
-
-    if (
-      linearCode === code &&
-      descriptionUpdate === description &&
-      languageUpdate === language &&
-      tagsUpdate === tags.join(",") &&
-      isPrivateUpdate === isPrivate
-    ) {
-      toast({
-        variant: "destructive",
-        title: "You have not made any changes",
-        description: "Please make changes to update your code",
-        action: <ToastAction altText="Okay">Okay</ToastAction>,
-      })
-      return
-    }
-
-    let updatedCodeData: {
-      code: string
-      description: string
-      isPrivate: boolean
-      language: string
-      tags: string[]
-      favoris?: string[]
-      favorisCount?: number
-      comments?: any[]
-    } = {
-      code: linearCode,
-      description: descriptionUpdate,
-      isPrivate: !!isPrivateUpdate,
-      language: languageUpdate.toLowerCase(),
-      tags: tabTabs,
-      favoris:
-        isPrivateUpdate === true && isPrivate === false ? [] : favorisInit,
-      favorisCount:
-        isPrivateUpdate === true && isPrivate === false
-          ? 0
-          : favorisInit.length,
-      comments:
-        isPrivateUpdate === true && isPrivate === false ? [] : commentsInit,
-    }
-
-    await updateCodeDocument({ id, updatedCodeData })
-
-    await index.partialUpdateObject({
-      objectID: id,
-      description: descriptionUpdate,
-      isPrivate: !!isPrivateUpdate,
-      language: languageUpdate.toLowerCase(),
-      tags: tabTabs,
-    })
-
-    reset({
-      code: indentCode(linearCode),
-      description: descriptionUpdate,
-      language: languageUpdate,
-      tags: tagsUpdate,
-      isPrivate: isPrivateUpdate,
-    })
-    setCheckboxOn(isPrivateUpdate)
-
-    setOpenEditDialog(false)
-    toast({
-      title: "Your code has been updated successfully !",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
-  }
-
-  //
-
-  const {
-    data: dataUser,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
+    data: dataAuthor,
+    isLoading: isLoadingAuthor,
+    isError: isErrorAuthor,
   } = useDocument(idAuthor, "users")
+
+  const {
+    data: dataCodes,
+    isLoading: isLoadingCodes,
+    isError: isErrorCodes,
+  } = useDocument(id, "codes")
+
+  const { updateCodeDocument }: any = useUpdateCodeDocument("codes")
+
+  const addCodeOnFavoris = async (id: string) => {
+    let updatedCodeData = {
+      favoris: favorisInit.includes(pseudo)
+        ? favorisInit.filter((item) => item !== pseudo)
+        : [...favorisInit, pseudo],
+      favorisCount: favorisInit.includes(pseudo)
+        ? favorisInit.filter((item) => item !== pseudo).length
+        : [...favorisInit, pseudo].length,
+    }
+
+    updateCodeDocument({ id, updatedCodeData })
+  }
 
   const domRefImage = useRef(null)
   const [backgroundImage, setBackgroundImage] = useState(
@@ -295,201 +159,14 @@ export default function CardCodeAdmin({
     link.click()
   }
 
-  function detectLanguage(code) {
-    const language = hljs.highlightAuto(code).language
-    return language || "text"
-  }
-
-  function handleCodeChange(code) {
-    const detectedLanguage = detectLanguage(code)
-    if (!languagesName.includes(detectedLanguage)) {
-      setValue("language", "other")
-      return
-    }
-    setValue("language", detectedLanguage)
-  }
-
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
-      <div className="flex w-full items-center justify-end">
-        <div className="flex items-center gap-2">
-          <AlertDialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
-            <AlertDialogTrigger asChild>
-              <Button variant="outline">
-                Edit
-                <Edit className="ml-2 h-4 w-4" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
-                    Edit a code
-                  </h3>
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                    <Label htmlFor="code">Edit your code</Label>
-                    <Textarea
-                      placeholder="Insert your code here..."
-                      id="code"
-                      {...register("code")}
-                      className="h-32"
-                      onChange={(e) => {
-                        handleCodeChange(e.target.value)
-                      }}
-                    />
-                    <p className="text-sm text-red-500">
-                      {errors.code && <>{errors.code.message}</>}
-                    </p>
-                  </div>
-                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                    <Label htmlFor="description">Edit escription</Label>
-                    <Textarea
-                      placeholder="What does this code do ?"
-                      id="description"
-                      {...register("description")}
-                    />
-                    <p className="text-sm text-red-500">
-                      {errors.description && <>{errors.description.message}</>}
-                    </p>
-                  </div>
-                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                    <Label htmlFor="language">Edit language</Label>
-                    <select
-                      className="flex h-10 w-full rounded-md border border-slate-300 bg-white py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
-                      name="language"
-                      id="language"
-                      {...register("language")}
-                    >
-                      <option value="" disabled selected>
-                        {" "}
-                        The code is written in what language ?
-                      </option>
-                      {allLanguages.map((language) => (
-                        <option value={language.name.toLocaleLowerCase()}>
-                          {language.name}
-                        </option>
-                      ))}
-                    </select>
-                    <p className="text-sm text-red-500">
-                      {errors.language && <>{errors.language.message}</>}
-                    </p>
-                  </div>
-                  <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                    <Label htmlFor="tags">Edit tags</Label>
-                    <Input
-                      type="text"
-                      id="tags"
-                      placeholder="Enter a tags ..."
-                      {...register("tags")}
-                    />
-                    <p className="text-sm font-medium text-slate-500">
-                      Please separate tags with{" "}
-                      <span className="text-slate-700 dark:text-slate-300">
-                        ,
-                      </span>
-                    </p>
-                    <p className="text-sm text-red-500">
-                      {errors.tags && <>{errors.tags.message}</>}
-                    </p>
-                  </div>
-                  {searchParams.get("code-preview") === null && (
-                    <div className="flex items-center gap-4">
-                      <input
-                        type="checkbox"
-                        {...register("isPrivate")}
-                        name="isPrivate"
-                        id="isPrivate"
-                        className={`h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none ring-slate-500
-                           ring-offset-0 focus:ring-slate-400 focus:ring-offset-slate-900 dark:bg-slate-800
-                          ${checkboxOn ? "ring-2" : "ring-0"}
-                          `}
-                        checked={checkboxOn}
-                        onChange={() => setCheckboxOn(!checkboxOn)}
-                      />
-                      <Label htmlFor="isPrivate">
-                        Will this code be private ?{" "}
-                        {checkboxOn ? (
-                          <span className="font-bold text-teal-300">Yes</span>
-                        ) : (
-                          <span className="font-bold text-teal-300">No</span>
-                        )}
-                      </Label>
-                    </div>
-                  )}
-                  {searchParams.get("code-preview") === null && (
-                    <div
-                      className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
-                      role="alert"
-                    >
-                      <span className="font-semibold">Warning alert !</span> If
-                      you change your code from public to private, you will lose
-                      all the favourites and comments of this code
-                    </div>
-                  )}
-                  {isError && (
-                    <p className="pt-4 text-sm font-bold text-red-500">
-                      An error has occurred, please try again later.
-                    </p>
-                  )}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <button
-                  className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
-                  )}
-                  disabled={isLoading}
-                  onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
-                >
-                  {isLoading && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  Edit
-                </button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>{" "}
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive">
-                Delete
-                <Trash className="ml-2 h-4 w-4" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  Are you sure you want to delete this code ?
-                </AlertDialogTitle>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <button
-                  className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
-                  )}
-                  disabled={isLoadingDelete}
-                  onClick={!isLoadingDelete ? handleDeleteDocument : undefined}
-                >
-                  {isLoadingDelete && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
-                  Delete
-                </button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      </div>
       <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
         <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
           <span className="text-xs font-medium text-white">
             {language.toLowerCase()}
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <span
               className="flex cursor-pointer items-center p-1 text-xs font-medium text-white"
               onClick={() => {
@@ -603,6 +280,34 @@ export default function CardCodeAdmin({
                 </div>
               </AlertDialogContent>
             </AlertDialog>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button className="cursor-pointer text-white">
+                  <Flag className="h-4 w-4 cursor-pointer" />
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Report this code</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Please, report this code if you think it&apos;s
+                    inappropriate.
+                    <br />
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <a
+                    className={cn(
+                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    )}
+                    href={`mailto:sharuco@leonelngoya.com?subject=REPORTING%20A%20CODE%20ON%20SHARUCO&body=Hello,%20%0D%0A%0D%0AI%20want%20to%20report%20this%20code%20https://sharuco.lndev.me/code-preview/${id}%20that%20I%20saw%20on%20Sharuco.%0D%0AThank%20you`}
+                  >
+                    Report Code
+                  </a>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
         {searchParams.get("code-preview") === null && !isPrivate ? (
@@ -617,14 +322,7 @@ export default function CardCodeAdmin({
             </pre>
           </Link>
         ) : (
-          <pre
-            className={`${
-              searchParams.get("code-preview") === null &&
-              isPrivate &&
-              "max-h-[200px] "
-            }
-          w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black`}
-          >
+          <pre className="w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
             <code
               className="text-white"
               dangerouslySetInnerHTML={{
@@ -634,38 +332,38 @@ export default function CardCodeAdmin({
           </pre>
         )}
       </div>
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <a
-          href={dataUser && dataUser.exists ? `/user/${idAuthor}` : "#"}
+          href={dataAuthor && dataAuthor.exists ? `/user/${idAuthor}` : "#"}
           className="flex items-center justify-start gap-2"
         >
           <Avatar className="h-8 w-8 cursor-pointer">
-            {isLoadingUser && (
+            {isLoadingAuthor && (
               <AvatarFallback>
                 <Loader />
               </AvatarFallback>
             )}
-            {dataUser && dataUser.exists ? (
+            {dataAuthor && dataAuthor.exists ? (
               <>
                 <AvatarImage
-                  src={dataUser.data.photoURL}
+                  src={dataAuthor.data.photoURL}
                   alt={
-                    dataUser.data.displayName !== null
-                      ? dataUser.data.displayName
-                      : dataUser.data.pseudo
+                    dataAuthor.data.displayName !== null
+                      ? dataAuthor.data.displayName
+                      : idAuthor
                   }
                 />
                 <AvatarFallback>
-                  {dataUser.data.displayName !== null ? (
+                  {dataAuthor.data.displayName !== null ? (
                     <>
-                      {dataUser.data.displayName.split(" ")[1] === undefined
-                        ? dataUser.data.displayName.split(" ")[0][0] +
-                          dataUser.data.displayName.split(" ")[0][1]
-                        : dataUser.data.displayName.split(" ")[0][0] +
-                          dataUser.data.displayName.split(" ")[1][0]}
+                      {dataAuthor.data.displayName.split(" ")[1] === undefined
+                        ? dataAuthor.data.displayName.split(" ")[0][0] +
+                          dataAuthor.data.displayName.split(" ")[0][1]
+                        : dataAuthor.data.displayName.split(" ")[0][0] +
+                          dataAuthor.data.displayName.split(" ")[1][0]}
                     </>
                   ) : (
-                    dataUser.data.pseudo[0] + dataUser.data.pseudo[1]
+                    dataAuthor.data.pseudo[0] + dataAuthor.data.pseudo[1]
                   )}
                 </AvatarFallback>
               </>
@@ -677,25 +375,24 @@ export default function CardCodeAdmin({
             <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
               {idAuthor}{" "}
             </span>
-            {dataUser && dataUser.exists && (
+            {dataAuthor && dataAuthor.exists && (
               <span>
-                {dataUser.data.premium && (
+                {dataAuthor.data.premium && (
                   <Verified className="h-4 w-4 text-green-500" />
                 )}
               </span>
             )}
           </div>
         </a>
-        <div className="flex shrink-0 items-center gap-4">
+        <div className="flex shrink-0 items-center justify-end gap-3">
           {searchParams.get("code-preview") === null && !isPrivate && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
                     href={`/code-preview/${id}#commentsCode`}
-                    className="flex gap-1 text-slate-700 hover:text-slate-500 dark:text-slate-400 hover:dark:text-white"
+                    className="flex gap-1 text-slate-700 hover:text-slate-500 dark:text-slate-400  hover:dark:text-white"
                   >
-                    {commentsInit.length}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -710,6 +407,7 @@ export default function CardCodeAdmin({
                         d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"
                       />
                     </svg>
+                    {comments.length}
                     <span className="sr-only">Add or view</span>
                   </Link>
                 </TooltipTrigger>
@@ -719,30 +417,125 @@ export default function CardCodeAdmin({
               </Tooltip>
             </TooltipProvider>
           )}
-          {isPrivate ? null : (
-            <div className="flex items-center text-slate-700 dark:text-slate-400 ">
-              {user && favorisInit.includes(pseudo) ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#F9197F"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="#F9197F"
-                  className="mr-2 h-5 w-5"
+          {user ? (
+            isPrivate ? null : (
+              <span
+                className="flex cursor-pointer items-center p-1 text-xs font-medium text-white"
+                onClick={() => {
+                  addCodeOnFavoris(id)
+                }}
+              >
+                {user && favorisInit.includes(pseudo) ? (
+                  <div className="mr-1 flex cursor-pointer  items-center justify-center rounded-full p-1 hover:bg-[#F8E3EB] dark:hover:bg-[#210C14]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="#F9197F"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="#F9197F"
+                      className="h-6 w-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                      />
+                    </svg>
+                  </div>
+                ) : (
+                  <div className="mr-1 flex cursor-pointer items-center justify-center rounded-full p-1 text-slate-700 hover:bg-[#F8E3EB] dark:text-slate-400 dark:hover:bg-[#210C14]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="h-6 w-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                      />
+                    </svg>
+                  </div>
+                )}
+                <span
+                  className={`${
+                    favorisInit.includes(pseudo) ? "text-[#F9197F]" : ""
+                  } hover:dark:text-white"  text-base text-slate-700 hover:text-slate-500  dark:text-slate-400`}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                  />
-                </svg>
-              ) : (
-                <Star className="mr-2 h-5 w-5" />
-              )}
-              {favorisInit.length}
-            </div>
+                  {favorisInit.length}
+                </span>
+              </span>
+            )
+          ) : (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
+                  <div className="mr-1 flex cursor-pointer items-center  justify-center rounded-full p-1 text-slate-700 hover:bg-[#F8E3EB] dark:text-slate-400 dark:hover:bg-[#210C14]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="h-6 w-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+                      />
+                    </svg>
+                  </div>
+                  <span
+                    className={`hover:dark:text-white" text-base text-slate-700 hover:text-slate-500  dark:text-slate-400`}
+                  >
+                    {favorisInit.length}
+                  </span>
+                </span>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Like a Code to share the love.
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Join Sharuco now to let{" "}
+                    <a
+                      href={
+                        dataAuthor && dataAuthor.exists
+                          ? `/user/${idAuthor}`
+                          : "#"
+                      }
+                      className="font-semibold text-slate-900 dark:text-slate-100"
+                    >
+                      {idAuthor}
+                    </a>{" "}
+                    know you like.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <button
+                    className={cn(
+                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    )}
+                    disabled={isPending}
+                    onClick={login}
+                  >
+                    {isPending ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Github className="mr-2 h-4 w-4" />
+                    )}
+                    Login with Github
+                  </button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           )}
-
           {!isPrivate && (
             <AlertDialog
               open={openShareDialog}
@@ -825,6 +618,7 @@ export default function CardCodeAdmin({
           )}
         </div>
       </div>
+
       {searchParams.get("code-preview") === null && !isPrivate ? (
         <Link
           href={`/code-preview/${id}`}

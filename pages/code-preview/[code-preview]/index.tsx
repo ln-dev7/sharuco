@@ -35,12 +35,12 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
 import { cn } from "@/lib/utils"
-import CardCode from "@/components/card-code"
-import CardCodeAdmin from "@/components/card-code-admin"
+import CardCode from "@/components/cards/card-code"
+import CardCodeAdmin from "@/components/cards/card-code-admin"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
-import Loader from "@/components/loader"
-import LoaderCode from "@/components/loader-code"
+import Loader from "@/components/loaders/loader"
+import LoaderCode from "@/components/loaders/loader-code"
 import {
   AlertDialog,
   AlertDialogCancel,

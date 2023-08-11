@@ -1,15 +1,9 @@
 import Link from "next/link"
 import algoliasearch from "algoliasearch"
 import { Search, SearchIcon, Trash2 } from "lucide-react"
-import {
-  Highlight,
-  Hits,
-  InstantSearch,
-  SearchBox,
-} from "react-instantsearch-hooks-web"
+import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch"
 
-import Loader from "@/components/loader"
-import LoaderCode from "@/components/loader-code"
+import LoaderCode from "@/components/loaders/loader-code"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 
@@ -20,7 +14,7 @@ const client = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY
 )
 
-export default function AlgoliaSearch() {
+export default function AlgoliaSearchCode() {
   return (
     <InstantSearch indexName="codes" searchClient={client}>
       <SearchBox

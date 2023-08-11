@@ -15,10 +15,10 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
 import { cn } from "@/lib/utils"
-import CardLink from "@/components/card-link"
+import CardLink from "@/components/cards/card-link"
 import EmptyCard from "@/components/empty-card"
 import { Layout } from "@/components/layout"
-import LoaderLinks from "@/components/loader-links"
+import LoaderLinks from "@/components/loaders/loader-links"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -35,6 +35,7 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
+import { SearchBarLink } from "./../components/search-bar/search-bar-link"
 
 export default function Dashboard() {
   const { user } = useAuthContext()
@@ -146,9 +147,9 @@ export default function Dashboard() {
           </p>
         </div>
         {user ? (
-          <div className="flex flex-col justify-between gap-2 sm:flex-row">
+          <div className="flex items-center justify-between gap-2 sm:flex-row">
             <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
-              <AlertDialogTrigger asChild>
+              <AlertDialogTrigger className="shrink-0" asChild>
                 <button
                   className={buttonVariants({ size: "lg" })}
                   onClick={() => setOpenDialog(true)}
@@ -232,6 +233,7 @@ export default function Dashboard() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+            <SearchBarLink />
             {/* <div className="flex flex-col gap-2 sm:flex-row">
             <Link
               href={`/user/${pseudo}`}

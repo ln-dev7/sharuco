@@ -9,7 +9,7 @@ import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { buttonVariants } from "@/components/ui/button"
 import { AvatarUser } from "./avatar-user"
-import { SearchBar } from "./search-bar"
+import { SearchBarCode } from "./search-bar/search-bar-code"
 
 export function SiteHeader() {
   const { user } = useAuthContext()
@@ -21,7 +21,7 @@ export function SiteHeader() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <div className="w-full flex-1 lg:w-auto lg:flex-none">
-            <SearchBar />
+            <SearchBarCode />
           </div>
           <nav className="flex items-center space-x-1">
             {!user && (

@@ -23,12 +23,11 @@ import moment from "moment"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import { cn } from "@/lib/utils"
-import CardCode from "@/components/card-code"
+import CardCode from "@/components/cards/card-code"
 import EmptyCard from "@/components/empty-card"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
-import Loader from "@/components/loader"
-import LoaderCodes from "@/components/loader-codes"
+import LoaderCodes from "@/components/loaders/loader-codes"
 import {
   AlertDialog,
   AlertDialogCancel,

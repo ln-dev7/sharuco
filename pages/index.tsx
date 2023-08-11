@@ -26,7 +26,6 @@ import { useTheme } from "next-themes"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import CardLink from "@/components/card-link"
 import { Layout } from "@/components/layout"
 import {
   AlertDialog,
