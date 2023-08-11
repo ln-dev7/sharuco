@@ -15,6 +15,7 @@ const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
+  preload: true,
 })
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -36,12 +37,14 @@ export default function App({ Component, pageProps }: AppProps) {
         <AuthContextProvider>
           <NextSeo
             title="Sharuco"
-            description="Share your code with everyone."
+            description="Sharuco allows you to share code codes that you have found
+            useful.."
             canonical="https://sharuco.lndev.me/"
             openGraph={{
               url: "https://sharuco.lndev.me/",
               title: "Sharuco",
-              description: "Share your code with everyone.",
+              description:
+                "Sharuco allows you to share code codes that you have found useful.",
               images: [
                 {
                   url: "https://sharuco.lndev.me/sharuco-banner.png",

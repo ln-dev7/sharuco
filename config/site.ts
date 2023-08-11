@@ -22,9 +22,15 @@ export const siteConfig: SiteConfig = {
       support: false,
     },
     {
+      title: "Links",
+      href: "/links",
+      pined: true,
+      support: false,
+    },
+    {
       title: "Popular code",
       href: "/popular",
-      pined: true,
+      pined: false,
       support: false,
     },
     {

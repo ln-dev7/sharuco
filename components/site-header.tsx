@@ -20,7 +20,7 @@ export function SiteHeader() {
           <MainNav items={siteConfig.mainNav} />
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
+          <div className="w-full flex-1 lg:w-auto lg:flex-none">
             <SearchBar />
           </div>
           <nav className="flex items-center space-x-1">
