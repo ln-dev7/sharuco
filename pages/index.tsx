@@ -441,10 +441,10 @@ export default function IndexPage() {
           <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
             OUR SPONSORS
           </h2>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
+          <div className="flex items-center justify-center gap-6 flex-wrap">
             {COMPANIES.map((support) => (
               <a
-                className="shrink-0 w-[200px]"
+                className="shrink-0 w-40"
                 href={support.link}
                 target="_blank"
                 rel="noopener noreferrer"
