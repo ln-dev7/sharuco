@@ -147,9 +147,9 @@ export default function Dashboard() {
           </p>
         </div>
         {user ? (
-          <div className="flex items-center justify-between gap-2 sm:flex-row">
+          <div className="flex items-center justify-between gap-2 flex-col sm:flex-row">
             <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
-              <AlertDialogTrigger className="shrink-0" asChild>
+              <AlertDialogTrigger className="shrink-0 w-full sm:w-fit" asChild>
                 <button
                   className={buttonVariants({ size: "lg" })}
                   onClick={() => setOpenDialog(true)}
