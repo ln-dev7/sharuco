@@ -33,34 +33,34 @@ export default function App({ Component, pageProps }: AppProps) {
 					--font-sans: ${fontSans.style.fontFamily};
 				}
 			}`}</style>
+      <NextSeo
+        title="Sharuco"
+        description="Sharuco allows you to share code codes that you have found
+            useful."
+        canonical="https://sharuco.lndev.me/"
+        openGraph={{
+          url: "https://sharuco.lndev.me/",
+          title: "Sharuco",
+          description:
+            "Sharuco allows you to share code codes that you have found useful.",
+          images: [
+            {
+              url: "https://sharuco.lndev.me/sharuco-banner.png",
+              alt: "Sharuco",
+              type: "image/jpeg",
+              secureUrl: "https://sharuco.lndev.me/sharuco-banner.png",
+            },
+          ],
+          siteName: "Sharuco",
+        }}
+        twitter={{
+          handle: "@ln_dev7",
+          site: "@ln_dev7",
+          cardType: "summary_large_image",
+        }}
+      />
       <QueryClientProvider client={queryClient}>
         <AuthContextProvider>
-          <NextSeo
-            title="Sharuco"
-            description="Sharuco allows you to share code codes that you have found
-            useful.."
-            canonical="https://sharuco.lndev.me/"
-            openGraph={{
-              url: "https://sharuco.lndev.me/",
-              title: "Sharuco",
-              description:
-                "Sharuco allows you to share code codes that you have found useful.",
-              images: [
-                {
-                  url: "https://sharuco.lndev.me/sharuco-banner.png",
-                  alt: "Sharuco",
-                  type: "image/jpeg",
-                  secureUrl: "https://sharuco.lndev.me/sharuco-banner.png",
-                },
-              ],
-              siteName: "Sharuco",
-            }}
-            twitter={{
-              handle: "@ln_dev7",
-              site: "@ln_dev7",
-              cardType: "summary_large_image",
-            }}
-          />
           <GoogleAnalytics measurementId="G-4FTGXMJNPY" />
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Toaster />
