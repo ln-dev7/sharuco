@@ -132,7 +132,7 @@ export default function Dashboard() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+      <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Sharuco Link
@@ -147,9 +147,9 @@ export default function Dashboard() {
           </p>
         </div>
         {user ? (
-          <div className="flex items-center justify-between gap-2 flex-col sm:flex-row">
+          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
             <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
-              <AlertDialogTrigger className="shrink-0 w-full sm:w-fit" asChild>
+              <AlertDialogTrigger className="w-full shrink-0 sm:w-fit" asChild>
                 <button
                   className={buttonVariants({ size: "lg" })}
                   onClick={() => setOpenDialog(true)}
@@ -220,7 +220,7 @@ export default function Dashboard() {
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                     )}
                     disabled={isLoading}
                     onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -307,12 +307,12 @@ export default function Dashboard() {
             <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
               <Lock className="h-12 w-12" />
               <h3 className="mt-4 text-lg font-semibold">Access denied</h3>
-              <p className="mb-4 mt-2 text-sm text-muted-foreground">
+              <p className="text-muted-foreground mb-4 mt-2 text-sm">
                 To access Sharuco Link you must first be logged in.
               </p>
               <button
                 className={cn(
-                  "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                  "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                 )}
                 disabled={isPending}
                 onClick={login}

@@ -291,7 +291,7 @@ export default function Dashboard() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>{" "}
-      <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+      <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Dashboard
@@ -314,7 +314,7 @@ export default function Dashboard() {
 
           <Link
             href="/add-personal-access-token"
-            className="mt-2 inline-flex items-center rounded-full border border-green-200 bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green-800 dark:bg-gray-800 dark:text-green-300 dark:border-none"
+            className="mt-2 inline-flex items-center rounded-full border border-green-200 bg-green-100 px-2.5 py-0.5 text-sm font-medium text-green-800 dark:border-none dark:bg-gray-800 dark:text-green-300"
           >
             <span className="mr-1 h-2 w-2 shrink-0 rounded-full bg-green-500"></span>
             To be able to add code to your Github Gist, make sure you follow
@@ -369,7 +369,7 @@ export default function Dashboard() {
                   <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                     <Label htmlFor="language">Language</Label>
                     <select
-                      className="flex h-10 w-full rounded-md border border-slate-300 bg-white py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      className="flex h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                       name="language"
                       id="language"
                       {...register("language")}
@@ -476,7 +476,7 @@ export default function Dashboard() {
                   )}
                   {isErrorAddOnGithubGist.isUnauthorized && (
                     <div
-                      className="p-4 mt-4 w-full lg:w-3/4 text-sm leading-6 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 font-medium"
+                      className="mt-4 w-full rounded-lg bg-red-50 p-4 text-sm font-medium leading-6 text-red-800 dark:bg-gray-800 dark:text-red-400 lg:w-3/4"
                       role="alert"
                     >
                       <Link href="/add-personal-access-token">
@@ -496,7 +496,7 @@ export default function Dashboard() {
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <button
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                   )}
                   disabled={isLoading || isLoadingAddOnGithubGist}
                   onClick={
@@ -772,15 +772,15 @@ export default function Dashboard() {
                     <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
                       <FileCog className="h-12 w-12" />
                       <h3 className="mt-4 text-lg font-semibold">
-                        You don't have any favorite code yet
+                        You don&apos;t have any favorite code yet
                       </h3>
-                      <p className="mb-4 mt-2 text-sm text-muted-foreground">
+                      <p className="text-muted-foreground mb-4 mt-2 text-sm">
                         You can find your favorite code in the explore section.
                       </p>
                       <Link
                         href="/explore"
                         className={cn(
-                          "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                          "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                         )}
                       >
                         Explore code
@@ -819,7 +819,7 @@ export default function Dashboard() {
                 <a
                   href="mailto:sharuco@leonelngoya.com"
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                   )}
                 >
                   Contact us

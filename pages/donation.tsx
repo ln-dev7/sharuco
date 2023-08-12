@@ -90,7 +90,7 @@ export default function Donation() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+      <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <div className="flex max-w-[980px] flex-col items-start gap-2">
           <h1 className="text-2xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-5xl">
             Support Sharuco
@@ -145,7 +145,7 @@ export default function Donation() {
         <div className="w-full flex items-center justify-center">
           <span className="text-lg font-bold">OR</span>
         </div> */}
-        <div className="w-full flex items-center justify-center">
+        <div className="flex w-full items-center justify-center">
           <a
             href="https://www.buymeacoffee.com/lndev"
             target="_blank"

@@ -31,19 +31,19 @@ export function SearchBarLink({ ...props }: DialogProps) {
             defaultChecked={false}
             variant="outline"
             className={cn(
-              "relative h-[44px] w-full justify-start items-center rounded-[0.5rem] text-sm"
+              "relative h-[44px] w-full items-center justify-start rounded-[0.5rem] text-sm"
             )}
             onClick={() => setOpen(true)}
             {...props}
           >
             <span className="hidden sm:inline-flex">Search links ...</span>
             <span className="inline-flex sm:hidden">Search links ...</span>
-            <kbd className="pointer-events-none absolute right-1.5 top-2 flex h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
+            <kbd className="bg-muted pointer-events-none absolute right-1.5 top-2 flex h-6 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100">
               <span className="text-xs">⌘</span>I
             </kbd>
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-h-[640px] p-0 overflow-hidden overflow-y-auto scrollbar-hide">
+        <DialogContent className="max-h-[640px] overflow-hidden overflow-y-auto p-0 scrollbar-hide">
           <AlgoliaSearchLink />
         </DialogContent>
       </Dialog>

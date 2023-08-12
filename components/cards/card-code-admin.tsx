@@ -357,7 +357,7 @@ export default function CardCodeAdmin({
                   <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                     <Label htmlFor="language">Edit language</Label>
                     <select
-                      className="flex h-10 w-full rounded-md border border-slate-300 bg-white py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      className="flex h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                       name="language"
                       id="language"
                       {...register("language")}
@@ -439,7 +439,7 @@ export default function CardCodeAdmin({
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <button
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                   )}
                   disabled={isLoading}
                   onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -469,7 +469,7 @@ export default function CardCodeAdmin({
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <button
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                   )}
                   disabled={isLoadingDelete}
                   onClick={!isLoadingDelete ? handleDeleteDocument : undefined}
@@ -485,7 +485,7 @@ export default function CardCodeAdmin({
         </div>
       </div>
       <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
-        <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
+        <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
           <span className="text-xs font-medium text-white">
             {language.toLowerCase()}
           </span>
@@ -511,7 +511,7 @@ export default function CardCodeAdmin({
                   <AlertDialogCancel>Close</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                     )}
                     onClick={downloadImage}
                   >
@@ -571,7 +571,7 @@ export default function CardCodeAdmin({
                     sharuco.lndev.me
                   </h3>
                   <div className="max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
-                    <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
+                    <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
                       <div className="flex items-center gap-2">
                         <span
                           className={`

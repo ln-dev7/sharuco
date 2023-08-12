@@ -84,13 +84,13 @@ export default function AddPersonalAccessToken() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="container grid items-center gap-8 pt-6 pb-8 md:py-10">
+      <section className="container grid items-center gap-8 pb-8 pt-6 md:py-10">
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Guides to add your personal access token on Sharuco
           </h1>
           {dataUser?.data.personalAccessToken ? (
-            <div className="mt-2 inline-flex items-center rounded-lg border border-green-200 bg-green-100 px-2.5 py-2 text-sm font-medium text-green-800 dark:bg-gray-800 dark:text-green-300 dark:border-none">
+            <div className="mt-2 inline-flex items-center rounded-lg border border-green-200 bg-green-100 px-2.5 py-2 text-sm font-medium text-green-800 dark:border-none dark:bg-gray-800 dark:text-green-300">
               You already have a token, but you can always create a new one and
               update it here
             </div>
@@ -122,7 +122,7 @@ export default function AddPersonalAccessToken() {
               3- Choose an expiry date for your token{" "}
             </p>
             <div
-              className="p-4 mt-2 w-full lg:w-3/4 text-sm leading-6 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 font-medium"
+              className="mt-2 w-full rounded-lg bg-red-50 p-4 text-sm font-medium leading-6 text-red-800 dark:bg-gray-800 dark:text-red-400 lg:w-3/4"
               role="alert"
             >
               Once the expiration date has passed, your token will no longer be
@@ -137,7 +137,7 @@ export default function AddPersonalAccessToken() {
               alt="GitHub personal access token"
               width={995}
               height={365}
-              className="mt-4 rounded-lg w-full lg:w-3/4 h-auto"
+              className="mt-4 h-auto w-full rounded-lg lg:w-3/4"
             />
           </div>
           <Separator className="my-4" />
@@ -153,7 +153,7 @@ export default function AddPersonalAccessToken() {
               alt="GitHub personal access token"
               width={975}
               height={157}
-              className="mt-4 rounded-lg w-full lg:w-3/4 h-auto"
+              className="mt-4 h-auto w-full rounded-lg lg:w-3/4"
             />
           </div>
           <Separator className="my-4" />
@@ -167,11 +167,11 @@ export default function AddPersonalAccessToken() {
               alt="GitHub personal access token"
               width={984}
               height={142}
-              className="mt-4 rounded-lg w-full lg:w-3/4 h-auto"
+              className="mt-4 h-auto w-full rounded-lg lg:w-3/4"
             />
           </div>
           <Separator className="my-4" />
-          <div className="flex flex-col sm:flex-row items-center w-full items-center gap-2">
+          <div className="flex w-full flex-col items-center gap-2 sm:flex-row">
             <Input
               type="text"
               placeholder="Paste your token here"
@@ -179,7 +179,7 @@ export default function AddPersonalAccessToken() {
               {...register("personalAccessToken")}
             />
             <Button
-              className="shrink-0 w-full sm:w-fit"
+              className="w-full shrink-0 sm:w-fit"
               disabled={isLoading}
               onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
             >
@@ -195,7 +195,7 @@ export default function AddPersonalAccessToken() {
             {errors.personalAccessToken && <>You must enter a token</>}
           </p>
           <div
-            className="p-4 mt-2 w-fit text-sm leading-6 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 font-medium"
+            className="mt-2 w-fit rounded-lg bg-red-50 p-4 text-sm font-medium leading-6 text-red-800 dark:bg-gray-800 dark:text-red-400"
             role="alert"
           >
             If you insert the wrong token, you will not be able to add to your

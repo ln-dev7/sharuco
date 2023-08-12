@@ -19,7 +19,7 @@ export default function AlgoliaSearchCode() {
     <InstantSearch indexName="codes" searchClient={client}>
       <SearchBox
         placeholder="Search publics codes..."
-        submitIconComponent={() => <Search className="w-4 h-4" />}
+        submitIconComponent={() => <Search className="h-4 w-4" />}
         resetIconComponent={() => <Trash2 />}
         loadingIconComponent={() => (
           <div className="w-full px-6 py-4">
@@ -43,7 +43,7 @@ export default function AlgoliaSearchCode() {
 function Hit({ hit }) {
   return (
     <Link href={`/code-preview/${hit.objectID}`}>
-      <div className="w-full mb-4 p-4 rounded-lg border hover:border-sky-500 dark:border-slate-300 dark:hover:border-sky-500 overflow-hidden">
+      <div className="mb-4 w-full overflow-hidden rounded-lg border p-4 hover:border-sky-500 dark:border-slate-300 dark:hover:border-sky-500">
         <div className="flex flex-col items-start">
           <h3 className="mb-2 text-lg font-semibold leading-none tracking-tight text-slate-700 dark:text-slate-300 ">
             {hit.idAuthor}

@@ -129,16 +129,16 @@ export default function Explore() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>{" "}
-      <section className="container grid items-center gap-8 pt-6 pb-8 md:py-10">
+      <section className="container grid items-center gap-8 pb-8 pt-6 md:py-10">
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Discover little bits of code that can help you.
           </h1>
           <div className="mt-2 flex w-full flex-col justify-end gap-2 lg:flex-row">
-            <div className="flex gap-2 flex-row">
-              <div className="w-full flex items-center justify-center relative">
+            <div className="flex flex-row gap-2">
+              <div className="relative flex w-full items-center justify-center">
                 {languageSelected && (
-                  <span className="absolute top-0 right-0 w-2 h-2 bg-sky-500 rounded-full"></span>
+                  <span className="absolute right-0 top-0 h-2 w-2 rounded-full bg-sky-500"></span>
                 )}
                 <Select
                   onValueChange={(value) => fetchCodesWithLanguage(value)}
@@ -170,9 +170,9 @@ export default function Explore() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="w-full flex items-center justify-center relative">
+              <div className="relative flex w-full items-center justify-center">
                 {tagSelected && (
-                  <span className="absolute top-0 right-0 w-2 h-2 bg-sky-500 rounded-full"></span>
+                  <span className="absolute right-0 top-0 h-2 w-2 rounded-full bg-sky-500"></span>
                 )}
                 <Select onValueChange={(value) => fetchCodesWithTag(value)}>
                   <SelectTrigger className="w-full lg:w-[240px]">

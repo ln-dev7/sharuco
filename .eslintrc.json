@@ -8,7 +8,7 @@
     "plugin:prettier/recommended",
     "next"
   ],
-  "plugins": ["tailwindcss", "react", "@next/eslint-plugin-next", "prettier"],
+  "plugins": ["tailwindcss", "react", "prettier"],
   "rules": {
     "no-console": "warn",
     "@next/next/no-html-link-for-pages": "off",
