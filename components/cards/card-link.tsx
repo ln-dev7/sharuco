@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
@@ -354,7 +355,9 @@ export default function CardCodeAdmin({
         ) : (
           <>
             {dataLinkPreview.image ? (
-              <img
+              <Image
+                width={414}
+                height={256}
                 className="h-full w-full object-cover"
                 src={dataLinkPreview.image}
                 alt={dataLinkPreview.title}
