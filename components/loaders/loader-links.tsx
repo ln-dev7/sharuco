@@ -18,7 +18,7 @@ export default function LoaderLinks() {
     >
       <Masonry gutter="2rem">
         {numbers.map((number) => (
-          <div className="mb-0 flex flex-col gap-2">
+          <div className="mb-0 flex flex-col gap-2" key={number}>
             <Skeleton className="overflow-hidden h-64 rounded-lg bg-slate-200 dark:bg-slate-800" />
             <div className="flex flex-col gap-2 my-2">
               <div className="mb-2 flex flex-col gap-2">

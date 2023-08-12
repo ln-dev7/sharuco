@@ -179,6 +179,166 @@ export default function CardCodeAdmin({
     isLoading: isLoadingLinkPreview,
   } = useQuery(["preview", link], () => fetchLinkPreview(link))
 
+  if (errorLinkPreview) {
+    return (
+      <div
+        className="relative bg-white border border-slate-200 rounded-xl overflow-hidden dark:bg-slate-900 dark:border-slate-700"
+        key={id}
+      >
+        <a
+          href={link}
+          target="_blank"
+          className="h-64 flex items-center justify-center"
+        >
+          <div className="w-full h-full flex flex-col items-center justify-center text-center rounded-t-xl bg-slate-50 dark:bg-slate-800 gap-2">
+            <XCircle className="h-8 w-8 text-slate-400" />
+            <h3 className="text-lg font-semibold">
+              This link is not available
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              The link you are trying to access is not available.
+            </p>
+          </div>
+        </a>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className="absolute z-30 top-2 right-2 rounded-full p-0 w-10 h-10 bg-white dark:bg-slate-700"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-fit">
+            <div className="flex w-full items-center justify-end gap-2">
+              <AlertDialog
+                open={openEditDialog}
+                onOpenChange={setOpenEditDialog}
+              >
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="h-10 w-10 p-0 rounded-full"
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      <h3 className="text-lg font-medium leading-6 text-slate-900 dark:text-slate-100">
+                        Edit a link
+                      </h3>
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      <div className="mb-4 flex w-full flex-col items-start gap-1.5">
+                        <Label htmlFor="link">Insert your link</Label>
+                        <Input
+                          placeholder="Insert your link here..."
+                          id="link"
+                          {...register("link")}
+                        />
+                        <p className="text-sm text-red-500">
+                          {errors.link && <>{errors.link.message}</>}
+                        </p>
+                      </div>
+                      <div className="mb-4 flex w-full flex-col items-start gap-1.5">
+                        <Label htmlFor="description">Description of link</Label>
+                        <Input
+                          placeholder="Insert description of your link here..."
+                          id="description"
+                          {...register("description")}
+                        />
+                        <p className="text-sm text-red-500">
+                          {errors.description && (
+                            <>{errors.description.message}</>
+                          )}
+                        </p>
+                      </div>
+                      <div className="mb-4 flex w-full flex-col items-start gap-1.5">
+                        <Label htmlFor="tags">Tags</Label>
+                        <Input
+                          type="text"
+                          id="tags"
+                          placeholder="Enter a tags ..."
+                          {...register("tags")}
+                        />
+                        <p className="text-sm font-medium text-slate-500">
+                          Please separate tags with{" "}
+                          <span className="text-slate-700 dark:text-slate-300">
+                            ,
+                          </span>
+                        </p>
+                        <p className="text-sm text-red-500">
+                          {errors.tags && <>{errors.tags.message}</>}
+                        </p>
+                      </div>
+
+                      {isError && (
+                        <p className="pt-4 text-sm font-bold text-red-500">
+                          An error has occurred, please try again later.
+                        </p>
+                      )}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <button
+                      className={cn(
+                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      )}
+                      disabled={isLoading}
+                      onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
+                    >
+                      {isLoading && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
+                      Edit
+                    </button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>{" "}
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    className="h-10 w-10 p-0 rounded-full"
+                  >
+                    <Trash className="h-4 w-4" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you sure you want to delete this link ?
+                    </AlertDialogTitle>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <button
+                      className={cn(
+                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      )}
+                      disabled={isLoadingDelete}
+                      onClick={
+                        !isLoadingDelete ? handleDeleteDocument : undefined
+                      }
+                    >
+                      {isLoadingDelete && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
+                      Delete
+                    </button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
+    )
+  }
+
   return (
     <div
       className="relative bg-white border border-slate-200 rounded-xl overflow-hidden dark:bg-slate-900 dark:border-slate-700"
