@@ -48,7 +48,7 @@
     "cheerio": "^1.0.0-rc.12",
     "class-variance-authority": "^0.4.0",
     "clsx": "^1.2.1",
-    "cmdk": "^0.1.21",
+    "cmdk": "^0.2.0",
     "firebase": "^9.18.0",
     "highlight.js": "^11.7.0",
     "html-to-image": "^1.11.11",
