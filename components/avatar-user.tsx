@@ -32,7 +32,7 @@ export const useGitHubLogout = () => {
     try {
       await signOut(auth)
     } catch (error) {
-      console.error(error.message)
+      return
     }
   }
 
@@ -112,8 +112,8 @@ export function AvatarUser() {
         </div>
         {user && (
           <>
-            <Separator className="mt-8 mb-4" />
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">
+            <Separator className="mb-4 mt-8" />
+            <p className="mb-1 text-sm text-slate-500 dark:text-slate-400">
               Follow Sharuco on{" "}
             </p>
             <Link

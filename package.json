@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint --fix",
     "preview": "next build && next start",
     "typecheck": "tsc --noEmit",
     "prepare": "husky install"

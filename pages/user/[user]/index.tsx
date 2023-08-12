@@ -112,7 +112,7 @@ export default function User() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>{" "}
-      <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+      <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         {isLoading && <LoaderCodes isUserProfile={true} />}
         {data && data.exists && (
           <div className="flex flex-col items-center gap-4">
@@ -181,7 +181,7 @@ export default function User() {
               ) : (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button className="top-0 right-0 rounded-full">
+                    <Button className="right-0 top-0 rounded-full">
                       Follow
                     </Button>
                   </AlertDialogTrigger>
@@ -205,7 +205,7 @@ export default function User() {
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <button
                         className={cn(
-                          "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                          "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                         )}
                         disabled={isPending}
                         onClick={login}
@@ -222,7 +222,7 @@ export default function User() {
                 </AlertDialog>
               )}
               <div className="flex flex-col items-center gap-2">
-                <div className="flex items-center gap-2 text-md font-semibold text-slate-900 dark:text-slate-100">
+                <div className="text-md flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
                   <Dialog>
                     <DialogTrigger asChild>
                       <span className="cursor-pointer hover:underline hover:underline-offset-2">
@@ -238,7 +238,7 @@ export default function User() {
                           <a
                             href={`/user/${follower}`}
                             key={follower}
-                            className="w-full bg-slate-100 border-2 border-transparent dark:bg-slate-700 px-4 py-2 rounded-lg flex items-center justify-start gap-2 text-sm font-semibold text-slate-900 dark:text-slate-100 hover:border-2 hover:border-sky-400"
+                            className="flex w-full items-center justify-start gap-2 rounded-lg border-2 border-transparent bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:border-2 hover:border-sky-400 dark:bg-slate-700 dark:text-slate-100"
                           >
                             <UserIcon className="h-4 w-4" />
                             <span className="hover:underline">{follower}</span>
@@ -268,7 +268,7 @@ export default function User() {
                           <a
                             href={`/user/${following}`}
                             key={following}
-                            className="w-full bg-slate-100 border-2 border-transparent dark:bg-slate-700 px-4 py-2 rounded-lg flex items-center justify-start gap-2 text-sm font-semibold text-slate-900 dark:text-slate-100 hover:border-2 hover:border-sky-400"
+                            className="flex w-full items-center justify-start gap-2 rounded-lg border-2 border-transparent bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:border-2 hover:border-sky-400 dark:bg-slate-700 dark:text-slate-100"
                           >
                             <UserIcon className="h-4 w-4" />
                             <span className="hover:underline">{following}</span>

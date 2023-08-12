@@ -162,7 +162,7 @@ export default function CardCode({
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
       <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
-        <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
+        <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
           <span className="text-xs font-medium text-white">
             {language.toLowerCase()}
           </span>
@@ -188,7 +188,7 @@ export default function CardCode({
                   <AlertDialogCancel>Close</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                     )}
                     onClick={downloadImage}
                   >
@@ -248,7 +248,7 @@ export default function CardCode({
                     sharuco.lndev.me
                   </h3>
                   <div className="max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
-                    <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
+                    <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
                       <div className="flex items-center gap-2">
                         <span
                           className={`
@@ -299,7 +299,7 @@ export default function CardCode({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <a
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                     )}
                     href={`mailto:sharuco@leonelngoya.com?subject=REPORTING%20A%20CODE%20ON%20SHARUCO&body=Hello,%20%0D%0A%0D%0AI%20want%20to%20report%20this%20code%20https://sharuco.lndev.me/code-preview/${id}%20that%20I%20saw%20on%20Sharuco.%0D%0AThank%20you`}
                   >
@@ -520,7 +520,7 @@ export default function CardCode({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                     )}
                     disabled={isPending}
                     onClick={login}

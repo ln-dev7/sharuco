@@ -31,7 +31,7 @@ export default function LoaderCodes({
         <Masonry gutter="2rem">
           {numbers.map((number) => (
             <div className="mb-0 flex flex-col gap-2" key={number}>
-              <Skeleton className="overflow-hidden h-[200px] rounded-lg bg-slate-200 dark:bg-slate-800" />
+              <Skeleton className="h-[200px] overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800" />
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center justify-start gap-2">
                   <Skeleton className="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-800" />
@@ -43,9 +43,9 @@ export default function LoaderCodes({
                   <Skeleton className="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-800" />
                 </div>
               </div>
-              <Skeleton className="overflow-hidden w-3/4 h-[10px] rounded-lg bg-slate-200 dark:bg-slate-800" />
-              <Skeleton className="overflow-hidden w-5/6 h-[10px] rounded-lg bg-slate-200 dark:bg-slate-800" />
-              <Skeleton className="overflow-hidden w-1/3 h-[10px] rounded-lg bg-slate-200 dark:bg-slate-800" />
+              <Skeleton className="h-[10px] w-3/4 overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800" />
+              <Skeleton className="h-[10px] w-5/6 overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800" />
+              <Skeleton className="h-[10px] w-1/3 overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800" />
               <div className="mt-2 flex w-full flex-wrap items-center justify-start gap-2">
                 <Skeleton className="h-5 w-[70px] rounded-full bg-slate-200 dark:bg-slate-800" />
                 <Skeleton className="h-5 w-[70px] rounded-full bg-slate-200 dark:bg-slate-800" />

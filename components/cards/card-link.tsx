@@ -182,20 +182,20 @@ export default function CardCodeAdmin({
   if (errorLinkPreview) {
     return (
       <div
-        className="relative bg-white border border-slate-200 rounded-xl overflow-hidden dark:bg-slate-900 dark:border-slate-700"
+        className="relative overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
         key={id}
       >
         <a
           href={link}
           target="_blank"
-          className="h-64 flex items-center justify-center"
+          className="flex h-64 items-center justify-center"
         >
-          <div className="w-full h-full flex flex-col items-center justify-center text-center rounded-t-xl bg-slate-50 dark:bg-slate-800 gap-2">
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-t-xl bg-slate-50 text-center dark:bg-slate-800">
             <XCircle className="h-8 w-8 text-slate-400" />
             <h3 className="text-lg font-semibold">
               This link is not available
             </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               The link you are trying to access is not available.
             </p>
           </div>
@@ -204,7 +204,7 @@ export default function CardCodeAdmin({
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className="absolute z-30 top-2 right-2 rounded-full p-0 w-10 h-10 bg-white dark:bg-slate-700"
+              className="absolute right-2 top-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-slate-700"
             >
               <MoreHorizontal className="h-4 w-4" />
             </Button>
@@ -218,7 +218,7 @@ export default function CardCodeAdmin({
                 <AlertDialogTrigger asChild>
                   <Button
                     variant="outline"
-                    className="h-10 w-10 p-0 rounded-full"
+                    className="h-10 w-10 rounded-full p-0"
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>
@@ -285,7 +285,7 @@ export default function CardCodeAdmin({
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                       )}
                       disabled={isLoading}
                       onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -302,7 +302,7 @@ export default function CardCodeAdmin({
                 <AlertDialogTrigger asChild>
                   <Button
                     variant="destructive"
-                    className="h-10 w-10 p-0 rounded-full"
+                    className="h-10 w-10 rounded-full p-0"
                   >
                     <Trash className="h-4 w-4" />
                   </Button>
@@ -317,7 +317,7 @@ export default function CardCodeAdmin({
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                       )}
                       disabled={isLoadingDelete}
                       onClick={
@@ -341,29 +341,29 @@ export default function CardCodeAdmin({
 
   return (
     <div
-      className="relative bg-white border border-slate-200 rounded-xl overflow-hidden dark:bg-slate-900 dark:border-slate-700"
+      className="relative overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
       key={id}
     >
       <a
         href={link}
         target="_blank"
-        className="h-64 flex items-center justify-center"
+        className="flex h-64 items-center justify-center"
       >
         {isLoadingLinkPreview ? (
-          <Skeleton className="w-full h-full rounded-none bg-slate-200 dark:bg-slate-800" />
+          <Skeleton className="h-full w-full rounded-none bg-slate-200 dark:bg-slate-800" />
         ) : (
           <>
             {dataLinkPreview.image ? (
               <img
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
                 src={dataLinkPreview.image}
                 alt={dataLinkPreview.title}
               />
             ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center text-center rounded-t-xl bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 gap-2">
+              <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-t-xl border-b border-slate-100 bg-slate-50 text-center dark:border-slate-700 dark:bg-slate-800">
                 <XCircle className="h-8 w-8 text-slate-400" />
                 <h3 className="text-lg font-semibold">Failed to load image</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   The image could not be loaded for this link.
                 </p>
               </div>
@@ -375,8 +375,8 @@ export default function CardCodeAdmin({
         <a href={link} target="_blank">
           {isLoadingLinkPreview ? (
             <>
-              <Skeleton className="w-full h-3 bg-slate-200 dark:bg-slate-800 mb-2" />
-              <Skeleton className="w-3/4 h-3 bg-slate-200 dark:bg-slate-800 mb-3" />
+              <Skeleton className="mb-2 h-3 w-full bg-slate-200 dark:bg-slate-800" />
+              <Skeleton className="mb-3 h-3 w-3/4 bg-slate-200 dark:bg-slate-800" />
             </>
           ) : (
             <>
@@ -390,15 +390,15 @@ export default function CardCodeAdmin({
         </a>
         {isLoadingLinkPreview ? (
           <>
-            <Skeleton className="w-3/4 h-2 bg-slate-200 dark:bg-slate-800 mb-2" />
-            <Skeleton className="w-1/2 h-2 bg-slate-200 dark:bg-slate-800 mb-2" />
-            <Skeleton className="w-full h-2 bg-slate-200 dark:bg-slate-800 mb-2" />
-            <Skeleton className="w-4/5 h-2 bg-slate-200 dark:bg-slate-800 mb-3" />
+            <Skeleton className="mb-2 h-2 w-3/4 bg-slate-200 dark:bg-slate-800" />
+            <Skeleton className="mb-2 h-2 w-1/2 bg-slate-200 dark:bg-slate-800" />
+            <Skeleton className="mb-2 h-2 w-full bg-slate-200 dark:bg-slate-800" />
+            <Skeleton className="mb-3 h-2 w-4/5 bg-slate-200 dark:bg-slate-800" />
           </>
         ) : (
           <>
             {dataLinkPreview.description && (
-              <p className="mb-3 font-normal line-clamp-5 text-md text-slate-700 dark:text-slate-400">
+              <p className="text-md mb-3 line-clamp-5 font-normal text-slate-700 dark:text-slate-400">
                 {dataLinkPreview.description}
               </p>
             )}
@@ -422,7 +422,7 @@ export default function CardCodeAdmin({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="absolute z-30 top-2 right-2 rounded-full p-0 w-10 h-10 bg-white dark:bg-slate-700"
+            className="absolute right-2 top-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-slate-700"
           >
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -433,7 +433,7 @@ export default function CardCodeAdmin({
               <AlertDialogTrigger asChild>
                 <Button
                   variant="outline"
-                  className="h-10 w-10 p-0 rounded-full"
+                  className="h-10 w-10 rounded-full p-0"
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
@@ -500,7 +500,7 @@ export default function CardCodeAdmin({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                     )}
                     disabled={isLoading}
                     onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -517,7 +517,7 @@ export default function CardCodeAdmin({
               <AlertDialogTrigger asChild>
                 <Button
                   variant="destructive"
-                  className="h-10 w-10 p-0 rounded-full"
+                  className="h-10 w-10 rounded-full p-0"
                 >
                   <Trash className="h-4 w-4" />
                 </Button>
@@ -532,7 +532,7 @@ export default function CardCodeAdmin({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                     )}
                     disabled={isLoadingDelete}
                     onClick={

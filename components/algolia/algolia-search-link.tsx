@@ -32,7 +32,7 @@ export default function AlgoliaSearchLink() {
     <InstantSearch indexName="links" searchClient={client}>
       <SearchBox
         placeholder="Search links..."
-        submitIconComponent={() => <Search className="w-4 h-4" />}
+        submitIconComponent={() => <Search className="h-4 w-4" />}
         resetIconComponent={() => <Trash2 />}
         loadingIconComponent={() => (
           <div className="w-full px-6 py-4">
@@ -61,7 +61,7 @@ export default function AlgoliaSearchLink() {
 function Hit({ hit }) {
   return (
     <Link href={`${hit.link}`} target="_blank">
-      <div className="w-full mb-4 p-4 rounded-lg border hover:border-sky-500 dark:border-slate-300 dark:hover:border-sky-500 overflow-hidden flex items-start flex-col gap-2">
+      <div className="mb-4 flex w-full flex-col items-start gap-2 overflow-hidden rounded-lg border p-4 hover:border-sky-500 dark:border-slate-300 dark:hover:border-sky-500">
         <div>
           <Highlight
             attribute="description"
@@ -83,7 +83,7 @@ function Hit({ hit }) {
         )}
         <Link
           href={`${hit.link}`}
-          className="line-clamp-1 text-xs text-sky-500 font-medium"
+          className="line-clamp-1 text-xs font-medium text-sky-500"
           target="_blank"
         >
           {hit.link}

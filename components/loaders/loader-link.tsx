@@ -16,17 +16,17 @@ export default function LoaderLink() {
     >
       <Masonry gutter="2rem">
         <div className="mb-0 flex flex-col gap-2">
-          <Skeleton className="overflow-hidden h-64 rounded-lg bg-slate-200 dark:bg-slate-800" />
-          <div className="flex flex-col gap-2 my-2">
+          <Skeleton className="h-64 overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800" />
+          <div className="my-2 flex flex-col gap-2">
             <div className="mb-2 flex flex-col gap-2">
-              <Skeleton className="w-full h-3 bg-slate-200 dark:bg-slate-800" />
-              <Skeleton className="w-3/4 h-3 bg-slate-200 dark:bg-slate-800" />
+              <Skeleton className="h-3 w-full bg-slate-200 dark:bg-slate-800" />
+              <Skeleton className="h-3 w-3/4 bg-slate-200 dark:bg-slate-800" />
             </div>
             <div className="mb-0 flex flex-col gap-2">
-              <Skeleton className="w-3/4 h-2 bg-slate-200 dark:bg-slate-800" />
-              <Skeleton className="w-1/2 h-2 bg-slate-200 dark:bg-slate-800" />
-              <Skeleton className="w-full h-2 bg-slate-200 dark:bg-slate-800" />
-              <Skeleton className="w-4/5 h-2 bg-slate-200 dark:bg-slate-800" />
+              <Skeleton className="h-2 w-3/4 bg-slate-200 dark:bg-slate-800" />
+              <Skeleton className="h-2 w-1/2 bg-slate-200 dark:bg-slate-800" />
+              <Skeleton className="h-2 w-full bg-slate-200 dark:bg-slate-800" />
+              <Skeleton className="h-2 w-4/5 bg-slate-200 dark:bg-slate-800" />
             </div>
           </div>
           <div className="flex w-full flex-wrap items-center justify-start gap-2">

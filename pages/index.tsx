@@ -57,7 +57,9 @@ export default function IndexPage() {
     fetch("https://api.github.com/repos/ln-dev7/sharuco/contributors")
       .then((response) => response.json())
       .then((data) => setContributors(data))
-      .catch((error) => console.error(error))
+      .catch((error) => {
+        return
+      })
   }, [])
   //
 
@@ -131,20 +133,20 @@ export default function IndexPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+      <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <a
-          className="inline-flex w-fit items-center rounded-lg bg-slate-100 dark:bg-slate-800 px-3 py-1 text-sm font-medium"
+          className="inline-flex w-fit items-center rounded-lg bg-slate-100 px-3 py-1 text-sm font-medium dark:bg-slate-800"
           href="/links"
         >
           🚀
           <div
             data-orientation="vertical"
-            className="shrink-0 bg-slate-200 dark:bg-slate-700 w-[1px] mx-2 h-4"
+            className="mx-2 h-4 w-[1px] shrink-0 bg-slate-200 dark:bg-slate-700"
           ></div>
-          <span className="sm:hidden text-slate-800 dark:text-slate-200">
+          <span className="text-slate-800 dark:text-slate-200 sm:hidden">
             Sharuco Link, Store all your links.
           </span>
-          <span className="hidden sm:inline text-slate-800 dark:text-slate-200">
+          <span className="hidden text-slate-800 dark:text-slate-200 sm:inline">
             Introducing Sharuco Link, Store all your links.
           </span>
           <svg
@@ -173,7 +175,7 @@ export default function IndexPage() {
             Sharuco allows you to share code codes that you have found useful.
           </p>
         </div>
-        <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 md:flex-row">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 md:flex-row">
           <Link
             href={siteConfig.links.explore}
             className={buttonVariants({ size: "lg" })}
@@ -251,7 +253,7 @@ export default function IndexPage() {
               </div>
               <div className="flex w-full flex-col items-start gap-1.5">
                 <select
-                  className="flex h-10 w-full rounded-md border border-slate-300 bg-white py-2 px-3 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                  className="flex h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                   name="languageImage"
                   id="languageImage"
                   value={languageImage}
@@ -273,7 +275,7 @@ export default function IndexPage() {
                   <AlertDialogTrigger asChild>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                       )}
                     >
                       Generate image
@@ -282,7 +284,7 @@ export default function IndexPage() {
                 ) : (
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                     )}
                   >
                     You need to fill the fields
@@ -293,7 +295,7 @@ export default function IndexPage() {
                     <AlertDialogCancel>Close</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 py-2 px-4 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                       )}
                       onClick={downloadImage}
                     >
@@ -353,7 +355,7 @@ export default function IndexPage() {
                       sharuco.lndev.me
                     </h3>
                     <div className="max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
-                      <div className="flex items-center justify-between bg-[#343541] py-1 px-4">
+                      <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
                         <div className="flex items-center gap-2">
                           <span
                             className={`
@@ -415,7 +417,9 @@ export default function IndexPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <img
+                  <Image
+                    width={56}
+                    height={56}
                     className="inline-block h-14 w-14 rounded-full ring-2 ring-white hover:ring-sky-500"
                     src={user.avatar_url}
                     alt={user.login}
@@ -436,19 +440,21 @@ export default function IndexPage() {
           {/* https://tailwindcss.com/docs/reusing-styles */}
         </div>
         <Separator className="my-2" />
-        <div className="flex my-8 flex-col items-center gap-8">
+        <div className="my-8 flex flex-col items-center gap-8">
           <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
             OUR SPONSORS
           </h2>
-          <div className="flex items-center justify-center gap-6 flex-wrap">
+          <div className="flex flex-wrap items-center justify-center gap-6">
             {COMPANIES.map((support) => (
               <a
-                className="shrink-0 w-40"
+                className="w-40 shrink-0"
                 href={support.link}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img
+                <Image
+                  width={160}
+                  height={55}
                   src={
                     theme === "dark"
                       ? support.image

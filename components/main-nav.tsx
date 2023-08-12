@@ -39,7 +39,7 @@ export function MainNav({ items }: MainNavProps) {
                   key={index}
                   href={item.disabled ? "#" : item.href}
                   className={cn(
-                    "group relative inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent py-2 px-4 text-sm font-semibold transition-colors hover:bg-slate-100 focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-slate-50 data-[active]:bg-slate-50 dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[state=open]:bg-slate-800 dark:data-[active]:bg-slate-800",
+                    "group relative inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-semibold transition-colors hover:bg-slate-100 focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-slate-50 data-[state=open]:bg-slate-50 dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[active]:bg-slate-800 dark:data-[state=open]:bg-slate-800",
                     item.disabled && "cursor-not-allowed"
                   )}
                 >
@@ -51,7 +51,7 @@ export function MainNav({ items }: MainNavProps) {
                     </span>
                   )}
                   {item.pined && (
-                    <span className="absolute top-0 right-0 flex h-3 w-3">
+                    <span className="absolute right-0 top-0 flex h-3 w-3">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
                       <span className="inline-flex h-3 w-3 rounded-full bg-sky-500"></span>
                     </span>
@@ -61,7 +61,7 @@ export function MainNav({ items }: MainNavProps) {
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="group relative inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent py-2 px-4 text-sm font-semibold transition-colors hover:bg-slate-100 focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-slate-50 data-[active]:bg-slate-50 dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[state=open]:bg-slate-800 dark:data-[active]:bg-slate-800">
+              <button className="group relative inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-semibold transition-colors hover:bg-slate-100 focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-slate-50 data-[state=open]:bg-slate-50 dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[active]:bg-slate-800 dark:data-[state=open]:bg-slate-800">
                 Support us
               </button>
             </DropdownMenuTrigger>
@@ -75,7 +75,7 @@ export function MainNav({ items }: MainNavProps) {
                         <Link
                           href={item.disabled ? "#" : item.href}
                           className={cn(
-                            "group relative inline-flex w-full items-center justify-start rounded-md bg-transparent py-2 px-4 text-sm font-semibold transition-colors focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-slate-50 data-[active]:bg-slate-50 dark:text-slate-100 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[state=open]:bg-slate-800 dark:data-[active]:bg-slate-800",
+                            "group relative inline-flex w-full items-center justify-start rounded-md bg-transparent px-4 py-2 text-sm font-semibold transition-colors focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-slate-50 data-[state=open]:bg-slate-50 dark:text-slate-100 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[active]:bg-slate-800 dark:data-[state=open]:bg-slate-800",
                             item.disabled && "cursor-not-allowed"
                           )}
                         >
@@ -89,7 +89,7 @@ export function MainNav({ items }: MainNavProps) {
                             </span>
                           )}
                           {item.pined && (
-                            <span className="absolute top-0 right-0 flex h-3 w-3">
+                            <span className="absolute right-0 top-0 flex h-3 w-3">
                               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
                               <span className="inline-flex h-3 w-3 rounded-full bg-sky-500"></span>
                             </span>
