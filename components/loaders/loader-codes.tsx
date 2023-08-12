@@ -30,7 +30,7 @@ export default function LoaderCodes({
       >
         <Masonry gutter="2rem">
           {numbers.map((number) => (
-            <div className="mb-0 flex flex-col gap-2">
+            <div className="mb-0 flex flex-col gap-2" key={number}>
               <Skeleton className="overflow-hidden h-[200px] rounded-lg bg-slate-200 dark:bg-slate-800" />
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center justify-start gap-2">
