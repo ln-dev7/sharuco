@@ -411,9 +411,9 @@ export default function IndexPage() {
           <div className="mt-3 flex -space-x-2">
             {isLoadingContributors && (
               <>
-                <Skeleton className="inline-block h-14 w-14 ring-2 ring-white hover:ring-sky-500 rounded-full bg-slate-200 dark:bg-slate-800" />
-                <Skeleton className="inline-block h-14 w-14 ring-2 ring-white hover:ring-sky-500 rounded-full bg-slate-200 dark:bg-slate-800" />
-                <Skeleton className="inline-block h-14 w-14 ring-2 ring-white hover:ring-sky-500 rounded-full bg-slate-200 dark:bg-slate-800" />
+                <Skeleton className="inline-block h-14 w-14 rounded-full bg-slate-200 ring-2 ring-white hover:ring-sky-500 dark:bg-slate-800" />
+                <Skeleton className="inline-block h-14 w-14 rounded-full bg-slate-200 ring-2 ring-white hover:ring-sky-500 dark:bg-slate-800" />
+                <Skeleton className="inline-block h-14 w-14 rounded-full bg-slate-200 ring-2 ring-white hover:ring-sky-500 dark:bg-slate-800" />
               </>
             )}
             {contributors &&
