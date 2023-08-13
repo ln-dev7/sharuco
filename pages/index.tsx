@@ -418,6 +418,7 @@ export default function IndexPage() {
             )}
             {contributors &&
               contributors
+                .filter((user) => user.login !== "dependabot[bot]")
                 .sort((a, b) => b.contributions - a.contributions)
                 .slice(0, 6)
                 .map((user) => (
