@@ -15,6 +15,7 @@ import hljs from "highlight.js"
 import { Separator } from "@/components/ui/separator"
 import "highlight.js/styles/vs.css"
 import { useEffect, useRef, useState } from "react"
+import { useQuery } from "react-query"
 
 import "highlight.js/styles/vs.css"
 import Head from "next/head"
@@ -36,6 +37,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Textarea } from "@/components/ui/textarea"
 
 export default function IndexPage() {
@@ -51,16 +53,15 @@ export default function IndexPage() {
   }, [])
 
   // Contributors
-  const [contributors, setContributors] = useState([])
-
-  useEffect(() => {
-    fetch("https://api.github.com/repos/ln-dev7/sharuco/contributors")
-      .then((response) => response.json())
-      .then((data) => setContributors(data))
-      .catch((error) => {
-        return
-      })
-  }, [])
+  const {
+    data: contributors,
+    isLoading: isLoadingContributors,
+    isError: isErrorContributors,
+  } = useQuery("contributors", () =>
+    fetch("https://api.github.com/repos/ln-dev7/sharuco/contributors").then(
+      (response) => response.json()
+    )
+  )
   //
 
   const [codeImage, setCodeImage] = useState("")
@@ -404,30 +405,37 @@ export default function IndexPage() {
               Contributors
             </h4>
             <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">
-              {contributors.length}
+              {contributors?.length}
             </span>
           </div>
           <div className="mt-3 flex -space-x-2">
-            {contributors
-              .sort((a, b) => b.contributions - a.contributions)
-              .slice(0, 6)
-              .map((user) => (
-                <a
-                  href={"https://github.com/" + user.login}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Image
-                    width={56}
-                    height={56}
-                    className="inline-block h-14 w-14 rounded-full ring-2 ring-white hover:ring-sky-500"
-                    src={user.avatar_url}
-                    alt={user.login}
-                  />
-                </a>
-              ))}
+            {isLoadingContributors && (
+              <>
+                <Skeleton className="inline-block h-14 w-14 rounded-full bg-slate-200 ring-2 ring-white hover:ring-sky-500 dark:bg-slate-800" />
+                <Skeleton className="inline-block h-14 w-14 rounded-full bg-slate-200 ring-2 ring-white hover:ring-sky-500 dark:bg-slate-800" />
+                <Skeleton className="inline-block h-14 w-14 rounded-full bg-slate-200 ring-2 ring-white hover:ring-sky-500 dark:bg-slate-800" />
+              </>
+            )}
+            {contributors &&
+              contributors
+                .filter((user) => user.login !== "dependabot[bot]")
+                .sort((a, b) => b.contributions - a.contributions)
+                .slice(0, 6)
+                .map((user) => (
+                  <a
+                    href={"https://github.com/" + user.login}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      className="inline-block h-14 w-14 rounded-full ring-2 ring-white hover:ring-sky-500"
+                      src={user.avatar_url}
+                      alt={user.login}
+                    />
+                  </a>
+                ))}
           </div>
-          {contributors.length > 6 && (
+          {contributors?.length > 6 && (
             <div className="mt-3 text-sm font-medium">
               <a
                 href="https://github.com/ln-dev7/sharuco/graphs/contributors"

@@ -19,6 +19,7 @@ import * as yup from "yup"
 import { cn } from "@/lib/utils"
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -313,20 +314,25 @@ export default function CardCodeAdmin({
                     <AlertDialogTitle>
                       Are you sure you want to delete this link ?
                     </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action is irreversible, please reflect beforehand.
+                    </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                       )}
                       disabled={isLoadingDelete}
                       onClick={
                         !isLoadingDelete ? handleDeleteDocument : undefined
                       }
                     >
-                      {isLoadingDelete && (
+                      {isLoadingDelete ? (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <Trash className="mr-2 h-4 w-4" />
                       )}
                       Delete
                     </button>
@@ -355,9 +361,7 @@ export default function CardCodeAdmin({
         ) : (
           <>
             {dataLinkPreview.image ? (
-              <Image
-                width={414}
-                height={256}
+              <img
                 className="h-full w-full object-cover"
                 src={dataLinkPreview.image}
                 alt={dataLinkPreview.title}
@@ -530,20 +534,25 @@ export default function CardCodeAdmin({
                   <AlertDialogTitle>
                     Are you sure you want to delete this link ?
                   </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action is irreversible, please reflect beforehand.
+                  </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                     )}
                     disabled={isLoadingDelete}
                     onClick={
                       !isLoadingDelete ? handleDeleteDocument : undefined
                     }
                   >
-                    {isLoadingDelete && (
+                    {isLoadingDelete ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Trash className="mr-2 h-4 w-4" />
                     )}
                     Delete
                   </button>
