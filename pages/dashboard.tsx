@@ -25,11 +25,11 @@ import {
   Eye,
   EyeOff,
   FileCog,
+  Heart,
   LinkIcon,
   Loader2,
   Plus,
   Settings,
-  Star,
   User,
 } from "lucide-react"
 import moment from "moment"
@@ -46,6 +46,7 @@ import { Layout } from "@/components/layout"
 import LoaderCodes from "@/components/loaders/loader-codes"
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -547,7 +548,7 @@ export default function Dashboard() {
                 Private code
               </TabsTrigger>
               <TabsTrigger value="favorite-code">
-                <Star className="mr-2 h-4 w-4" />
+                <Heart className="mr-2 h-4 w-4" />
                 Favorite code
               </TabsTrigger>
             </div>
