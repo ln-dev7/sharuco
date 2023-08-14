@@ -6,16 +6,28 @@ import Link from "next/link"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
+import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
+import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { FileCog, Github, Loader2, Lock, Plus } from "lucide-react"
+import {
+  Eye,
+  EyeOff,
+  FileCog,
+  Github,
+  LinkIcon,
+  Loader2,
+  Lock,
+  Plus,
+  Trash,
+} from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
 import { cn } from "@/lib/utils"
-import CardLink from "@/components/cards/card-link"
+import CardLinkAdmin from "@/components/cards/card-link-admin"
 import EmptyCard from "@/components/empty-card"
 import { Layout } from "@/components/layout"
 import LoaderLinks from "@/components/loaders/loader-links"
@@ -50,6 +62,33 @@ export default function Dashboard() {
   const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
   const {
+    data: dataUser,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+  } = useDocument(pseudo, "users")
+
+  const [openChangeVisibilityDialog, setOpenChangeVisibilityDialog] =
+    useState(false)
+
+  const { updateUserDocument }: any = useUpdateUserDocument("users")
+
+  const changeVisibiltyForLinkPage = async (pseudo: string) => {
+    let updatedUserData = {
+      publicLinkPage: !dataUser.data.publicLinkPage,
+    }
+    updateUserDocument({ pseudo, updatedUserData })
+    setOpenChangeVisibilityDialog(false)
+    const description = dataUser.data.publicLinkPage
+      ? "Your link page is now public anyone can access it."
+      : "Your link page is kept private, you are the only person who can view it "
+    toast({
+      title: "Visibility changed",
+      description: description,
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
+  }
+
+  const {
     isLoading: isLoadingLinks,
     isError: isErrorLinks,
     data: dataLinks,
@@ -82,7 +121,7 @@ export default function Dashboard() {
     resolver: yupResolver(schema),
   })
 
-  const [openDialog, setOpenDialog] = useState(false)
+  const [openCreateLinkDialog, setOpenCreateLinkDialog] = useState(false)
   const { createDocument, isLoading, isError, isSuccess }: any =
     useCreateDocument("links")
 
@@ -115,7 +154,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (isSuccess) {
       notifyCodeAdded()
-      setOpenDialog(!isSuccess)
+      setOpenCreateLinkDialog(!isSuccess)
     }
   }, [isSuccess])
 
@@ -147,11 +186,14 @@ export default function Dashboard() {
         </div>
         {user ? (
           <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
-            <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+            <AlertDialog
+              open={openCreateLinkDialog}
+              onOpenChange={setOpenCreateLinkDialog}
+            >
               <AlertDialogTrigger className="w-full shrink-0 sm:w-fit" asChild>
                 <button
                   className={buttonVariants({ size: "lg" })}
-                  onClick={() => setOpenDialog(true)}
+                  onClick={() => setOpenCreateLinkDialog(true)}
                 >
                   <Plus className="mr-2 h-4 w-4" />
                   Add new link
@@ -232,15 +274,80 @@ export default function Dashboard() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            {/* <div className="flex flex-col gap-2 sm:flex-row">
-            <Link
-              href={`/user/${pseudo}`}
-              className={buttonVariants({ size: "lg", variant: "outline" })}
-            >
-              <User className="mr-2 h-4 w-4" />
-              Your profile
-            </Link>
-          </div> */}
+            <div className="flex flex-col gap-2 w-full sm:w-fit sm:flex-row">
+              {dataUser?.data?.publicLinkPage && (
+                <Link
+                  href={`/link/${pseudo}`}
+                  className={buttonVariants({ size: "lg", variant: "outline" })}
+                >
+                  <LinkIcon className="mr-2 h-4 w-4" />
+                  Your public links
+                </Link>
+              )}
+              <AlertDialog
+                open={openChangeVisibilityDialog}
+                onOpenChange={setOpenChangeVisibilityDialog}
+              >
+                <AlertDialogTrigger asChild>
+                  <button
+                    className={buttonVariants({
+                      size: "lg",
+                      variant: "subtle",
+                    })}
+                    onClick={() => setOpenChangeVisibilityDialog(true)}
+                  >
+                    {dataUser?.data?.publicLinkPage ? (
+                      <Eye className="mr-2 h-4 w-4" />
+                    ) : (
+                      <EyeOff className="mr-2 h-4 w-4" />
+                    )}
+                    Change visibility
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Do you want to change the visibility of your link page?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {dataUser?.data?.publicLinkPage ? (
+                        <>
+                          By passing privately your public link page will no
+                          longer be available.
+                        </>
+                      ) : (
+                        <>
+                          By going in public everyone to see your links here :{" "}
+                          <Link
+                            href={`/link/${pseudo}`}
+                            className="font-bold hover:underline hover:underline-offset-4"
+                          >
+                            {`https://sharuco.lndev.me/link/${pseudo}`}
+                          </Link>
+                        </>
+                      )}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <button
+                      className={cn(
+                        "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      )}
+                      onClick={() => {
+                        changeVisibiltyForLinkPage(pseudo)
+                      }}
+                    >
+                      {dataUser?.data?.publicLinkPage ? (
+                        <>Change to private</>
+                      ) : (
+                        <>Change to public</>
+                      )}
+                    </button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           </div>
         ) : null}
         <Separator className="my-4" />
@@ -269,7 +376,7 @@ export default function Dashboard() {
                           tags: string[]
                           createdAt: any
                         }) => (
-                          <CardLink
+                          <CardLinkAdmin
                             key={link.id}
                             id={link.id}
                             idAuthor={link.idAuthor}
