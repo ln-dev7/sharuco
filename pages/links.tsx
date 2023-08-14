@@ -35,7 +35,6 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
-import { SearchBarLink } from "./../components/search-bar/search-bar-link"
 
 export default function Dashboard() {
   const { user } = useAuthContext()
@@ -233,7 +232,6 @@ export default function Dashboard() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <SearchBarLink />
             {/* <div className="flex flex-col gap-2 sm:flex-row">
             <Link
               href={`/user/${pseudo}`}

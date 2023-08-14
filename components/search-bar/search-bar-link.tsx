@@ -13,7 +13,7 @@ export function SearchBarLink({ ...props }: DialogProps) {
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === "i" && (e.metaKey || e.ctrlKey)) {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
         setOpen((open) => !open)
       }
@@ -31,15 +31,15 @@ export function SearchBarLink({ ...props }: DialogProps) {
             defaultChecked={false}
             variant="outline"
             className={cn(
-              "relative h-[44px] w-full items-center justify-start rounded-[0.5rem] text-sm"
+              "text-muted-foreground relative h-9 w-full justify-start rounded-[0.5rem] text-sm sm:pr-12 lg:w-72"
             )}
             onClick={() => setOpen(true)}
             {...props}
           >
             <span className="hidden sm:inline-flex">Search links ...</span>
             <span className="inline-flex sm:hidden">Search links ...</span>
-            <kbd className="bg-muted pointer-events-none absolute right-1.5 top-2 flex h-6 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100">
-              <span className="text-xs">⌘</span>I
+            <kbd className="bg-muted pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+              <span className="text-xs">⌘</span>K
             </kbd>
           </Button>
         </DialogTrigger>
