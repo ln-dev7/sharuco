@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 
 import { siteConfig } from "@/config/site"
@@ -16,6 +16,7 @@ import { SearchBarLink } from "./search-bar/search-bar-link"
 export function SiteHeader() {
   const { user } = useAuthContext()
   const pathName = usePathname()
+  const searchParams = useSearchParams()
   return (
     <header className="sticky top-0 z-40 w-full border-b border-b-slate-200 bg-white dark:border-b-slate-700 dark:bg-slate-900">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
@@ -24,7 +25,8 @@ export function SiteHeader() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <div className="w-full flex-1 lg:w-auto lg:flex-none">
-            {pathName === "/links" && user ? (
+            {(pathName === "/links" || searchParams.get("link") !== null) &&
+            user ? (
               <SearchBarLink />
             ) : (
               <SearchBarCode />

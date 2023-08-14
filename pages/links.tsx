@@ -27,7 +27,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
 import { cn } from "@/lib/utils"
-import CardLink from "@/components/cards/card-link"
+import CardLinkAdmin from "@/components/cards/card-link-admin"
 import EmptyCard from "@/components/empty-card"
 import { Layout } from "@/components/layout"
 import LoaderLinks from "@/components/loaders/loader-links"
@@ -70,8 +70,7 @@ export default function Dashboard() {
   const [openChangeVisibilityDialog, setOpenChangeVisibilityDialog] =
     useState(false)
 
-  const { updateUserDocument, isSuccess: isSuccessUpdateUserDocument }: any =
-    useUpdateUserDocument("users")
+  const { updateUserDocument }: any = useUpdateUserDocument("users")
 
   const changeVisibiltyForLinkPage = async (pseudo: string) => {
     let updatedUserData = {
@@ -377,7 +376,7 @@ export default function Dashboard() {
                           tags: string[]
                           createdAt: any
                         }) => (
-                          <CardLink
+                          <CardLinkAdmin
                             key={link.id}
                             id={link.id}
                             idAuthor={link.idAuthor}
