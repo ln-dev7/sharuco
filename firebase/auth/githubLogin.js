@@ -79,6 +79,7 @@ export const useGitHubLogin = () => {
               moment(user.metadata.creationTime).valueOf(),
             following: [],
             followers: [],
+            publicLinkPage: false,
           },
           { merge: true }
         )
