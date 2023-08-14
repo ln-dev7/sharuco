@@ -14,6 +14,7 @@ import {
   Eye,
   FileCog,
   Github,
+  Link2Icon,
   Loader2,
   Star,
   UserIcon,
@@ -301,7 +302,16 @@ export default function User() {
                   <TabsTrigger value="favorite-code">
                     <Star className="mr-2 h-4 w-4" />
                     Favorite code
-                  </TabsTrigger>
+                  </TabsTrigger>{" "}
+                  {data.data.publicLinkPage && (
+                    <Link
+                      href={`/link/${data.data.pseudo}`}
+                      className="inline-flex min-w-[100px] items-center justify-center px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
+                    >
+                      <Link2Icon className="mr-2 h-4 w-4" />
+                      <span>Public links</span>
+                    </Link>
+                  )}
                 </div>
               </TabsList>
               <TabsContent className="border-none p-0 pt-4" value="public-code">
