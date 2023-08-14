@@ -56,6 +56,12 @@ export default function Dashboard() {
     data: dataLinks,
   } = useGetDocumentFromUser(pseudo, "links")
 
+  const {
+    isLoading: isLoadingGroupLinks,
+    isError: isErrorGroupLinks,
+    data: dataGroupLinks,
+  } = useGetDocumentFromUser(pseudo, "group-links")
+
   const schema = yup.object().shape({
     link: yup
       .string()
@@ -65,6 +71,7 @@ export default function Dashboard() {
       )
       .required(),
     description: yup.string().required(),
+    group: yup.string().required(),
     tags: yup
       .string()
       .test(
@@ -88,7 +95,7 @@ export default function Dashboard() {
     useCreateDocument("links")
 
   const onSubmit = async (data) => {
-    const { link, description, tags } = data
+    const { link, description, group, tags } = data
     const tabTabs = tags
       ? tags.split(",").map((word) => word.trim().toLowerCase())
       : []
@@ -100,6 +107,7 @@ export default function Dashboard() {
       link: link,
       description: description,
       tags: tabTabs,
+      group: group,
       createdAt: moment().valueOf(),
       idAuthor: pseudo,
     }
@@ -109,6 +117,7 @@ export default function Dashboard() {
     reset({
       link: "",
       description: "",
+      group: "",
       tags: "",
     })
   }
@@ -188,6 +197,32 @@ export default function Dashboard() {
                         {errors.description && (
                           <>{errors.description.message}</>
                         )}
+                      </p>
+                    </div>
+                    <div className="mb-4 flex w-full flex-col items-start gap-1.5">
+                      <Label htmlFor="language">Parent group</Label>
+                      <select
+                        className="flex h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        name="language"
+                        id="language"
+                        {...register("group")}
+                      >
+                        <option value="" disabled selected>
+                          Choose the group where this link will be
+                        </option>
+                        <option value="no-group">No group</option>
+                        {dataGroupLinks &&
+                          dataGroupLinks.map((group) => (
+                            <option value={group.id}>{group.name}</option>
+                          ))}
+                        {isLoadingGroupLinks && (
+                          <option value="" disabled>
+                            Loading group ...
+                          </option>
+                        )}
+                      </select>
+                      <p className="text-sm text-red-500">
+                        {errors.group && <>{errors.group.message}</>}
                       </p>
                     </div>
                     <div className="mb-4 flex w-full flex-col items-start gap-1.5">
