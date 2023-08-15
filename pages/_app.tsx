@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app"
 import { AuthContextProvider } from "@/context/AuthContext"
+import GoogleAnalytics from "@bradgarropy/next-google-analytics"
 import { Inter as FontSans } from "@next/font/google"
 import { Analytics } from "@vercel/analytics/react"
 import { NextSeo } from "next-seo"
@@ -64,9 +65,10 @@ export default function App({ Component, pageProps }: AppProps) {
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Toaster />
             <Component {...pageProps} />
+            <Analytics />
+            <GoogleAnalytics measurementId="G-4FTGXMJNPY" />
             {/* <ReactQueryDevtools initialIsOpen={false} /> */}
           </ThemeProvider>
-          <Analytics />
         </AuthContextProvider>
       </QueryClientProvider>
     </>
