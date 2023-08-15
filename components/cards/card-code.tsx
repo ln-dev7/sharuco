@@ -3,13 +3,15 @@
 import { useRef, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { getLanguageColor } from "@/constants/languages"
+import { getExtensionByName, getLanguageColor } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
 import highlight from "@/utils/highlight"
+import indentCode from "@/utils/indentCode"
+import sdk, { Project } from "@stackblitz/sdk"
 import * as htmlToImage from "html-to-image"
 import {
   Copy,
@@ -159,8 +161,53 @@ export default function CardCode({
     link.click()
   }
 
+  //
+
+  const extension = getExtensionByName(language)
+
+  async function embedProject() {
+    sdk.embedProject(
+      "embed-stackblitz",
+      {
+        title: `${idAuthor} - code : ${id}`,
+        description: description,
+        template: "javascript",
+        files: {
+          "index.html": `<div id="app"></div>`,
+          "index.js": `console.log("hello")`,
+          [`index${extension}`]: `${indentCode(code)}`,
+        },
+        settings: {
+          compile: {
+            trigger: "auto",
+            clearConsole: false,
+          },
+        },
+      },
+      {
+        height: 400,
+        openFile: `index${extension}`,
+        terminalHeight: 50,
+      }
+    )
+  }
+
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
+      <div className="flex flex-col items-center justify-center gap-2 mb-0">
+        <div className="flex items-center justify-center gap-4">
+          <button onClick={embedProject}>
+            <img
+              src="https://developer.stackblitz.com/img/open_in_stackblitz.svg"
+              alt="stackblitz icon"
+            />
+          </button>
+        </div>
+        <div
+          id="embed-stackblitz"
+          className="rounded-lg overflow-hidden bg-slate-200 dark:bg-slate-800"
+        ></div>
+      </div>
       <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
         <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
           <span className="text-xs font-medium text-white">
