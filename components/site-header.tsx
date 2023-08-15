@@ -25,11 +25,16 @@ export function SiteHeader() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <div className="w-full flex-1 lg:w-auto lg:flex-none">
-            {(pathName === "/links" || searchParams.get("link") !== null) &&
-            user ? (
+            {searchParams.get("link") !== null ? (
               <SearchBarLink />
             ) : (
-              <SearchBarCode />
+              <>
+                {pathName === "/links" && user ? (
+                  <SearchBarLink />
+                ) : (
+                  <SearchBarCode />
+                )}
+              </>
             )}
           </div>
           <nav className="flex items-center space-x-1">
