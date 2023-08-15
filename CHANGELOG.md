@@ -1,5 +1,14 @@
 # @ln-dev7/sharuco
 
+## 0.1.0
+
+### Minor Changes
+
+- [Button to redirect to links on a user’s page.](https://github.com/ln-dev7/sharuco/pull/149) [`b0b95bfb60e3a828f5d23c912366e27f31d0e1f8`](https://github.com/ln-dev7/sharuco/tree/b0b95bfb60e3a828f5d23c912366e27f31d0e1f8).
+- [Change visibility link page.](https://github.com/ln-dev7/sharuco/pull/148) [`9423ed16a205e29414ef6f877a2bbb1b0484c107`](https://github.com/ln-dev7/sharuco/tree/9423ed16a205e29414ef6f877a2bbb1b0484c107).
+- Update dependencies.
+- Thanks [@ln-dev7](https://github.com/ln-dev7)!
+
 ## 0.0.2
 
 ### Patch Changes
