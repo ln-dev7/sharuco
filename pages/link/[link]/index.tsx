@@ -61,7 +61,7 @@ export default function User() {
         {isLoading && <LoaderLinks />}
         {data && data.exists && data.data.publicLinkPage && (
           <div className="flex flex-col items-center gap-8">
-            <div className="flex items-center gap-3 w-full justify-start">
+            <div className="flex w-full items-center justify-start gap-3">
               <div className="relative flex items-center justify-center">
                 <Avatar className="h-16 w-16 cursor-pointer">
                   <AvatarImage

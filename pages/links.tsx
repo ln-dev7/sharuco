@@ -274,7 +274,7 @@ export default function Dashboard() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <div className="flex flex-col gap-2 w-full sm:w-fit sm:flex-row">
+            <div className="flex w-full flex-col gap-2 sm:w-fit sm:flex-row">
               {dataUser?.data?.publicLinkPage && (
                 <Link
                   href={`/link/${pseudo}`}
