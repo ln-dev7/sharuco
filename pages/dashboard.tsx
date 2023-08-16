@@ -20,6 +20,7 @@ import copyToClipboard from "@/utils/copyToClipboard.js"
 import indentCode from "@/utils/indentCode.js"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
+import sdk, { Project } from "@stackblitz/sdk"
 import hljs from "highlight.js"
 import {
   Eye,
@@ -56,6 +57,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button, buttonVariants } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
@@ -161,6 +163,7 @@ export default function Dashboard() {
     return language || "text"
   }
 
+  const [codeValue, setCodeValue] = useState("")
   function handleCodeChange(code) {
     const detectedLanguage = detectLanguage(code)
     if (!languagesName.includes(detectedLanguage)) {
@@ -280,6 +283,38 @@ export default function Dashboard() {
     }
   }, [isSuccess])
 
+  //
+
+  async function embedProject(code: string, language: string) {
+    const extension = getExtensionByName(language)
+    setTimeout(() => {
+      sdk.embedProject(
+        "embed-stackblitz",
+        {
+          title: `${pseudo} - test code`,
+          description: "test code",
+          template: "javascript",
+          files: {
+            "index.html": `<div id="app"></div>`,
+            "index.js": `console.log("hello")`,
+            [`index${extension}`]: `${indentCode(code)}`,
+          },
+          settings: {
+            compile: {
+              trigger: "auto",
+              clearConsole: false,
+            },
+          },
+        },
+        {
+          height: 400,
+          openFile: `index${extension}`,
+          terminalHeight: 50,
+        }
+      )
+    }, 1)
+  }
+
   return (
     <Layout>
       <Head>
@@ -349,9 +384,48 @@ export default function Dashboard() {
                       {...register("code")}
                       className="h-32"
                       onChange={(e) => {
+                        setCodeValue(e.target.value)
                         handleCodeChange(e.target.value)
                       }}
                     />
+                    <div className="flex w-full items-center justify-center">
+                      <Dialog>
+                        {codeValue !== "" && (
+                          <DialogTrigger asChild>
+                            <button
+                              className="mt-1 flex items-center justify-center gap-2 rounded-md bg-[#1574ef] px-3 py-1 text-white"
+                              onClick={() => {
+                                embedProject(codeValue, getValues("language"))
+                              }}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1}
+                                stroke="currentColor"
+                                className="h-5 w-5"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                                />
+                              </svg>
+                              <span className="font-base text-sm tracking-wider text-white">
+                                Edit this code in stackblitz
+                              </span>
+                            </button>
+                          </DialogTrigger>
+                        )}
+                        <DialogContent className="sm:max-w-7xl">
+                          <div
+                            id="embed-stackblitz"
+                            className="overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800"
+                          ></div>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                     <p className="text-sm text-red-500">
                       {errors.code && <>{errors.code.message}</>}
                     </p>

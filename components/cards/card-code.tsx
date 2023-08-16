@@ -52,6 +52,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { ToastAction } from "@/components/ui/toast"
 import {
   Tooltip,
@@ -166,48 +167,72 @@ export default function CardCode({
   const extension = getExtensionByName(language)
 
   async function embedProject() {
-    sdk.embedProject(
-      "embed-stackblitz",
-      {
-        title: `${idAuthor} - code : ${id}`,
-        description: description,
-        template: "javascript",
-        files: {
-          "index.html": `<div id="app"></div>`,
-          "index.js": `console.log("hello")`,
-          [`index${extension}`]: `${indentCode(code)}`,
-        },
-        settings: {
-          compile: {
-            trigger: "auto",
-            clearConsole: false,
+    setTimeout(() => {
+      sdk.embedProject(
+        "embed-stackblitz",
+        {
+          title: `${idAuthor} - code : ${id}`,
+          description: description,
+          template: "javascript",
+          files: {
+            "index.html": `<div id="app"></div>`,
+            "index.js": `console.log("hello")`,
+            [`index${extension}`]: `${indentCode(code)}`,
+          },
+          settings: {
+            compile: {
+              trigger: "auto",
+              clearConsole: false,
+            },
           },
         },
-      },
-      {
-        height: 400,
-        openFile: `index${extension}`,
-        terminalHeight: 50,
-      }
-    )
+        {
+          height: 400,
+          openFile: `index${extension}`,
+          terminalHeight: 50,
+        }
+      )
+    }, 1)
   }
 
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
-      <div className="flex flex-col items-center justify-center gap-2 mb-0">
-        <div className="flex items-center justify-center gap-4">
-          <button onClick={embedProject}>
-            <img
-              src="https://developer.stackblitz.com/img/open_in_stackblitz.svg"
-              alt="stackblitz icon"
-            />
-          </button>
+      {searchParams.get("code-preview") !== null && (
+        <div className="flex w-full items-center justify-center">
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                className="flex items-center justify-center gap-2 rounded-md bg-[#1574ef] px-3 py-2 text-white"
+                onClick={embedProject}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="h-6 w-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                  />
+                </svg>
+                <span className="text-sm font-semibold tracking-wider text-white">
+                  Open in stackblitz
+                </span>
+              </button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-7xl">
+              <div
+                id="embed-stackblitz"
+                className="overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800"
+              ></div>
+            </DialogContent>
+          </Dialog>
         </div>
-        <div
-          id="embed-stackblitz"
-          className="rounded-lg overflow-hidden bg-slate-200 dark:bg-slate-800"
-        ></div>
-      </div>
+      )}
       <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
         <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
           <span className="text-xs font-medium text-white">
@@ -357,7 +382,7 @@ export default function CardCode({
             </AlertDialog>
           </div>
         </div>
-        {searchParams.get("code-preview") === null && !isPrivate ? (
+        {searchParams.get("code-preview") === null ? (
           <Link href={`/code-preview/${id}`}>
             <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
               <code
@@ -432,7 +457,7 @@ export default function CardCode({
           </div>
         </a>
         <div className="flex shrink-0 items-center justify-end gap-3">
-          {searchParams.get("code-preview") === null && !isPrivate && (
+          {searchParams.get("code-preview") === null && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -658,7 +683,7 @@ export default function CardCode({
         </div>
       </div>
 
-      {searchParams.get("code-preview") === null && !isPrivate ? (
+      {searchParams.get("code-preview") === null ? (
         <Link
           href={`/code-preview/${id}`}
           className="text-sm text-slate-700 dark:text-slate-400"

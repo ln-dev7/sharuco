@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import {
   allLanguages,
+  getExtensionByName,
   getLanguageColor,
   languagesName,
 } from "@/constants/languages"
@@ -18,6 +19,7 @@ import highlight from "@/utils/highlight"
 import indentCode from "@/utils/indentCode"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
+import sdk, { Project } from "@stackblitz/sdk"
 import algoliasearch from "algoliasearch"
 import hljs from "highlight.js"
 import * as htmlToImage from "html-to-image"
@@ -63,6 +65,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -310,8 +313,77 @@ export default function CardCodeAdmin({
     setValue("language", detectedLanguage)
   }
 
+  //
+
+  const extension = getExtensionByName(language)
+
+  async function embedProject() {
+    setTimeout(() => {
+      sdk.embedProject(
+        "embed-stackblitz",
+        {
+          title: `${idAuthor} - code : ${id}`,
+          description: description,
+          template: "javascript",
+          files: {
+            "index.html": `<div id="app"></div>`,
+            "index.js": `console.log("hello")`,
+            [`index${extension}`]: `${indentCode(code)}`,
+          },
+          settings: {
+            compile: {
+              trigger: "auto",
+              clearConsole: false,
+            },
+          },
+        },
+        {
+          height: 400,
+          openFile: `index${extension}`,
+          terminalHeight: 50,
+        }
+      )
+    }, 1)
+  }
+
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
+      {searchParams.get("code-preview") !== null && (
+        <div className="flex w-full items-center justify-center">
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                className="flex items-center justify-center gap-2 rounded-md bg-[#1574ef] px-3 py-2 text-white"
+                onClick={embedProject}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="h-6 w-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                  />
+                </svg>
+                <span className="text-sm font-semibold tracking-wider text-white">
+                  Open in stackblitz
+                </span>
+              </button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-7xl">
+              <div
+                id="embed-stackblitz"
+                className="overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800"
+              ></div>
+            </DialogContent>
+          </Dialog>
+        </div>
+      )}
       <div className="flex w-full items-center justify-end">
         <div className="flex items-center gap-2">
           <AlertDialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
