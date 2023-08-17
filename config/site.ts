@@ -24,6 +24,12 @@ export const siteConfig: SiteConfig = {
     {
       title: "Links",
       href: "/links",
+      pined: false,
+      support: false,
+    },
+    {
+      title: "Forms",
+      href: "/forms",
       pined: true,
       support: false,
     },

@@ -48,7 +48,7 @@ import { Separator } from "@/components/ui/separator"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
-export default function Links() {
+export default function Forms() {
   const { user } = useAuthContext()
   const { login, isPending } = useGitHubLogin()
   const { toast } = useToast()
@@ -161,7 +161,7 @@ export default function Links() {
   return (
     <Layout>
       <Head>
-        <title>Sharuco | Links</title>
+        <title>Sharuco | Forms</title>
         <meta
           name="description"
           content="Sharuco allows you to share code codes that you have found
@@ -173,7 +173,7 @@ export default function Links() {
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
-            Sharuco Link
+            Sharuco Form
           </h1>
           <p
             className={cn(

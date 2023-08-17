@@ -19,7 +19,7 @@ import Loader from "@/components/loaders/loader"
 import LoaderCodes from "@/components/loaders/loader-codes"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-export default function Dashboard() {
+export default function SuperAdmin() {
   const { logout } = useGitHubLogout()
 
   const { user } = useAuthContext()
