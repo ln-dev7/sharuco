@@ -10,8 +10,6 @@
 
 - [View code on stackblitz](https://github.com/ln-dev7/sharuco/pull/154)
 
-- Update dependencies.
-
 - Thanks [@ln-dev7](https://github.com/ln-dev7)!
 
 **Full Changelog**: https://github.com/ln-dev7/sharuco/compare/v0.1.0...v0.2.0
