@@ -31,7 +31,7 @@ import { cn } from "@/lib/utils"
 import CardForm from "@/components/cards/card-form"
 import EmptyCard from "@/components/empty-card"
 import { Layout } from "@/components/layout"
-import LoaderLinks from "@/components/loaders/loader-links"
+import LoaderForms from "@/components/loaders/loader-forms"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -227,7 +227,7 @@ export default function Forms() {
         <Separator className="my-4" />
         {user ? (
           <>
-            {isLoadingForms && <LoaderLinks />}
+            {isLoadingForms && <LoaderForms />}
             {dataForms && (
               <>
                 {dataForms.length > 0 && (

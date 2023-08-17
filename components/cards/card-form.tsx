@@ -162,7 +162,7 @@ export default function CardForm({
         <h5 className="my-4 line-clamp-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
           {name}
         </h5>
-        <p className="flex text-md mb-3 line-clamp-4 font-normal text-slate-700 dark:text-slate-400">
+        <p className="text-md mb-3 line-clamp-3 font-normal text-slate-700 dark:text-slate-400">
           {description}
         </p>
         <div className="w-full flex items-center justify-between gap-2 mt-4">
@@ -175,7 +175,7 @@ export default function CardForm({
           <span className="flex items-center gap-1 text-slate-700 dark:text-slate-400">
             <MessageSquare className="h-4 w-4 mr-1.5" />
             <span className="text-sm font-medium">
-              {responses.length} responses
+              {responses.length} answers
             </span>
           </span>
         </div>
