@@ -33,7 +33,7 @@ import LoaderLinks from "@/components/loaders/loader-links"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button, buttonVariants } from "@/components/ui/button"
 
-export default function LinksPage() {
+export default function LinkPage() {
   const searchParams = useSearchParams()
   const idCurrent = searchParams?.get("link")?.toLowerCase()
 
