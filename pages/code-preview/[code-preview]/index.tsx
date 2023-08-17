@@ -223,7 +223,8 @@ export default function CodePreview() {
                 }}
               >
                 <Masonry>
-                  {false ? (
+                  {dataUser?.data.pseudo === dataCode.data.idAuthor ||
+                  SUPER_ADMIN.includes(dataUser?.data.pseudo) ? (
                     <CardCodeAdmin
                       key={searchParams.get("code-preview")}
                       id={searchParams.get("code-preview")}

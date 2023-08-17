@@ -171,6 +171,7 @@ export default function CardCodeAdmin({
     handleSubmit,
     reset,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -430,6 +431,84 @@ export default function CardCodeAdmin({
                         handleCodeChange(e.target.value)
                       }}
                     />
+                    <div className="flex w-full items-center justify-center">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <button className="mt-2 flex items-center justify-center gap-2 rounded-md bg-[#1574ef] px-3 py-1 text-white">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1}
+                              stroke="currentColor"
+                              className="h-5 w-5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                              />
+                            </svg>
+                            <span className="font-base text-sm tracking-wider text-white">
+                              Edit this code in stackblitz
+                            </span>
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-7xl">
+                          <DialogHeader>
+                            <DialogDescription>
+                              Choose the template with which the code will be
+                              executed{" "}
+                            </DialogDescription>
+                            <Select
+                              onValueChange={(value: TemplateName) => {
+                                embedProject(
+                                  value,
+                                  getValues("code"),
+                                  getValues("language"),
+                                  pseudo,
+                                  getValues("description")
+                                    ? getValues("description")
+                                    : null
+                                )
+                              }}
+                            >
+                              <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Choose a template" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectLabel>Templates</SelectLabel>
+                                  <SelectItem value="angular-cli">
+                                    angular-cli
+                                  </SelectItem>
+                                  <SelectItem value="create-react-app">
+                                    create-react-app
+                                  </SelectItem>
+                                  <SelectItem value="html">html</SelectItem>
+                                  <SelectItem value="javascript">
+                                    javascript
+                                  </SelectItem>
+                                  <SelectItem value="polymer">
+                                    polymer
+                                  </SelectItem>
+                                  <SelectItem value="typescript">
+                                    typescript
+                                  </SelectItem>
+                                  <SelectItem value="vue">vue</SelectItem>
+                                  <SelectItem value="node">node</SelectItem>
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </DialogHeader>
+                          <div
+                            id="embed-stackblitz"
+                            className="overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800"
+                          ></div>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+
                     <p className="text-sm text-red-500">
                       {errors.code && <>{errors.code.message}</>}
                     </p>
@@ -485,40 +564,37 @@ export default function CardCodeAdmin({
                       {errors.tags && <>{errors.tags.message}</>}
                     </p>
                   </div>
-                  {searchParams.get("code-preview") === null && (
-                    <div className="flex items-center gap-4">
-                      <input
-                        type="checkbox"
-                        {...register("isPrivate")}
-                        name="isPrivate"
-                        id="isPrivate"
-                        className={`h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none ring-slate-500
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="checkbox"
+                      {...register("isPrivate")}
+                      name="isPrivate"
+                      id="isPrivate"
+                      className={`h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none ring-slate-500
                            ring-offset-0 focus:ring-slate-400 focus:ring-offset-slate-900 dark:bg-slate-800
                           ${checkboxOn ? "ring-2" : "ring-0"}
                           `}
-                        checked={checkboxOn}
-                        onChange={() => setCheckboxOn(!checkboxOn)}
-                      />
-                      <Label htmlFor="isPrivate">
-                        Will this code be private ?{" "}
-                        {checkboxOn ? (
-                          <span className="font-bold text-teal-300">Yes</span>
-                        ) : (
-                          <span className="font-bold text-teal-300">No</span>
-                        )}
-                      </Label>
-                    </div>
-                  )}
-                  {searchParams.get("code-preview") === null && (
-                    <div
-                      className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
-                      role="alert"
-                    >
-                      <span className="font-semibold">Warning alert !</span> If
-                      you change your code from public to private, you will lose
-                      all the favourites and comments of this code
-                    </div>
-                  )}
+                      checked={checkboxOn}
+                      onChange={() => setCheckboxOn(!checkboxOn)}
+                    />
+                    <Label htmlFor="isPrivate">
+                      Will this code be private ?{" "}
+                      {checkboxOn ? (
+                        <span className="font-bold text-teal-300">Yes</span>
+                      ) : (
+                        <span className="font-bold text-teal-300">No</span>
+                      )}
+                    </Label>
+                  </div>
+                  <div
+                    className="mt-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
+                    role="alert"
+                  >
+                    <span className="font-semibold">Warning alert !</span> If
+                    you change your code from public to private, you will lose
+                    all the favourites and comments of this code
+                  </div>
+
                   {isError && (
                     <p className="pt-4 text-sm font-bold text-red-500">
                       An error has occurred, please try again later.
