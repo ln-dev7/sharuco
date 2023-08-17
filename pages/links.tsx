@@ -48,7 +48,7 @@ import { Separator } from "@/components/ui/separator"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
-export default function Dashboard() {
+export default function Links() {
   const { user } = useAuthContext()
   const { login, isPending } = useGitHubLogin()
   const { toast } = useToast()
