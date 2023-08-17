@@ -26,6 +26,7 @@ const useUpdateUserDocument = (collectionName) => {
         queryClient.invalidateQueries("isprivate-code-from-user-true")
         queryClient.invalidateQueries("codes-from-user")
         queryClient.invalidateQueries("links-from-user")
+        queryClient.invalidateQueries("forms-from-user")
         queryClient.invalidateQueries("favorites-codes")
         queryClient.invalidateQueries("isprivate-codes-true")
         queryClient.invalidateQueries("isprivate-codes-false")

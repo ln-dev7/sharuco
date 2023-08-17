@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
+import { colors, getRandomColor } from "@/constants/colors"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
@@ -27,7 +28,7 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
 import { cn } from "@/lib/utils"
-import CardLinkAdmin from "@/components/cards/card-link-admin"
+import CardForm from "@/components/cards/card-form"
 import EmptyCard from "@/components/empty-card"
 import { Layout } from "@/components/layout"
 import LoaderLinks from "@/components/loaders/loader-links"
@@ -45,6 +46,7 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import { Textarea } from "@/components/ui/textarea"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
@@ -55,7 +57,7 @@ export default function Forms() {
 
   const notifyCodeAdded = () =>
     toast({
-      title: "Your link has been added successfully !",
+      title: "Your form has been created successfully !",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
 
@@ -67,49 +69,17 @@ export default function Forms() {
     isError: isErrorUser,
   } = useDocument(pseudo, "users")
 
-  const [openChangeVisibilityDialog, setOpenChangeVisibilityDialog] =
-    useState(false)
-
   const { updateUserDocument }: any = useUpdateUserDocument("users")
 
-  const changeVisibiltyForLinkPage = async (pseudo: string) => {
-    let updatedUserData = {
-      publicLinkPage: !dataUser.data.publicLinkPage,
-    }
-    updateUserDocument({ pseudo, updatedUserData })
-    setOpenChangeVisibilityDialog(false)
-    const description = dataUser.data.publicLinkPage
-      ? "Your link page is now public anyone can access it."
-      : "Your link page is kept private, you are the only person who can view it "
-    toast({
-      title: "Visibility changed",
-      description: description,
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
-  }
-
   const {
-    isLoading: isLoadingLinks,
-    isError: isErrorLinks,
-    data: dataLinks,
-  } = useGetDocumentFromUser(pseudo, "links")
+    isLoading: isLoadingForms,
+    isError: isErrorForms,
+    data: dataForms,
+  } = useGetDocumentFromUser(pseudo, "forms")
 
   const schema = yup.object().shape({
-    link: yup
-      .string()
-      .matches(
-        /^(http|https):\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/,
-        "Invalid link format"
-      )
-      .required(),
+    name: yup.string().required(),
     description: yup.string().required(),
-    tags: yup
-      .string()
-      .test(
-        "tags",
-        "The tags field must contain only letters, commas and/or spaces",
-        (val) => !val || /^[a-zA-Z, ]*$/.test(val)
-      ),
   })
 
   const {
@@ -121,23 +91,16 @@ export default function Forms() {
     resolver: yupResolver(schema),
   })
 
-  const [openCreateLinkDialog, setOpenCreateLinkDialog] = useState(false)
+  const [openCreateFormDialog, setOpenCreateFormDialog] = useState(false)
   const { createDocument, isLoading, isError, isSuccess }: any =
     useCreateDocument("links")
 
   const onSubmit = async (data) => {
-    const { link, description, tags } = data
-    const tabTabs = tags
-      ? tags.split(",").map((word) => word.trim().toLowerCase())
-      : []
-    if (tabTabs[tabTabs.length - 1] === "") {
-      tabTabs.pop()
-    }
+    const { name, description } = data
 
     let newDocument = {
-      link: link,
+      name: name,
       description: description,
-      tags: tabTabs,
       createdAt: moment().valueOf(),
       idAuthor: pseudo,
     }
@@ -145,16 +108,15 @@ export default function Forms() {
     createDocument(newDocument)
 
     reset({
-      link: "",
+      name: "",
       description: "",
-      tags: "",
     })
   }
 
   useEffect(() => {
     if (isSuccess) {
       notifyCodeAdded()
-      setOpenCreateLinkDialog(!isSuccess)
+      setOpenCreateFormDialog(!isSuccess)
     }
   }, [isSuccess])
 
@@ -181,48 +143,49 @@ export default function Forms() {
               "sm:text-base md:text-lg lg:text-lg"
             )}
           >
-            Keep the links that you found useful and that will help you later.
+            Create and share forms to receive answers very quickly.
           </p>
         </div>
         {user ? (
           <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
             <AlertDialog
-              open={openCreateLinkDialog}
-              onOpenChange={setOpenCreateLinkDialog}
+              open={openCreateFormDialog}
+              onOpenChange={setOpenCreateFormDialog}
             >
               <AlertDialogTrigger className="w-full shrink-0 sm:w-fit" asChild>
                 <button
                   className={buttonVariants({ size: "lg" })}
-                  onClick={() => setOpenCreateLinkDialog(true)}
+                  onClick={() => setOpenCreateFormDialog(true)}
                 >
                   <Plus className="mr-2 h-4 w-4" />
-                  Add new link
+                  Create new form
                 </button>
               </AlertDialogTrigger>
               <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
                 <AlertDialogHeader>
                   <AlertDialogTitle>
                     <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
-                      Add new link
+                      Create new form
                     </h3>
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                      <Label htmlFor="code">Insert your link</Label>
+                      <Label htmlFor="code">Insert name</Label>
                       <Input
-                        placeholder="Insert your link here..."
-                        id="code"
-                        {...register("link")}
+                        placeholder="Insert name of your form here..."
+                        id="name"
+                        {...register("name")}
                       />
                       <p className="text-sm text-red-500">
-                        {errors.link && <>{errors.link.message}</>}
+                        {errors.name && <>{errors.name.message}</>}
                       </p>
                     </div>
-                    <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                      <Label htmlFor="description">Decription of link</Label>
-                      <Input
-                        placeholder="Insert description of your link here..."
+                    <div className="flex w-full flex-col items-start gap-1.5">
+                      <Label htmlFor="description">Decription of form</Label>
+                      <Textarea
+                        placeholder="Insert description of your form..."
                         id="description"
+                        className="h-24"
                         {...register("description")}
                       />
                       <p className="text-sm text-red-500">
@@ -231,25 +194,6 @@ export default function Forms() {
                         )}
                       </p>
                     </div>
-                    <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                      <Label htmlFor="tags">Tags</Label>
-                      <Input
-                        type="text"
-                        id="tags"
-                        placeholder="Enter a tags ..."
-                        {...register("tags")}
-                      />
-                      <p className="text-sm font-medium text-slate-500">
-                        Please separate tags with{" "}
-                        <span className="text-slate-700 dark:text-slate-300">
-                          ,
-                        </span>
-                      </p>
-                      <p className="text-sm text-red-500">
-                        {errors.tags && <>{errors.tags.message}</>}
-                      </p>
-                    </div>
-
                     {isError && (
                       <p className="pt-4 text-sm font-bold text-red-500">
                         An error has occurred, please try again later.
@@ -274,89 +218,15 @@ export default function Forms() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <div className="flex w-full flex-col gap-2 sm:w-fit sm:flex-row">
-              {dataUser?.data?.publicLinkPage && (
-                <Link
-                  href={`/link/${pseudo}`}
-                  className={buttonVariants({ size: "lg", variant: "outline" })}
-                >
-                  <LinkIcon className="mr-2 h-4 w-4" />
-                  Your public links
-                </Link>
-              )}
-              <AlertDialog
-                open={openChangeVisibilityDialog}
-                onOpenChange={setOpenChangeVisibilityDialog}
-              >
-                <AlertDialogTrigger asChild>
-                  <button
-                    className={buttonVariants({
-                      size: "lg",
-                      variant: "subtle",
-                    })}
-                    onClick={() => setOpenChangeVisibilityDialog(true)}
-                  >
-                    {dataUser?.data?.publicLinkPage ? (
-                      <Eye className="mr-2 h-4 w-4" />
-                    ) : (
-                      <EyeOff className="mr-2 h-4 w-4" />
-                    )}
-                    Change visibility
-                  </button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Do you want to change the visibility of your link page?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      {dataUser?.data?.publicLinkPage ? (
-                        <>
-                          By passing privately your public link page will no
-                          longer be available.
-                        </>
-                      ) : (
-                        <>
-                          By going in public everyone to see your links here :{" "}
-                          <Link
-                            href={`/link/${pseudo}`}
-                            className="font-bold hover:underline hover:underline-offset-4"
-                          >
-                            {`https://sharuco.lndev.me/link/${pseudo}`}
-                          </Link>
-                        </>
-                      )}
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <button
-                      className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
-                      )}
-                      onClick={() => {
-                        changeVisibiltyForLinkPage(pseudo)
-                      }}
-                    >
-                      {dataUser?.data?.publicLinkPage ? (
-                        <>Change to private</>
-                      ) : (
-                        <>Change to public</>
-                      )}
-                    </button>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
           </div>
         ) : null}
         <Separator className="my-4" />
         {user ? (
           <>
-            {isLoadingLinks && <LoaderLinks />}
-            {dataLinks && (
+            {isLoadingForms && <LoaderLinks />}
+            {dataForms && (
               <>
-                {dataLinks.length > 0 && (
+                {dataForms.length > 0 && (
                   <ResponsiveMasonry
                     columnsCountBreakPoints={{
                       659: 1,
@@ -367,30 +237,32 @@ export default function Forms() {
                     className="w-full"
                   >
                     <Masonry gutter="2rem">
-                      {dataLinks.map(
-                        (link: {
+                      {dataForms.map(
+                        (form: {
                           id: string
                           idAuthor: string
-                          link: string
+                          name: string
                           description: string
-                          tags: string[]
+                          color: string
+                          responses: any[]
                           createdAt: any
                         }) => (
-                          <CardLinkAdmin
-                            key={link.id}
-                            id={link.id}
-                            idAuthor={link.idAuthor}
-                            link={link.link}
-                            description={link.description}
-                            tags={link.tags}
-                            createdAt={link.createdAt}
+                          <CardForm
+                            key={form.id}
+                            id={form.id}
+                            idAuthor={form.idAuthor}
+                            name={form.name}
+                            description={form.description}
+                            color={form.color}
+                            responses={form.responses}
+                            createdAt={form.createdAt}
                           />
                         )
                       )}
                     </Masonry>
                   </ResponsiveMasonry>
                 )}
-                {dataLinks.length == 0 && (
+                {dataForms.length == 0 && (
                   <EmptyCard
                     icon={<FileCog className="h-12 w-12" />}
                     title="No link found"
@@ -399,7 +271,7 @@ export default function Forms() {
                 )}
               </>
             )}
-            {isErrorLinks && (
+            {isErrorForms && (
               <EmptyCard
                 icon={<FileCog className="h-12 w-12" />}
                 title="An error has occurred"
@@ -413,7 +285,7 @@ export default function Forms() {
               <Lock className="h-12 w-12" />
               <h3 className="mt-4 text-lg font-semibold">Access denied</h3>
               <p className="text-muted-foreground mb-4 mt-2 text-sm">
-                To access Sharuco Link you must first be logged in.
+                To access Sharuco Form you must first be logged in.
               </p>
               <button
                 className={cn(
