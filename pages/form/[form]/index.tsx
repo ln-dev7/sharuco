@@ -25,17 +25,23 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import sdk, { Project } from "@stackblitz/sdk"
 import hljs from "highlight.js"
 import {
+  Calendar,
+  CircleDot,
   Eye,
   EyeOff,
   FileCog,
   FileQuestion,
   Heart,
   LinkIcon,
+  List,
+  ListChecks,
   Loader2,
   MessageSquare,
   Plus,
+  Save,
   Send,
   Settings,
+  Type,
   User,
   View,
 } from "lucide-react"
@@ -68,6 +74,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog"
@@ -149,6 +156,8 @@ export default function FormPage() {
     })
   }
 
+  // fonction qui prend en param un text et fonction de cela ajoute une <div></div> dans la div #questions - avec un switch case on regarde la valeur du text si c'est "input" on ajoute une div avec un input, si c'est "textarea" on ajoute une div avec un textarea etc...
+
   return (
     <Layout>
       <Head>
@@ -192,6 +201,9 @@ export default function FormPage() {
                   <TabsTrigger value="responses">
                     <MessageSquare className="mr-2 h-4 w-4" />
                     Responses
+                    <span className="flex items-center justify-center bg-slate-200 dark:bg-slate-700 ml-2 px-1 rounded-md">
+                      {dataForm.data.responses.length}
+                    </span>
                   </TabsTrigger>
                   <TabsTrigger value="publish">
                     <Send className="mr-2 h-4 w-4" />
@@ -199,11 +211,69 @@ export default function FormPage() {
                   </TabsTrigger>
                 </div>
               </TabsList>
-              <TabsContent
-                className="border-none p-0 pt-4"
-                value="questions"
-              ></TabsContent>
-              <TabsContent className="border-none p-0 pt-4" value="responses">
+              <TabsContent className="border-none p-0 pt-4" value="questions">
+                <div className="w-full flex flex-col sm:flex-row items-start gap-4">
+                  <div className="w-full sm:w-[250px] shrink-0 rounded-md flex flex-col gap-2 items-start">
+                    <button className="hover:bg-slate-100 hover:dark:bg-slate-800 flex items-center justify-start gap-1 py-2 px-4 w-full rounded-md">
+                      <Type className="h-5 w-5" />
+                      <span className="ml-2 text-sm font-semibold">
+                        Short answer
+                      </span>
+                    </button>
+                    <button className="hover:bg-slate-100 hover:dark:bg-slate-800 flex items-center justify-start gap-1 py-2 px-4 w-full rounded-md">
+                      <Type className="h-5 w-5" />
+                      <span className="ml-2 text-sm font-semibold">
+                        Long answer
+                      </span>
+                    </button>
+                    <button className="hover:bg-slate-100 hover:dark:bg-slate-800 flex items-center justify-start gap-1 py-2 px-4 w-full rounded-md">
+                      <CircleDot className="h-5 w-5" />
+                      <span className="ml-2 text-sm font-semibold">
+                        Unique choice
+                      </span>
+                    </button>
+                    <button className="hover:bg-slate-100 hover:dark:bg-slate-800 flex items-center justify-start gap-1 py-2 px-4 w-full rounded-md">
+                      <ListChecks className="h-5 w-5" />
+                      <span className="ml-2 text-sm font-semibold">
+                        Multi choice
+                      </span>
+                    </button>
+                    <button className="hover:bg-slate-100 hover:dark:bg-slate-800 flex items-center justify-start gap-1 py-2 px-4 w-full rounded-md">
+                      <List className="h-5 w-5" />
+                      <span className="ml-2 text-sm font-semibold">
+                        List of choices
+                      </span>
+                    </button>
+                    <button className="hover:bg-slate-100 hover:dark:bg-slate-800 flex items-center justify-start gap-1 py-2 px-4 w-full rounded-md">
+                      <Calendar className="h-5 w-5" />
+                      <span className="ml-2 text-sm font-semibold">Date</span>
+                    </button>
+                    <Separator className="hidden sm:block w-full my-2" />
+                    <div className="hidden sm:flex px-4 flex-col gap-2">
+                      <span className="text-sm">
+                        click on a button to add it in the questions
+                      </span>
+                    </div>
+                  </div>
+                  <Separator className="block sm:hidden w-full my-2" />
+                  <div
+                    id="questions"
+                    className="relative w-full rounded-md px-4 pt-7 pb-4 border overflow-hidden"
+                  >
+                    <div
+                      className={`absolute inset-x-0 top-0 h-3 w-full`}
+                      style={{
+                        background: `${dataForm.data.color}`,
+                      }}
+                    ></div>
+                    <Button variant="outline">
+                      <Save className="mr-2 h-4 w-4" />
+                      Save questions
+                    </Button>
+                  </div>
+                </div>
+              </TabsContent>
+              <TabsContent className="border-none p-0 pt-2" value="responses">
                 {dataForm.data.responses &&
                 dataForm.data.responses.length > 0 ? (
                   <div></div>
@@ -215,7 +285,7 @@ export default function FormPage() {
                   />
                 )}
               </TabsContent>
-              <TabsContent className="border-none p-0 pt-4" value="publish">
+              <TabsContent className="border-none p-0 pt-2" value="publish">
                 <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 dark:border-slate-700">
                   <div className="mx-auto flex w-full max-w-xl flex-col gap-4 items-center justify-center text-center p-4">
                     <Link
