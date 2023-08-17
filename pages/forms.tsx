@@ -93,7 +93,7 @@ export default function Forms() {
 
   const [openCreateFormDialog, setOpenCreateFormDialog] = useState(false)
   const { createDocument, isLoading, isError, isSuccess }: any =
-    useCreateDocument("links")
+    useCreateDocument("forms")
 
   const onSubmit = async (data) => {
     const { name, description } = data
@@ -103,6 +103,10 @@ export default function Forms() {
       description: description,
       createdAt: moment().valueOf(),
       idAuthor: pseudo,
+      color: getRandomColor(colors),
+      published: false,
+      questions: [],
+      responses: [],
     }
 
     createDocument(newDocument)
@@ -265,8 +269,8 @@ export default function Forms() {
                 {dataForms.length == 0 && (
                   <EmptyCard
                     icon={<FileCog className="h-12 w-12" />}
-                    title="No link found"
-                    description="You have not added any link yet."
+                    title="No form found"
+                    description="You have not added any form yet."
                   />
                 )}
               </>

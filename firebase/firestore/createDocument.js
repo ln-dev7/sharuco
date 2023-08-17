@@ -42,6 +42,19 @@ const createDocument = async (newData, collectionName) => {
         idAuthor: newCollection.idAuthor,
       })
       break
+      case "forms":
+        index.saveObject({
+          objectID: newCollection.id,
+          name: newCollection.name,
+          description: newCollection.description,
+          color: newCollection.color,
+          createdAt: newCollection.createdAt,
+          questions: newCollection.questions,
+          responses: newCollection.responses,
+          published: newCollection.published,
+          idAuthor: newCollection.idAuthor,
+        })
+        break
     default:
       break
   }

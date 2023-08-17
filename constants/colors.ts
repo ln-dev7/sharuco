@@ -33,7 +33,7 @@ export const colors = [
   "#e11d48",
 ]
 
-export function getRandomColor(colors) {
-  const randomIndex = Math.floor(Math.random() * colors.length);
-  return colors[randomIndex];
+export function getRandomColor(colors: string[]) {
+  const randomIndex = Math.floor(Math.random() * colors.length)
+  return colors[randomIndex]
 }

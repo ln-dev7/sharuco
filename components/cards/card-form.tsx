@@ -67,7 +67,7 @@ export default function CardForm({
 
   //
 
-  const ALGOLIA_INDEX_NAME = "links"
+  const ALGOLIA_INDEX_NAME = "forms"
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
@@ -76,7 +76,7 @@ export default function CardForm({
   const index = client.initIndex(ALGOLIA_INDEX_NAME)
 
   const { deleteDocument, isLoading: isLoadingDelete }: any =
-    useDeleteDocument("links")
+    useDeleteDocument("forms")
 
   const handleDeleteDocument = () => {
     deleteDocument(id)
@@ -104,7 +104,7 @@ export default function CardForm({
   }, [name, description, setValue])
 
   const { updateFormDocument, isLoading, isError, isSuccess }: any =
-    useUpdateFormDocument("links")
+    useUpdateFormDocument("forms")
 
   const onSubmit = async (data) => {
     const { name: nameUpdate, description: descriptionUpdate } = data
@@ -113,7 +113,7 @@ export default function CardForm({
       toast({
         variant: "destructive",
         title: "You have not made any changes",
-        description: "Please make changes to update your link",
+        description: "Please make changes to update your form",
         action: <ToastAction altText="Okay">Okay</ToastAction>,
       })
       return
@@ -131,7 +131,7 @@ export default function CardForm({
 
     await index.partialUpdateObject({
       objectID: id,
-      link: nameUpdate,
+      name: nameUpdate,
       description: descriptionUpdate,
     })
 
@@ -153,7 +153,10 @@ export default function CardForm({
       key={id}
     >
       <div
-        className={`h-3 w-full absolute top-0 left-0 right-0 bg-[${color}]`}
+        className={`h-3 w-full absolute top-0 left-0 right-0`}
+        style={{
+          background: `${color}`,
+        }}
       ></div>
       <Link href={`/form/edit/${id}`} className="flex flex-col items-start p-4">
         <h5 className="my-4 line-clamp-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
@@ -201,15 +204,15 @@ export default function CardForm({
                 <AlertDialogHeader>
                   <AlertDialogTitle>
                     <h3 className="text-lg font-medium leading-6 text-slate-900 dark:text-slate-100">
-                      Edit a link
+                      Edit a form
                     </h3>
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     <div className="mb-4 flex w-full flex-col items-start gap-1.5">
-                      <Label htmlFor="link">Insert name</Label>
+                      <Label htmlFor="name">Insert name</Label>
                       <Input
                         placeholder="Insert name of your form here..."
-                        id="link"
+                        id="name"
                         {...register("name")}
                       />
                       <p className="text-sm text-red-500">
@@ -266,7 +269,7 @@ export default function CardForm({
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    Are you sure you want to delete this link ?
+                    Are you sure you want to delete this form ?
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     This action is irreversible, please reflect beforehand.
