@@ -36,6 +36,7 @@ import {
   Send,
   Settings,
   User,
+  View,
 } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
@@ -92,6 +93,13 @@ export default function FormPage() {
   const router = useRouter()
 
   const { toast } = useToast()
+
+  const notifyUrlCopied = () =>
+    toast({
+      title: "Url of your code copied to clipboard",
+      description: "You can share it wherever you want",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
 
   const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
@@ -155,14 +163,93 @@ export default function FormPage() {
                 className="border-none p-0 pt-4"
                 value="questions"
               ></TabsContent>
-              <TabsContent
-                className="border-none p-0 pt-4"
-                value="responses"
-              ></TabsContent>
-              <TabsContent
-                className="border-none p-0 pt-4"
-                value="publish"
-              ></TabsContent>
+              <TabsContent className="border-none p-0 pt-4" value="responses">
+                {dataForm.data.responses &&
+                dataForm.data.responses.length > 0 ? (
+                  <div></div>
+                ) : (
+                  <EmptyCard
+                    icon={<MessageSquare className="h-8 w-8" />}
+                    title="No responses yet"
+                    description="Responses to your form will appear here"
+                  />
+                )}
+              </TabsContent>
+              <TabsContent className="border-none p-0 pt-4" value="publish">
+                <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 dark:border-slate-700">
+                  <div className="mx-auto flex w-full max-w-xl flex-col gap-4 items-center justify-center text-center p-4">
+                    <Link
+                      href={`/form/view/${searchParams.get("form")}`}
+                      className={buttonVariants({
+                        size: "default",
+                        variant: "subtle",
+                      })}
+                    >
+                      <Eye className="mr-2 h-4 w-4" />
+                      View form
+                    </Link>
+                    <h3 className="mt-4 text-md font-semibold">
+                      {dataForm.data.published
+                        ? "Your form is currently online and can be viewed and answered by anyone at the link"
+                        : "Your form is not published so can only be seen by you alone"}
+                    </h3>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <p className="text-muted-foreground underline underline-offset-4 cursor-pointer mb-4 mt-2 text-sm">
+                          Change the status of your form
+                        </p>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            {dataForm.data.published
+                              ? "Want to make your form private  ?"
+                              : "Do you want to make your form public ?"}
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            {dataForm.data.published
+                              ? "Your form will no longer be visible to anyone except you"
+                              : "Your form will be visible to everyone and anyone will be able to answer it"}
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction>
+                            {dataForm.data.published
+                              ? "make private"
+                              : "make public"}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                    <div className="flex flex-col md:flex-row w-full items-center gap-2">
+                      <Input
+                        className="w-full"
+                        type="text"
+                        placeholder={`https://sharuco.lndev.me/form/view/${searchParams.get(
+                          "form"
+                        )}`}
+                        value={`https://sharuco.lndev.me/form/view/${searchParams.get(
+                          "form"
+                        )}`}
+                      />
+                      <Button
+                        onClick={() => {
+                          copyToClipboard(
+                            `https://sharuco.lndev.me/form/view/${searchParams.get(
+                              "form"
+                            )}`
+                          )
+                          notifyUrlCopied()
+                        }}
+                        className="shrink-0 w-full sm:w-fit"
+                      >
+                        Copy link
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
             </Tabs>
           </div>
         )}
