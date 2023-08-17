@@ -1,21 +1,46 @@
 # @ln-dev7/sharuco
 
+## 0.2.0
+
+### Minor Changes
+
+- [Add stackblitz button on edit code form](https://github.com/ln-dev7/sharuco/pull/156)
+
+- [Ability to choose a template for code execution on stackblitz](https://github.com/ln-dev7/sharuco/pull/155)
+
+- [View code on stackblitz](https://github.com/ln-dev7/sharuco/pull/154)
+
+- Update dependencies.
+
+- Thanks [@ln-dev7](https://github.com/ln-dev7)!
+
+**Full Changelog**: https://github.com/ln-dev7/sharuco/compare/v0.1.0...v0.2.0
+
 ## 0.1.0
 
 ### Minor Changes
 
-- [Button to redirect to links on a user’s page.](https://github.com/ln-dev7/sharuco/pull/149) [`b0b95bfb60e3a828f5d23c912366e27f31d0e1f8`](https://github.com/ln-dev7/sharuco/tree/b0b95bfb60e3a828f5d23c912366e27f31d0e1f8).
-- [Change visibility link page.](https://github.com/ln-dev7/sharuco/pull/148) [`9423ed16a205e29414ef6f877a2bbb1b0484c107`](https://github.com/ln-dev7/sharuco/tree/9423ed16a205e29414ef6f877a2bbb1b0484c107).
+- [Button to redirect to links on a user’s page.](https://github.com/ln-dev7/sharuco/pull/149) 
+
+- [Change visibility link page.](https://github.com/ln-dev7/sharuco/pull/148) 
+
 - Update dependencies.
+
 - Thanks [@ln-dev7](https://github.com/ln-dev7)!
+
+**Full Changelog**: https://github.com/ln-dev7/sharuco/compare/v0.0.2...v0.1.0
 
 ## 0.0.2
 
 ### Patch Changes
 
-- [Change of star icon by heart icon ,add trash icon on delete button, use react-query for fetxh contributors and many update.](https://github.com/ln-dev7/sharuco/pull/141) [`8227e08374f8cbea3784f06ab96545d98d8054d7`](https://github.com/ln-dev7/sharuco/tree/8227e08374f8cbea3784f06ab96545d98d8054d7).
+- [Change of star icon by heart icon ,add trash icon on delete button, use react-query for fetxh contributors and many update.](https://github.com/ln-dev7/sharuco/pull/141) 
+
 - Update dependencies.
+
 - Thanks [@ln-dev7](https://github.com/ln-dev7)!
+
+**Full Changelog**: https://github.com/ln-dev7/sharuco/compare/v0.0.1...v0.0.2
 
 ## 0.0.1
 
