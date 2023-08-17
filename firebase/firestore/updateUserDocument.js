@@ -32,10 +32,16 @@ const useUpdateUserDocument = (collectionName) => {
         queryClient.invalidateQueries("isprivate-codes-false")
         queryClient.invalidateQueries("document-users")
         queryClient.invalidateQueries("document-codes")
+        queryClient.invalidateQueries("document-links")
+        queryClient.invalidateQueries("document-forms")
         queryClient.invalidateQueries("users")
         queryClient.invalidateQueries("codes")
+        queryClient.invalidateQueries("links")
+        queryClient.invalidateQueries("forms")
         queryClient.invalidateQueries("documents-codes")
         queryClient.invalidateQueries("documents-users")
+        queryClient.invalidateQueries("documents-links")
+        queryClient.invalidateQueries("documents-forms")
         queryClient.invalidateQueries("popular-codes")
       },
     }

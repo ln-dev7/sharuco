@@ -35,6 +35,7 @@ import {
   Plus,
   Send,
   Settings,
+  Terminal,
   User,
 } from "lucide-react"
 import moment from "moment"
@@ -91,7 +92,21 @@ export default function FormViewPage() {
   const { user } = useAuthContext()
   const router = useRouter()
 
+  const pseudo = user?.reloadUserInfo.screenName.toLowerCase() || ""
+
   const { toast } = useToast()
+
+  const {
+    data: dataForm,
+    isLoading: isLoadingForm,
+    isError: isErrorForm,
+    error: errorForm,
+  }: {
+    data: any
+    isLoading: boolean
+    isError: boolean
+    error: any
+  } = useDocument(searchParams.get("form"), "forms")
 
   return (
     <Layout>
@@ -107,10 +122,67 @@ export default function FormViewPage() {
       </Head>{" "}
       <section className="fixed inset-0 z-50 bg-white dark:bg-slate-900">
         <div className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
+          <div className="flex w-full items-center justify-start">
+            <Link href="/forms" className="font-bold flex items-center">
+              <Terminal className="h-6 w-6 mr-2" />
+              Sharuco Form
+            </Link>
+          </div>
+          <Separator />
+          {isLoadingForm && (
+            <div className="flex w-full items-center justify-center">
+              <Loader2 className="h-10 w-10 animate-spin" />
+            </div>
+          )}
+          {dataForm &&
+            dataForm.exists &&
+            (dataForm.data.published || dataForm.data.idAuthor === pseudo) && (
+              <div>Hello</div>
+            )}
+          {((dataForm && !dataForm.exists) ||
+            (dataForm &&
+              dataForm.exists &&
+              !dataForm.data.published &&
+              dataForm.data.idAuthor !== pseudo)) && (
+            <div className="flex flex-col items-center gap-4">
+              <h1 className="text-2xl font-bold">This form does not exist.</h1>
+              <Link
+                href="/forms"
+                className={buttonVariants({ size: "lg", variant: "outline" })}
+              >
+                Create your own form
+              </Link>
+            </div>
+          )}
+          {isErrorForm && (
+            <>
+              {errorForm.message == "Missing or insufficient permissions." ? (
+                <div className="flex flex-col items-center gap-4">
+                  <h1 className="text-2xl font-bold">
+                    This form does not exist.
+                  </h1>
+                  <Link
+                    href="/forms"
+                    className={buttonVariants({
+                      size: "lg",
+                      variant: "outline",
+                    })}
+                  >
+                    Create your own form
+                  </Link>
+                </div>
+              ) : (
+                <Error />
+              )}
+            </>
+          )}
           <Separator />
           <div className="flex w-full items-center justify-center">
             <Link href="/">
-              Powered by <span className="font-bold">Sharuco</span>
+              Powered by{" "}
+              <span className="font-bold hover:underline hover:underline-offset-4">
+                Sharuco
+              </span>
             </Link>
           </div>
         </div>

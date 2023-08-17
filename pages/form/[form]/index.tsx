@@ -16,6 +16,7 @@ import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
+import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
 import copyToClipboard from "@/utils/copyToClipboard.js"
 import embedProject from "@/utils/embedStackblitzProject"
 import indentCode from "@/utils/indentCode.js"
@@ -94,6 +95,12 @@ export default function FormPage() {
 
   const { toast } = useToast()
 
+  useEffect(() => {
+    if (!user) {
+      router.push("/forms")
+    }
+  })
+
   const notifyUrlCopied = () =>
     toast({
       title: "Url of your code copied to clipboard",
@@ -107,7 +114,40 @@ export default function FormPage() {
     data: dataForm,
     isLoading: isLoadingForm,
     isError: isErrorForm,
+    error: errorForm,
+  }: {
+    data: any
+    isLoading: boolean
+    isError: boolean
+    error: any
   } = useDocument(searchParams.get("form"), "forms")
+
+  const {
+    updateFormDocument,
+    isLoading: isLoadingUpdateForm,
+    isError: isErrorUpdateForm,
+    isSuccess: isSuccessUpdateForm,
+  }: any = useUpdateFormDocument("forms")
+
+  const changeStatutOfForm = async () => {
+    let updatedFormData: {
+      published: boolean
+    } = {
+      published: !dataForm?.data?.published,
+    }
+
+    const id = searchParams.get("form")
+
+    await updateFormDocument({ id, updatedFormData })
+
+    toast({
+      title: "Form status changed",
+      description: `Your form is now ${
+        !dataForm?.data?.published ? "public" : "private"
+      }`,
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
+  }
 
   return (
     <Layout>
@@ -214,7 +254,9 @@ export default function FormPage() {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction>
+                          <AlertDialogAction
+                            onClick={() => changeStatutOfForm()}
+                          >
                             {dataForm.data.published
                               ? "make private"
                               : "make public"}
@@ -267,7 +309,25 @@ export default function FormPage() {
             </Link>
           </div>
         )}
-        {isErrorForm && <Error />}
+        {isErrorForm && (
+          <>
+            {errorForm.message == "Missing or insufficient permissions." ? (
+              <div className="flex flex-col items-center gap-4">
+                <h1 className="text-2xl font-bold">
+                  This form does not exist.
+                </h1>
+                <Link
+                  href="/forms"
+                  className={buttonVariants({ size: "lg", variant: "outline" })}
+                >
+                  Create your own form
+                </Link>
+              </div>
+            ) : (
+              <Error />
+            )}
+          </>
+        )}
       </section>
     </Layout>
   )
