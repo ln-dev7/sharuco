@@ -228,16 +228,47 @@ export default function IndexPage() {
           </Link>{" "}
           for the latest updates
         </p>
-        <div className="mt-4 flex flex-col items-start gap-4">
+        <Separator className="my-2" />
+        <div className="my-8 flex flex-col items-center gap-8">
+          <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
+            OUR SPONSORS
+          </h2>
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            {COMPANIES.map((support) => (
+              <a
+                className="w-40 shrink-0"
+                href={support.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  width={160}
+                  height={55}
+                  src={
+                    theme === "dark"
+                      ? support.image
+                      : support.imageDark
+                      ? support.imageDark
+                      : support.image
+                  }
+                  className="cursor-pointer"
+                  alt={support.name}
+                />
+              </a>
+            ))}
+          </div>
+        </div>
+        <Separator className="my-2" />
+        <div className="mt-8 flex flex-col items-start gap-4">
           <div>
             <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
               Create beautiful images of your code.
             </h2>
           </div>
           <div className="flex flex-col gap-6 md:flex-row">
-            <div className="w-full bg-slate-100 dark:bg-slate-800 md:w-1/2">
+            <div className="w-full rounded-md overflow-hidden bg-slate-100 dark:bg-slate-800 md:w-1/2">
               <Image
-                src="/code-preview.png"
+                src="/home/code-preview.png"
                 alt="Card preview"
                 width={1598}
                 height={904}
@@ -394,6 +425,34 @@ export default function IndexPage() {
             </div>
           </div>
         </div>
+        <div className="mt-8 w-full flex flex-col items-start gap-4">
+          <div className="w-full flex flex-col items-start gap-2 justify-center">
+            <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-3xl lg:text-3xl">
+              Discover Sharuco Link
+            </h2>
+            <p className="max-w-[700px] text-md text-slate-700 dark:text-slate-400 sm:text-lg">
+              Sharuco Link is a simple way to store all the links that are
+              useful to you and with possibilities to make everyone discover
+              them.
+            </p>
+          </div>
+          <div className="flex w-full flex-col justify-center items-center gap-4">
+            <div className="w-full dark:border dark:border-slate-700 bg-slate-100 dark:bg-slate-800 overflow-hidden rounded-md">
+              <Image
+                src="/home/sharuco-link.png"
+                alt="Sharuco Link"
+                width={2880}
+                height={1448}
+                className="w-full "
+              />
+            </div>
+            <div className="w-fit flex items-center justify-center">
+              <Link href="/links" className={buttonVariants({ size: "lg" })}>
+                Go to Sharuco Link
+              </Link>
+            </div>
+          </div>
+        </div>
         <Separator className="my-2" />
         <div>
           <div className="flex items-center space-x-2 text-base">
@@ -446,36 +505,9 @@ export default function IndexPage() {
             </div>
           )}
           {/* https://tailwindcss.com/docs/reusing-styles */}
-        </div>
-        <Separator className="my-2" />
-        <div className="my-8 flex flex-col items-center gap-8">
-          <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
-            OUR SPONSORS
-          </h2>
-          <div className="flex flex-wrap items-center justify-center gap-6">
-            {COMPANIES.map((support) => (
-              <a
-                className="w-40 shrink-0"
-                href={support.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  width={160}
-                  height={55}
-                  src={
-                    theme === "dark"
-                      ? support.image
-                      : support.imageDark
-                      ? support.imageDark
-                      : support.image
-                  }
-                  className="cursor-pointer"
-                  alt={support.name}
-                />
-              </a>
-            ))}
-          </div>
+          <p className="text-sm mt-4 text-slate-700 dark:text-slate-400">
+            Many thanks to all of you !
+          </p>
         </div>
       </section>
     </Layout>
