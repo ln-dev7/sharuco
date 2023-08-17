@@ -562,9 +562,7 @@ export default function CodePreview() {
             dataCode.data.isPrivate &&
             dataCode.data.idAuthor !== pseudo)) && (
           <div className="flex flex-col items-center gap-4">
-            <h1 className="text-2xl font-bold">
-              This code code does not exist.
-            </h1>
+            <h1 className="text-2xl font-bold">This code does not exist.</h1>
             <Link
               href="/explore"
               className={buttonVariants({ size: "lg", variant: "outline" })}

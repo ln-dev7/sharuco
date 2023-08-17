@@ -153,29 +153,29 @@ export default function CardForm({
       key={id}
     >
       <div
-        className={`h-3 w-full absolute top-0 left-0 right-0`}
+        className={`absolute inset-x-0 top-0 h-3 w-full`}
         style={{
           background: `${color}`,
         }}
       ></div>
-      <Link href={`/form/edit/${id}`} className="flex flex-col items-start p-4">
+      <Link href={`/form/${id}`} className="flex flex-col items-start p-4">
         <h5 className="my-4 line-clamp-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
           {name}
         </h5>
         <p className="text-md mb-3 line-clamp-3 font-normal text-slate-700 dark:text-slate-400">
           {description}
         </p>
-        <div className="w-full flex items-center justify-between gap-2 mt-4">
+        <div className="mt-4 flex w-full items-center justify-between gap-2">
           <span className="flex items-center gap-1 text-slate-700 dark:text-slate-400">
-            <Timer className="h-4 w-4 mr-1.5" />
+            <Timer className="mr-1.5 h-4 w-4" />
             <span className="text-sm font-medium">
               {formatDateTime(moment(createdAt))}
             </span>
           </span>
           <span className="flex items-center gap-1 text-slate-700 dark:text-slate-400">
-            <MessageSquare className="h-4 w-4 mr-1.5" />
+            <MessageSquare className="mr-1.5 h-4 w-4" />
             <span className="text-sm font-medium">
-              {responses.length} answers
+              {responses.length} response{responses > 1 && "s"}
             </span>
           </span>
         </div>

@@ -11,6 +11,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { buttonVariants } from "@/components/ui/button"
 import { AvatarUser } from "./avatar-user"
 import { SearchBarCode } from "./search-bar/search-bar-code"
+import { SearchBarForm } from "./search-bar/search-bar-form"
 import { SearchBarLink } from "./search-bar/search-bar-link"
 
 export function SiteHeader() {
@@ -25,16 +26,14 @@ export function SiteHeader() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <div className="w-full flex-1 lg:w-auto lg:flex-none">
-            {searchParams.get("link") !== null ? (
+            {searchParams.get("link") !== null ||
+            (pathName === "/links" && user) ? (
               <SearchBarLink />
+            ) : (searchParams.get("form") !== null && user) ||
+              (pathName === "/forms" && user) ? (
+              <SearchBarForm />
             ) : (
-              <>
-                {pathName === "/links" && user ? (
-                  <SearchBarLink />
-                ) : (
-                  <SearchBarCode />
-                )}
-              </>
+              <SearchBarCode />
             )}
           </div>
           <nav className="flex items-center space-x-1">

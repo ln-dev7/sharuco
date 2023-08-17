@@ -19,7 +19,7 @@ export default function LoaderForms() {
       <Masonry gutter="2rem">
         {numbers.map((number) => (
           <div
-            className="mb-0 flex flex-col gap-2 bg-slate-50 dark:bg-slate-950 p-6 rounded-lg"
+            className="mb-0 flex flex-col gap-2 rounded-lg bg-slate-50 p-6 dark:bg-slate-950"
             key={number}
           >
             <div className="flex flex-col gap-2">

@@ -266,7 +266,7 @@ export default function IndexPage() {
             </h2>
           </div>
           <div className="flex flex-col gap-6 md:flex-row">
-            <div className="w-full rounded-md overflow-hidden bg-slate-100 dark:bg-slate-800 md:w-1/2">
+            <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:bg-slate-800 md:w-1/2">
               <Image
                 src="/home/code-preview.png"
                 alt="Card preview"
@@ -425,19 +425,19 @@ export default function IndexPage() {
             </div>
           </div>
         </div>
-        <div className="mt-8 w-full flex flex-col items-start gap-4">
-          <div className="w-full flex flex-col items-start gap-2 justify-center">
+        <div className="mt-8 flex w-full flex-col items-start gap-4">
+          <div className="flex w-full flex-col items-start justify-center gap-2">
             <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-3xl lg:text-3xl">
               Discover Sharuco Link
             </h2>
-            <p className="max-w-[700px] text-md text-slate-700 dark:text-slate-400 sm:text-lg">
+            <p className="text-md max-w-[700px] text-slate-700 dark:text-slate-400 sm:text-lg">
               Sharuco Link is a simple way to store all the links that are
               useful to you and with possibilities to make everyone discover
               them.
             </p>
           </div>
-          <div className="flex w-full flex-col justify-center items-center gap-4">
-            <div className="w-full dark:border dark:border-slate-700 bg-slate-100 dark:bg-slate-800 overflow-hidden rounded-md">
+          <div className="flex w-full flex-col items-center justify-center gap-4">
+            <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-700 dark:bg-slate-800">
               <Image
                 src="/home/sharuco-link.png"
                 alt="Sharuco Link"
@@ -446,7 +446,7 @@ export default function IndexPage() {
                 className="w-full "
               />
             </div>
-            <div className="w-fit flex items-center justify-center">
+            <div className="flex w-fit items-center justify-center">
               <Link href="/links" className={buttonVariants({ size: "lg" })}>
                 Go to Sharuco Link
               </Link>
@@ -505,7 +505,7 @@ export default function IndexPage() {
             </div>
           )}
           {/* https://tailwindcss.com/docs/reusing-styles */}
-          <p className="text-sm mt-4 text-slate-700 dark:text-slate-400">
+          <p className="mt-4 text-sm text-slate-700 dark:text-slate-400">
             Many thanks to all of you !
           </p>
         </div>
