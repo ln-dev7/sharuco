@@ -17,6 +17,7 @@ import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import copyToClipboard from "@/utils/copyToClipboard.js"
+import embedProject from "@/utils/embedStackblitzProject"
 import indentCode from "@/utils/indentCode.js"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -38,6 +39,7 @@ import { useForm } from "react-hook-form"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
+import { TemplateName } from "@/types/templatStackblitzName"
 import { cn } from "@/lib/utils"
 import CardCode from "@/components/cards/card-code"
 import CardCodeAdmin from "@/components/cards/card-code-admin"
@@ -57,9 +59,24 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
@@ -283,38 +300,6 @@ export default function Dashboard() {
     }
   }, [isSuccess])
 
-  //
-
-  async function embedProject(code: string, language: string) {
-    const extension = getExtensionByName(language)
-    setTimeout(() => {
-      sdk.embedProject(
-        "embed-stackblitz",
-        {
-          title: `${pseudo} - test code`,
-          description: "test code",
-          template: "javascript",
-          files: {
-            "index.html": `<div id="app"></div>`,
-            "index.js": `console.log("hello")`,
-            [`index${extension}`]: `${indentCode(code)}`,
-          },
-          settings: {
-            compile: {
-              trigger: "auto",
-              clearConsole: false,
-            },
-          },
-        },
-        {
-          height: 400,
-          openFile: `index${extension}`,
-          terminalHeight: 50,
-        }
-      )
-    }, 1)
-  }
-
   return (
     <Layout>
       <Head>
@@ -392,12 +377,7 @@ export default function Dashboard() {
                       <Dialog>
                         {codeValue !== "" && (
                           <DialogTrigger asChild>
-                            <button
-                              className="mt-1 flex items-center justify-center gap-2 rounded-md bg-[#1574ef] px-3 py-1 text-white"
-                              onClick={() => {
-                                embedProject(codeValue, getValues("language"))
-                              }}
-                            >
+                            <button className="mt-2 flex items-center justify-center gap-2 rounded-md bg-[#1574ef] px-3 py-1 text-white">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -419,6 +399,52 @@ export default function Dashboard() {
                           </DialogTrigger>
                         )}
                         <DialogContent className="sm:max-w-7xl">
+                          <DialogHeader>
+                            <DialogDescription>
+                              Choose the template with which the code will be
+                              executed{" "}
+                            </DialogDescription>
+                            <Select
+                              onValueChange={(value: TemplateName) => {
+                                embedProject(
+                                  value,
+                                  getValues("code"),
+                                  getValues("language"),
+                                  pseudo,
+                                  getValues("description")
+                                    ? getValues("description")
+                                    : null
+                                )
+                              }}
+                            >
+                              <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Choose a template" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectLabel>Templates</SelectLabel>
+                                  <SelectItem value="angular-cli">
+                                    angular-cli
+                                  </SelectItem>
+                                  <SelectItem value="create-react-app">
+                                    create-react-app
+                                  </SelectItem>
+                                  <SelectItem value="html">html</SelectItem>
+                                  <SelectItem value="javascript">
+                                    javascript
+                                  </SelectItem>
+                                  <SelectItem value="polymer">
+                                    polymer
+                                  </SelectItem>
+                                  <SelectItem value="typescript">
+                                    typescript
+                                  </SelectItem>
+                                  <SelectItem value="vue">vue</SelectItem>
+                                  <SelectItem value="node">node</SelectItem>
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </DialogHeader>
                           <div
                             id="embed-stackblitz"
                             className="overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800"

@@ -15,11 +15,11 @@ import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
+import embedProject from "@/utils/embedStackblitzProject"
 import highlight from "@/utils/highlight"
 import indentCode from "@/utils/indentCode"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import sdk, { Project } from "@stackblitz/sdk"
 import algoliasearch from "algoliasearch"
 import hljs from "highlight.js"
 import * as htmlToImage from "html-to-image"
@@ -50,6 +50,7 @@ import {
 } from "react-share"
 import * as yup from "yup"
 
+import { TemplateName } from "@/types/templatStackblitzName"
 import { cn } from "@/lib/utils"
 import Loader from "@/components/loaders/loader"
 import {
@@ -65,9 +66,24 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { ToastAction } from "@/components/ui/toast"
 import {
@@ -315,54 +331,20 @@ export default function CardCodeAdmin({
 
   //
 
-  const extension = getExtensionByName(language)
-
-  async function embedProject() {
-    setTimeout(() => {
-      sdk.embedProject(
-        "embed-stackblitz",
-        {
-          title: `${idAuthor} - code : ${id}`,
-          description: description,
-          template: "javascript",
-          files: {
-            "index.html": `<div id="app"></div>`,
-            "index.js": `console.log("hello")`,
-            [`index${extension}`]: `${indentCode(code)}`,
-          },
-          settings: {
-            compile: {
-              trigger: "auto",
-              clearConsole: false,
-            },
-          },
-        },
-        {
-          height: 400,
-          openFile: `index${extension}`,
-          terminalHeight: 50,
-        }
-      )
-    }, 1)
-  }
-
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
       {searchParams.get("code-preview") !== null && (
         <div className="flex w-full items-center justify-center">
           <Dialog>
             <DialogTrigger asChild>
-              <button
-                className="flex items-center justify-center gap-2 rounded-md bg-[#1574ef] px-3 py-2 text-white"
-                onClick={embedProject}
-              >
+              <button className="mb-1 flex items-center justify-center gap-2 rounded-md bg-[#1574ef] px-3 py-1.5 text-white">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  strokeWidth={1.5}
+                  strokeWidth={1.4}
                   stroke="currentColor"
-                  className="h-6 w-6"
+                  className="h-5 w-5"
                 >
                   <path
                     strokeLinecap="round"
@@ -376,6 +358,42 @@ export default function CardCodeAdmin({
               </button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-7xl">
+              <DialogHeader>
+                <DialogDescription>
+                  Choose the template with which the code will be executed{" "}
+                </DialogDescription>
+                <Select
+                  onValueChange={(value: TemplateName) => {
+                    embedProject(
+                      value,
+                      code,
+                      language,
+                      idAuthor,
+                      description,
+                      id
+                    )
+                  }}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Choose a template" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Templates</SelectLabel>
+                      <SelectItem value="angular-cli">angular-cli</SelectItem>
+                      <SelectItem value="create-react-app">
+                        create-react-app
+                      </SelectItem>
+                      <SelectItem value="html">html</SelectItem>
+                      <SelectItem value="javascript">javascript</SelectItem>
+                      <SelectItem value="polymer">polymer</SelectItem>
+                      <SelectItem value="typescript">typescript</SelectItem>
+                      <SelectItem value="vue">vue</SelectItem>
+                      <SelectItem value="node">node</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </DialogHeader>
               <div
                 id="embed-stackblitz"
                 className="overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800"
