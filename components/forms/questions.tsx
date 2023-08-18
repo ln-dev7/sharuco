@@ -162,19 +162,26 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     append({ type, text: "", label: "" })
   }
 
-  const { register, handleSubmit, control, errors, setValue } =
-    useForm<FormData>({
-      resolver: yupResolver(schema),
-      defaultValues: dataForm,
-    })
-  const { fields, append, remove } = useFieldArray<Question>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: dataForm,
+  })
+  const watchedFields = watch("questions", [])
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "questions",
   })
 
-  useEffect(() => {
-    setValue("questions", dataForm.questions)
-  }, [dataForm, setValue])
+  // useEffect(() => {
+  //   setValue("questions", dataForm.questions)
+  // }, [dataForm, setValue])
 
   const handleRemoveField = (index: number) => {
     remove(index)
@@ -267,22 +274,24 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
               <label className="flex flex-col items-start">
                 <Input
                   {...register(`questions.${index}.label` as const)}
-                  defaultValue={field.label}
+                  //defaultValue={field.label}
                   className="h-8 border-none outline-none"
                   placeholder="Your question"
                 />
                 {errors?.questions?.[index]?.label && (
-                  <p>{errors.questions[index].label.message}</p>
+                  <p className="text-xs font-medium text-red-500 mt-1">
+                    {errors.questions[index].label.message}
+                  </p>
                 )}
               </label>
-              {field.type === "text" && (
+              {watchedFields[index]?.type === "text" && (
                 <Input
                   {...register(`questions.${index}.text` as const)}
                   placeholder="Enter placeholder"
                   //placeholder={field.text}
                 />
               )}
-              {field.type === "longtext" && (
+              {watchedFields[index]?.type === "longtext" && (
                 <Textarea
                   {...register(`questions.${index}.text` as const)}
                   placeholder="Enter placeholder"
