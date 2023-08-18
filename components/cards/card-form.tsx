@@ -159,7 +159,7 @@ export default function CardForm({
         }}
       ></div>
       <Link href={`/form/${id}`} className="flex flex-col items-start p-4">
-        <h5 className="my-4 line-clamp-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h5 className="my-4 mr-8 line-clamp-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
           {name}
         </h5>
         <p className="text-md mb-3 line-clamp-3 font-normal text-slate-700 dark:text-slate-400">
@@ -200,7 +200,7 @@ export default function CardForm({
                   <Pencil className="h-4 w-4" />
                 </Button>
               </AlertDialogTrigger>
-              <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+              <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
                 <AlertDialogHeader>
                   <AlertDialogTitle>
                     <h3 className="text-lg font-medium leading-6 text-slate-900 dark:text-slate-100">

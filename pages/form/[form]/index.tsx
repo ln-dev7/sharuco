@@ -150,12 +150,7 @@ export default function FormPage() {
               <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
                 {dataForm.data.name}
               </h1>
-              <p
-                className={cn(
-                  "text-sm font-medium leading-5 text-gray-500 dark:text-gray-400",
-                  "sm:text-base md:text-lg lg:text-lg"
-                )}
-              >
+              <p className="text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 sm:text-base md:text-lg lg:text-lg">
                 {dataForm.data.description}
               </p>
             </div>

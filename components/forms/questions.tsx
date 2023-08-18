@@ -125,15 +125,19 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     isSuccess: isSuccessUpdateForm,
   }: any = useUpdateFormDocument("forms")
 
+  type QuestionType =
+    | "text"
+    | "email"
+    | "link"
+    | "longtext"
+    | "date"
+    | "uniquechoice"
+    | "listchoice"
+    | "multiplechoice"
+
   interface Question {
     text: string
-    type:
-      | "text"
-      | "longtext"
-      | "date"
-      | "uniquechoice"
-      | "listchoice"
-      | "multiplechoice"
+    type: QuestionType
     label: string
   }
 
@@ -150,15 +154,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     ),
   })
 
-  const handleAddField = (
-    type:
-      | "text"
-      | "longtext"
-      | "date"
-      | "uniquechoice"
-      | "listchoice"
-      | "multiplechoice"
-  ) => {
+  const handleAddField = (type: QuestionType) => {
     append({ type, text: "", label: "" })
   }
 
@@ -173,15 +169,15 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     resolver: yupResolver(schema),
     defaultValues: dataForm,
   })
-  const watchedFields = watch("questions", [])
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "questions",
   })
 
-  // useEffect(() => {
-  //   setValue("questions", dataForm.questions)
-  // }, [dataForm, setValue])
+  useEffect(() => {
+    setValue("questions", dataForm.questions)
+  }, [dataForm, setValue])
 
   const handleRemoveField = (index: number) => {
     remove(index)
@@ -209,7 +205,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
 
   return (
     <div className="flex w-full flex-col items-start gap-4 sm:flex-row">
-      <div className="flex w-full shrink-0 flex-col items-start gap-2 rounded-md sm:w-[250px]">
+      <div className="flex w-full shrink-0 flex-col items-start gap-2 rounded-md sm:sticky sm:top-20 sm:w-[250px]">
         <button
           onClick={() => handleAddField("text")}
           className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
@@ -266,49 +262,52 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
           }}
         ></div>
         <div className="w-full space-y-6">
-          {fields.map((field, index) => (
-            <div
-              className="relative flex w-full flex-col items-start gap-2 first:mt-2"
-              key={field.id}
-            >
-              <label className="flex flex-col items-start">
-                <Input
-                  {...register(`questions.${index}.label` as const)}
-                  //defaultValue={field.label}
-                  className="h-8 border-none outline-none"
-                  placeholder="Your question"
-                />
-                {errors?.questions?.[index]?.label && (
-                  <p className="text-xs font-medium text-red-500 mt-1">
-                    {errors.questions[index].label.message}
-                  </p>
-                )}
-              </label>
-              {watchedFields[index]?.type === "text" && (
-                <Input
-                  {...register(`questions.${index}.text` as const)}
-                  placeholder="Enter placeholder"
-                  //placeholder={field.text}
-                />
-              )}
-              {watchedFields[index]?.type === "longtext" && (
-                <Textarea
-                  {...register(`questions.${index}.text` as const)}
-                  placeholder="Enter placeholder"
-                />
-              )}
-              {/* {errors?.questions?.[index]?.text && (
-              <p>{errors.questions[index].text.message}</p>
-            )} */}
-              <Button
-                variant="destructive"
-                className="absolute -top-2 right-2 flex h-10 w-10 items-center justify-center rounded-full p-2"
-                onClick={() => handleRemoveField(index)}
+          {fields.map((field, index) => {
+            const watchedFieldType = watch(`questions[${index}].type`)
+            return (
+              <div
+                className="relative flex w-full flex-col items-start gap-2 first:mt-2"
+                key={field.id}
               >
-                <Trash className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
+                <label className="flex flex-col items-start">
+                  <Input
+                    {...register(`questions.${index}.label` as const)}
+                    //defaultValue={field.label}
+                    className="h-8 border-none outline-none"
+                    placeholder="Your question"
+                  />
+                  {errors?.questions?.[index]?.label && (
+                    <p className="mt-1 text-xs font-medium text-red-500">
+                      {errors.questions[index].label.message}
+                    </p>
+                  )}
+                </label>
+                {watchedFieldType === "text" && (
+                  <Input
+                    {...register(`questions.${index}.text` as const)}
+                    placeholder="Enter placeholder"
+                    //placeholder={field.text}
+                  />
+                )}
+                {watchedFieldType === "longtext" && (
+                  <Textarea
+                    {...register(`questions.${index}.text` as const)}
+                    placeholder="Enter placeholder"
+                  />
+                )}
+                {/* {errors?.questions?.[index]?.text && (
+                <p>{errors.questions[index].text.message}</p>
+              )} */}
+                <Button
+                  variant="destructive"
+                  className="absolute -top-2 right-2 flex h-10 w-10 items-center justify-center rounded-full p-2"
+                  onClick={() => handleRemoveField(index)}
+                >
+                  <Trash className="h-4 w-4" />
+                </Button>
+              </div>
+            )
+          })}
           {fields.length < 1 && (
             <EmptyCard
               icon={<FileQuestion className="h-8 w-8" />}

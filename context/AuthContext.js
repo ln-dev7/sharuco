@@ -8,7 +8,7 @@ import {
   getFirestore,
   setDoc,
 } from "firebase/firestore"
-import { Loader } from "lucide-react"
+import { Loader, Terminal } from "lucide-react"
 
 const db = getFirestore(firebase_app)
 
@@ -59,8 +59,12 @@ export const AuthContextProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={{ user }}>
       {loading ? (
-        <div className="fixed inset-0 flex items-center justify-center">
+        <div className="fixed inset-0 flex flex-col gap-2 items-center justify-center">
           <Loader className="animate-spin" />
+          <div className="flex items-center gap-1">
+            <Terminal />
+            <span className="font-semibold text-lg">Sharuco</span>
+          </div>
         </div>
       ) : (
         children

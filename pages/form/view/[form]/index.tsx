@@ -16,6 +16,7 @@ import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
+import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
 import copyToClipboard from "@/utils/copyToClipboard.js"
 import embedProject from "@/utils/embedStackblitzProject"
 import indentCode from "@/utils/indentCode.js"
@@ -108,6 +109,45 @@ export default function FormViewPage() {
     error: any
   } = useDocument(searchParams.get("form"), "forms")
 
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
+    //resolver: yupResolver(schema),
+    defaultValues: dataForm,
+  })
+
+  const {
+    updateFormDocument,
+    isLoading: isLoadingUpdateForm,
+    isError: isErrorUpdateForm,
+    isSuccess: isSuccessUpdateForm,
+  }: any = useUpdateFormDocument("forms")
+
+  const onSubmit = async (data: FormData) => {
+    //console.log(data)
+
+    let updatedFormData: {
+      //questions: Question[]
+    } = {
+      //questions: data.questions,
+    }
+
+    const id = searchParams.get("form")
+
+    await updateFormDocument({ id, updatedFormData })
+
+    toast({
+      title: "Form sent !",
+      description: "Your form has been sent, thank you !",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
+  }
+
   return (
     <Layout>
       <Head>
@@ -120,7 +160,7 @@ export default function FormViewPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>{" "}
-      <section className="fixed inset-0 z-50 bg-white dark:bg-slate-900">
+      <section className="fixed inset-0 z-50 h-screen overflow-scroll bg-white dark:bg-slate-900">
         <div className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
           <div className="flex w-full items-center justify-start">
             <Link href="/forms" className="flex items-center font-bold">
@@ -137,7 +177,51 @@ export default function FormViewPage() {
           {dataForm &&
             dataForm.exists &&
             (dataForm.data.published || dataForm.data.idAuthor === pseudo) && (
-              <div>Hello</div>
+              <div className="w-full">
+                <div
+                  className={`absolute inset-x-0 top-0 h-3 w-full`}
+                  style={{
+                    background: `${dataForm.data.color}`,
+                  }}
+                ></div>
+                <div className="flex w-full flex-col items-center justify-center gap-2">
+                  <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
+                    {dataForm.data.name}
+                  </h1>
+                  <p className="text-center text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 sm:text-base md:text-lg lg:text-lg">
+                    {dataForm.data.description}
+                  </p>
+                </div>
+                <div className="mx-auto my-6 h-4 w-4 rounded-full bg-slate-200 dark:bg-slate-800" />
+                <div className="mx-auto w-full space-y-6 lg:w-2/3">
+                  {dataForm.data.questions.map((question, index) => (
+                    <div
+                      key={index}
+                      className="flex w-full flex-col items-center gap-2 first:mt-4"
+                    >
+                      <div className="flex w-full flex-col items-start gap-2">
+                        <Label>{question.label}</Label>
+                        {question.type === "text" && (
+                          <Input
+                            placeholder={question.text}
+                            className="w-full"
+                          />
+                        )}
+                        {question.type === "longtext" && (
+                          <Textarea
+                            placeholder={question.text}
+                            className="w-full"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  <Button variant="default" onClick={handleSubmit(onSubmit)}>
+                    <Send className="mr-2 h-4 w-4" />
+                    Send
+                  </Button>
+                </div>
+              </div>
             )}
           {((dataForm && !dataForm.exists) ||
             (dataForm &&
