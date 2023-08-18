@@ -123,8 +123,8 @@ export default function FormViewPage() {
       <section className="fixed inset-0 z-50 bg-white dark:bg-slate-900">
         <div className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
           <div className="flex w-full items-center justify-start">
-            <Link href="/forms" className="font-bold flex items-center">
-              <Terminal className="h-6 w-6 mr-2" />
+            <Link href="/forms" className="flex items-center font-bold">
+              <Terminal className="mr-2 h-6 w-6" />
               Sharuco Form
             </Link>
           </div>
@@ -177,7 +177,28 @@ export default function FormViewPage() {
             </>
           )}
           <Separator />
-          <div className="flex w-full items-center justify-center">
+          <div className="flex w-full flex-col items-center justify-center gap-4">
+            <div
+              className="flex items-center rounded-lg bg-yellow-50 p-4 text-sm text-yellow-800 dark:bg-gray-800 dark:text-yellow-300"
+              role="alert"
+            >
+              <svg
+                className="mr-3 inline h-4 w-4 shrink-0"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+              </svg>
+              <span className="sr-only">Info</span>
+              <div>
+                <span className="font-medium">
+                  NEVER send sensitive information to Shruco Form such as your
+                  password or credit card !
+                </span>
+              </div>
+            </div>
             <Link href="/">
               Powered by{" "}
               <span className="font-bold hover:underline hover:underline-offset-4">

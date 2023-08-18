@@ -199,7 +199,7 @@ export default function Links() {
                   Add new link
                 </button>
               </AlertDialogTrigger>
-              <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+              <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
                 <AlertDialogHeader>
                   <AlertDialogTitle>
                     <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
@@ -412,7 +412,7 @@ export default function Links() {
             <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
               <Lock className="h-12 w-12" />
               <h3 className="mt-4 text-lg font-semibold">Access denied</h3>
-              <p className="text-muted-foreground mb-4 mt-2 text-sm">
+              <p className="mb-4 mt-2 text-sm text-muted-foreground">
                 To access Sharuco Link you must first be logged in.
               </p>
               <button

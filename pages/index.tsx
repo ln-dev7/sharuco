@@ -137,7 +137,7 @@ export default function IndexPage() {
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <a
           className="inline-flex w-fit items-center rounded-lg bg-slate-100 px-3 py-1 text-sm font-medium dark:bg-slate-800"
-          href="/links"
+          href="/forms"
         >
           🚀
           <div
@@ -145,10 +145,10 @@ export default function IndexPage() {
             className="mx-2 h-4 w-[1px] shrink-0 bg-slate-200 dark:bg-slate-700"
           ></div>
           <span className="text-slate-800 dark:text-slate-200 sm:hidden">
-            Sharuco Link, Store all your links.
+            Sharuco Form, Create and share your forms.
           </span>
           <span className="hidden text-slate-800 dark:text-slate-200 sm:inline">
-            Introducing Sharuco Link, Store all your links.
+            Introducing Sharuco Form, Create and share your forms.
           </span>
           <svg
             width="15"
@@ -156,7 +156,7 @@ export default function IndexPage() {
             viewBox="0 0 15 15"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="ml-1 h-4 w-4"
+            className="ml-1 h-4 w-4 shrink-0"
           >
             <path
               d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
@@ -168,12 +168,13 @@ export default function IndexPage() {
         </a>
         <div className="flex max-w-[980px] flex-col items-start gap-2">
           <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-            Share your code
+            Share your code.
             <br className="hidden sm:inline" />
-            with everyone.
+            Manage Form & Link.
           </h1>
           <p className="max-w-[700px] text-lg text-slate-700 dark:text-slate-400 sm:text-xl">
-            Sharuco allows you to share code codes that you have found useful.
+            Share and explore essential codes, create forms to retrieve
+            information and keep useful links.
           </p>
         </div>
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 md:flex-row">
@@ -259,6 +260,35 @@ export default function IndexPage() {
           </div>
         </div>
         <Separator className="my-2" />
+        <div className="mt-8 flex w-full flex-col items-start gap-4">
+          <div className="flex w-full flex-col items-start justify-center gap-2">
+            <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-3xl lg:text-3xl">
+              Discover Sharuco Link
+            </h2>
+            <p className="text-md max-w-[700px] text-slate-700 dark:text-slate-400 sm:text-lg">
+              Sharuco Link is a simple way to store all the links that are
+              useful to you and with possibilities to make everyone discover
+              them.
+            </p>
+          </div>
+          <div className="flex w-full flex-col items-center justify-center gap-4">
+            <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-700 dark:bg-slate-800">
+              <Image
+                src="/home/sharuco-link.png"
+                alt="Sharuco Link"
+                width={2880}
+                height={1448}
+                className="w-full "
+              />
+            </div>
+            <div className="flex w-fit items-center justify-center">
+              <Link href="/links" className={buttonVariants({ size: "lg" })}>
+                Go to Sharuco Link
+              </Link>
+            </div>
+          </div>
+        </div>
+
         <div className="mt-8 flex flex-col items-start gap-4">
           <div>
             <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
@@ -322,7 +352,7 @@ export default function IndexPage() {
                     You need to fill the fields
                   </button>
                 )}
-                <AlertDialogContent className="flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto scrollbar-hide">
+                <AlertDialogContent className="scrollbar-hide flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto">
                   <AlertDialogFooter>
                     <AlertDialogCancel>Close</AlertDialogCancel>
                     <button
@@ -422,34 +452,6 @@ export default function IndexPage() {
                   </div>
                 </AlertDialogContent>
               </AlertDialog>
-            </div>
-          </div>
-        </div>
-        <div className="mt-8 flex w-full flex-col items-start gap-4">
-          <div className="flex w-full flex-col items-start justify-center gap-2">
-            <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-3xl lg:text-3xl">
-              Discover Sharuco Link
-            </h2>
-            <p className="text-md max-w-[700px] text-slate-700 dark:text-slate-400 sm:text-lg">
-              Sharuco Link is a simple way to store all the links that are
-              useful to you and with possibilities to make everyone discover
-              them.
-            </p>
-          </div>
-          <div className="flex w-full flex-col items-center justify-center gap-4">
-            <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-700 dark:bg-slate-800">
-              <Image
-                src="/home/sharuco-link.png"
-                alt="Sharuco Link"
-                width={2880}
-                height={1448}
-                className="w-full "
-              />
-            </div>
-            <div className="flex w-fit items-center justify-center">
-              <Link href="/links" className={buttonVariants({ size: "lg" })}>
-                Go to Sharuco Link
-              </Link>
             </div>
           </div>
         </div>

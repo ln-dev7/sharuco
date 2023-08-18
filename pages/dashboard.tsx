@@ -353,7 +353,7 @@ export default function Dashboard() {
                 Add new code
               </button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+            <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
               <AlertDialogHeader>
                 <AlertDialogTitle>
                   <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
@@ -875,7 +875,7 @@ export default function Dashboard() {
                       <h3 className="mt-4 text-lg font-semibold">
                         You don&apos;t have any favorite code yet
                       </h3>
-                      <p className="text-muted-foreground mb-4 mt-2 text-sm">
+                      <p className="mb-4 mt-2 text-sm text-muted-foreground">
                         You can find your favorite code in the explore section.
                       </p>
                       <Link

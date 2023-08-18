@@ -41,12 +41,13 @@ import {
   Save,
   Send,
   Settings,
+  Trash,
   Type,
   User,
   View,
 } from "lucide-react"
 import moment from "moment"
-import { useForm } from "react-hook-form"
+import { useFieldArray, useForm } from "react-hook-form"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
@@ -56,6 +57,9 @@ import CardCode from "@/components/cards/card-code"
 import CardCodeAdmin from "@/components/cards/card-code-admin"
 import EmptyCard from "@/components/empty-card"
 import Error from "@/components/error"
+import PublishForms from "@/components/forms/publish"
+import QuestionsForms from "@/components/forms/questions"
+import ResponsesForms from "@/components/forms/responses"
 import { Layout } from "@/components/layout"
 import LoaderCodes from "@/components/loaders/loader-codes"
 import {
@@ -108,13 +112,6 @@ export default function FormPage() {
     }
   })
 
-  const notifyUrlCopied = () =>
-    toast({
-      title: "Url of your code copied to clipboard",
-      description: "You can share it wherever you want",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
-
   const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
   const {
@@ -128,35 +125,6 @@ export default function FormPage() {
     isError: boolean
     error: any
   } = useDocument(searchParams.get("form"), "forms")
-
-  const {
-    updateFormDocument,
-    isLoading: isLoadingUpdateForm,
-    isError: isErrorUpdateForm,
-    isSuccess: isSuccessUpdateForm,
-  }: any = useUpdateFormDocument("forms")
-
-  const changeStatutOfForm = async () => {
-    let updatedFormData: {
-      published: boolean
-    } = {
-      published: !dataForm?.data?.published,
-    }
-
-    const id = searchParams.get("form")
-
-    await updateFormDocument({ id, updatedFormData })
-
-    toast({
-      title: "Form status changed",
-      description: `Your form is now ${
-        !dataForm?.data?.published ? "public" : "private"
-      }`,
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
-  }
-
-  // fonction qui prend en param un text et fonction de cela ajoute une <div></div> dans la div #questions - avec un switch case on regarde la valeur du text si c'est "input" on ajoute une div avec un input, si c'est "textarea" on ajoute une div avec un textarea etc...
 
   return (
     <Layout>
@@ -201,7 +169,7 @@ export default function FormPage() {
                   <TabsTrigger value="responses">
                     <MessageSquare className="mr-2 h-4 w-4" />
                     Responses
-                    <span className="flex items-center justify-center bg-slate-200 dark:bg-slate-700 ml-2 px-1 rounded-md">
+                    <span className="ml-2 flex items-center justify-center rounded-md bg-slate-200 px-1 dark:bg-slate-700">
                       {dataForm.data.responses.length}
                     </span>
                   </TabsTrigger>
@@ -212,155 +180,13 @@ export default function FormPage() {
                 </div>
               </TabsList>
               <TabsContent className="border-none p-0 pt-4" value="questions">
-                <div className="w-full flex flex-col sm:flex-row items-start gap-4">
-                  <div className="w-full sm:w-[250px] shrink-0 rounded-md flex flex-col gap-2 items-start">
-                    <button className="hover:bg-slate-100 hover:dark:bg-slate-800 flex items-center justify-start gap-1 py-2 px-4 w-full rounded-md">
-                      <Type className="h-5 w-5" />
-                      <span className="ml-2 text-sm font-semibold">
-                        Short answer
-                      </span>
-                    </button>
-                    <button className="hover:bg-slate-100 hover:dark:bg-slate-800 flex items-center justify-start gap-1 py-2 px-4 w-full rounded-md">
-                      <Type className="h-5 w-5" />
-                      <span className="ml-2 text-sm font-semibold">
-                        Long answer
-                      </span>
-                    </button>
-                    <button className="hover:bg-slate-100 hover:dark:bg-slate-800 flex items-center justify-start gap-1 py-2 px-4 w-full rounded-md">
-                      <CircleDot className="h-5 w-5" />
-                      <span className="ml-2 text-sm font-semibold">
-                        Unique choice
-                      </span>
-                    </button>
-                    <button className="hover:bg-slate-100 hover:dark:bg-slate-800 flex items-center justify-start gap-1 py-2 px-4 w-full rounded-md">
-                      <ListChecks className="h-5 w-5" />
-                      <span className="ml-2 text-sm font-semibold">
-                        Multi choice
-                      </span>
-                    </button>
-                    <button className="hover:bg-slate-100 hover:dark:bg-slate-800 flex items-center justify-start gap-1 py-2 px-4 w-full rounded-md">
-                      <List className="h-5 w-5" />
-                      <span className="ml-2 text-sm font-semibold">
-                        List of choices
-                      </span>
-                    </button>
-                    <button className="hover:bg-slate-100 hover:dark:bg-slate-800 flex items-center justify-start gap-1 py-2 px-4 w-full rounded-md">
-                      <Calendar className="h-5 w-5" />
-                      <span className="ml-2 text-sm font-semibold">Date</span>
-                    </button>
-                    <Separator className="hidden sm:block w-full my-2" />
-                    <div className="hidden sm:flex px-4 flex-col gap-2">
-                      <span className="text-sm">
-                        click on a button to add it in the questions
-                      </span>
-                    </div>
-                  </div>
-                  <Separator className="block sm:hidden w-full my-2" />
-                  <div
-                    id="questions"
-                    className="relative w-full rounded-md px-4 pt-7 pb-4 border overflow-hidden"
-                  >
-                    <div
-                      className={`absolute inset-x-0 top-0 h-3 w-full`}
-                      style={{
-                        background: `${dataForm.data.color}`,
-                      }}
-                    ></div>
-                    <Button variant="outline">
-                      <Save className="mr-2 h-4 w-4" />
-                      Save questions
-                    </Button>
-                  </div>
-                </div>
+                <QuestionsForms dataForm={dataForm.data} />
               </TabsContent>
               <TabsContent className="border-none p-0 pt-2" value="responses">
-                {dataForm.data.responses &&
-                dataForm.data.responses.length > 0 ? (
-                  <div></div>
-                ) : (
-                  <EmptyCard
-                    icon={<MessageSquare className="h-8 w-8" />}
-                    title="No responses yet"
-                    description="Responses to your form will appear here"
-                  />
-                )}
+                <ResponsesForms dataForm={dataForm.data} />
               </TabsContent>
               <TabsContent className="border-none p-0 pt-2" value="publish">
-                <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 dark:border-slate-700">
-                  <div className="mx-auto flex w-full max-w-xl flex-col gap-4 items-center justify-center text-center p-4">
-                    <Link
-                      href={`/form/view/${searchParams.get("form")}`}
-                      className={buttonVariants({
-                        size: "default",
-                        variant: "subtle",
-                      })}
-                    >
-                      <Eye className="mr-2 h-4 w-4" />
-                      View form
-                    </Link>
-                    <h3 className="mt-4 text-md font-semibold">
-                      {dataForm.data.published
-                        ? "Your form is currently online and can be viewed and answered by anyone at the link"
-                        : "Your form is not published so can only be seen by you alone"}
-                    </h3>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <p className="text-muted-foreground underline underline-offset-4 cursor-pointer mb-4 mt-2 text-sm">
-                          Change the status of your form
-                        </p>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            {dataForm.data.published
-                              ? "Want to make your form private  ?"
-                              : "Do you want to make your form public ?"}
-                          </AlertDialogTitle>
-                          <AlertDialogDescription>
-                            {dataForm.data.published
-                              ? "Your form will no longer be visible to anyone except you"
-                              : "Your form will be visible to everyone and anyone will be able to answer it"}
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => changeStatutOfForm()}
-                          >
-                            {dataForm.data.published
-                              ? "make private"
-                              : "make public"}
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                    <div className="flex flex-col md:flex-row w-full items-center gap-2">
-                      <Input
-                        className="w-full"
-                        type="text"
-                        placeholder={`https://sharuco.lndev.me/form/view/${searchParams.get(
-                          "form"
-                        )}`}
-                        value={`https://sharuco.lndev.me/form/view/${searchParams.get(
-                          "form"
-                        )}`}
-                      />
-                      <Button
-                        onClick={() => {
-                          copyToClipboard(
-                            `https://sharuco.lndev.me/form/view/${searchParams.get(
-                              "form"
-                            )}`
-                          )
-                          notifyUrlCopied()
-                        }}
-                        className="shrink-0 w-full sm:w-fit"
-                      >
-                        Copy link
-                      </Button>
-                    </div>
-                  </div>
-                </div>
+                <PublishForms dataForm={dataForm.data} />
               </TabsContent>
             </Tabs>
           </div>
