@@ -22,7 +22,7 @@ import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
 import * as htmlToImage from "html-to-image"
-import { Code2, Github, Loader2 } from "lucide-react"
+import { ArrowRight, Code2, Github, Loader2 } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { siteConfig } from "@/config/site"
@@ -260,35 +260,6 @@ export default function IndexPage() {
           </div>
         </div>
         <Separator className="my-2" />
-        <div className="mt-8 flex w-full flex-col items-start gap-4">
-          <div className="flex w-full flex-col items-start justify-center gap-2">
-            <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-3xl lg:text-3xl">
-              Discover Sharuco Link
-            </h2>
-            <p className="text-md max-w-[700px] text-slate-700 dark:text-slate-400 sm:text-lg">
-              Sharuco Link is a simple way to store all the links that are
-              useful to you and with possibilities to make everyone discover
-              them.
-            </p>
-          </div>
-          <div className="flex w-full flex-col items-center justify-center gap-4">
-            <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-700 dark:bg-slate-800">
-              <Image
-                src="/home/sharuco-link.png"
-                alt="Sharuco Link"
-                width={2880}
-                height={1448}
-                className="w-full "
-              />
-            </div>
-            <div className="flex w-fit items-center justify-center">
-              <Link href="/links" className={buttonVariants({ size: "lg" })}>
-                Go to Sharuco Link
-              </Link>
-            </div>
-          </div>
-        </div>
-
         <div className="mt-8 flex flex-col items-start gap-4">
           <div>
             <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
@@ -452,6 +423,143 @@ export default function IndexPage() {
                   </div>
                 </AlertDialogContent>
               </AlertDialog>
+            </div>
+          </div>
+        </div>
+        <div className="mt-16 flex w-full flex-col items-start gap-4">
+          <div className="flex w-full flex-col items-center justify-center gap-2">
+            <h2 className="text-3xl font-bold leading-tight tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
+              Sharuco Form
+            </h2>
+            <p className="text-md max-w-[700px] text-center text-slate-700 dark:text-slate-400 sm:text-lg">
+              Sharuco Form allows you to create forms to collect information
+              from your users.
+            </p>
+          </div>
+          <Separator className="block w-1/2 mx-auto lg:hidden my-2" />
+          <div className="flex w-full flex-col items-center justify-center gap-4">
+            <div className="flex flex-col items-start gap-16 lg:gap-6 pt-10 pb-12">
+              <div className="flex flex-col lg:flex-row gap-4 lg:gap-20">
+                <div className="flex w-full flex-col items-start gap-2 sm:gap-4 justify-center">
+                  <h3 className="text-2xl sm:text-4xl font-medium">
+                    Create forms
+                    <br className="hidden sm:inline" /> easily in minutes{" "}
+                  </h3>
+                  <p>
+                    Choose from all the different question types present to
+                    customize your form.
+                  </p>
+                </div>
+                <div className="w-full overflow-hidden rounded-md bg-slate-100 border border-slate-200 dark:bg-slate-800">
+                  <img
+                    src="/home/form-1.png"
+                    alt="Sharuco Form"
+                    width={2880}
+                    height={1448}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col-reverse lg:flex-row gap-4 lg:gap-20">
+                <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-800 dark:bg-slate-800">
+                  <img
+                    src="/home/form-2.png"
+                    alt="Sharuco Form"
+                    width={2880}
+                    height={1448}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex w-full flex-col items-start gap-2 sm:gap-4 justify-center">
+                  <h3 className="text-2xl sm:text-4xl font-medium">
+                    Publish your form
+                    <br className="hidden sm:inline" /> in one click
+                  </h3>
+                  <p>
+                    Give everyone the opportunity to reply to your form by
+                    publishing and sharing it on your networks.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col lg:flex-row gap-4 lg:gap-20">
+                <div className="flex w-full flex-col items-start gap-2 sm:gap-4 justify-center">
+                  <h3 className="text-2xl sm:text-4xl font-medium">
+                    Collect all
+                    <br className="hidden sm:inline" /> your information
+                  </h3>
+                  <p>
+                    In a dedicated area you have access to all the data sent via
+                    your form
+                  </p>
+                </div>
+                <div className="w-full overflow-hidden rounded-md bg-slate-100 border border-slate-200 dark:bg-slate-800">
+                  <img
+                    src="/home/form-3.png"
+                    alt="Sharuco Form"
+                    width={2880}
+                    height={1448}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col-reverse lg:flex-row gap-4 lg:gap-20">
+                <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-800 dark:bg-slate-800">
+                  <img
+                    src="/home/form-4.png"
+                    alt="Sharuco Form"
+                    width={2880}
+                    height={1448}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex w-full flex-col items-start gap-2 sm:gap-4 justify-center">
+                  <h3 className="text-2xl sm:text-4xl font-medium">
+                    Manages all forms
+                  </h3>
+                  <p>
+                    In one screen you have a global visualization of all your
+                    forms with the ability to manage them.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="flex w-fit items-center justify-center">
+              <Link
+                href="/forms"
+                className={buttonVariants({ size: "lg", variant: "subtle" })}
+              >
+                Go to Sharuco Form
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+        <div className="mt-16 flex w-full flex-col items-start gap-4">
+          <div className="flex w-full flex-col items-start justify-center gap-2">
+            <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-3xl lg:text-4xl">
+              Discover Sharuco Link
+            </h2>
+            <p className="text-md max-w-[700px] text-slate-700 dark:text-slate-400 sm:text-lg">
+              Sharuco Link is a simple way to store all the links that are
+              useful to you and with possibilities to make everyone discover
+              them.
+            </p>
+          </div>
+          <div className="flex w-full flex-col items-center justify-center gap-4">
+            <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-700 dark:bg-slate-800">
+              <Image
+                src="/home/sharuco-link.png"
+                alt="Sharuco Link"
+                width={2880}
+                height={1448}
+                className="w-full "
+              />
+            </div>
+            <div className="flex w-fit items-center justify-center">
+              <Link href="/links" className={buttonVariants({ size: "lg" })}>
+                Go to Sharuco Link
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
             </div>
           </div>
         </div>
