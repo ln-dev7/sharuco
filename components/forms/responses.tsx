@@ -63,6 +63,12 @@ import Error from "@/components/error"
 import { Layout } from "@/components/layout"
 import LoaderCodes from "@/components/loaders/loader-codes"
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -162,30 +168,44 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
             .reverse()
             .map((response, index) => (
               <div
-                className="flex w-full flex-col items-start gap-5 rounded-md border border-dashed border-slate-300 p-4 dark:border-slate-700"
+                className="flex w-full flex-col items-start gap-4 rounded-md border border-dashed border-slate-300 p-4 dark:border-slate-700"
                 key={index}
               >
-                <div className="flex w-full flex-col items-start gap-2 ">
-                  {response.responses.map((answer, answerIndex) => (
-                    <>
-                      {answer.type === "heading" ? (
-                        <h3 className="text-xl font-semibold" key={answerIndex}>
-                          {answer.label}
-                        </h3>
-                      ) : (
-                        <div
-                          className="flex w-full flex-col items-start gap-2 rounded-md bg-slate-100 p-4 dark:bg-slate-800"
-                          key={answerIndex}
-                        >
-                          <Label>{answer.label}</Label>
-                          <div>
-                            <p className="font-semibold">{answer.text}</p>
-                          </div>
-                        </div>
-                      )}
-                    </>
-                  ))}
-                </div>
+                <Accordion
+                  type="single"
+                  collapsible
+                  className="w-full border-b  border-dashed border-slate-300 dark:border-slate-700"
+                >
+                  <AccordionItem value="response" className="border-none">
+                    <AccordionTrigger>View response</AccordionTrigger>
+                    <AccordionContent>
+                      <div className="flex w-full flex-col items-start gap-2 ">
+                        {response.responses.map((answer, answerIndex) => (
+                          <>
+                            {answer.type === "heading" ? (
+                              <h3
+                                className="text-xl font-semibold"
+                                key={answerIndex}
+                              >
+                                {answer.label}
+                              </h3>
+                            ) : (
+                              <div
+                                className="flex w-full flex-col items-start gap-2 rounded-md bg-slate-100 p-4 dark:bg-slate-800"
+                                key={answerIndex}
+                              >
+                                <Label>{answer.label}</Label>
+                                <div>
+                                  <p className="font-semibold">{answer.text}</p>
+                                </div>
+                              </div>
+                            )}
+                          </>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
                 <div className="flex w-full items-center justify-between">
                   <span className="flex items-center gap-1 text-slate-700 dark:text-slate-400">
                     <Timer className="mr-1.5 h-4 w-4" />

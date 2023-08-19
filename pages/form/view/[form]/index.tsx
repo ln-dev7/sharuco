@@ -195,7 +195,7 @@ export default function FormViewPage() {
       responses: [
         ...dataForm?.data?.questions.map((question: any) => {
           return {
-            text: "",
+            text: question.type === "heading" ? "heading" : "",
           }
         }),
       ],
@@ -280,6 +280,7 @@ export default function FormViewPage() {
                             {...register(`responses.${index}.text` as const)}
                             placeholder={question.text}
                             value={question.type}
+                            defaultValue={question.type}
                             className="hidden"
                           />
                         )}
