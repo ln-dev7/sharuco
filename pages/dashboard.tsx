@@ -516,7 +516,7 @@ export default function Dashboard() {
                       className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
                       ${
                         checkboxOn
-                          ? "before:absolute before:inset-0 before:rounded-full before:bg-slate-500 before:transform before:scale-75 before:transition-transform"
+                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-slate-500 before:transition-transform"
                           : ""
                       } 
                       `}
@@ -542,7 +542,7 @@ export default function Dashboard() {
                         className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
                           ${
                             gistCheckboxOn
-                              ? "before:absolute before:inset-0 before:rounded-full before:bg-slate-500 before:transform before:scale-75 before:transition-transform"
+                              ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-slate-500 before:transition-transform"
                               : ""
                           }
                           `}

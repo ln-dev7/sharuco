@@ -436,12 +436,12 @@ export default function IndexPage() {
               from your users.
             </p>
           </div>
-          <Separator className="block w-1/2 mx-auto lg:hidden my-2" />
+          <Separator className="mx-auto my-2 block w-1/2 lg:hidden" />
           <div className="flex w-full flex-col items-center justify-center gap-4">
-            <div className="flex flex-col items-start gap-16 lg:gap-6 pt-10 pb-12">
-              <div className="flex flex-col lg:flex-row gap-4 lg:gap-20">
-                <div className="flex w-full flex-col items-start gap-2 sm:gap-4 justify-center">
-                  <h3 className="text-2xl sm:text-4xl font-medium">
+            <div className="flex flex-col items-start gap-16 pb-12 pt-10 lg:gap-6">
+              <div className="flex flex-col gap-4 lg:flex-row lg:gap-20">
+                <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
+                  <h3 className="text-2xl font-medium sm:text-4xl">
                     Create forms
                     <br className="hidden sm:inline" /> easily in minutes{" "}
                   </h3>
@@ -450,28 +450,28 @@ export default function IndexPage() {
                     customize your form.
                   </p>
                 </div>
-                <div className="w-full overflow-hidden rounded-md bg-slate-100 border border-slate-200 dark:bg-slate-800">
+                <div className="w-full overflow-hidden rounded-md border border-slate-200 bg-slate-100 dark:bg-slate-800">
                   <img
                     src="/home/form-1.png"
                     alt="Sharuco Form"
                     width={2880}
                     height={1448}
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </div>
               </div>
-              <div className="flex flex-col-reverse lg:flex-row gap-4 lg:gap-20">
+              <div className="flex flex-col-reverse gap-4 lg:flex-row lg:gap-20">
                 <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-800 dark:bg-slate-800">
                   <img
                     src="/home/form-2.png"
                     alt="Sharuco Form"
                     width={2880}
                     height={1448}
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </div>
-                <div className="flex w-full flex-col items-start gap-2 sm:gap-4 justify-center">
-                  <h3 className="text-2xl sm:text-4xl font-medium">
+                <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
+                  <h3 className="text-2xl font-medium sm:text-4xl">
                     Publish your form
                     <br className="hidden sm:inline" /> in one click
                   </h3>
@@ -481,9 +481,9 @@ export default function IndexPage() {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row gap-4 lg:gap-20">
-                <div className="flex w-full flex-col items-start gap-2 sm:gap-4 justify-center">
-                  <h3 className="text-2xl sm:text-4xl font-medium">
+              <div className="flex flex-col gap-4 lg:flex-row lg:gap-20">
+                <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
+                  <h3 className="text-2xl font-medium sm:text-4xl">
                     Collect all
                     <br className="hidden sm:inline" /> your information
                   </h3>
@@ -492,28 +492,28 @@ export default function IndexPage() {
                     your form
                   </p>
                 </div>
-                <div className="w-full overflow-hidden rounded-md bg-slate-100 border border-slate-200 dark:bg-slate-800">
+                <div className="w-full overflow-hidden rounded-md border border-slate-200 bg-slate-100 dark:bg-slate-800">
                   <img
                     src="/home/form-3.png"
                     alt="Sharuco Form"
                     width={2880}
                     height={1448}
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </div>
               </div>
-              <div className="flex flex-col-reverse lg:flex-row gap-4 lg:gap-20">
+              <div className="flex flex-col-reverse gap-4 lg:flex-row lg:gap-20">
                 <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-800 dark:bg-slate-800">
                   <img
                     src="/home/form-4.png"
                     alt="Sharuco Form"
                     width={2880}
                     height={1448}
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </div>
-                <div className="flex w-full flex-col items-start gap-2 sm:gap-4 justify-center">
-                  <h3 className="text-2xl sm:text-4xl font-medium">
+                <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
+                  <h3 className="text-2xl font-medium sm:text-4xl">
                     Manages all forms
                   </h3>
                   <p>
