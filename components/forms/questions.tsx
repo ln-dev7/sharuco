@@ -317,17 +317,17 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
 
         {isSuccessUpdateForm && (
           <div
-            className="flex items-center w-full p-4 text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+            className="flex w-full items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
             role="alert"
           >
-            <Check className="w-4 h-4" />
+            <Check className="h-4 w-4" />
             <span className="sr-only">Info</span>
             <div className="ml-3 text-sm font-medium">
               Your questions have been updated
             </div>
             <button
               type="button"
-              className="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
+              className="-m-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 p-1.5 text-green-500 hover:bg-green-200 focus:ring-2 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
               onClick={resetUpdateForm}
             >
               <span className="sr-only">Close</span>
