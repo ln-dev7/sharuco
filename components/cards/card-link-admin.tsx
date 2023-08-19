@@ -197,7 +197,7 @@ export default function CardLinkAdmin({
             <h3 className="text-lg font-semibold">
               This link is not available
             </h3>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-sm text-muted-foreground">
               The link you are trying to access is not available.
             </p>
           </div>
@@ -225,7 +225,7 @@ export default function CardLinkAdmin({
                     <Pencil className="h-4 w-4" />
                   </Button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+                <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
                   <AlertDialogHeader>
                     <AlertDialogTitle>
                       <h3 className="text-lg font-medium leading-6 text-slate-900 dark:text-slate-100">
@@ -370,7 +370,7 @@ export default function CardLinkAdmin({
               <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-t-xl border-b border-slate-100 bg-slate-50 text-center dark:border-slate-700 dark:bg-slate-800">
                 <XCircle className="h-8 w-8 text-slate-400" />
                 <h3 className="text-lg font-semibold">Failed to load image</h3>
-                <p className="text-muted-foreground text-sm">
+                <p className="text-sm text-muted-foreground">
                   The image could not be loaded for this link.
                 </p>
               </div>
@@ -445,7 +445,7 @@ export default function CardLinkAdmin({
                   <Pencil className="h-4 w-4" />
                 </Button>
               </AlertDialogTrigger>
-              <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+              <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
                 <AlertDialogHeader>
                   <AlertDialogTitle>
                     <h3 className="text-lg font-medium leading-6 text-slate-900 dark:text-slate-100">

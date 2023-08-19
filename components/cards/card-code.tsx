@@ -272,7 +272,7 @@ export default function CardCode({
                   <Save className="h-4 w-4 cursor-pointer" />
                 </button>
               </AlertDialogTrigger>
-              <AlertDialogContent className="flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto scrollbar-hide">
+              <AlertDialogContent className="scrollbar-hide flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto">
                 <AlertDialogFooter>
                   <AlertDialogCancel>Close</AlertDialogCancel>
                   <button

@@ -353,7 +353,7 @@ export default function Dashboard() {
                 Add new code
               </button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+            <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
               <AlertDialogHeader>
                 <AlertDialogTitle>
                   <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
@@ -516,7 +516,7 @@ export default function Dashboard() {
                       className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
                       ${
                         checkboxOn
-                          ? "before:absolute before:inset-0 before:rounded-full before:bg-slate-500 before:transform before:scale-75 before:transition-transform"
+                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-slate-500 before:transition-transform"
                           : ""
                       } 
                       `}
@@ -542,7 +542,7 @@ export default function Dashboard() {
                         className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
                           ${
                             gistCheckboxOn
-                              ? "before:absolute before:inset-0 before:rounded-full before:bg-slate-500 before:transform before:scale-75 before:transition-transform"
+                              ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-slate-500 before:transition-transform"
                               : ""
                           }
                           `}
@@ -881,7 +881,7 @@ export default function Dashboard() {
                       <h3 className="mt-4 text-lg font-semibold">
                         You don&apos;t have any favorite code yet
                       </h3>
-                      <p className="text-muted-foreground mb-4 mt-2 text-sm">
+                      <p className="mb-4 mt-2 text-sm text-muted-foreground">
                         You can find your favorite code in the explore section.
                       </p>
                       <Link

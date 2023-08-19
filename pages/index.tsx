@@ -22,7 +22,7 @@ import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
 import * as htmlToImage from "html-to-image"
-import { Code2, Github, Loader2 } from "lucide-react"
+import { ArrowRight, Code2, Github, Loader2 } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { siteConfig } from "@/config/site"
@@ -137,7 +137,7 @@ export default function IndexPage() {
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <a
           className="inline-flex w-fit items-center rounded-lg bg-slate-100 px-3 py-1 text-sm font-medium dark:bg-slate-800"
-          href="/links"
+          href="/forms"
         >
           🚀
           <div
@@ -145,10 +145,10 @@ export default function IndexPage() {
             className="mx-2 h-4 w-[1px] shrink-0 bg-slate-200 dark:bg-slate-700"
           ></div>
           <span className="text-slate-800 dark:text-slate-200 sm:hidden">
-            Sharuco Link, Store all your links.
+            Sharuco Form, Create and share your forms.
           </span>
           <span className="hidden text-slate-800 dark:text-slate-200 sm:inline">
-            Introducing Sharuco Link, Store all your links.
+            Introducing Sharuco Form, Create and share your forms.
           </span>
           <svg
             width="15"
@@ -156,7 +156,7 @@ export default function IndexPage() {
             viewBox="0 0 15 15"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="ml-1 h-4 w-4"
+            className="ml-1 h-4 w-4 shrink-0"
           >
             <path
               d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
@@ -168,12 +168,13 @@ export default function IndexPage() {
         </a>
         <div className="flex max-w-[980px] flex-col items-start gap-2">
           <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-            Share your code
+            Share your code.
             <br className="hidden sm:inline" />
-            with everyone.
+            Manage Form & Link.
           </h1>
           <p className="max-w-[700px] text-lg text-slate-700 dark:text-slate-400 sm:text-xl">
-            Sharuco allows you to share code codes that you have found useful.
+            Share and explore essential codes, create forms to retrieve
+            information and keep useful links.
           </p>
         </div>
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 md:flex-row">
@@ -253,6 +254,7 @@ export default function IndexPage() {
                   }
                   className="cursor-pointer"
                   alt={support.name}
+                  priority={true}
                 />
               </a>
             ))}
@@ -266,12 +268,13 @@ export default function IndexPage() {
             </h2>
           </div>
           <div className="flex flex-col gap-6 md:flex-row">
-            <div className="w-full rounded-md overflow-hidden bg-slate-100 dark:bg-slate-800 md:w-1/2">
+            <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:bg-slate-800 md:w-1/2">
               <Image
                 src="/home/code-preview.png"
                 alt="Card preview"
                 width={1598}
                 height={904}
+                priority={true}
               />
             </div>
             <div className="flex w-full flex-col gap-4 md:w-1/2">
@@ -322,7 +325,7 @@ export default function IndexPage() {
                     You need to fill the fields
                   </button>
                 )}
-                <AlertDialogContent className="flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto scrollbar-hide">
+                <AlertDialogContent className="scrollbar-hide flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto">
                   <AlertDialogFooter>
                     <AlertDialogCancel>Close</AlertDialogCancel>
                     <button
@@ -425,30 +428,144 @@ export default function IndexPage() {
             </div>
           </div>
         </div>
-        <div className="mt-8 w-full flex flex-col items-start gap-4">
-          <div className="w-full flex flex-col items-start gap-2 justify-center">
-            <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-3xl lg:text-3xl">
+        <div className="mt-16 flex w-full flex-col items-start gap-4">
+          <div className="flex w-full flex-col items-center justify-center gap-2">
+            <h2 className="text-3xl font-bold leading-tight tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
+              Sharuco Form
+            </h2>
+            <p className="text-md max-w-[700px] text-center text-slate-700 dark:text-slate-400 sm:text-lg">
+              Sharuco Form allows you to create forms to collect information
+              from your users.
+            </p>
+          </div>
+          <Separator className="mx-auto my-2 block w-1/2 lg:hidden" />
+          <div className="flex w-full flex-col items-center justify-center gap-4">
+            <div className="flex flex-col items-start gap-16 pb-12 pt-10 lg:gap-6">
+              <div className="flex flex-col gap-4 lg:flex-row lg:gap-20">
+                <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
+                  <h3 className="text-2xl font-medium sm:text-4xl">
+                    Create forms
+                    <br className="hidden sm:inline" /> easily in minutes{" "}
+                  </h3>
+                  <p>
+                    Choose from all the different question types present to
+                    customize your form.
+                  </p>
+                </div>
+                <div className="w-full overflow-hidden rounded-md border border-slate-200 bg-slate-100 dark:bg-slate-800">
+                  <Image
+                    src="/home/form-1.png"
+                    alt="Sharuco Form"
+                    width={2880}
+                    height={1448}
+                    className="h-full w-full object-cover"
+                    priority={true}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col-reverse gap-4 lg:flex-row lg:gap-20">
+                <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-800 dark:bg-slate-800">
+                  <Image
+                    src="/home/form-2.png"
+                    alt="Sharuco Form"
+                    width={2880}
+                    height={1448}
+                    className="h-full w-full object-cover"
+                    priority={true}
+                  />
+                </div>
+                <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
+                  <h3 className="text-2xl font-medium sm:text-4xl">
+                    Publish your form
+                    <br className="hidden sm:inline" /> in one click
+                  </h3>
+                  <p>
+                    Give everyone the opportunity to reply to your form by
+                    publishing and sharing it on your networks.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4 lg:flex-row lg:gap-20">
+                <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
+                  <h3 className="text-2xl font-medium sm:text-4xl">
+                    Collect all
+                    <br className="hidden sm:inline" /> your information
+                  </h3>
+                  <p>
+                    In a dedicated area you have access to all the data sent via
+                    your form
+                  </p>
+                </div>
+                <div className="w-full overflow-hidden rounded-md border border-slate-200 bg-slate-100 dark:bg-slate-800">
+                  <Image
+                    src="/home/form-3.png"
+                    alt="Sharuco Form"
+                    width={2880}
+                    height={1448}
+                    className="h-full w-full object-cover"
+                    priority={true}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col-reverse gap-4 lg:flex-row lg:gap-20">
+                <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-800 dark:bg-slate-800">
+                  <Image
+                    src="/home/form-4.png"
+                    alt="Sharuco Form"
+                    width={2880}
+                    height={1448}
+                    className="h-full w-full object-cover"
+                    priority={true}
+                  />
+                </div>
+                <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
+                  <h3 className="text-2xl font-medium sm:text-4xl">
+                    Manages all forms
+                  </h3>
+                  <p>
+                    In one screen you have a global visualization of all your
+                    forms with the ability to manage them.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="flex w-fit items-center justify-center">
+              <Link
+                href="/forms"
+                className={buttonVariants({ size: "lg", variant: "subtle" })}
+              >
+                Go to Sharuco Form
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+        <div className="mt-16 flex w-full flex-col items-start gap-4">
+          <div className="flex w-full flex-col items-start justify-center gap-2">
+            <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-3xl lg:text-4xl">
               Discover Sharuco Link
             </h2>
-            <p className="max-w-[700px] text-md text-slate-700 dark:text-slate-400 sm:text-lg">
+            <p className="text-md max-w-[700px] text-slate-700 dark:text-slate-400 sm:text-lg">
               Sharuco Link is a simple way to store all the links that are
               useful to you and with possibilities to make everyone discover
               them.
             </p>
           </div>
-          <div className="flex w-full flex-col justify-center items-center gap-4">
-            <div className="w-full dark:border dark:border-slate-700 bg-slate-100 dark:bg-slate-800 overflow-hidden rounded-md">
+          <div className="flex w-full flex-col items-center justify-center gap-4">
+            <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-700 dark:bg-slate-800">
               <Image
                 src="/home/sharuco-link.png"
                 alt="Sharuco Link"
                 width={2880}
                 height={1448}
                 className="w-full "
+                priority={true}
               />
             </div>
-            <div className="w-fit flex items-center justify-center">
+            <div className="flex w-fit items-center justify-center">
               <Link href="/links" className={buttonVariants({ size: "lg" })}>
                 Go to Sharuco Link
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </div>
           </div>
@@ -505,7 +622,7 @@ export default function IndexPage() {
             </div>
           )}
           {/* https://tailwindcss.com/docs/reusing-styles */}
-          <p className="text-sm mt-4 text-slate-700 dark:text-slate-400">
+          <p className="mt-4 text-sm text-slate-700 dark:text-slate-400">
             Many thanks to all of you !
           </p>
         </div>

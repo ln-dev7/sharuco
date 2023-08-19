@@ -412,7 +412,7 @@ export default function CardCodeAdmin({
                 <Edit className="ml-2 h-4 w-4" />
               </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+            <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
               <AlertDialogHeader>
                 <AlertDialogTitle>
                   <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
@@ -573,7 +573,7 @@ export default function CardCodeAdmin({
                       className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
                       ${
                         checkboxOn
-                          ? "before:absolute before:inset-0 before:rounded-full before:bg-slate-500 before:transform before:scale-75 before:transition-transform"
+                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-slate-500 before:transition-transform"
                           : ""
                       } 
                       `}
@@ -681,7 +681,7 @@ export default function CardCodeAdmin({
                   <Save className="h-4 w-4 cursor-pointer" />
                 </button>
               </AlertDialogTrigger>
-              <AlertDialogContent className="flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto scrollbar-hide">
+              <AlertDialogContent className="scrollbar-hide flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto">
                 <AlertDialogFooter>
                   <AlertDialogCancel>Close</AlertDialogCancel>
                   <button
