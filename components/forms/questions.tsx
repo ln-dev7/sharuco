@@ -105,12 +105,6 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
 
   const { toast } = useToast()
 
-  useEffect(() => {
-    if (!user) {
-      router.push("/forms")
-    }
-  })
-
   const notifyUrlCopied = () =>
     toast({
       title: "Url of your code copied to clipboard",

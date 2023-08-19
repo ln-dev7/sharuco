@@ -19,6 +19,7 @@ import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCo
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
 import copyToClipboard from "@/utils/copyToClipboard.js"
 import embedProject from "@/utils/embedStackblitzProject"
+import formatDateTime from "@/utils/formatDateTime.js"
 import indentCode from "@/utils/indentCode.js"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -41,6 +42,7 @@ import {
   Save,
   Send,
   Settings,
+  Timer,
   Trash,
   Type,
   User,
@@ -103,12 +105,6 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
 
   const { toast } = useToast()
 
-  useEffect(() => {
-    if (!user) {
-      router.push("/forms")
-    }
-  })
-
   const notifyUrlCopied = () =>
     toast({
       title: "Url of your code copied to clipboard",
@@ -118,10 +114,42 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
 
   const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
+  // console.log(dataForm.responses)
+
   return (
     <>
       {dataForm.responses && dataForm.responses.length > 0 ? (
-        <div></div>
+        <div className="w-full space-y-4">
+          {dataForm.responses
+            .slice()
+            .reverse()
+            .map((response, index) => (
+              <div
+                className="w-full flex flex-col items-start gap-5 p-4 rounded-md border border-dashed border-slate-300 dark:border-slate-700"
+                key={index}
+              >
+                <div className="w-full flex flex-col items-start gap-2 ">
+                  {response.responses.map((answer, answerIndex) => (
+                    <div
+                      className="w-full flex flex-col items-start gap-2 rounded-md bg-slate-800 p-4"
+                      key={answerIndex}
+                    >
+                      {/* {answer.type} */}
+                      <Label>{answer.label}</Label>
+                      <div>{answer.text}</div>
+                    </div>
+                  ))}
+                </div>
+                <span className="flex items-center gap-1 text-slate-700 dark:text-slate-400">
+                  <Timer className="mr-1.5 h-4 w-4" />
+                  <span className="text-sm font-medium">
+                    {formatDateTime(moment(response.createdAt))}
+                  </span>
+                </span>
+                {/* <p>ID Comment: {response.idComment}</p> */}
+              </div>
+            ))}
+        </div>
       ) : (
         <EmptyCard
           icon={<MessageSquare className="h-8 w-8" />}

@@ -159,7 +159,7 @@ export default function FormViewPage() {
         {
           idComment: moment().valueOf() + uid(),
           createdAt: moment().valueOf(),
-          response: [
+          responses: [
             ...data.responses.map((response: any, index: number) => {
               return {
                 text: response.text,
