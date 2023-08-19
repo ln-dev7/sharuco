@@ -25,6 +25,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import sdk, { Project } from "@stackblitz/sdk"
 import hljs from "highlight.js"
 import {
+  Check,
   Eye,
   EyeOff,
   FileCog,
@@ -38,10 +39,12 @@ import {
   Settings,
   Terminal,
   User,
+  X,
 } from "lucide-react"
 import moment from "moment"
-import { useForm } from "react-hook-form"
+import { useFieldArray, useForm } from "react-hook-form"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import { uid } from "uid"
 import * as yup from "yup"
 
 import { TemplateName } from "@/types/templatStackblitzName"
@@ -97,6 +100,16 @@ export default function FormViewPage() {
 
   const { toast } = useToast()
 
+  type QuestionType =
+    | "text"
+    | "email"
+    | "link"
+    | "longtext"
+    | "date"
+    | "uniquechoice"
+    | "listchoice"
+    | "multiplechoice"
+
   const {
     data: dataForm,
     isLoading: isLoadingForm,
@@ -109,16 +122,24 @@ export default function FormViewPage() {
     error: any
   } = useDocument(searchParams.get("form"), "forms")
 
+  const schema = yup.object().shape({
+    responses: yup.array().of(
+      yup.object().shape({
+        text: yup.string().required("This field is required"),
+      })
+    ),
+  })
+
   const {
     register,
     handleSubmit,
     control,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm({
-    //resolver: yupResolver(schema),
-    defaultValues: dataForm,
+    resolver: yupResolver(schema),
   })
 
   const {
@@ -126,25 +147,45 @@ export default function FormViewPage() {
     isLoading: isLoadingUpdateForm,
     isError: isErrorUpdateForm,
     isSuccess: isSuccessUpdateForm,
+    reset: resetUpdateForm,
   }: any = useUpdateFormDocument("forms")
 
-  const onSubmit = async (data: FormData) => {
-    //console.log(data)
-
+  const onSubmit = async (data) => {
     let updatedFormData: {
-      //questions: Question[]
+      responses: any[]
     } = {
-      //questions: data.questions,
+      responses: [
+        ...dataForm?.data?.responses,
+        {
+          idComment: moment().valueOf() + uid(),
+          createdAt: moment().valueOf(),
+          response: [
+            ...data.responses.map((response: any, index: number) => {
+              return {
+                text: response.text,
+                type: dataForm?.data?.questions[index].type,
+                label: dataForm?.data?.questions[index].label,
+              }
+            }),
+          ],
+        },
+      ],
     }
 
     const id = searchParams.get("form")
 
     await updateFormDocument({ id, updatedFormData })
 
-    toast({
-      title: "Form sent !",
-      description: "Your form has been sent, thank you !",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    //console.log("updatedFormData", updatedFormData)
+
+    reset({
+      responses: [
+        ...dataForm?.data?.questions.map((question: any) => {
+          return {
+            text: "",
+          }
+        }),
+      ],
     })
   }
 
@@ -177,7 +218,7 @@ export default function FormViewPage() {
           {dataForm &&
             dataForm.exists &&
             (dataForm.data.published || dataForm.data.idAuthor === pseudo) && (
-              <div className="w-full">
+              <div className="w-full py-8">
                 <div
                   className={`absolute inset-x-0 top-0 h-3 w-full`}
                   style={{
@@ -192,32 +233,67 @@ export default function FormViewPage() {
                     {dataForm.data.description}
                   </p>
                 </div>
-                <div className="mx-auto my-6 h-4 w-4 rounded-full bg-slate-200 dark:bg-slate-800" />
-                <div className="mx-auto w-full space-y-6 lg:w-2/3">
-                  {dataForm.data.questions.map((question, index) => (
-                    <div
-                      key={index}
-                      className="flex w-full flex-col items-center gap-2 first:mt-4"
+                <Separator className="mx-auto my-8 sm:w-2/3" />
+                {isSuccessUpdateForm && (
+                  <div
+                    className="flex items-center mx-auto sm:w-2/3 p-4 text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 mb-8"
+                    role="alert"
+                  >
+                    <Check className="w-4 h-4" />
+                    <span className="sr-only">Info</span>
+                    <div className="ml-3 text-sm font-medium">
+                      Your form has been sent successfully, Thank you !
+                    </div>
+                    <button
+                      type="button"
+                      className="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
+                      onClick={resetUpdateForm}
                     >
-                      <div className="flex w-full flex-col items-start gap-2">
+                      <span className="sr-only">Close</span>
+                      <X />
+                    </button>
+                  </div>
+                )}
+                <div className="mx-auto w-full space-y-6 lg:w-2/3">
+                  {dataForm?.data?.questions.map((question, index) => {
+                    return (
+                      <div
+                        className="flex w-full flex-col items-start gap-2"
+                        key={index}
+                      >
                         <Label>{question.label}</Label>
                         {question.type === "text" && (
                           <Input
+                            {...register(`responses.${index}.text` as const)}
                             placeholder={question.text}
-                            className="w-full"
                           />
                         )}
                         {question.type === "longtext" && (
                           <Textarea
+                            {...register(`responses.${index}.text` as const)}
                             placeholder={question.text}
-                            className="w-full"
                           />
                         )}
+                        {errors?.responses?.[index]?.text && (
+                          <p className="text-xs font-medium text-red-500">
+                            {errors.responses[index].text.message}
+                          </p>
+                        )}
                       </div>
-                    </div>
-                  ))}
-                  <Button variant="default" onClick={handleSubmit(onSubmit)}>
-                    <Send className="mr-2 h-4 w-4" />
+                    )
+                  })}
+                  <Button
+                    variant="default"
+                    disabled={isLoadingUpdateForm}
+                    onClick={
+                      isLoadingUpdateForm ? undefined : handleSubmit(onSubmit)
+                    }
+                  >
+                    {isLoadingUpdateForm ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Send className="mr-2 h-4 w-4" />
+                    )}
                     Send
                   </Button>
                 </div>

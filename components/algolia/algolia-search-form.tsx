@@ -61,7 +61,7 @@ export default function AlgoliaSearchForm() {
 
 function Hit({ hit }) {
   return (
-    <Link href={`form/${hit.objectID}`}>
+    <Link href={`/form/${hit.objectID}`}>
       <div className="mb-4 flex w-full flex-col items-start gap-2 overflow-hidden rounded-lg border p-4 hover:border-sky-500 dark:border-slate-300 dark:hover:border-sky-500">
         <h2 className="text-lg font-semibold">{hit.name}</h2>
         <Highlight
