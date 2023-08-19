@@ -513,9 +513,12 @@ export default function Dashboard() {
                       {...register("isPrivate")}
                       name="isPrivate"
                       id="isPrivate"
-                      className={`h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none ring-slate-500
-                       ring-offset-0 focus:ring-slate-400 focus:ring-offset-slate-900 dark:bg-slate-800
-                      ${checkboxOn ? "ring-2" : "ring-0"}
+                      className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
+                      ${
+                        checkboxOn
+                          ? "before:absolute before:inset-0 before:rounded-full before:bg-slate-500 before:transform before:scale-75 before:transition-transform"
+                          : ""
+                      } 
                       `}
                       checked={checkboxOn}
                       onChange={() => setCheckboxOn(!checkboxOn)}
@@ -536,9 +539,12 @@ export default function Dashboard() {
                         {...register("isGithubGist")}
                         name="isGithubGist"
                         id="isGithubGist"
-                        className={`h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none ring-slate-500
-                           ring-offset-0 focus:ring-slate-400 focus:ring-offset-slate-900 dark:bg-slate-800
-                          ${gistCheckboxOn ? "ring-2" : "ring-0"}
+                        className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
+                          ${
+                            gistCheckboxOn
+                              ? "before:absolute before:inset-0 before:rounded-full before:bg-slate-500 before:transform before:scale-75 before:transition-transform"
+                              : ""
+                          }
                           `}
                         checked={gistCheckboxOn}
                         onChange={() => setGistCheckboxOn(!gistCheckboxOn)}
