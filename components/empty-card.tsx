@@ -14,7 +14,7 @@ export default function EmptyCard({
       <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
         {icon}
         <h3 className="mt-4 text-lg font-semibold">{title}</h3>
-        <p className="text-muted-foreground mb-4 mt-2 text-sm">{description}</p>
+        <p className="mb-4 mt-2 text-sm text-muted-foreground">{description}</p>
       </div>
     </div>
   )

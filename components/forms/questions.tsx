@@ -26,6 +26,7 @@ import sdk, { Project } from "@stackblitz/sdk"
 import algoliasearch from "algoliasearch"
 import hljs from "highlight.js"
 import {
+  AlignJustify,
   Calendar,
   Check,
   CircleDot,
@@ -33,12 +34,15 @@ import {
   EyeOff,
   FileCog,
   FileQuestion,
+  Heading,
   Heart,
   LinkIcon,
   List,
   ListChecks,
   Loader2,
+  Mail,
   MessageSquare,
+  Minus,
   Plus,
   Save,
   Send,
@@ -124,6 +128,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
   }: any = useUpdateFormDocument("forms")
 
   type QuestionType =
+    | "heading"
     | "text"
     | "email"
     | "link"
@@ -212,18 +217,45 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     <div className="flex w-full flex-col items-start gap-4 sm:flex-row">
       <div className="flex w-full shrink-0 flex-col items-start gap-2 rounded-md sm:sticky sm:top-20 sm:w-[250px]">
         <button
+          onClick={() => handleAddField("heading")}
+          className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+        >
+          <Heading className="h-5 w-5" />
+          <span className="ml-2 text-sm font-semibold">Heading</span>
+        </button>
+        <button
           onClick={() => handleAddField("text")}
           className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
         >
-          <Type className="h-5 w-5" />
+          <Minus className="h-5 w-5" />
           <span className="ml-2 text-sm font-semibold">Short answer</span>
         </button>
         <button
           onClick={() => handleAddField("longtext")}
           className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
         >
-          <Type className="h-5 w-5" />
+          <AlignJustify className="h-5 w-5" />
           <span className="ml-2 text-sm font-semibold">Long answer</span>
+        </button>
+        <button
+          //onClick={() => handleAddField("link")}
+          className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+        >
+          <LinkIcon className="h-5 w-5" />
+          <span className="ml-2 text-sm font-semibold">Link</span>
+          <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+            soon
+          </span>
+        </button>
+        <button
+          //onClick={() => handleAddField("email")}
+          className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+        >
+          <Mail className="h-5 w-5" />
+          <span className="ml-2 text-sm font-semibold">E-mail</span>
+          <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+            soon
+          </span>
         </button>
         <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
           <CircleDot className="h-5 w-5" />
@@ -279,7 +311,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                     {...register(`questions.${index}.label` as const)}
                     //defaultValue={field.label}
                     className="h-8 border-none outline-none"
-                    placeholder="Your question"
+                    placeholder="Your label"
                   />
                   {errors?.questions?.[index]?.label && (
                     <p className="mt-1 text-xs font-medium text-red-500">
@@ -287,7 +319,9 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                     </p>
                   )}
                 </label>
-                {watchedFieldType === "text" && (
+                {(watchedFieldType === "text" ||
+                  watchedFieldType === "email" ||
+                  watchedFieldType === "link") && (
                   <Input
                     {...register(`questions.${index}.text` as const)}
                     placeholder="Enter placeholder"
@@ -300,6 +334,11 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                     placeholder="Enter placeholder"
                   />
                 )}
+                <div className="flex w-full items-center justify-start">
+                  <span className="mr-2 rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300">
+                    {watchedFieldType}
+                  </span>
+                </div>
                 {/* {errors?.questions?.[index]?.text && (
                 <p>{errors.questions[index].text.message}</p>
               )} */}

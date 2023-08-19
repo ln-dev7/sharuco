@@ -180,6 +180,7 @@ export default function FormViewPage() {
         },
       ],
     }
+    //console.log("updatedFormData", updatedFormData)
 
     const id = searchParams.get("form")
 
@@ -189,8 +190,6 @@ export default function FormViewPage() {
       objectID: id,
       responses: updatedFormData.responses,
     })
-
-    //console.log("updatedFormData", updatedFormData)
 
     reset({
       responses: [
@@ -248,26 +247,6 @@ export default function FormViewPage() {
                   </p>
                 </div>
                 <Separator className="mx-auto my-8 sm:w-2/3" />
-                {isSuccessUpdateForm && (
-                  <div
-                    className="mx-auto mb-8 flex items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400 sm:w-2/3"
-                    role="alert"
-                  >
-                    <Check className="h-4 w-4" />
-                    <span className="sr-only">Info</span>
-                    <div className="ml-3 text-sm font-medium">
-                      Your form has been sent successfully, Thank you !
-                    </div>
-                    <button
-                      type="button"
-                      className="-m-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 p-1.5 text-green-500 hover:bg-green-200 focus:ring-2 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
-                      onClick={resetUpdateForm}
-                    >
-                      <span className="sr-only">Close</span>
-                      <X />
-                    </button>
-                  </div>
-                )}
                 <div className="mx-auto w-full space-y-6 lg:w-2/3">
                   {dataForm?.data?.questions.map((question, index) => {
                     return (
@@ -275,8 +254,16 @@ export default function FormViewPage() {
                         className="flex w-full flex-col items-start gap-2"
                         key={index}
                       >
-                        <Label>{question.label}</Label>
-                        {question.type === "text" && (
+                        {question.type !== "heading" ? (
+                          <Label>{question.label}</Label>
+                        ) : (
+                          <h3 className="text-xl font-semibold">
+                            {question.label}
+                          </h3>
+                        )}
+                        {(question.type === "text" ||
+                          question.type === "link" ||
+                          question.type === "email") && (
                           <Input
                             {...register(`responses.${index}.text` as const)}
                             placeholder={question.text}
@@ -288,6 +275,14 @@ export default function FormViewPage() {
                             placeholder={question.text}
                           />
                         )}
+                        {question.type === "heading" && (
+                          <Input
+                            {...register(`responses.${index}.text` as const)}
+                            placeholder={question.text}
+                            value={question.type}
+                            className="hidden"
+                          />
+                        )}
                         {errors?.responses?.[index]?.text && (
                           <p className="text-xs font-medium text-red-500">
                             {errors.responses[index].text.message}
@@ -296,6 +291,26 @@ export default function FormViewPage() {
                       </div>
                     )
                   })}
+                  {isSuccessUpdateForm && (
+                    <div
+                      className="mx-auto mb-8 flex items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
+                      role="alert"
+                    >
+                      <Check className="h-4 w-4" />
+                      <span className="sr-only">Info</span>
+                      <div className="ml-3 text-sm font-medium">
+                        Your form has been sent successfully, Thank you !
+                      </div>
+                      <button
+                        type="button"
+                        className="-m-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 p-1.5 text-green-500 hover:bg-green-200 focus:ring-2 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
+                        onClick={resetUpdateForm}
+                      >
+                        <span className="sr-only">Close</span>
+                        <X />
+                      </button>
+                    </div>
+                  )}
                   <Button
                     variant="default"
                     disabled={isLoadingUpdateForm}

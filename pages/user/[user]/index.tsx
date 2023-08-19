@@ -230,7 +230,7 @@ export default function User() {
                         {data.data.followers.length} followers
                       </span>
                     </DialogTrigger>
-                    <DialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+                    <DialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
                       <DialogHeader>
                         <DialogTitle>Followers</DialogTitle>
                       </DialogHeader>
@@ -260,7 +260,7 @@ export default function User() {
                         {data.data.following.length} following
                       </span>
                     </DialogTrigger>
-                    <DialogContent className="max-h-[640px] overflow-hidden overflow-y-auto scrollbar-hide">
+                    <DialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
                       <DialogHeader>
                         <DialogTitle>Following</DialogTitle>
                       </DialogHeader>

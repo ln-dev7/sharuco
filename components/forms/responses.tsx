@@ -162,24 +162,31 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
             .reverse()
             .map((response, index) => (
               <div
-                className="w-full flex flex-col items-start gap-5 p-4 rounded-md border border-dashed border-slate-300 dark:border-slate-700"
+                className="flex w-full flex-col items-start gap-5 rounded-md border border-dashed border-slate-300 p-4 dark:border-slate-700"
                 key={index}
               >
-                <div className="w-full flex flex-col items-start gap-2 ">
+                <div className="flex w-full flex-col items-start gap-2 ">
                   {response.responses.map((answer, answerIndex) => (
-                    <div
-                      className="w-full flex flex-col items-start gap-2 rounded-md bg-slate-100 dark:bg-slate-800 p-4"
-                      key={answerIndex}
-                    >
-                      {/* {answer.type} */}
-                      <Label>{answer.label}</Label>
-                      <div>
-                        <p className="font-semibold">{answer.text}</p>
-                      </div>
-                    </div>
+                    <>
+                      {answer.type === "heading" ? (
+                        <h3 className="text-xl font-semibold" key={answerIndex}>
+                          {answer.label}
+                        </h3>
+                      ) : (
+                        <div
+                          className="flex w-full flex-col items-start gap-2 rounded-md bg-slate-100 p-4 dark:bg-slate-800"
+                          key={answerIndex}
+                        >
+                          <Label>{answer.label}</Label>
+                          <div>
+                            <p className="font-semibold">{answer.text}</p>
+                          </div>
+                        </div>
+                      )}
+                    </>
                   ))}
                 </div>
-                <div className="w-full flex items-center justify-between">
+                <div className="flex w-full items-center justify-between">
                   <span className="flex items-center gap-1 text-slate-700 dark:text-slate-400">
                     <Timer className="mr-1.5 h-4 w-4" />
                     <span className="text-sm font-medium">
@@ -188,7 +195,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                   </span>
                   <Button
                     variant="destructive"
-                    className="flex items-center justify-center rounded-md p-2 gap-2 text-semibold"
+                    className="text-semibold flex items-center justify-center gap-2 rounded-md px-4 text-white"
                     disabled={isLoadingUpdateForm}
                     onClick={() => {
                       isLoadingUpdateForm

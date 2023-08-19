@@ -170,7 +170,7 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <p
-            className="mb-4 mt-2 cursor-pointer text-sm text-muted-foreground underline underline-offset-4 uppercase"
+            className="mb-4 mt-2 cursor-pointer text-sm font-semibold uppercase text-muted-foreground underline underline-offset-4"
             onClick={() => changeStatutOfForm()}
           >
             {!dataForm?.published ? "Publish" : "Unpublish"} your form
@@ -178,7 +178,7 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
         )}
         {isSuccessUpdateForm && (
           <div
-            className="flex w-full items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400 mb-2"
+            className="mb-2 flex w-full items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
             role="alert"
           >
             <Check className="h-4 w-4" />
