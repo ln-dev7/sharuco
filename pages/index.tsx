@@ -254,6 +254,7 @@ export default function IndexPage() {
                   }
                   className="cursor-pointer"
                   alt={support.name}
+                  priority={true}
                 />
               </a>
             ))}
@@ -273,6 +274,7 @@ export default function IndexPage() {
                 alt="Card preview"
                 width={1598}
                 height={904}
+                priority={true}
               />
             </div>
             <div className="flex w-full flex-col gap-4 md:w-1/2">
@@ -451,23 +453,25 @@ export default function IndexPage() {
                   </p>
                 </div>
                 <div className="w-full overflow-hidden rounded-md border border-slate-200 bg-slate-100 dark:bg-slate-800">
-                  <img
+                  <Image
                     src="/home/form-1.png"
                     alt="Sharuco Form"
                     width={2880}
                     height={1448}
                     className="h-full w-full object-cover"
+                    priority={true}
                   />
                 </div>
               </div>
               <div className="flex flex-col-reverse gap-4 lg:flex-row lg:gap-20">
                 <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-800 dark:bg-slate-800">
-                  <img
+                  <Image
                     src="/home/form-2.png"
                     alt="Sharuco Form"
                     width={2880}
                     height={1448}
                     className="h-full w-full object-cover"
+                    priority={true}
                   />
                 </div>
                 <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
@@ -493,23 +497,25 @@ export default function IndexPage() {
                   </p>
                 </div>
                 <div className="w-full overflow-hidden rounded-md border border-slate-200 bg-slate-100 dark:bg-slate-800">
-                  <img
+                  <Image
                     src="/home/form-3.png"
                     alt="Sharuco Form"
                     width={2880}
                     height={1448}
                     className="h-full w-full object-cover"
+                    priority={true}
                   />
                 </div>
               </div>
               <div className="flex flex-col-reverse gap-4 lg:flex-row lg:gap-20">
                 <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-800 dark:bg-slate-800">
-                  <img
+                  <Image
                     src="/home/form-4.png"
                     alt="Sharuco Form"
                     width={2880}
                     height={1448}
                     className="h-full w-full object-cover"
+                    priority={true}
                   />
                 </div>
                 <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
@@ -553,6 +559,7 @@ export default function IndexPage() {
                 width={2880}
                 height={1448}
                 className="w-full "
+                priority={true}
               />
             </div>
             <div className="flex w-fit items-center justify-center">
