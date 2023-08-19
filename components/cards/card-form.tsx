@@ -175,7 +175,7 @@ export default function CardForm({
           <span className="flex items-center gap-1 text-slate-700 dark:text-slate-400">
             <MessageSquare className="mr-1.5 h-4 w-4" />
             <span className="text-sm font-medium">
-              {responses.length} response{responses > 1 && "s"}
+              {responses.length} response{responses.length > 1 && "s"}
             </span>
           </span>
         </div>

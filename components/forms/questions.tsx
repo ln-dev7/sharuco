@@ -23,6 +23,7 @@ import indentCode from "@/utils/indentCode.js"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
 import sdk, { Project } from "@stackblitz/sdk"
+import algoliasearch from "algoliasearch"
 import hljs from "highlight.js"
 import {
   Calendar,
@@ -180,6 +181,14 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     remove(index)
   }
 
+  const ALGOLIA_INDEX_NAME = "forms"
+
+  const client = algoliasearch(
+    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
+    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
+  )
+  const index = client.initIndex(ALGOLIA_INDEX_NAME)
+
   const onSubmit = async (data: FormData) => {
     //console.log(data)
 
@@ -192,6 +201,11 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     const id = searchParams.get("form")
 
     await updateFormDocument({ id, updatedFormData })
+
+    await index.partialUpdateObject({
+      objectID: id,
+      questions: data.questions,
+    })
   }
 
   return (

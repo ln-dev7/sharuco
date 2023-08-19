@@ -24,6 +24,7 @@ import indentCode from "@/utils/indentCode.js"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
 import sdk, { Project } from "@stackblitz/sdk"
+import algoliasearch from "algoliasearch"
 import hljs from "highlight.js"
 import {
   Calendar,
@@ -114,7 +115,43 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
 
   const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
+  const ALGOLIA_INDEX_NAME = "forms"
+
+  const client = algoliasearch(
+    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
+    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
+  )
+  const index = client.initIndex(ALGOLIA_INDEX_NAME)
+
   // console.log(dataForm.responses)
+
+  const { updateFormDocument, isLoading: isLoadingUpdateForm }: any =
+    useUpdateFormDocument("forms")
+
+  const handleDeleteResponse = async (idResponse: string) => {
+    let updatedFormData: {
+      responses: any[]
+    } = {
+      responses: [
+        ...dataForm.responses.filter(
+          (response: any) => response.idResponse !== idResponse
+        ),
+      ],
+    }
+
+    const id = searchParams.get("form")
+
+    //console.log(updatedFormData.responses,)
+
+    await updateFormDocument({ id, updatedFormData })
+
+    await index.partialUpdateObject({
+      objectID: id,
+      responses: updatedFormData.responses,
+    })
+
+    //console.log("updatedFormData", updatedFormData)
+  }
 
   return (
     <>
@@ -131,22 +168,42 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                 <div className="w-full flex flex-col items-start gap-2 ">
                   {response.responses.map((answer, answerIndex) => (
                     <div
-                      className="w-full flex flex-col items-start gap-2 rounded-md bg-slate-800 p-4"
+                      className="w-full flex flex-col items-start gap-2 rounded-md bg-slate-100 dark:bg-slate-800 p-4"
                       key={answerIndex}
                     >
                       {/* {answer.type} */}
                       <Label>{answer.label}</Label>
-                      <div>{answer.text}</div>
+                      <div>
+                        <p className="font-semibold">{answer.text}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
-                <span className="flex items-center gap-1 text-slate-700 dark:text-slate-400">
-                  <Timer className="mr-1.5 h-4 w-4" />
-                  <span className="text-sm font-medium">
-                    {formatDateTime(moment(response.createdAt))}
+                <div className="w-full flex items-center justify-between">
+                  <span className="flex items-center gap-1 text-slate-700 dark:text-slate-400">
+                    <Timer className="mr-1.5 h-4 w-4" />
+                    <span className="text-sm font-medium">
+                      {formatDateTime(moment(response.createdAt))}
+                    </span>
                   </span>
-                </span>
-                {/* <p>ID Comment: {response.idComment}</p> */}
+                  <Button
+                    variant="destructive"
+                    className="flex items-center justify-center rounded-md p-2 gap-2 text-semibold"
+                    disabled={isLoadingUpdateForm}
+                    onClick={() => {
+                      isLoadingUpdateForm
+                        ? undefined
+                        : handleDeleteResponse(response.idResponse)
+                    }}
+                  >
+                    {isLoadingUpdateForm ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Trash className="h-4 w-4" />
+                    )}
+                    Delete
+                  </Button>
+                </div>
               </div>
             ))}
         </div>

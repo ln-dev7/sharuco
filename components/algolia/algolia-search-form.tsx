@@ -73,7 +73,7 @@ function Hit({ hit }) {
           hit={hit}
         />
         <span className="text-sm font-semibold">
-          {hit.responses.length} response{hit.responses > 1 && "s"}
+          {hit.responses.length} response{hit.responses.length > 1 && "s"}
         </span>
       </div>
     </Link>
