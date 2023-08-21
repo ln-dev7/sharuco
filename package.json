@@ -93,7 +93,7 @@
     "eslint-config-next": "13.2.4",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-tailwindcss": "^3.8.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
