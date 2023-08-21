@@ -40,7 +40,7 @@
 
 ### Patch Changes
 
-- [Change of star icon by heart icon ,add trash icon on delete button, use react-query for fetxh contributors and many update.](https://github.com/ln-dev7/sharuco/pull/141) 
+- [Change of star icon by heart icon ,add trash icon on delete button, use react-query for fetch contributors and many update.](https://github.com/ln-dev7/sharuco/pull/141) 
 
 - Update dependencies.
 
