@@ -1,5 +1,13 @@
 # @ln-dev7/sharuco
 
+## 1.0.0
+
+### Major Changes
+
+- Thanks [@ln-dev7](https://github.com/ln-dev7)!
+
+**Full Changelog**: https://github.com/ln-dev7/sharuco/compare/v0.2.0...v1.0.0
+
 ## 0.2.0
 
 ### Minor Changes
@@ -32,7 +40,7 @@
 
 ### Patch Changes
 
-- [Change of star icon by heart icon ,add trash icon on delete button, use react-query for fetxh contributors and many update.](https://github.com/ln-dev7/sharuco/pull/141) 
+- [Change of star icon by heart icon ,add trash icon on delete button, use react-query for fetch contributors and many update.](https://github.com/ln-dev7/sharuco/pull/141) 
 
 - Update dependencies.
 

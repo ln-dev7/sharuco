@@ -202,6 +202,10 @@ export default function FormViewPage() {
     })
   }
 
+  if (dataForm?.data?.redirectOnCompletion && isSuccessUpdateForm) {
+    window.location.href = dataForm.data.redirectOnCompletion
+  }
+
   return (
     <Layout>
       <Head>

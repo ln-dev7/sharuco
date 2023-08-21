@@ -31,7 +31,7 @@ export function SearchBarCode({ ...props }: DialogProps) {
             defaultChecked={false}
             variant="outline"
             className={cn(
-              "text-muted-foreground relative h-9 w-full justify-start rounded-[0.5rem] text-sm sm:pr-12 lg:w-72"
+              "relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 lg:w-72"
             )}
             onClick={() => setOpen(true)}
             {...props}
@@ -40,12 +40,12 @@ export function SearchBarCode({ ...props }: DialogProps) {
               Search publics codes ...
             </span>
             <span className="inline-flex sm:hidden">Search...</span>
-            <kbd className="bg-muted pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+            <kbd className="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
               <span className="text-xs">⌘</span>K
             </kbd>
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-h-[640px] overflow-hidden overflow-y-auto p-0 scrollbar-hide">
+        <DialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto p-0">
           <AlgoliaSearchCode />
         </DialogContent>
       </Dialog>
