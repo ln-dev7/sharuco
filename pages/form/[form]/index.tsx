@@ -181,16 +181,64 @@ export default function FormPage() {
                   </div>
                 </TabsList>
                 <TabsContent className="border-none p-0 pt-4" value="questions">
-                  <QuestionsForms dataForm={dataForm.data} />
+                  <ResponsiveMasonry
+                    columnsCountBreakPoints={{
+                      659: 1,
+                      660: 1,
+                      720: 1,
+                      1200: 1,
+                    }}
+                    className="w-full"
+                  >
+                    <Masonry gutter="2rem">
+                      <QuestionsForms dataForm={dataForm.data} />
+                    </Masonry>
+                  </ResponsiveMasonry>
                 </TabsContent>
                 <TabsContent className="border-none p-0 pt-2" value="responses">
-                  <ResponsesForms dataForm={dataForm.data} />
+                  <ResponsiveMasonry
+                    columnsCountBreakPoints={{
+                      659: 1,
+                      660: 1,
+                      720: 1,
+                      1200: 1,
+                    }}
+                    className="w-full"
+                  >
+                    <Masonry gutter="2rem">
+                      <ResponsesForms dataForm={dataForm.data} />
+                    </Masonry>
+                  </ResponsiveMasonry>
                 </TabsContent>
                 <TabsContent className="border-none p-0 pt-2" value="publish">
-                  <PublishForms dataForm={dataForm.data} />
+                  <ResponsiveMasonry
+                    columnsCountBreakPoints={{
+                      659: 1,
+                      660: 1,
+                      720: 1,
+                      1200: 1,
+                    }}
+                    className="w-full"
+                  >
+                    <Masonry gutter="2rem">
+                      <PublishForms dataForm={dataForm.data} />
+                    </Masonry>
+                  </ResponsiveMasonry>
                 </TabsContent>
                 <TabsContent className="border-none p-0 pt-2" value="settings">
-                  <SettingsForms dataForm={dataForm.data} />
+                  <ResponsiveMasonry
+                    columnsCountBreakPoints={{
+                      659: 1,
+                      660: 1,
+                      720: 1,
+                      1200: 1,
+                    }}
+                    className="w-full"
+                  >
+                    <Masonry gutter="2rem">
+                      <SettingsForms dataForm={dataForm.data} />
+                    </Masonry>
+                  </ResponsiveMasonry>
                 </TabsContent>
               </Tabs>
             </div>
