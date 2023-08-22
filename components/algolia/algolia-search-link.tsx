@@ -2,14 +2,8 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import algoliasearch from "algoliasearch"
-import { Search, SearchIcon, Trash2 } from "lucide-react"
-import {
-  Configure,
-  Highlight,
-  Hits,
-  InstantSearch,
-  SearchBox,
-} from "react-instantsearch"
+import { Search, Trash2 } from "lucide-react"
+import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch"
 
 import LoaderLink from "@/components/loaders/loader-link"
 import { Badge } from "@/components/ui/badge"
@@ -22,15 +16,15 @@ const client = algoliasearch(
 )
 
 export default function AlgoliaSearchLink() {
-  const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
+  const { user, userPseudo } = useAuthContext()
+
   const searchParams = useSearchParams()
 
   const transformItems = (items) => {
     if (searchParams.get("link") !== null) {
       return items.filter((item) => item.idAuthor === searchParams.get("link"))
     } else {
-      return items.filter((item) => item.idAuthor === pseudo)
+      return items.filter((item) => item.idAuthor === userPseudo)
     }
   }
 
@@ -68,7 +62,7 @@ export default function AlgoliaSearchLink() {
 
 function Hit({ hit }) {
   return (
-    <Link href={`${hit.link}`} target="_blank">
+    <a href={`${hit.link}`} target="_blank">
       <div className="mb-4 flex w-full flex-col items-start gap-2 overflow-hidden rounded-lg border p-4 hover:border-sky-500 dark:border-slate-300 dark:hover:border-sky-500">
         <div>
           <Highlight
@@ -97,6 +91,6 @@ function Hit({ hit }) {
           {hit.link}
         </Link>
       </div>
-    </Link>
+    </a>
   )
 }

@@ -13,14 +13,13 @@ import { Layout } from "@/components/layout"
 import LoaderCodes from "@/components/loaders/loader-codes"
 
 export default function Popular() {
-  const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
+  const { user, userPseudo } = useAuthContext()
 
   const {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(pseudo, "users")
+  } = useDocument(userPseudo, "users")
 
   const {
     isLoading: isLoadingPopularCodes,

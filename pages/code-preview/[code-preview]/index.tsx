@@ -63,8 +63,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 export default function CodePreview() {
   const searchParams = useSearchParams()
-  const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
+  const { user, userPseudo } = useAuthContext()
 
   const { toast } = useToast()
 
@@ -81,7 +80,7 @@ export default function CodePreview() {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(pseudo, "users")
+  } = useDocument(userPseudo, "users")
 
   const {
     data: dataCode,
@@ -143,8 +142,8 @@ export default function CodePreview() {
       comments: [
         ...dataCode?.data?.comments,
         {
-          idComment: pseudo + moment().valueOf(),
-          idAuthor: pseudo,
+          idComment: userPseudo + moment().valueOf(),
+          idAuthor: userPseudo,
           //comment: convertirMentionsEnLiens(comment),
           comment: comment,
           createdAt: moment().valueOf(),
@@ -215,7 +214,8 @@ export default function CodePreview() {
         {dataCode &&
           dataCode.exists &&
           (!dataCode.data.isPrivate ||
-            (dataCode.data.isPrivate && dataCode.data.idAuthor === pseudo)) && (
+            (dataCode.data.isPrivate &&
+              dataCode.data.idAuthor === userPseudo)) && (
             <div className="w-full">
               <ResponsiveMasonry
                 columnsCountBreakPoints={{
@@ -560,7 +560,7 @@ export default function CodePreview() {
           (dataCode &&
             dataCode.exists &&
             dataCode.data.isPrivate &&
-            dataCode.data.idAuthor !== pseudo)) && (
+            dataCode.data.idAuthor !== userPseudo)) && (
           <div className="flex flex-col items-center gap-4">
             <h1 className="text-2xl font-bold">This code does not exist.</h1>
             <Link

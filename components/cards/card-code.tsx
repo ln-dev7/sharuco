@@ -108,8 +108,8 @@ export default function CardCode({
 
   const searchParams = useSearchParams()
 
-  const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
+  const { user, userPseudo } = useAuthContext()
+
   const { login, isPending } = useGitHubLogin()
 
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
@@ -132,12 +132,12 @@ export default function CardCode({
 
   const addCodeOnFavoris = async (id: string) => {
     let updatedCodeData = {
-      favoris: favorisInit.includes(pseudo)
-        ? favorisInit.filter((item) => item !== pseudo)
-        : [...favorisInit, pseudo],
-      favorisCount: favorisInit.includes(pseudo)
-        ? favorisInit.filter((item) => item !== pseudo).length
-        : [...favorisInit, pseudo].length,
+      favoris: favorisInit.includes(userPseudo)
+        ? favorisInit.filter((item) => item !== userPseudo)
+        : [...favorisInit, userPseudo],
+      favorisCount: favorisInit.includes(userPseudo)
+        ? favorisInit.filter((item) => item !== userPseudo).length
+        : [...favorisInit, userPseudo].length,
     }
 
     updateCodeDocument({ id, updatedCodeData })
@@ -514,7 +514,7 @@ export default function CardCode({
                   addCodeOnFavoris(id)
                 }}
               >
-                {user && favorisInit.includes(pseudo) ? (
+                {user && favorisInit.includes(userPseudo) ? (
                   <div className="mr-1 flex cursor-pointer  items-center justify-center rounded-full p-1 hover:bg-[#F8E3EB] dark:hover:bg-[#210C14]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -543,7 +543,7 @@ export default function CardCode({
                 )}
                 <span
                   className={`${
-                    favorisInit.includes(pseudo) ? "text-[#F9197F]" : ""
+                    favorisInit.includes(userPseudo) ? "text-[#F9197F]" : ""
                   } hover:dark:text-white"  text-base text-slate-700 hover:text-slate-500  dark:text-slate-400`}
                 >
                   {favorisInit.length}

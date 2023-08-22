@@ -84,7 +84,7 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function Dashboard() {
-  const { user } = useAuthContext()
+  const { user, userPseudo } = useAuthContext()
   const router = useRouter()
   useEffect(() => {
     if (!user) {
@@ -108,37 +108,36 @@ export default function Dashboard() {
       description: "You can find it in your profile section.",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
   const {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(pseudo, "users")
+  } = useDocument(userPseudo, "users")
 
   const {
     isLoading: isLoadingPrivateCodes,
     isError: isErrorPrivateCodes,
     data: dataPrivateCodes,
-  } = useGetIsPrivateCodeFromUser(true, pseudo)
+  } = useGetIsPrivateCodeFromUser(true, userPseudo)
 
   const {
     isLoading: isLoadingPublicCodes,
     isError: isErrorPublicCodes,
     data: dataPublicCodes,
-  } = useGetIsPrivateCodeFromUser(false, pseudo)
+  } = useGetIsPrivateCodeFromUser(false, userPseudo)
 
   const {
     isLoading: isLoadingCodes,
     isError: isErrorCodes,
     data: dataCodes,
-  } = useGetDocumentFromUser(pseudo, "codes")
+  } = useGetDocumentFromUser(userPseudo, "codes")
 
   const {
     isLoading: isLoadingFavoriteCodes,
     isError: isErrorFavoriteCodes,
     data: dataFavoriteCodes,
-  } = useGetFavoriteCode(pseudo)
+  } = useGetFavoriteCode(userPseudo)
 
   const [checkboxOn, setCheckboxOn] = useState(false)
   const [gistCheckboxOn, setGistCheckboxOn] = useState(false)
@@ -215,7 +214,7 @@ export default function Dashboard() {
       createdAt: moment().valueOf(),
       favoris: [],
       favorisCount: 0,
-      idAuthor: pseudo,
+      idAuthor: userPseudo,
       comments: [],
     }
 
@@ -410,7 +409,7 @@ export default function Dashboard() {
                                   value,
                                   getValues("code"),
                                   getValues("language"),
-                                  pseudo,
+                                  userPseudo,
                                   getValues("description")
                                     ? getValues("description")
                                     : null
@@ -622,7 +621,7 @@ export default function Dashboard() {
           </AlertDialog>
           <div className="flex flex-col gap-2 sm:flex-row">
             <Link
-              href={`/user/${pseudo}`}
+              href={`/user/${userPseudo}`}
               className={buttonVariants({ size: "lg", variant: "outline" })}
             >
               <User className="mr-2 h-4 w-4" />

@@ -43,14 +43,13 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Explore() {
-  const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
+  const { user, userPseudo } = useAuthContext()
 
   const {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(pseudo, "users")
+  } = useDocument(userPseudo, "users")
 
   const [currentData, setCurrentData] = useState(null)
   const [lastDocc, setLastDocc] = useState(null)

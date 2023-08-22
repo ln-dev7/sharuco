@@ -53,8 +53,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function User() {
-  const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
+  const { user, userPseudo } = useAuthContext()
+
   const searchParams = useSearchParams()
   const idCurrent = searchParams?.get("user")?.toLowerCase()
 
@@ -64,7 +64,7 @@ export default function User() {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(pseudo, "users")
+  } = useDocument(userPseudo, "users")
 
   const { data, isLoading, isError } = useDocument(idCurrent, "users")
 
