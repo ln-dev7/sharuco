@@ -18,7 +18,7 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 export default function Donation() {
-  const { user } = useAuthContext()
+  const { user, userPseudo } = useAuthContext()
   const [paymentDone, setPaymentDone] = useState(false)
 
   const checkPaymentStatus = async () => {

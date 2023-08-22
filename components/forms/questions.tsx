@@ -105,7 +105,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 export default function QuestionsForms({ dataForm }: { dataForm: any }) {
   const searchParams = useSearchParams()
-  const { user } = useAuthContext()
+  const { user, userPseudo } = useAuthContext()
   const router = useRouter()
 
   const { toast } = useToast()
@@ -116,8 +116,6 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
       description: "You can share it wherever you want",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
-
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
   const {
     updateFormDocument,

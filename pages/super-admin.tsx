@@ -22,7 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 export default function SuperAdmin() {
   const { logout } = useGitHubLogout()
 
-  const { user } = useAuthContext()
+  const { user, userPseudo } = useAuthContext()
   const router = useRouter()
   useEffect(() => {
     if (

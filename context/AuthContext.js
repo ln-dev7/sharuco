@@ -16,19 +16,21 @@ const auth = getAuth(firebase_app)
 
 export const AuthContext = createContext({
   user: null,
+  userPseudo: "",
 })
 
 export const useAuthContext = () => useContext(AuthContext)
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null)
+  const [userPseudo, setUserPseudo] = useState("")
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user)
-
+        setUserPseudo(user.reloadUserInfo.screenName.toLowerCase())
         async function addUID() {
           const documentRef = doc(
             collection(db, "users"),
@@ -49,6 +51,7 @@ export const AuthContextProvider = ({ children }) => {
         addUID()
       } else {
         setUser(null)
+        setUserPseudo("")
       }
       setLoading(false)
     })
@@ -57,7 +60,7 @@ export const AuthContextProvider = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user }}>
+    <AuthContext.Provider value={{ user, userPseudo }}>
       {loading ? (
         <div className="fixed inset-0 flex flex-col gap-2 items-center justify-center">
           <Loader className="animate-spin" />

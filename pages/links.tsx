@@ -49,7 +49,7 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function Links() {
-  const { user } = useAuthContext()
+  const { user, userPseudo } = useAuthContext()
   const { login, isPending } = useGitHubLogin()
   const { toast } = useToast()
 
@@ -59,13 +59,11 @@ export default function Links() {
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
 
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
-
   const {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(pseudo, "users")
+  } = useDocument(userPseudo, "users")
 
   const [openChangeVisibilityDialog, setOpenChangeVisibilityDialog] =
     useState(false)
@@ -92,7 +90,7 @@ export default function Links() {
     isLoading: isLoadingLinks,
     isError: isErrorLinks,
     data: dataLinks,
-  } = useGetDocumentFromUser(pseudo, "links")
+  } = useGetDocumentFromUser(userPseudo, "links")
 
   const schema = yup.object().shape({
     link: yup
@@ -139,7 +137,7 @@ export default function Links() {
       description: description,
       tags: tabTabs,
       createdAt: moment().valueOf(),
-      idAuthor: pseudo,
+      idAuthor: userPseudo,
     }
 
     createDocument(newDocument)
@@ -277,7 +275,7 @@ export default function Links() {
             <div className="flex w-full flex-col gap-2 sm:w-fit sm:flex-row">
               {dataUser?.data?.publicLinkPage && (
                 <Link
-                  href={`/link/${pseudo}`}
+                  href={`/link/${userPseudo}`}
                   className={buttonVariants({ size: "lg", variant: "outline" })}
                 >
                   <LinkIcon className="mr-2 h-4 w-4" />
@@ -319,10 +317,10 @@ export default function Links() {
                         <>
                           By going in public everyone to see your links here :{" "}
                           <Link
-                            href={`/link/${pseudo}`}
+                            href={`/link/${userPseudo}`}
                             className="font-bold hover:underline hover:underline-offset-4"
                           >
-                            {`https://sharuco.lndev.me/link/${pseudo}`}
+                            {`https://sharuco.lndev.me/link/${userPseudo}`}
                           </Link>
                         </>
                       )}
@@ -335,7 +333,7 @@ export default function Links() {
                         "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                       )}
                       onClick={() => {
-                        changeVisibiltyForLinkPage(pseudo)
+                        changeVisibiltyForLinkPage(userPseudo)
                       }}
                     >
                       {dataUser?.data?.publicLinkPage ? (

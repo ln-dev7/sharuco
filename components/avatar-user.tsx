@@ -41,9 +41,9 @@ export const useGitHubLogout = () => {
 
 export function AvatarUser() {
   const { logout } = useGitHubLogout()
-  const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
-  const { data, isLoading, isError } = useDocument(pseudo, "users")
+  const { user, userPseudo } = useAuthContext()
+
+  const { data, isLoading, isError } = useDocument(userPseudo, "users")
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -60,7 +60,7 @@ export function AvatarUser() {
                 alt={
                   data.data.displayName !== null
                     ? data.data.displayName
-                    : pseudo
+                    : userPseudo
                 }
               />
               <AvatarFallback>
@@ -86,7 +86,7 @@ export function AvatarUser() {
               <span className="font-bold">
                 {data.data.displayName !== null
                   ? data.data.displayName.split(" ")[0]
-                  : pseudo}
+                  : userPseudo}
               </span>
             )}
           </SheetTitle>

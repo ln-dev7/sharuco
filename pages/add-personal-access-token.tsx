@@ -18,8 +18,8 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function AddPersonalAccessToken() {
-  const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
+  const { user, userPseudo } = useAuthContext()
+
   const router = useRouter()
   useEffect(() => {
     if (!user) {
@@ -33,7 +33,7 @@ export default function AddPersonalAccessToken() {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(pseudo, "users")
+  } = useDocument(userPseudo, "users")
 
   const schema = yup.object().shape({
     personalAccessToken: yup.string().required(),
@@ -61,7 +61,7 @@ export default function AddPersonalAccessToken() {
       personalAccessToken: personalAccessToken,
     }
 
-    updateUserDocument({ pseudo, updatedUserData })
+    updateUserDocument({ userPseudo, updatedUserData })
     reset({
       personalAccessToken: "",
     })

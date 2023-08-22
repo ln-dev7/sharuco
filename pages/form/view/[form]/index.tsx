@@ -94,10 +94,8 @@ import { useToast } from "@/components/ui/use-toast"
 
 export default function FormViewPage() {
   const searchParams = useSearchParams()
-  const { user } = useAuthContext()
-  const router = useRouter()
-
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase() || ""
+  const { user, userPseudo } = useAuthContext()
+  const router = useRouter() || ""
 
   const { toast } = useToast()
 
@@ -234,7 +232,8 @@ export default function FormViewPage() {
           )}
           {dataForm &&
             dataForm.exists &&
-            (dataForm.data.published || dataForm.data.idAuthor === pseudo) && (
+            (dataForm.data.published ||
+              dataForm.data.idAuthor === userPseudo) && (
               <div className="w-full py-8">
                 <div
                   className={`absolute inset-x-0 top-0 h-3 w-full`}
@@ -337,7 +336,7 @@ export default function FormViewPage() {
             (dataForm &&
               dataForm.exists &&
               !dataForm.data.published &&
-              dataForm.data.idAuthor !== pseudo)) && (
+              dataForm.data.idAuthor !== userPseudo)) && (
             <div className="flex flex-col items-center gap-4">
               <h1 className="text-2xl font-bold">This form does not exist.</h1>
               <Link

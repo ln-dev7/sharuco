@@ -42,7 +42,7 @@ export default function AlgoliaSearchCode() {
 
 function Hit({ hit }) {
   return (
-    <Link href={`/code-preview/${hit.objectID}`}>
+    <a href={`/code-preview/${hit.objectID}`}>
       <div className="mb-4 w-full overflow-hidden rounded-lg border p-4 hover:border-sky-500 dark:border-slate-300 dark:hover:border-sky-500">
         <div className="flex flex-col items-start">
           <h3 className="mb-2 text-lg font-semibold leading-none tracking-tight text-slate-700 dark:text-slate-300 ">
@@ -62,6 +62,6 @@ function Hit({ hit }) {
           />
         </div>
       </div>
-    </Link>
+    </a>
   )
 }

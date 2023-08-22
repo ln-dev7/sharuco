@@ -101,7 +101,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 export default function PublishForms({ dataForm }: { dataForm: any }) {
   const searchParams = useSearchParams()
-  const { user } = useAuthContext()
+  const { user, userPseudo } = useAuthContext()
   const router = useRouter()
 
   const { toast } = useToast()
@@ -112,8 +112,6 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
       description: "You can share it wherever you want",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
-
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
   const ALGOLIA_INDEX_NAME = "forms"
 

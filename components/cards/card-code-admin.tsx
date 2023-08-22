@@ -121,8 +121,8 @@ export default function CardCodeAdmin({
 
   const searchParams = useSearchParams()
 
-  const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
+  const { user, userPseudo } = useAuthContext()
+
   const { login, isPending } = useGitHubLogin()
 
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
@@ -466,7 +466,7 @@ export default function CardCodeAdmin({
                                   value,
                                   getValues("code"),
                                   getValues("language"),
-                                  pseudo,
+                                  userPseudo,
                                   getValues("description")
                                     ? getValues("description")
                                     : null
@@ -896,7 +896,7 @@ export default function CardCodeAdmin({
           )}
           {isPrivate ? null : (
             <div className="flex items-center text-slate-700 dark:text-slate-400 ">
-              {user && favorisInit.includes(pseudo) ? (
+              {user && favorisInit.includes(userPseudo) ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="#F9197F"

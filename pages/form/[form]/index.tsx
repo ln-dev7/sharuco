@@ -101,7 +101,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 export default function FormPage() {
   const searchParams = useSearchParams()
-  const { user } = useAuthContext()
+  const { user, userPseudo } = useAuthContext()
   const router = useRouter()
 
   const { toast } = useToast()
@@ -111,8 +111,6 @@ export default function FormPage() {
       router.push("/forms")
     }
   })
-
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
 
   const {
     data: dataForm,
@@ -144,52 +142,54 @@ export default function FormPage() {
             <Loader2 className="h-10 w-10 animate-spin" />
           </div>
         )}
-        {dataForm && dataForm.exists && dataForm.data.idAuthor === pseudo && (
-          <div className="flex w-full flex-col gap-4">
-            <div className="flex flex-col items-start gap-2">
-              <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
-                {dataForm.data.name}
-              </h1>
-              <p className="text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 sm:text-base md:text-lg lg:text-lg">
-                {dataForm.data.description}
-              </p>
+        {dataForm &&
+          dataForm.exists &&
+          dataForm.data.idAuthor === userPseudo && (
+            <div className="flex w-full flex-col gap-4">
+              <div className="flex flex-col items-start gap-2">
+                <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
+                  {dataForm.data.name}
+                </h1>
+                <p className="text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 sm:text-base md:text-lg lg:text-lg">
+                  {dataForm.data.description}
+                </p>
+              </div>
+              <Tabs defaultValue="questions" className="w-full">
+                <TabsList>
+                  <div>
+                    <TabsTrigger value="questions">
+                      <FileQuestion className="mr-2 h-4 w-4" />
+                      Questions
+                    </TabsTrigger>
+                    <TabsTrigger value="responses">
+                      <MessageSquare className="mr-2 h-4 w-4" />
+                      Responses
+                      <span className="ml-2 flex items-center justify-center rounded-md bg-slate-200 px-1 dark:bg-slate-700">
+                        {dataForm.data.responses.length}
+                      </span>
+                    </TabsTrigger>
+                    <TabsTrigger value="publish">
+                      <Send className="mr-2 h-4 w-4" />
+                      Publish
+                    </TabsTrigger>
+                  </div>
+                </TabsList>
+                <TabsContent className="border-none p-0 pt-4" value="questions">
+                  <QuestionsForms dataForm={dataForm.data} />
+                </TabsContent>
+                <TabsContent className="border-none p-0 pt-2" value="responses">
+                  <ResponsesForms dataForm={dataForm.data} />
+                </TabsContent>
+                <TabsContent className="border-none p-0 pt-2" value="publish">
+                  <PublishForms dataForm={dataForm.data} />
+                </TabsContent>
+              </Tabs>
             </div>
-            <Tabs defaultValue="questions" className="w-full">
-              <TabsList>
-                <div>
-                  <TabsTrigger value="questions">
-                    <FileQuestion className="mr-2 h-4 w-4" />
-                    Questions
-                  </TabsTrigger>
-                  <TabsTrigger value="responses">
-                    <MessageSquare className="mr-2 h-4 w-4" />
-                    Responses
-                    <span className="ml-2 flex items-center justify-center rounded-md bg-slate-200 px-1 dark:bg-slate-700">
-                      {dataForm.data.responses.length}
-                    </span>
-                  </TabsTrigger>
-                  <TabsTrigger value="publish">
-                    <Send className="mr-2 h-4 w-4" />
-                    Publish
-                  </TabsTrigger>
-                </div>
-              </TabsList>
-              <TabsContent className="border-none p-0 pt-4" value="questions">
-                <QuestionsForms dataForm={dataForm.data} />
-              </TabsContent>
-              <TabsContent className="border-none p-0 pt-2" value="responses">
-                <ResponsesForms dataForm={dataForm.data} />
-              </TabsContent>
-              <TabsContent className="border-none p-0 pt-2" value="publish">
-                <PublishForms dataForm={dataForm.data} />
-              </TabsContent>
-            </Tabs>
-          </div>
-        )}
+          )}
         {((dataForm && !dataForm.exists) ||
           (dataForm &&
             dataForm.exists &&
-            dataForm.data.idAuthor !== pseudo)) && (
+            dataForm.data.idAuthor !== userPseudo)) && (
           <div className="flex flex-col items-center gap-4">
             <h1 className="text-2xl font-bold">This form does not exist.</h1>
             <Link

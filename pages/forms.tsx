@@ -51,7 +51,7 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function Forms() {
-  const { user } = useAuthContext()
+  const { user, userPseudo } = useAuthContext()
   const { login, isPending } = useGitHubLogin()
   const { toast } = useToast()
 
@@ -61,13 +61,11 @@ export default function Forms() {
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
 
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
-
   const {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(pseudo, "users")
+  } = useDocument(userPseudo, "users")
 
   const { updateUserDocument }: any = useUpdateUserDocument("users")
 
@@ -75,7 +73,7 @@ export default function Forms() {
     isLoading: isLoadingForms,
     isError: isErrorForms,
     data: dataForms,
-  } = useGetDocumentFromUser(pseudo, "forms")
+  } = useGetDocumentFromUser(userPseudo, "forms")
 
   const schema = yup.object().shape({
     name: yup.string().required(),
@@ -102,7 +100,7 @@ export default function Forms() {
       name: name,
       description: description,
       createdAt: moment().valueOf(),
-      idAuthor: pseudo,
+      idAuthor: userPseudo,
       color: getRandomColor(colors),
       published: false,
       questions: [],

@@ -22,11 +22,10 @@ const client = algoliasearch(
 )
 
 export default function AlgoliaSearchForm() {
-  const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
+  const { user, userPseudo } = useAuthContext()
 
   const transformItems = (items) => {
-    return items.filter((item) => item.idAuthor === pseudo)
+    return items.filter((item) => item.idAuthor === userPseudo)
   }
 
   return (
@@ -61,7 +60,7 @@ export default function AlgoliaSearchForm() {
 
 function Hit({ hit }) {
   return (
-    <Link href={`/form/${hit.objectID}`}>
+    <a href={`/form/${hit.objectID}`}>
       <div className="mb-4 flex w-full flex-col items-start gap-2 overflow-hidden rounded-lg border p-4 hover:border-sky-500 dark:border-slate-300 dark:hover:border-sky-500">
         <h2 className="text-lg font-semibold">{hit.name}</h2>
         <Highlight
@@ -76,6 +75,6 @@ function Hit({ hit }) {
           {hit.responses.length} response{hit.responses.length > 1 && "s"}
         </span>
       </div>
-    </Link>
+    </a>
   )
 }

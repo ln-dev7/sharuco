@@ -44,8 +44,7 @@ export default function IndexPage() {
   const { login, isPending } = useGitHubLogin()
   const { theme } = useTheme()
 
-  const { user } = useAuthContext()
-  const pseudo = user?.reloadUserInfo.screenName.toLowerCase()
+  const { user, userPseudo } = useAuthContext()
 
   const [userCountry, setUserCountry] = useState("")
   useEffect(() => {
@@ -409,7 +408,7 @@ export default function IndexPage() {
                         </div>
                         {user && (
                           <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
-                            @ {pseudo}
+                            @ {userPseudo}
                           </span>
                         )}
                       </div>
