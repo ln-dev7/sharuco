@@ -23,7 +23,7 @@ export const useAuthContext = () => useContext(AuthContext)
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-  const [userPseudo, setUserPseudo] = useState("")
+  const [userPseudo, setUserPseudo] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export const AuthContextProvider = ({ children }) => {
         addUID()
       } else {
         setUser(null)
-        setUserPseudo("")
+        setUserPseudo(null)
       }
       setLoading(false)
     })

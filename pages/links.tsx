@@ -30,6 +30,8 @@ import { cn } from "@/lib/utils"
 import CardLinkAdmin from "@/components/cards/card-link-admin"
 import EmptyCard from "@/components/empty-card"
 import { Layout } from "@/components/layout"
+import LinksConnected from "@/components/links/LinksConnected"
+import LinksNotConnected from "@/components/links/LinksNotConnected"
 import LoaderLinks from "@/components/loaders/loader-links"
 import {
   AlertDialog,
@@ -85,12 +87,6 @@ export default function Links() {
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
   }
-
-  const {
-    isLoading: isLoadingLinks,
-    isError: isErrorLinks,
-    data: dataLinks,
-  } = useGetDocumentFromUser(userPseudo, "links")
 
   const schema = yup.object().shape({
     link: yup
@@ -349,87 +345,7 @@ export default function Links() {
           </div>
         ) : null}
         <Separator className="my-4" />
-        {user ? (
-          <>
-            {isLoadingLinks && <LoaderLinks />}
-            {dataLinks && (
-              <>
-                {dataLinks.length > 0 && (
-                  <ResponsiveMasonry
-                    columnsCountBreakPoints={{
-                      659: 1,
-                      660: 2,
-                      720: 2,
-                      990: 3,
-                    }}
-                    className="w-full"
-                  >
-                    <Masonry gutter="2rem">
-                      {dataLinks.map(
-                        (link: {
-                          id: string
-                          idAuthor: string
-                          link: string
-                          description: string
-                          tags: string[]
-                          createdAt: any
-                        }) => (
-                          <CardLinkAdmin
-                            key={link.id}
-                            id={link.id}
-                            idAuthor={link.idAuthor}
-                            link={link.link}
-                            description={link.description}
-                            tags={link.tags}
-                            createdAt={link.createdAt}
-                          />
-                        )
-                      )}
-                    </Masonry>
-                  </ResponsiveMasonry>
-                )}
-                {dataLinks.length == 0 && (
-                  <EmptyCard
-                    icon={<FileCog className="h-12 w-12" />}
-                    title="No link found"
-                    description="You have not added any link yet."
-                  />
-                )}
-              </>
-            )}
-            {isErrorLinks && (
-              <EmptyCard
-                icon={<FileCog className="h-12 w-12" />}
-                title="An error has occurred"
-                description="An error has occurred, please try again later or refresh the page."
-              />
-            )}
-          </>
-        ) : (
-          <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 dark:border-slate-700">
-            <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
-              <Lock className="h-12 w-12" />
-              <h3 className="mt-4 text-lg font-semibold">Access denied</h3>
-              <p className="mb-4 mt-2 text-sm text-muted-foreground">
-                To access Sharuco Link you must first be logged in.
-              </p>
-              <button
-                className={cn(
-                  "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
-                )}
-                disabled={isPending}
-                onClick={login}
-              >
-                {isPending ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Github className="mr-2 h-4 w-4" />
-                )}
-                Login with Github
-              </button>
-            </div>
-          </div>
-        )}
+        {user ? <LinksConnected /> : <LinksNotConnected />}
       </section>
     </Layout>
   )

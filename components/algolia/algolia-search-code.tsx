@@ -1,6 +1,5 @@
-import Link from "next/link"
 import algoliasearch from "algoliasearch"
-import { Search, SearchIcon, Trash2 } from "lucide-react"
+import { Search, Trash2 } from "lucide-react"
 import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch"
 
 import LoaderCode from "@/components/loaders/loader-code"

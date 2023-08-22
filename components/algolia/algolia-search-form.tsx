@@ -1,18 +1,7 @@
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import algoliasearch from "algoliasearch"
-import { Loader2, Search, SearchIcon, Trash2 } from "lucide-react"
-import {
-  Configure,
-  Highlight,
-  Hits,
-  InstantSearch,
-  SearchBox,
-} from "react-instantsearch"
-
-import LoaderLink from "@/components/loaders/loader-link"
-import { Badge } from "@/components/ui/badge"
+import { Loader2, Search, Trash2 } from "lucide-react"
+import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch"
 
 // https://www.algolia.com/doc/guides/building-search-ui/getting-started/react-hooks/#before-you-start
 

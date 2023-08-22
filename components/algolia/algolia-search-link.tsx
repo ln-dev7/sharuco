@@ -2,14 +2,8 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import algoliasearch from "algoliasearch"
-import { Search, SearchIcon, Trash2 } from "lucide-react"
-import {
-  Configure,
-  Highlight,
-  Hits,
-  InstantSearch,
-  SearchBox,
-} from "react-instantsearch"
+import { Search, Trash2 } from "lucide-react"
+import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch"
 
 import LoaderLink from "@/components/loaders/loader-link"
 import { Badge } from "@/components/ui/badge"

@@ -30,6 +30,8 @@ import * as yup from "yup"
 import { cn } from "@/lib/utils"
 import CardForm from "@/components/cards/card-form"
 import EmptyCard from "@/components/empty-card"
+import FormsConnected from "@/components/forms/FormsConnected"
+import FormsNotConnected from "@/components/forms/FormsNotConnected"
 import { Layout } from "@/components/layout"
 import LoaderForms from "@/components/loaders/loader-forms"
 import {
@@ -52,7 +54,6 @@ import { useToast } from "@/components/ui/use-toast"
 
 export default function Forms() {
   const { user, userPseudo } = useAuthContext()
-  const { login, isPending } = useGitHubLogin()
   const { toast } = useToast()
 
   const notifyCodeAdded = () =>
@@ -61,19 +62,7 @@ export default function Forms() {
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
 
-  const {
-    data: dataUser,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
-  } = useDocument(userPseudo, "users")
-
   const { updateUserDocument }: any = useUpdateUserDocument("users")
-
-  const {
-    isLoading: isLoadingForms,
-    isError: isErrorForms,
-    data: dataForms,
-  } = useGetDocumentFromUser(userPseudo, "forms")
 
   const schema = yup.object().shape({
     name: yup.string().required(),
@@ -223,89 +212,7 @@ export default function Forms() {
           </div>
         ) : null}
         <Separator className="my-4" />
-        {user ? (
-          <>
-            {isLoadingForms && <LoaderForms />}
-            {dataForms && (
-              <>
-                {dataForms.length > 0 && (
-                  <ResponsiveMasonry
-                    columnsCountBreakPoints={{
-                      659: 1,
-                      660: 2,
-                      720: 2,
-                      990: 3,
-                    }}
-                    className="w-full"
-                  >
-                    <Masonry gutter="2rem">
-                      {dataForms.map(
-                        (form: {
-                          id: string
-                          idAuthor: string
-                          name: string
-                          description: string
-                          color: string
-                          responses: any[]
-                          createdAt: any
-                        }) => (
-                          <CardForm
-                            key={form.id}
-                            id={form.id}
-                            idAuthor={form.idAuthor}
-                            name={form.name}
-                            description={form.description}
-                            color={form.color}
-                            responses={form.responses}
-                            createdAt={form.createdAt}
-                          />
-                        )
-                      )}
-                    </Masonry>
-                  </ResponsiveMasonry>
-                )}
-                {dataForms.length == 0 && (
-                  <EmptyCard
-                    icon={<FileCog className="h-12 w-12" />}
-                    title="No form found"
-                    description="You have not added any form yet."
-                  />
-                )}
-              </>
-            )}
-            {isErrorForms && (
-              <EmptyCard
-                icon={<FileCog className="h-12 w-12" />}
-                title="An error has occurred"
-                description="An error has occurred, please try again later or refresh the page."
-              />
-            )}
-          </>
-        ) : (
-          <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 dark:border-slate-700">
-            <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
-              <Lock className="h-12 w-12" />
-              <h3 className="mt-4 text-lg font-semibold">Access denied</h3>
-              <p className="mb-4 mt-2 text-sm text-muted-foreground">
-                To access Sharuco Form you must first be logged in.
-              </p>
-              <button
-                className={cn(
-                  "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
-                )}
-                disabled={isPending}
-                onClick={login}
-              >
-                {isPending ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Github className="mr-2 h-4 w-4" />
-                )}
-                Login with Github
-              </button>
-            </div>
-          </div>
-        )}
+        {user ? <FormsConnected /> : <FormsNotConnected />}
       </section>
     </Layout>
   )
