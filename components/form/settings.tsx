@@ -241,7 +241,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
 
   return (
     <div className="flex py-6 shrink-0 items-center justify-center rounded-md">
-      <div className="mx-auto flex w-full max-w-3xl flex-col items-start justify-center gap-4 p-4 text-center">
+      <div className="mx-auto flex w-full max-w-3xl flex-col items-start justify-center gap-4 text-center">
         <div className="flex flex-col items-start">
           <h3 className="text-xl font-semibold">General</h3>
         </div>
@@ -259,8 +259,9 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
         </div>
         <div className="flex w-full flex-col items-start gap-2">
           <Label>Description</Label>
-          <Input
+          <Textarea
             placeholder="Description of the form"
+            className="h-24"
             {...register("description")}
             // defaultValue={dataForm.description}
           />
@@ -279,7 +280,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
               // defaultValue={dataForm.color}
             />
             <div
-              className="block w-9 h-9 rounded-md"
+              className="block w-9 h-9 shrink-0 rounded-full"
               style={{
                 background: `${dataForm.color}`,
               }}
@@ -291,7 +292,9 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
         </div>
         <div className="flex w-full flex-col items-start gap-2">
           <div className="flex w-full flex-col items-start gap-1">
-            <Label>Redirect to this URL when the form is submitted.</Label>
+            <Label className="text-left">
+              Redirect to this URL when the form is submitted.
+            </Label>
             <p className="text-sm text-left">
               Leave the field blank if you do not want to redirect to a URL
             </p>
