@@ -7,7 +7,7 @@ export default function usePaymentInitialization() {
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  const initializePayment = async (email, amount, description, publicKey) => {
+  const initializePayment = async (email, amount, description, publicKey, callback) => {
     setIsLoading(true)
     setIsError(false)
 
@@ -16,8 +16,7 @@ export default function usePaymentInitialization() {
       currency: "EUR",
       amount,
       description,
-      callback: "http://localhost:3000/donation",
-      // callback: "https://sharuco.lndev.me/donation",
+      callback,
     }
 
     try {

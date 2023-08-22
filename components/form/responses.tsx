@@ -166,7 +166,10 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
             .reverse()
             .map((response, index) => (
               <div
-                className="flex w-full flex-col items-start gap-4 rounded-md border border-dashed border-slate-300 p-4 dark:border-slate-700"
+                className={cn(
+                  "flex w-full flex-col items-start gap-4 rounded-md border border-dashed border-slate-300 p-4 dark:border-slate-700"
+                  // response.paymentStatut === "complete" ? "bg-emerald-50/50 dark:bg-emerald-500/5" : ""
+                )}
                 key={index}
               >
                 <Accordion
@@ -175,7 +178,16 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                   className="w-full border-b  border-dashed border-slate-300 dark:border-slate-700"
                 >
                   <AccordionItem value="response" className="border-none">
-                    <AccordionTrigger>View response</AccordionTrigger>
+                    <AccordionTrigger>
+                      <div className="flex items-center justify-start gap-2">
+                        View response
+                        {response.paymentStatut === "complete" ? (
+                          <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                            PAID ( {dataForm.amountNotchPay} EURO )
+                          </span>
+                        ) : null}
+                      </div>
+                    </AccordionTrigger>
                     <AccordionContent>
                       <div className="flex w-full flex-col items-start gap-2 ">
                         {response.responses.map((answer, answerIndex) => (

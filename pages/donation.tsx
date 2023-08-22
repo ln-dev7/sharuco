@@ -79,7 +79,8 @@ export default function Donation() {
       emailToUse,
       parseInt(price),
       "Donation for Sharuco",
-      process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY_TEST
+      process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
+      "https://sharuco.lndev.me/donation"
     )
     reset({
       price: 0,

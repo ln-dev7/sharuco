@@ -17,7 +17,6 @@ import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import usePaymentInitialization from "@/notchpay/initializePayment.js"
 import copyToClipboard from "@/utils/copyToClipboard.js"
 import embedProject from "@/utils/embedStackblitzProject"
 import indentCode from "@/utils/indentCode.js"
@@ -106,8 +105,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
   const { user, userPseudo } = useAuthContext()
   const router = useRouter()
 
-  const { initializePayment, isLoading, isError } = usePaymentInitialization()
-
   const { toast } = useToast()
 
   const notifyUrlCopied = () =>
@@ -148,15 +145,15 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       is: true,
       then: (schema) =>
         schema
-          .matches(/^b\./, 'Public NotchPay API key must start with "b."')
+          .matches(/^pk\./, 'Public NotchPay API key must start with "b."')
           .required("Public NotchPay API key is required"),
     }),
     amountNotchPay: yup.number().when("acceptPayment", {
       is: true,
       then: (schema) =>
         schema
-          .typeError("Amount for NotchPay must be a valid number")
           .min(2, "Amount for NotchPay must be greater than 2")
+          .typeError("Amount for NotchPay must be a valid number")
           .required("Amount for NotchPay is required"),
     }),
   })
@@ -354,12 +351,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           </p>
         </div>
         <Separator className="opacity-50" />
-        <div
-          className="flex w-full flex-col items-start gap-2"
-          style={{
-            opacity: checkboxAcceptPayment ? "1" : "0.2",
-          }}
-        >
+        <div className="flex w-full flex-col items-start gap-2">
           <div className="flex w-full flex-col items-start gap-1">
             <Label>Public NotchPay API key</Label>
             <p className="text-left text-sm">
@@ -373,7 +365,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             </p>
           </div>
           <Input
-            placeholder="b.xxxxxxx...xxxxxxxx"
+            placeholder="pk.xxxxxxx...xxxxxxxx"
             {...register("publicNotchPayApiKey")}
           />
           <p className="text-sm text-red-500">
@@ -382,12 +374,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             )}
           </p>
         </div>
-        <div
-          className="flex w-full flex-col items-start gap-2"
-          style={{
-            opacity: checkboxAcceptPayment ? "1" : "0.2",
-          }}
-        >
+        <div className="flex w-full flex-col items-start gap-2">
           <Label>Amount ( in EURO ) </Label>
           <Input placeholder="2 EURO" {...register("amountNotchPay")} />
           <p className="text-sm text-red-500">
@@ -438,7 +425,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           </Button>
           {isSuccessUpdateForm && (
             <div
-              className="flex w-full items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
+              className="flex mt-2 w-full items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
               role="alert"
             >
               <Check className="h-4 w-4" />
