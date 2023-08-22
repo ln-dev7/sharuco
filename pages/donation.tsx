@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import usePaymentInitialization from "@/notchpay/donation/initializePayment.js"
+import usePaymentInitialization from "@/notchpay/initializePayment.js"
 
 //import axios from "axios"
 import "highlight.js/styles/vs.css"
@@ -22,12 +22,10 @@ export default function Donation() {
   const [paymentDone, setPaymentDone] = useState(false)
 
   const checkPaymentStatus = async () => {
-    const transactionDonationReference = localStorage.getItem(
-      "transaction-donation-reference"
-    )
-    const CAPTURE_URL = `https://api.notchpay.co/payments/${transactionDonationReference}`
+    const transactionReference = localStorage.getItem("transaction-reference")
+    const CAPTURE_URL = `https://api.notchpay.co/payments/${transactionReference}`
 
-    if (!transactionDonationReference) {
+    if (!transactionReference) {
       return
     }
 
@@ -41,7 +39,7 @@ export default function Donation() {
       const paymentStatus = response.data.transaction.status
 
       if (paymentStatus === "complete") {
-        localStorage.removeItem("transaction-donation-reference")
+        localStorage.removeItem("transaction-reference")
         setPaymentDone(true)
       }
     } catch (error) {}
@@ -56,7 +54,12 @@ export default function Donation() {
   const { initializePayment, isLoading, isError } = usePaymentInitialization()
 
   const schema = yup.object().shape({
-    price: yup.number().integer().min(1).required(),
+    price: yup
+      .number()
+      .integer()
+      .typeError("Amount must be a valid number")
+      .min(2, "Amount must be greater than 2")
+      .required(),
     email: !user ? yup.string().email().required() : yup.string().email(),
   })
 
@@ -72,7 +75,13 @@ export default function Donation() {
   const onSubmit = async (data) => {
     const { price, email } = data
     const emailToUse = user ? user.email : email
-    initializePayment(emailToUse, parseInt(price), "Donation for Sharuco")
+    initializePayment(
+      emailToUse,
+      parseInt(price),
+      "Donation for Sharuco",
+      process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
+      "https://sharuco.lndev.me/donation"
+    )
     reset({
       price: 0,
     })
@@ -101,9 +110,9 @@ export default function Donation() {
             project, you can make a donation.
           </p>
         </div>
-        {/* <div className="flex flex-col sm:flex-row items-start w-full gap-2">
-          <div className="w-full flex flex-col sm:flex-row items-start gap-2">
-            <div className="w-full flex flex-col items-start gap-2">
+        <div className="flex w-full flex-col items-start gap-2 sm:flex-row">
+          <div className="flex w-full flex-col items-start gap-2 sm:flex-row">
+            <div className="flex w-full flex-col items-start gap-2">
               <Input
                 type="text"
                 placeholder="Enter the amount in euro ( € )"
@@ -115,7 +124,7 @@ export default function Donation() {
               </p>
             </div>
             {!user ? (
-              <div className="w-full flex flex-col items-start gap-2">
+              <div className="flex w-full flex-col items-start gap-2">
                 <Input
                   type="email"
                   placeholder="Enter your email"
@@ -129,7 +138,7 @@ export default function Donation() {
             ) : null}
           </div>
           <Button
-            className="shrink-0 w-full sm:w-fit"
+            className="w-full shrink-0 sm:w-fit"
             disabled={isLoading}
             onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
           >
@@ -138,13 +147,13 @@ export default function Donation() {
           </Button>
         </div>
         {paymentDone ? (
-          <div className="inline-flex items-center rounded-lg border border-green-200 bg-green-100 p-4 text-sm font-medium text-green-800 dark:bg-gray-800 dark:text-green-300 dark:border-none">
+          <div className="inline-flex items-center rounded-lg border border-green-200 bg-green-100 p-4 text-sm font-medium text-green-800 dark:border-none dark:bg-gray-800 dark:text-green-300">
             Thanks you for your donation!
           </div>
         ) : null}
-        <div className="w-full flex items-center justify-center">
+        <div className="flex w-full items-center justify-center">
           <span className="text-lg font-bold">OR</span>
-        </div> */}
+        </div>
         <div className="flex w-full items-center justify-center">
           <a
             href="https://www.buymeacoffee.com/lndev"

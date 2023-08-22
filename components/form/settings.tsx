@@ -122,6 +122,10 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
   )
   const index = client.initIndex(ALGOLIA_INDEX_NAME)
 
+  const [checkboxAcceptPayment, setCheckboxAcceptPayment] = useState(
+    dataForm.acceptPayment
+  )
+
   const schema = yup.object().shape({
     name: yup.string().required("Name is required"),
     description: yup.string().required("Description is required"),
@@ -136,11 +140,22 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       .string()
       .url("Redirect URL must be a valid URL")
       .nullable(),
-    // publicNotchPayApiKey: yup
-    //   .string()
-    //   .matches(/^b\./, 'Public NotchPay API key must start with "b."')
-    //   .required("Public NotchPay API key is required"),
-    //amountNotchPay: yup.number().required('Amount for NotchPay is required'),
+    acceptPayment: yup.boolean(),
+    publicNotchPayApiKey: yup.string().when("acceptPayment", {
+      is: true,
+      then: (schema) =>
+        schema
+          .matches(/^pk\./, 'Public NotchPay API key must start with "pk."')
+          .required("Public NotchPay API key is required"),
+    }),
+    amountNotchPay: yup.number().when("acceptPayment", {
+      is: true,
+      then: (schema) =>
+        schema
+          .min(2, "Amount for NotchPay must be greater than 2")
+          .typeError("Amount for NotchPay must be a valid number")
+          .required("Amount for NotchPay is required"),
+    }),
   })
 
   const {
@@ -160,8 +175,9 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     setValue("description", dataForm.description)
     setValue("color", dataForm.color)
     setValue("redirectOnCompletion", dataForm.redirectOnCompletion)
-    // setValue("publicNotchPayApiKey", dataForm.publicNotchPayApiKey)
-    // setValue("amountNotchPay", dataForm.amountNotchPay)
+    setValue("publicNotchPayApiKey", dataForm.publicNotchPayApiKey)
+    setValue("amountNotchPay", dataForm.amountNotchPay)
+    setValue("acceptPayment", dataForm.acceptPayment)
   }, [dataForm])
 
   const {
@@ -178,17 +194,19 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
+      publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
+      amountNotchPay: amountNotchPayUpdate,
+      acceptPayment: acceptPaymentUpdate,
     } = data
 
     if (
       nameUpdate === dataForm.name &&
       descriptionUpdate === dataForm.description &&
       colorUpdate === dataForm.color &&
-      redirectOnCompletionUpdate === dataForm.redirectOnCompletion
-      // && publicNotchPayApiKeyUpdate === dataForm.publicNotchPayApiKey &&
-      // amountNotchPayUpdate === dataForm.amountNotchPay
+      redirectOnCompletionUpdate === dataForm.redirectOnCompletion &&
+      publicNotchPayApiKeyUpdate === dataForm.publicNotchPayApiKey &&
+      amountNotchPayUpdate === dataForm.amountNotchPay &&
+      acceptPaymentUpdate === dataForm.acceptPayment
     ) {
       toast({
         variant: "destructive",
@@ -204,15 +222,17 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: string
       color: string
       redirectOnCompletion: string
-      // publicNotchPayApiKey: string
-      // amountNotchPay: number
+      publicNotchPayApiKey: string
+      amountNotchPay: number
+      acceptPayment: boolean
     } = {
       name: nameUpdate,
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
+      publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
+      amountNotchPay: amountNotchPayUpdate,
+      acceptPayment: acceptPaymentUpdate,
     }
 
     const id = searchParams.get("form")
@@ -225,8 +245,9 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
+      publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
+      amountNotchPay: amountNotchPayUpdate,
+      acceptPayment: acceptPaymentUpdate,
     })
 
     reset({
@@ -234,8 +255,9 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
+      publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
+      amountNotchPay: amountNotchPayUpdate,
+      acceptPayment: acceptPaymentUpdate,
     })
   }
 
@@ -263,7 +285,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             placeholder="Description of the form"
             className="h-24"
             {...register("description")}
-            // defaultValue={dataForm.description}
           />
           <p className="text-sm text-red-500">
             {errors.description && <>{errors.description.message}</>}
@@ -277,7 +298,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
               className="w-full"
               placeholder="#000000"
               {...register("color")}
-              // defaultValue={dataForm.color}
             />
             <div
               className="block h-9 w-9 shrink-0 rounded-full"
@@ -302,7 +322,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           <Input
             placeholder="https://example.com?success=true"
             {...register("redirectOnCompletion")}
-            // defaultValue={dataForm.redirectOnCompletion}
           />
           <p className="text-sm text-red-500">
             {errors.redirectOnCompletion && (
@@ -310,61 +329,87 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             )}
           </p>
         </div>
-        <div className="relative flex w-full flex-col items-start gap-4 opacity-30 before:absolute before:inset-0">
-          {/* <Separator className="my-2" /> */}
-          <div className="flex flex-col items-start">
-            <h3 className="text-xl font-semibold">Payment</h3>
+        <Separator className="my-2" />
+        <div className="flex flex-col items-start">
+          <h3 className="text-xl font-semibold">Payment</h3>
+          <p className="text-left text-sm">
+            You can use{" "}
+            <a
+              href="https://business.notchpay.co"
+              className="font-bold underline underline-offset-4"
+            >
+              NotchPay
+            </a>{" "}
+            to accept payments on your form. You can create a NotchPay account{" "}
+            <a
+              href="https://business.notchpay.co"
+              className="font-bold underline underline-offset-4"
+            >
+              here
+            </a>
+            .
+          </p>
+        </div>
+        <Separator className="opacity-50" />
+        <div className="flex w-full flex-col items-start gap-2">
+          <div className="flex w-full flex-col items-start gap-1">
+            <Label>Public NotchPay API key</Label>
             <p className="text-left text-sm">
-              You can use{" "}
+              You can have it here :{" "}
               <a
-                href="https://business.notchpay.co"
-                className="font-bold underline underline-offset-4"
+                href="https://business.notchpay.co/settings/developer"
+                className="font-semibold underline underline-offset-4"
               >
-                NotchPay
-              </a>{" "}
-              to accept payments on your form. You can create a NotchPay account{" "}
-              <a
-                href="https://business.notchpay.co"
-                className="font-bold underline underline-offset-4"
-              >
-                here
+                https://business.notchpay.co/settings/developer
               </a>
-              .
             </p>
           </div>
-          {/* <Separator className="opacity-50" /> */}
-          <div className="flex w-full flex-col items-start gap-2">
-            <div className="flex w-full flex-col items-start gap-1">
-              <Label>Public NotchPay API key</Label>
-              <p className="text-left text-sm">
-                You can have it here :{" "}
-                <a
-                  href="https://business.notchpay.co/settings/developer"
-                  className="font-semibold underline underline-offset-4"
-                >
-                  https://business.notchpay.co/settings/developer
-                </a>
-              </p>
-            </div>
-            <Input
-              placeholder="b.nxxxxxxxxxxxxxxx"
-              //{...register("publicNotchPayApiKey")}
-            />
-            {/* <p className="text-sm text-red-500">
-                      {errors.publicNotchPayApiKey && <>{errors.publicNotchPayApiKey.message}</>}
-                    </p> */}
-          </div>
-          <div className="flex w-full flex-col items-start gap-2">
-            <Label>Amount ( in XAF ) </Label>
-            <Input
-              placeholder="5000 XAF"
-              //{...register("amountNotchPay")}
-            />
-            {/* <p className="text-sm text-red-500">
-                      {errors.amountNotchPay && <>{errors.amountNotchPay.message}</>}
-                    </p> */}
-          </div>
+          <Input
+            placeholder="pk.xxxxxxx...xxxxxxxx"
+            {...register("publicNotchPayApiKey")}
+          />
+          <p className="text-sm text-red-500">
+            {errors.publicNotchPayApiKey && checkboxAcceptPayment && (
+              <>{errors.publicNotchPayApiKey.message}</>
+            )}
+          </p>
         </div>
+        <div className="flex w-full flex-col items-start gap-2">
+          <Label>Amount ( in EURO ) </Label>
+          <Input placeholder="2 EURO" {...register("amountNotchPay")} />
+          <p className="text-sm text-red-500">
+            {errors.amountNotchPay && checkboxAcceptPayment && (
+              <>{errors.amountNotchPay.message}</>
+            )}
+          </p>
+        </div>
+
+        <div className="flex w-full items-center justify-start gap-2">
+          <input
+            type="checkbox"
+            {...register("acceptPayment")}
+            name="acceptPayment"
+            id="acceptPayment"
+            className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
+                      ${
+                        checkboxAcceptPayment
+                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-slate-500 before:transition-transform"
+                          : ""
+                      } 
+                      `}
+            checked={checkboxAcceptPayment}
+            onChange={() => setCheckboxAcceptPayment(!checkboxAcceptPayment)}
+          />
+          <Label htmlFor="acceptPayment">
+            Does this form accept payments ?{" "}
+            {checkboxAcceptPayment ? (
+              <span className="font-bold text-teal-300"> Yes</span>
+            ) : (
+              <span className="font-bold text-teal-300"> No</span>
+            )}
+          </Label>
+        </div>
+
         <div className="sticky inset-x-0 bottom-0 flex w-full flex-col items-start gap-2 border-t  bg-white py-4 dark:bg-slate-900">
           <Button
             variant="default"
@@ -380,7 +425,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           </Button>
           {isSuccessUpdateForm && (
             <div
-              className="flex w-full items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
+              className="mt-2 flex w-full items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
               role="alert"
             >
               <Check className="h-4 w-4" />

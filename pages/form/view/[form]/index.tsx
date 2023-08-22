@@ -17,6 +17,7 @@ import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
+import usePaymentInitialization from "@/notchpay/initializePayment.js"
 import copyToClipboard from "@/utils/copyToClipboard.js"
 import embedProject from "@/utils/embedStackblitzProject"
 import indentCode from "@/utils/indentCode.js"
@@ -24,6 +25,7 @@ import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
 import sdk, { Project } from "@stackblitz/sdk"
 import algoliasearch from "algoliasearch"
+import axios from "axios"
 import hljs from "highlight.js"
 import {
   Check,
@@ -127,6 +129,7 @@ export default function FormViewPage() {
         text: yup.string().required("This field is required"),
       })
     ),
+    paymentStatut: yup.string(),
   })
 
   const ALGOLIA_INDEX_NAME = "forms"
@@ -158,14 +161,17 @@ export default function FormViewPage() {
   }: any = useUpdateFormDocument("forms")
 
   const onSubmit = async (data) => {
+    setPaymentDone(false)
     let updatedFormData: {
       responses: any[]
+      paymentStatut?: string
     } = {
       responses: [
         ...dataForm?.data?.responses,
         {
           idResponse: moment().valueOf() + uid(),
           createdAt: moment().valueOf(),
+          paymentStatut: data.paymentStatut ? data.paymentStatut : "",
           responses: [
             ...data.responses.map((response: any, index: number) => {
               return {
@@ -178,7 +184,7 @@ export default function FormViewPage() {
         },
       ],
     }
-    //console.log("updatedFormData", updatedFormData)
+    // console.log("updatedFormData", updatedFormData)
 
     const id = searchParams.get("form")
 
@@ -202,6 +208,74 @@ export default function FormViewPage() {
 
   if (dataForm?.data?.redirectOnCompletion && isSuccessUpdateForm) {
     window.location.href = dataForm.data.redirectOnCompletion
+  }
+
+  // payment
+
+  const [paymentDone, setPaymentDone] = useState(false)
+
+  const checkPaymentStatus = async () => {
+    const transactionReference = localStorage.getItem("transaction-reference")
+    const CAPTURE_URL = `https://api.notchpay.co/payments/${transactionReference}`
+
+    if (!transactionReference) {
+      return
+    }
+
+    try {
+      const response = await axios.get(CAPTURE_URL, {
+        headers: {
+          Accept: "application/json",
+          Authorization: process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
+        },
+      })
+      const paymentStatus = response.data.transaction.status
+
+      if (paymentStatus === "complete") {
+        localStorage.removeItem("transaction-reference")
+        setValue("paymentStatut", "complete")
+        setPaymentDone(true)
+      }
+    } catch (error) {}
+  }
+
+  useEffect(() => {
+    if (window.location.search.includes("?reference=")) {
+      checkPaymentStatus()
+    }
+  }, [])
+
+  const {
+    initializePayment,
+    isLoading: isLoadingPayment,
+    isError: isErrorPayment,
+  } = usePaymentInitialization()
+
+  const schemaPayment = yup.object().shape({
+    email: yup.string().email().required(),
+  })
+
+  const {
+    register: registerPayment,
+    handleSubmit: handleSubmitPayment,
+    reset: resetPayment,
+    formState: { errors: errorsPayment },
+  } = useForm({
+    resolver: yupResolver(schemaPayment),
+  })
+
+  const onSubmitPayment = async (data) => {
+    const { email } = data
+    initializePayment(
+      email,
+      dataForm?.data?.amountNotchPay,
+      "Sharuco Form Payment",
+      dataForm?.data?.publicNotchPayApiKey,
+      `https://sharuco.lndev.me/form/view/${searchParams.get("form")}`
+    )
+    resetPayment({
+      email: "",
+    })
   }
 
   return (
@@ -251,6 +325,70 @@ export default function FormViewPage() {
                 </div>
                 <Separator className="mx-auto my-8 sm:w-2/3" />
                 <div className="mx-auto w-full space-y-6 lg:w-2/3">
+                  {dataForm?.data?.acceptPayment && !paymentDone && (
+                    <div className="flex flex-col items-start gap-4 rounded-xl border border-[#11B981] bg-emerald-50/50 px-4 py-6 dark:bg-emerald-500/5 sm:flex-row">
+                      <a href="https://notchpay.co/" className="w-12 shrink-0">
+                        <img
+                          src="/partner/notchpay-favicon.svg"
+                          alt="notchpay"
+                        />
+                      </a>
+                      <div className="flex w-full flex-col items-start gap-2">
+                        <p>
+                          This form accepts a payment at the rate of{" "}
+                          <span className="font-bold">
+                            {dataForm?.data?.amountNotchPay} Euro
+                          </span>{" "}
+                          , If you make it this will be notified to the
+                          administrator of this form.
+                        </p>
+                        <div className="flex w-full flex-col items-start gap-2 sm:flex-row">
+                          <div className="flex w-full flex-col items-start gap-2">
+                            <Input
+                              className="w-full"
+                              placeholder="Enter your email"
+                              {...registerPayment("email")}
+                            />
+                            <p className="text-sm text-red-500">
+                              {errorsPayment.email && (
+                                <>{errorsPayment.email.message}</>
+                              )}
+                            </p>
+                          </div>
+                          <Button
+                            className="w-full shrink-0 sm:w-fit"
+                            disabled={isLoadingPayment}
+                            onClick={
+                              !isLoadingPayment
+                                ? handleSubmitPayment(onSubmitPayment)
+                                : undefined
+                            }
+                          >
+                            {isLoadingPayment && (
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            )}
+                            Pay {dataForm?.data?.amountNotchPay} EURO
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {paymentDone ? (
+                    <div className="flex flex-col items-start gap-4 rounded-xl border border-[#11B981] bg-emerald-50/50 px-4 py-6 dark:bg-emerald-500/5 sm:flex-row">
+                      <a href="https://notchpay.co/" className="w-12 shrink-0">
+                        <img
+                          src="/partner/notchpay-favicon.svg"
+                          alt="notchpay"
+                        />
+                      </a>
+                      <div className="flex w-full flex-col items-start gap-2 font-bold">
+                        <p>Your payment has been made successfully !</p>
+                        <p>
+                          Fill out this form now without reloading the page !
+                        </p>
+                      </div>
+                    </div>
+                  ) : null}
                   {dataForm?.data?.questions.map((question, index) => {
                     return (
                       <div

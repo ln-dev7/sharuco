@@ -29,6 +29,7 @@ import hljs from "highlight.js"
 import {
   Calendar,
   CircleDot,
+  DollarSign,
   Eye,
   EyeOff,
   FileCog,
@@ -166,7 +167,12 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
             .reverse()
             .map((response, index) => (
               <div
-                className="flex w-full flex-col items-start gap-4 rounded-md border border-dashed border-slate-300 p-4 dark:border-slate-700"
+                className={cn(
+                  "flex w-full flex-col items-start gap-4 rounded-md border border-dashed border-slate-300 p-4 dark:border-slate-700",
+                  response.paymentStatut === "complete"
+                    ? "border-2 border-solid border-emerald-500 dark:border-emerald-900"
+                    : ""
+                )}
                 key={index}
               >
                 <Accordion
@@ -175,7 +181,17 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                   className="w-full border-b  border-dashed border-slate-300 dark:border-slate-700"
                 >
                   <AccordionItem value="response" className="border-none">
-                    <AccordionTrigger>View response</AccordionTrigger>
+                    <AccordionTrigger>
+                      <div className="flex items-center justify-start gap-2">
+                        View response
+                        {response.paymentStatut === "complete" ? (
+                          <span className="mr-2 flex items-center gap-2 rounded bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
+                            <DollarSign className="h-4 w-4 text-emerald-500" />
+                            PAID ( {dataForm.amountNotchPay} EURO )
+                          </span>
+                        ) : null}
+                      </div>
+                    </AccordionTrigger>
                     <AccordionContent>
                       <div className="flex w-full flex-col items-start gap-2 ">
                         {response.responses.map((answer, answerIndex) => (
