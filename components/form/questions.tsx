@@ -304,13 +304,23 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                 className="relative flex w-full flex-col items-start gap-2 first:mt-2"
                 key={field.id}
               >
-                <label className="flex flex-col items-start">
-                  <Input
-                    {...register(`questions.${index}.label` as const)}
-                    //defaultValue={field.label}
-                    className="h-8 border-none outline-none"
-                    placeholder="Your label"
-                  />
+                <label className="flex flex-col items-start w-3/4">
+                  {watchedFieldType === "heading" ? (
+                    <Input
+                      {...register(`questions.${index}.label` as const)}
+                      //defaultValue={field.label}
+                      className="h-6 font-semibold text-md p-0 border-none outline-none hover:ring-0 hover:outline-none hover:border-none focus:ring-0 focus:outline-none focus:border-none"
+                      placeholder="Your label"
+                    />
+                  ) : (
+                    <Input
+                      {...register(`questions.${index}.label` as const)}
+                      //defaultValue={field.label}
+                      className="h-8 pl-0 border-none outline-none hover:ring-0 hover:outline-none hover:border-none focus:ring-0 focus:outline-none focus:border-none"
+                      placeholder="Your label"
+                    />
+                  )}
+
                   {errors?.questions?.[index]?.label && (
                     <p className="mt-1 text-xs font-medium text-red-500">
                       {errors.questions[index].label.message}
