@@ -136,11 +136,13 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       .string()
       .url("Redirect URL must be a valid URL")
       .nullable(),
-    // publicNotchPayApiKey: yup
-    //   .string()
-    //   .matches(/^b\./, 'Public NotchPay API key must start with "b."')
-    //   .required("Public NotchPay API key is required"),
-    //amountNotchPay: yup.number().required('Amount for NotchPay is required'),
+    publicNotchPayApiKey: yup
+      .string()
+      .matches(/^b\./, 'Public NotchPay API key must start with "b."'),
+    amountNotchPay: yup
+      .number()
+      .typeError("Amount for NotchPay must be a valid number")
+      .min(1001, "Amount for NotchPay must be greater than 1000"),
   })
 
   const {
@@ -160,8 +162,8 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     setValue("description", dataForm.description)
     setValue("color", dataForm.color)
     setValue("redirectOnCompletion", dataForm.redirectOnCompletion)
-    // setValue("publicNotchPayApiKey", dataForm.publicNotchPayApiKey)
-    // setValue("amountNotchPay", dataForm.amountNotchPay)
+    setValue("publicNotchPayApiKey", dataForm.publicNotchPayApiKey)
+    setValue("amountNotchPay", dataForm.amountNotchPay)
   }, [dataForm])
 
   const {
@@ -178,17 +180,17 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
+      publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
+      amountNotchPay: amountNotchPayUpdate,
     } = data
 
     if (
       nameUpdate === dataForm.name &&
       descriptionUpdate === dataForm.description &&
       colorUpdate === dataForm.color &&
-      redirectOnCompletionUpdate === dataForm.redirectOnCompletion
-      // && publicNotchPayApiKeyUpdate === dataForm.publicNotchPayApiKey &&
-      // amountNotchPayUpdate === dataForm.amountNotchPay
+      redirectOnCompletionUpdate === dataForm.redirectOnCompletion &&
+      publicNotchPayApiKeyUpdate === dataForm.publicNotchPayApiKey &&
+      amountNotchPayUpdate === dataForm.amountNotchPay
     ) {
       toast({
         variant: "destructive",
@@ -204,15 +206,15 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: string
       color: string
       redirectOnCompletion: string
-      // publicNotchPayApiKey: string
-      // amountNotchPay: number
+      publicNotchPayApiKey: string
+      amountNotchPay: number
     } = {
       name: nameUpdate,
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
+      publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
+      amountNotchPay: amountNotchPayUpdate,
     }
 
     const id = searchParams.get("form")
@@ -225,8 +227,8 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
+      publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
+      amountNotchPay: amountNotchPayUpdate,
     })
 
     reset({
@@ -234,8 +236,8 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
+      publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
+      amountNotchPay: amountNotchPayUpdate,
     })
   }
 
@@ -262,7 +264,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           <Input
             placeholder="Description of the form"
             {...register("description")}
-            // defaultValue={dataForm.description}
           />
           <p className="text-sm text-red-500">
             {errors.description && <>{errors.description.message}</>}
@@ -276,7 +277,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
               className="w-full"
               placeholder="#000000"
               {...register("color")}
-              // defaultValue={dataForm.color}
             />
             <div
               className="block w-9 h-9 rounded-md"
@@ -299,7 +299,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           <Input
             placeholder="https://example.com?success=true"
             {...register("redirectOnCompletion")}
-            // defaultValue={dataForm.redirectOnCompletion}
           />
           <p className="text-sm text-red-500">
             {errors.redirectOnCompletion && (
@@ -307,60 +306,57 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             )}
           </p>
         </div>
-        <div className="relative flex flex-col items-start gap-4 opacity-30 w-full before:absolute before:inset-0">
-          {/* <Separator className="my-2" /> */}
-          <div className="flex flex-col items-start">
-            <h3 className="text-xl font-semibold">Payment</h3>
+        <Separator className="my-2" />
+        <div className="flex flex-col items-start">
+          <h3 className="text-xl font-semibold">Payment</h3>
+          <p className="text-sm text-left">
+            You can use{" "}
+            <a
+              href="https://business.notchpay.co"
+              className="font-bold underline underline-offset-4"
+            >
+              NotchPay
+            </a>{" "}
+            to accept payments on your form. You can create a NotchPay account{" "}
+            <a
+              href="https://business.notchpay.co"
+              className="font-bold underline underline-offset-4"
+            >
+              here
+            </a>
+            .
+          </p>
+        </div>
+        <Separator className="opacity-50" />
+        <div className="flex w-full flex-col items-start gap-2">
+          <div className="flex w-full flex-col items-start gap-1">
+            <Label>Public NotchPay API key</Label>
             <p className="text-sm text-left">
-              You can use{" "}
+              You can have it here :{" "}
               <a
-                href="https://business.notchpay.co"
-                className="font-bold underline underline-offset-4"
+                href="https://business.notchpay.co/settings/developer"
+                className="font-semibold underline underline-offset-4"
               >
-                NotchPay
-              </a>{" "}
-              to accept payments on your form. You can create a NotchPay account{" "}
-              <a
-                href="https://business.notchpay.co"
-                className="font-bold underline underline-offset-4"
-              >
-                here
+                https://business.notchpay.co/settings/developer
               </a>
-              .
             </p>
           </div>
-          {/* <Separator className="opacity-50" /> */}
-          <div className="flex w-full flex-col items-start gap-2">
-            <div className="flex w-full flex-col items-start gap-1">
-              <Label>Public NotchPay API key</Label>
-              <p className="text-sm text-left">
-                You can have it here :{" "}
-                <a
-                  href="https://business.notchpay.co/settings/developer"
-                  className="font-semibold underline underline-offset-4"
-                >
-                  https://business.notchpay.co/settings/developer
-                </a>
-              </p>
-            </div>
-            <Input
-              placeholder="b.nxxxxxxxxxxxxxxx"
-              //{...register("publicNotchPayApiKey")}
-            />
-            {/* <p className="text-sm text-red-500">
-                      {errors.publicNotchPayApiKey && <>{errors.publicNotchPayApiKey.message}</>}
-                    </p> */}
-          </div>
-          <div className="flex w-full flex-col items-start gap-2">
-            <Label>Amount ( in XAF ) </Label>
-            <Input
-              placeholder="5000 XAF"
-              //{...register("amountNotchPay")}
-            />
-            {/* <p className="text-sm text-red-500">
-                      {errors.amountNotchPay && <>{errors.amountNotchPay.message}</>}
-                    </p> */}
-          </div>
+          <Input
+            placeholder="b.xxxxxxx...xxxxxxxx"
+            {...register("publicNotchPayApiKey")}
+          />
+          <p className="text-sm text-red-500">
+            {errors.publicNotchPayApiKey && (
+              <>{errors.publicNotchPayApiKey.message}</>
+            )}
+          </p>
+        </div>
+        <div className="flex w-full flex-col items-start gap-2">
+          <Label>Amount ( in XAF ) </Label>
+          <Input placeholder="5000 XAF" {...register("amountNotchPay")} />
+          <p className="text-sm text-red-500">
+            {errors.amountNotchPay && <>{errors.amountNotchPay.message}</>}
+          </p>
         </div>
         <div className="sticky bottom-0 w-full left-0 right-0 flex flex-col items-start gap-2  py-4 border-t bg-white dark:bg-slate-900">
           <Button
