@@ -145,7 +145,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       is: true,
       then: (schema) =>
         schema
-          .matches(/^pk\./, 'Public NotchPay API key must start with "b."')
+          .matches(/^pk\./, 'Public NotchPay API key must start with "pk."')
           .required("Public NotchPay API key is required"),
     }),
     amountNotchPay: yup.number().when("acceptPayment", {
