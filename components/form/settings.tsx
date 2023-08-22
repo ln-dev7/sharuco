@@ -17,6 +17,7 @@ import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
+import usePaymentInitialization from "@/notchpay/initializePayment.js"
 import copyToClipboard from "@/utils/copyToClipboard.js"
 import embedProject from "@/utils/embedStackblitzProject"
 import indentCode from "@/utils/indentCode.js"
@@ -105,6 +106,8 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
   const { user, userPseudo } = useAuthContext()
   const router = useRouter()
 
+  const { initializePayment, isLoading, isError } = usePaymentInitialization()
+
   const { toast } = useToast()
 
   const notifyUrlCopied = () =>
@@ -122,6 +125,10 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
   )
   const index = client.initIndex(ALGOLIA_INDEX_NAME)
 
+  const [checkboxAcceptPayment, setCheckboxAcceptPayment] = useState(
+    dataForm.acceptPayment
+  )
+
   const schema = yup.object().shape({
     name: yup.string().required("Name is required"),
     description: yup.string().required("Description is required"),
@@ -136,13 +143,22 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       .string()
       .url("Redirect URL must be a valid URL")
       .nullable(),
-    publicNotchPayApiKey: yup
-      .string()
-      .matches(/^b\./, 'Public NotchPay API key must start with "b."'),
-    amountNotchPay: yup
-      .number()
-      .typeError("Amount for NotchPay must be a valid number")
-      .min(1001, "Amount for NotchPay must be greater than 1000"),
+    acceptPayment: yup.boolean(),
+    publicNotchPayApiKey: yup.string().when("acceptPayment", {
+      is: true,
+      then: (schema) =>
+        schema
+          .matches(/^b\./, 'Public NotchPay API key must start with "b."')
+          .required("Public NotchPay API key is required"),
+    }),
+    amountNotchPay: yup.number().when("acceptPayment", {
+      is: true,
+      then: (schema) =>
+        schema
+          .typeError("Amount for NotchPay must be a valid number")
+          .min(2, "Amount for NotchPay must be greater than 2")
+          .required("Amount for NotchPay is required"),
+    }),
   })
 
   const {
@@ -164,6 +180,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     setValue("redirectOnCompletion", dataForm.redirectOnCompletion)
     setValue("publicNotchPayApiKey", dataForm.publicNotchPayApiKey)
     setValue("amountNotchPay", dataForm.amountNotchPay)
+    setValue("acceptPayment", dataForm.acceptPayment)
   }, [dataForm])
 
   const {
@@ -182,6 +199,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       redirectOnCompletion: redirectOnCompletionUpdate,
       publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
       amountNotchPay: amountNotchPayUpdate,
+      acceptPayment: acceptPaymentUpdate,
     } = data
 
     if (
@@ -190,7 +208,8 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       colorUpdate === dataForm.color &&
       redirectOnCompletionUpdate === dataForm.redirectOnCompletion &&
       publicNotchPayApiKeyUpdate === dataForm.publicNotchPayApiKey &&
-      amountNotchPayUpdate === dataForm.amountNotchPay
+      amountNotchPayUpdate === dataForm.amountNotchPay &&
+      acceptPaymentUpdate === dataForm.acceptPayment
     ) {
       toast({
         variant: "destructive",
@@ -208,6 +227,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       redirectOnCompletion: string
       publicNotchPayApiKey: string
       amountNotchPay: number
+      acceptPayment: boolean
     } = {
       name: nameUpdate,
       description: descriptionUpdate,
@@ -215,6 +235,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       redirectOnCompletion: redirectOnCompletionUpdate,
       publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
       amountNotchPay: amountNotchPayUpdate,
+      acceptPayment: acceptPaymentUpdate,
     }
 
     const id = searchParams.get("form")
@@ -229,6 +250,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       redirectOnCompletion: redirectOnCompletionUpdate,
       publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
       amountNotchPay: amountNotchPayUpdate,
+      acceptPayment: acceptPaymentUpdate,
     })
 
     reset({
@@ -238,6 +260,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       redirectOnCompletion: redirectOnCompletionUpdate,
       publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
       amountNotchPay: amountNotchPayUpdate,
+      acceptPayment: acceptPaymentUpdate,
     })
   }
 
@@ -312,7 +335,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
         <Separator className="my-2" />
         <div className="flex flex-col items-start">
           <h3 className="text-xl font-semibold">Payment</h3>
-          <p className="text-sm text-left">
+          <p className="text-left text-sm">
             You can use{" "}
             <a
               href="https://business.notchpay.co"
@@ -331,10 +354,15 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           </p>
         </div>
         <Separator className="opacity-50" />
-        <div className="flex w-full flex-col items-start gap-2">
+        <div
+          className="flex w-full flex-col items-start gap-2"
+          style={{
+            opacity: checkboxAcceptPayment ? "1" : "0.2",
+          }}
+        >
           <div className="flex w-full flex-col items-start gap-1">
             <Label>Public NotchPay API key</Label>
-            <p className="text-sm text-left">
+            <p className="text-left text-sm">
               You can have it here :{" "}
               <a
                 href="https://business.notchpay.co/settings/developer"
@@ -349,18 +377,52 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             {...register("publicNotchPayApiKey")}
           />
           <p className="text-sm text-red-500">
-            {errors.publicNotchPayApiKey && (
+            {errors.publicNotchPayApiKey && checkboxAcceptPayment && (
               <>{errors.publicNotchPayApiKey.message}</>
             )}
           </p>
         </div>
-        <div className="flex w-full flex-col items-start gap-2">
-          <Label>Amount ( in XAF ) </Label>
-          <Input placeholder="5000 XAF" {...register("amountNotchPay")} />
+        <div
+          className="flex w-full flex-col items-start gap-2"
+          style={{
+            opacity: checkboxAcceptPayment ? "1" : "0.2",
+          }}
+        >
+          <Label>Amount ( in EURO ) </Label>
+          <Input placeholder="2 EURO" {...register("amountNotchPay")} />
           <p className="text-sm text-red-500">
-            {errors.amountNotchPay && <>{errors.amountNotchPay.message}</>}
+            {errors.amountNotchPay && checkboxAcceptPayment && (
+              <>{errors.amountNotchPay.message}</>
+            )}
           </p>
         </div>
+
+        <div className="flex w-full items-center justify-start gap-2">
+          <input
+            type="checkbox"
+            {...register("acceptPayment")}
+            name="acceptPayment"
+            id="acceptPayment"
+            className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
+                      ${
+                        checkboxAcceptPayment
+                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-slate-500 before:transition-transform"
+                          : ""
+                      } 
+                      `}
+            checked={checkboxAcceptPayment}
+            onChange={() => setCheckboxAcceptPayment(!checkboxAcceptPayment)}
+          />
+          <Label htmlFor="acceptPayment">
+            Does this form accept payments ?{" "}
+            {checkboxAcceptPayment ? (
+              <span className="font-bold text-teal-300"> Yes</span>
+            ) : (
+              <span className="font-bold text-teal-300"> No</span>
+            )}
+          </Label>
+        </div>
+
         <div className="sticky inset-x-0 bottom-0 flex w-full flex-col items-start gap-2 border-t  bg-white py-4 dark:bg-slate-900">
           <Button
             variant="default"

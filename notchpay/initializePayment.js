@@ -7,7 +7,7 @@ export default function usePaymentInitialization() {
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
-  const initializePayment = async (email, amount, description) => {
+  const initializePayment = async (email, amount, description, publicKey) => {
     setIsLoading(true)
     setIsError(false)
 
@@ -16,15 +16,16 @@ export default function usePaymentInitialization() {
       currency: "EUR",
       amount,
       description,
-      // callback: "http://localhost:3000/donation",
-      callback: "https://sharuco.lndev.me/donation",
+      callback: "http://localhost:3000/donation",
+      // callback: "https://sharuco.lndev.me/donation",
     }
 
     try {
       const response = await axios.post(INITIALIZE_URL, data, {
         headers: {
           Accept: "application/json",
-          Authorization: process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
+          //Authorization: process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
+          Authorization: publicKey
         },
       })
 
@@ -32,7 +33,7 @@ export default function usePaymentInitialization() {
       // console.log(response.data)
       // stock la reference dans le local storage
       localStorage.setItem(
-        "transaction-donation-reference",
+        "transaction-reference",
         response.data.transaction.reference
       )
       window.open(authorizationUrl, "_blank")
