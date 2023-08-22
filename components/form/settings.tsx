@@ -425,7 +425,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           </Button>
           {isSuccessUpdateForm && (
             <div
-              className="flex mt-2 w-full items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
+              className="mt-2 flex w-full items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
               role="alert"
             >
               <Check className="h-4 w-4" />

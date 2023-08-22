@@ -182,7 +182,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                       <div className="flex items-center justify-start gap-2">
                         View response
                         {response.paymentStatut === "complete" ? (
-                          <span className="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                          <span className="mr-2 rounded bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
                             PAID ( {dataForm.amountNotchPay} EURO )
                           </span>
                         ) : null}

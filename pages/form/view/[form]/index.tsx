@@ -326,14 +326,14 @@ export default function FormViewPage() {
                 <Separator className="mx-auto my-8 sm:w-2/3" />
                 <div className="mx-auto w-full space-y-6 lg:w-2/3">
                   {dataForm?.data?.acceptPayment && !paymentDone && (
-                    <div className="px-4 py-6 bg-emerald-50/50 dark:bg-emerald-500/5 rounded-xl border border-[#11B981] flex flex-col sm:flex-row items-start gap-4">
+                    <div className="flex flex-col items-start gap-4 rounded-xl border border-[#11B981] bg-emerald-50/50 px-4 py-6 dark:bg-emerald-500/5 sm:flex-row">
                       <a href="https://notchpay.co/" className="w-12 shrink-0">
                         <img
                           src="/partner/notchpay-favicon.svg"
                           alt="notchpay"
                         />
                       </a>
-                      <div className="w-full flex flex-col items-start gap-2">
+                      <div className="flex w-full flex-col items-start gap-2">
                         <p>
                           This form accepts a payment at the rate of{" "}
                           <span className="font-bold">
@@ -342,8 +342,8 @@ export default function FormViewPage() {
                           , If you make it this will be notified to the
                           administrator of this form.
                         </p>
-                        <div className="w-full flex flex-col sm:flex-row items-start gap-2">
-                          <div className="w-full flex flex-col items-start gap-2">
+                        <div className="flex w-full flex-col items-start gap-2 sm:flex-row">
+                          <div className="flex w-full flex-col items-start gap-2">
                             <Input
                               className="w-full"
                               placeholder="Enter your email"
@@ -356,7 +356,7 @@ export default function FormViewPage() {
                             </p>
                           </div>
                           <Button
-                            className="shrink-0 w-full sm:w-fit"
+                            className="w-full shrink-0 sm:w-fit"
                             disabled={isLoadingPayment}
                             onClick={
                               !isLoadingPayment
@@ -374,14 +374,14 @@ export default function FormViewPage() {
                     </div>
                   )}
                   {paymentDone ? (
-                    <div className="px-4 py-6 bg-emerald-50/50 dark:bg-emerald-500/5 rounded-xl border border-[#11B981] flex flex-col sm:flex-row items-start gap-4">
+                    <div className="flex flex-col items-start gap-4 rounded-xl border border-[#11B981] bg-emerald-50/50 px-4 py-6 dark:bg-emerald-500/5 sm:flex-row">
                       <a href="https://notchpay.co/" className="w-12 shrink-0">
                         <img
                           src="/partner/notchpay-favicon.svg"
                           alt="notchpay"
                         />
                       </a>
-                      <div className="w-full flex flex-col items-start font-bold gap-2">
+                      <div className="flex w-full flex-col items-start gap-2 font-bold">
                         <p>Your payment has been made successfully !</p>
                         <p>
                           Fill out this form now without reloading the page !
