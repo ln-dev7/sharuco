@@ -240,7 +240,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
   }
 
   return (
-    <div className="flex py-6 shrink-0 items-center justify-center rounded-md">
+    <div className="flex shrink-0 items-center justify-center rounded-md py-6">
       <div className="mx-auto flex w-full max-w-3xl flex-col items-start justify-center gap-4 text-center">
         <div className="flex flex-col items-start">
           <h3 className="text-xl font-semibold">General</h3>
@@ -272,7 +272,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
 
         <div className="flex w-full flex-col items-start gap-2">
           <Label>Color of the form</Label>
-          <div className="w-full flex items-center gap-2">
+          <div className="flex w-full items-center gap-2">
             <Input
               className="w-full"
               placeholder="#000000"
@@ -280,7 +280,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
               // defaultValue={dataForm.color}
             />
             <div
-              className="block w-9 h-9 shrink-0 rounded-full"
+              className="block h-9 w-9 shrink-0 rounded-full"
               style={{
                 background: `${dataForm.color}`,
               }}
@@ -295,7 +295,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             <Label className="text-left">
               Redirect to this URL when the form is submitted.
             </Label>
-            <p className="text-sm text-left">
+            <p className="text-left text-sm">
               Leave the field blank if you do not want to redirect to a URL
             </p>
           </div>
@@ -310,11 +310,11 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             )}
           </p>
         </div>
-        <div className="relative flex flex-col items-start gap-4 opacity-30 w-full before:absolute before:inset-0">
+        <div className="relative flex w-full flex-col items-start gap-4 opacity-30 before:absolute before:inset-0">
           {/* <Separator className="my-2" /> */}
           <div className="flex flex-col items-start">
             <h3 className="text-xl font-semibold">Payment</h3>
-            <p className="text-sm text-left">
+            <p className="text-left text-sm">
               You can use{" "}
               <a
                 href="https://business.notchpay.co"
@@ -336,7 +336,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           <div className="flex w-full flex-col items-start gap-2">
             <div className="flex w-full flex-col items-start gap-1">
               <Label>Public NotchPay API key</Label>
-              <p className="text-sm text-left">
+              <p className="text-left text-sm">
                 You can have it here :{" "}
                 <a
                   href="https://business.notchpay.co/settings/developer"
@@ -365,7 +365,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                     </p> */}
           </div>
         </div>
-        <div className="sticky bottom-0 w-full left-0 right-0 flex flex-col items-start gap-2  py-4 border-t bg-white dark:bg-slate-900">
+        <div className="sticky inset-x-0 bottom-0 flex w-full flex-col items-start gap-2 border-t  bg-white py-4 dark:bg-slate-900">
           <Button
             variant="default"
             disabled={isLoadingUpdateForm}

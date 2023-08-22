@@ -147,7 +147,7 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
   }
 
   return (
-    <div className="flex py-20 shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 dark:border-slate-700">
+    <div className="flex shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 py-20 dark:border-slate-700">
       <div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center gap-4 p-4 text-center">
         <Link
           href={`/form/view/${searchParams.get("form")}`}
