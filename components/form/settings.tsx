@@ -240,7 +240,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
   }
 
   return (
-    <div className="flex py-12 shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 dark:border-slate-700">
+    <div className="flex py-6 shrink-0 items-center justify-center rounded-md">
       <div className="mx-auto flex w-full max-w-3xl flex-col items-start justify-center gap-4 p-4 text-center">
         <div className="flex flex-col items-start">
           <h3 className="text-xl font-semibold">General</h3>
