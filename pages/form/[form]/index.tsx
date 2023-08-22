@@ -41,6 +41,7 @@ import {
   Save,
   Send,
   Settings,
+  Settings2,
   Trash,
   Type,
   User,
@@ -60,6 +61,7 @@ import Error from "@/components/error"
 import PublishForms from "@/components/form/publish"
 import QuestionsForms from "@/components/form/questions"
 import ResponsesForms from "@/components/form/responses"
+import SettingsForms from "@/components/form/settings"
 import { Layout } from "@/components/layout"
 import LoaderCodes from "@/components/loaders/loader-codes"
 import {
@@ -172,6 +174,10 @@ export default function FormPage() {
                       <Send className="mr-2 h-4 w-4" />
                       Publish
                     </TabsTrigger>
+                    <TabsTrigger value="settings">
+                      <Settings2 className="mr-2 h-4 w-4" />
+                      Settings
+                    </TabsTrigger>
                   </div>
                 </TabsList>
                 <TabsContent className="border-none p-0 pt-4" value="questions">
@@ -182,6 +188,9 @@ export default function FormPage() {
                 </TabsContent>
                 <TabsContent className="border-none p-0 pt-2" value="publish">
                   <PublishForms dataForm={dataForm.data} />
+                </TabsContent>
+                <TabsContent className="border-none p-0 pt-2" value="settings">
+                  <SettingsForms dataForm={dataForm.data} />
                 </TabsContent>
               </Tabs>
             </div>
