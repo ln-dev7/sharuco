@@ -88,6 +88,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
   Select,
   SelectContent,
@@ -255,12 +256,12 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
             soon
           </span>
         </button>
-        <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
+        <button
+          className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+          onClick={() => handleAddField("uniquechoice")}
+        >
           <CircleDot className="h-5 w-5" />
           <span className="ml-2 text-sm font-semibold">Unique choice</span>
-          <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-            soon
-          </span>
         </button>
         <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
           <ListChecks className="h-5 w-5" />
@@ -341,6 +342,22 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                     {...register(`questions.${index}.text` as const)}
                     placeholder="Enter placeholder"
                   />
+                )}
+                {watchedFieldType === "uniquechoice" && (
+                  <RadioGroup defaultValue="comfortable">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="default" id="r1" />
+                      <Label htmlFor="r1">Default</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="comfortable" id="r2" />
+                      <Label htmlFor="r2">Comfortable</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="compact" id="r3" />
+                      <Label htmlFor="r3">Compact</Label>
+                    </div>
+                  </RadioGroup>
                 )}
                 <div className="flex w-full items-center justify-start">
                   <span className="mr-2 rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300">
