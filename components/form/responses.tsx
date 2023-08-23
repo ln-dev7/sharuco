@@ -186,13 +186,32 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                         View response
                         {response.paymentStatut === "complete" ? (
                           <span className="mr-2 flex items-center gap-2 rounded bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
-                            <DollarSign className="h-4 w-4 text-emerald-500" />
-                            PAID ( {dataForm.amountNotchPay} EURO )
+                            PAID
                           </span>
                         ) : null}
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
+                      {response.paymentStatut === "complete" ? (
+                        <div className="text-md mb-4 flex items-center gap-2 rounded bg-green-100 px-2.5 py-1.5 font-medium text-green-800 dark:bg-emerald-900 dark:text-green-300">
+                          <p>
+                            This user paid with this address :{" "}
+                            <a
+                              href={`mailto:${response.emailPayment}`}
+                              className="underline underline-offset-4"
+                            >
+                              {response.emailPayment}
+                            </a>{" "}
+                            , you can check it in your{" "}
+                            <a
+                              href="https://business.notchpay.co/transactions"
+                              className="underline underline-offset-4"
+                            >
+                              NotchPay Dashboard
+                            </a>{" "}
+                          </p>
+                        </div>
+                      ) : null}
                       <div className="flex w-full flex-col items-start gap-2 ">
                         {response.responses.map((answer, answerIndex) => (
                           <>
