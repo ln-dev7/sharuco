@@ -26,6 +26,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import sdk, { Project } from "@stackblitz/sdk"
 import algoliasearch from "algoliasearch"
 import hljs from "highlight.js"
+import jsPDF from "jspdf"
 import {
   Calendar,
   CircleDot,
@@ -158,10 +159,79 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
     //console.log("updatedFormData", updatedFormData)
   }
 
+  // GENERATE PDF
+
+  const generatePDF = (dataForm) => {
+    const pdf = new jsPDF()
+
+    pdf.setFontSize(16)
+    pdf.text(dataForm.name, 10, 10)
+    pdf.setFontSize(12)
+    pdf.text(dataForm.description, 10, 20)
+
+    let yPos = 40
+
+    pdf.setFontSize(12)
+    pdf.text(`Total Responses: ${dataForm.responses.length}`, 150, 30)
+
+    dataForm.responses
+      .slice()
+      .reverse()
+      .forEach((response, index) => {
+        pdf.setFontSize(12)
+        pdf.text(`Response ${index + 1}`, 10, yPos)
+        yPos += 10
+
+        pdf.setFontSize(10)
+        pdf.text(`Email Payment : ${response.emailPayment}`, 15, yPos)
+        yPos += 8
+
+        pdf.text(`Payment Status : ${response.paymentStatut}`, 15, yPos)
+        yPos += 8
+
+        pdf.text(
+          `Created At : ${new Date(response.createdAt).toLocaleString()}`,
+          15,
+          yPos
+        )
+        yPos += 10
+
+        response.responses.forEach((res) => {
+          if (yPos + 25 > pdf.internal.pageSize.height - 25) {
+            pdf.addPage() // Ajoute une nouvelle page si nécessaire
+            yPos = 15 // Réinitialise la position Y pour la nouvelle page
+          }
+          if (res.type === "heading") {
+            pdf.text(`${res.label}`, 15, yPos)
+          } else {
+            pdf.text(`${res.label}: ${res.text}`, 15, yPos)
+          }
+          yPos += 8
+        })
+
+        // Dessiner une barre noire après chaque réponse
+        pdf.setDrawColor(0) // Couleur de la bordure (noir)
+        pdf.setLineWidth(0.15) // Largeur de la bordure
+        pdf.rect(10, yPos, pdf.internal.pageSize.width - 20, 0.5, "S")
+        yPos += 1 // Ajuste la position Y pour la prochaine section
+
+        yPos += 10
+      })
+
+    pdf.setFontSize(10)
+    pdf.textWithLink("Powered by SHARUCO FORM", 10, yPos + 10, {
+      url: "https://sharuco.lndev.me/forms",
+    })
+
+    // Preview the PDF in a new tab
+    pdf.output("dataurlnewwindow")
+  }
+
   return (
     <>
       {dataForm.responses && dataForm.responses.length > 0 ? (
         <div className="w-full space-y-4">
+          <Button onClick={() => generatePDF(dataForm)}>Generate PDF</Button>
           {dataForm.responses
             .slice()
             .reverse()

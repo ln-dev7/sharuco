@@ -190,7 +190,7 @@ export default function FormPage() {
                     }}
                     className="w-full"
                   >
-                    <Masonry gutter="2rem">
+                    <Masonry gutter="1rem">
                       <QuestionsForms dataForm={dataForm.data} />
                     </Masonry>
                   </ResponsiveMasonry>
@@ -205,7 +205,7 @@ export default function FormPage() {
                     }}
                     className="w-full"
                   >
-                    <Masonry gutter="2rem">
+                    <Masonry gutter="1rem">
                       <ResponsesForms dataForm={dataForm.data} />
                     </Masonry>
                   </ResponsiveMasonry>
@@ -220,7 +220,7 @@ export default function FormPage() {
                     }}
                     className="w-full"
                   >
-                    <Masonry gutter="2rem">
+                    <Masonry gutter="1rem">
                       <PublishForms dataForm={dataForm.data} />
                     </Masonry>
                   </ResponsiveMasonry>
@@ -235,7 +235,7 @@ export default function FormPage() {
                     }}
                     className="w-full"
                   >
-                    <Masonry gutter="2rem">
+                    <Masonry gutter="1rem">
                       <SettingsForms dataForm={dataForm.data} />
                     </Masonry>
                   </ResponsiveMasonry>
