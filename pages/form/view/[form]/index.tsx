@@ -130,6 +130,7 @@ export default function FormViewPage() {
       })
     ),
     paymentStatut: yup.string(),
+    emailPayment: yup.string(),
   })
 
   const ALGOLIA_INDEX_NAME = "forms"
@@ -165,6 +166,7 @@ export default function FormViewPage() {
     let updatedFormData: {
       responses: any[]
       paymentStatut?: string
+      emailPayment?: string
     } = {
       responses: [
         ...dataForm?.data?.responses,
@@ -172,6 +174,7 @@ export default function FormViewPage() {
           idResponse: moment().valueOf() + uid(),
           createdAt: moment().valueOf(),
           paymentStatut: data.paymentStatut ? data.paymentStatut : "",
+          emailPayment: data.emailPayment ? data.emailPayment : "",
           responses: [
             ...data.responses.map((response: any, index: number) => {
               return {
@@ -229,12 +232,16 @@ export default function FormViewPage() {
           Authorization: process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
         },
       })
+      console.log("response.data", response.data)
       const paymentStatus = response.data.transaction.status
+      const emailPayment = response.data.transaction.customer.email
 
       if (paymentStatus === "complete") {
         localStorage.removeItem("transaction-reference")
-        setValue("paymentStatut", "complete")
+        setValue("paymentStatut", paymentStatus)
+        setValue("emailPayment", emailPayment)
         setPaymentDone(true)
+      } else {
       }
     } catch (error) {}
   }
@@ -269,9 +276,10 @@ export default function FormViewPage() {
     initializePayment(
       email,
       dataForm?.data?.amountNotchPay,
-      "Sharuco Form Payment",
+      dataForm?.data?.name,
       dataForm?.data?.publicNotchPayApiKey,
-      `https://sharuco.lndev.me/form/view/${searchParams.get("form")}`
+      //`https://sharuco.lndev.me/form/view/${searchParams.get("form")}`,
+      `http://localhost:3000/form/view/${searchParams.get("form")}`
     )
     resetPayment({
       email: "",

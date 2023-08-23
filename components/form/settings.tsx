@@ -145,7 +145,10 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       is: true,
       then: (schema) =>
         schema
-          .matches(/^pk\./, 'Public NotchPay API key must start with "pk."')
+          .matches(
+            /^(sb\.|b\.|pk\.)/,
+            'Public NotchPay API key must start with "pk." or "b." or "sb."'
+          )
           .required("Public NotchPay API key is required"),
     }),
     amountNotchPay: yup.number().when("acceptPayment", {
@@ -365,7 +368,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             </p>
           </div>
           <Input
-            placeholder="pk.xxxxxxx...xxxxxxxx"
+            placeholder="(pk or sb or b).xxxxxxx...xxxxxxxx"
             {...register("publicNotchPayApiKey")}
           />
           <p className="text-sm text-red-500">
