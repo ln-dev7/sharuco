@@ -53,7 +53,7 @@
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
-    "firebase": "^10.1.0",
+    "firebase": "^10.3.1",
     "highlight.js": "^11.7.0",
     "html-to-image": "^1.11.11",
     "jspdf": "^2.5.1",
