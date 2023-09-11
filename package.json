@@ -85,7 +85,7 @@
     "@babel/parser": "^7.21.3",
     "@babel/preset-env": "^7.22.15",
     "@ianvs/prettier-plugin-sort-imports": "^3.7.1",
-    "@next/eslint-plugin-next": "^13.2.4",
+    "@next/eslint-plugin-next": "^13.4.19",
     "@types/node": "^20.5.0",
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.2.7",
