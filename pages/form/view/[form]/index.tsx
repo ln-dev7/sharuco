@@ -162,7 +162,7 @@ export default function FormViewPage() {
   }: any = useUpdateFormDocument("forms")
 
   const onSubmit = async (data) => {
-    setPaymentDone(false)
+    // setPaymentDone(false)
     let updatedFormData: {
       responses: any[]
       // paymentStatut?: string
@@ -215,76 +215,76 @@ export default function FormViewPage() {
 
   // payment
 
-  const [paymentDone, setPaymentDone] = useState(false)
+  // const [paymentDone, setPaymentDone] = useState(false)
 
-  const checkPaymentStatus = async () => {
-    const transactionReference = localStorage.getItem("transaction-reference")
-    const CAPTURE_URL = `https://api.notchpay.co/payments/${transactionReference}`
+  // const checkPaymentStatus = async () => {
+  //   const transactionReference = localStorage.getItem("transaction-reference")
+  //   const CAPTURE_URL = `https://api.notchpay.co/payments/${transactionReference}`
 
-    if (!transactionReference) {
-      return
-    }
+  //   if (!transactionReference) {
+  //     return
+  //   }
 
-    try {
-      const response = await axios.get(CAPTURE_URL, {
-        headers: {
-          Accept: "application/json",
-          Authorization: process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
-        },
-      })
-      console.log("response.data", response.data)
-      const paymentStatus = response.data.transaction.status
-      const emailPayment = response.data.transaction.customer.email
+  //   try {
+  //     const response = await axios.get(CAPTURE_URL, {
+  //       headers: {
+  //         Accept: "application/json",
+  //         Authorization: process.env.NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY,
+  //       },
+  //     })
+  //     console.log("response.data", response.data)
+  //     const paymentStatus = response.data.transaction.status
+  //     const emailPayment = response.data.transaction.customer.email
 
-      if (paymentStatus === "complete") {
-        localStorage.removeItem("transaction-reference")
-        // setValue("paymentStatut", paymentStatus)
-        // setValue("emailPayment", emailPayment)
-        // setPaymentDone(true)
-      } else {
-      }
-    } catch (error) {}
-  }
+  //     if (paymentStatus === "complete") {
+  //       localStorage.removeItem("transaction-reference")
+  //       // setValue("paymentStatut", paymentStatus)
+  //       // setValue("emailPayment", emailPayment)
+  //       // setPaymentDone(true)
+  //     } else {
+  //     }
+  //   } catch (error) {}
+  // }
 
-  useEffect(() => {
-    if (window.location.search.includes("?reference=")) {
-      checkPaymentStatus()
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (window.location.search.includes("?reference=")) {
+  //     checkPaymentStatus()
+  //   }
+  // }, [])
 
-  const {
-    initializePayment,
-    isLoading: isLoadingPayment,
-    isError: isErrorPayment,
-  } = usePaymentInitialization()
+  // const {
+  //   initializePayment,
+  //   isLoading: isLoadingPayment,
+  //   isError: isErrorPayment,
+  // } = usePaymentInitialization()
 
-  const schemaPayment = yup.object().shape({
-    email: yup.string().email().required(),
-  })
+  // const schemaPayment = yup.object().shape({
+  //   email: yup.string().email().required(),
+  // })
 
-  const {
-    register: registerPayment,
-    handleSubmit: handleSubmitPayment,
-    reset: resetPayment,
-    formState: { errors: errorsPayment },
-  } = useForm({
-    resolver: yupResolver(schemaPayment),
-  })
+  // const {
+  //   register: registerPayment,
+  //   handleSubmit: handleSubmitPayment,
+  //   reset: resetPayment,
+  //   formState: { errors: errorsPayment },
+  // } = useForm({
+  //   resolver: yupResolver(schemaPayment),
+  // })
 
-  const onSubmitPayment = async (data) => {
-    const { email } = data
-    initializePayment(
-      email,
-      dataForm?.data?.amountNotchPay,
-      dataForm?.data?.name,
-      dataForm?.data?.publicNotchPayApiKey,
-      `https://sharuco.lndev.me/form/view/${searchParams.get("form")}`
-      //`http://localhost:3000/form/view/${searchParams.get("form")}`
-    )
-    resetPayment({
-      email: "",
-    })
-  }
+  // const onSubmitPayment = async (data) => {
+  //   const { email } = data
+  //   initializePayment(
+  //     email,
+  //     dataForm?.data?.amountNotchPay,
+  //     dataForm?.data?.name,
+  //     dataForm?.data?.publicNotchPayApiKey,
+  //     `https://sharuco.lndev.me/form/view/${searchParams.get("form")}`
+  //     //`http://localhost:3000/form/view/${searchParams.get("form")}`
+  //   )
+  //   resetPayment({
+  //     email: "",
+  //   })
+  // }
 
   return (
     <Layout>
