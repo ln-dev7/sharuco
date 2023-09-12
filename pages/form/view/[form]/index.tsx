@@ -129,8 +129,8 @@ export default function FormViewPage() {
         text: yup.string().required("This field is required"),
       })
     ),
-    paymentStatut: yup.string(),
-    emailPayment: yup.string(),
+    // paymentStatut: yup.string(),
+    // emailPayment: yup.string(),
   })
 
   const ALGOLIA_INDEX_NAME = "forms"
@@ -165,16 +165,16 @@ export default function FormViewPage() {
     setPaymentDone(false)
     let updatedFormData: {
       responses: any[]
-      paymentStatut?: string
-      emailPayment?: string
+      // paymentStatut?: string
+      // emailPayment?: string
     } = {
       responses: [
         ...dataForm?.data?.responses,
         {
           idResponse: moment().valueOf() + uid(),
           createdAt: moment().valueOf(),
-          paymentStatut: data.paymentStatut ? data.paymentStatut : "",
-          emailPayment: data.emailPayment ? data.emailPayment : "",
+          // paymentStatut: data.paymentStatut ? data.paymentStatut : "",
+          // emailPayment: data.emailPayment ? data.emailPayment : "",
           responses: [
             ...data.responses.map((response: any, index: number) => {
               return {
@@ -238,9 +238,9 @@ export default function FormViewPage() {
 
       if (paymentStatus === "complete") {
         localStorage.removeItem("transaction-reference")
-        setValue("paymentStatut", paymentStatus)
-        setValue("emailPayment", emailPayment)
-        setPaymentDone(true)
+        // setValue("paymentStatut", paymentStatus)
+        // setValue("emailPayment", emailPayment)
+        // setPaymentDone(true)
       } else {
       }
     } catch (error) {}
@@ -278,8 +278,8 @@ export default function FormViewPage() {
       dataForm?.data?.amountNotchPay,
       dataForm?.data?.name,
       dataForm?.data?.publicNotchPayApiKey,
-      //`https://sharuco.lndev.me/form/view/${searchParams.get("form")}`,
-      `http://localhost:3000/form/view/${searchParams.get("form")}`
+      `https://sharuco.lndev.me/form/view/${searchParams.get("form")}`
+      //`http://localhost:3000/form/view/${searchParams.get("form")}`
     )
     resetPayment({
       email: "",
@@ -333,7 +333,7 @@ export default function FormViewPage() {
                 </div>
                 <Separator className="mx-auto my-8 sm:w-2/3" />
                 <div className="mx-auto w-full space-y-6 lg:w-2/3">
-                  {dataForm?.data?.acceptPayment && !paymentDone && (
+                  {/* {dataForm?.data?.acceptPayment && !paymentDone && (
                     <div className="flex flex-col items-start gap-4 rounded-xl border border-[#11B981] bg-emerald-50/50 px-4 py-6 dark:bg-emerald-500/5 sm:flex-row">
                       <a href="https://notchpay.co/" className="w-12 shrink-0">
                         <img
@@ -380,8 +380,8 @@ export default function FormViewPage() {
                         </div>
                       </div>
                     </div>
-                  )}
-                  {paymentDone ? (
+                  )} */}
+                  {/* {paymentDone ? (
                     <div className="flex flex-col items-start gap-4 rounded-xl border border-[#11B981] bg-emerald-50/50 px-4 py-6 dark:bg-emerald-500/5 sm:flex-row">
                       <a href="https://notchpay.co/" className="w-12 shrink-0">
                         <img
@@ -396,7 +396,7 @@ export default function FormViewPage() {
                         </p>
                       </div>
                     </div>
-                  ) : null}
+                  ) : null} */}
                   {dataForm?.data?.questions.map((question, index) => {
                     return (
                       <div
