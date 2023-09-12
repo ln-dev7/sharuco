@@ -298,8 +298,27 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                                 key={answerIndex}
                               >
                                 <Label>{answer.label}</Label>
-                                <div>
+
+                                <div className="flex w-full items-center justify-between">
                                   <p className="font-semibold">{answer.text}</p>
+                                  <span
+                                    className="block cursor-pointer underline underline-offset-2"
+                                    onClick={() => {
+                                      copyToClipboard(answer.text)
+                                      toast({
+                                        title: `"${answer.text}" copied to clipboard`,
+                                        description:
+                                          "You can paste it wherever you want",
+                                        action: (
+                                          <ToastAction altText="Okay">
+                                            Okay
+                                          </ToastAction>
+                                        ),
+                                      })
+                                    }}
+                                  >
+                                    copy
+                                  </span>
                                 </div>
                               </div>
                             )}
