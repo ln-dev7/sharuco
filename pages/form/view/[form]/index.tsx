@@ -466,7 +466,7 @@ export default function FormViewPage() {
                     )
                   })}
                   <div className="mx-auto my-8 flex w-full flex-col items-center gap-2 sm:w-2/3">
-                    <div className="relative flex w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-lg p-8">
+                    <div className="relative flex w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-lg bg-blue-600 p-8">
                       <h3 className="text-md z-10 text-center font-bold uppercase text-white">
                         Prove you’re not a robot by solving this equation{" "}
                       </h3>
