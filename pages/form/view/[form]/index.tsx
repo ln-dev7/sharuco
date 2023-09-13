@@ -123,12 +123,23 @@ export default function FormViewPage() {
     error: any
   } = useDocument(searchParams.get("form"), "forms")
 
+  //
+  const [randomNumbers, setRandomNumbers] = useState(generateRandomNumbers())
+
+  function generateRandomNumbers() {
+    const number1 = Math.floor(Math.random() * 21) // Nombres aléatoires de 0 à 20
+    const number2 = Math.floor(Math.random() * 21)
+    return { number1, number2 }
+  }
+  //
+
   const schema = yup.object().shape({
     responses: yup.array().of(
       yup.object().shape({
         text: yup.string().required("This field is required"),
       })
     ),
+    answer: yup.number().integer(),
     // paymentStatut: yup.string(),
     // emailPayment: yup.string(),
   })
@@ -163,6 +174,16 @@ export default function FormViewPage() {
 
   const onSubmit = async (data) => {
     // setPaymentDone(false)
+
+    // Vérifie si la réponse de l'utilisateur est la somme des nombres aléatoires
+    const userAnswer = parseInt(data.answer, 10)
+    const correctAnswer = randomNumbers.number1 + randomNumbers.number2
+
+    if (userAnswer !== correctAnswer) {
+      alert("The answer to the mathematical question is incorrect.")
+      return
+    }
+
     let updatedFormData: {
       responses: any[]
       // paymentStatut?: string
@@ -206,7 +227,10 @@ export default function FormViewPage() {
           }
         }),
       ],
+      answer: null,
     })
+
+    setRandomNumbers(generateRandomNumbers())
   }
 
   if (dataForm?.data?.redirectOnCompletion && isSuccessUpdateForm) {
@@ -441,6 +465,29 @@ export default function FormViewPage() {
                       </div>
                     )
                   })}
+                  <div className="mx-auto my-8 flex w-full flex-col items-center gap-2 sm:w-2/3">
+                    <div className="relative flex w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-lg p-8">
+                      <h3 className="text-md z-10 text-center font-bold uppercase text-white">
+                        Prove you’re not a robot by solving this equation{" "}
+                      </h3>
+                      <span className="z-10 mb-2 block text-center text-4xl font-black text-white">
+                        {randomNumbers.number1} + {randomNumbers.number2} = ?
+                      </span>
+                      <img
+                        src="/assets/stacked-waves-haikei.svg"
+                        alt="stacked-waves-haikei"
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
+                      <input
+                        type="number"
+                        id="answer"
+                        name="answer"
+                        {...register("answer")}
+                        className="z-10 h-10 w-full rounded-md bg-white px-3 py-2 text-sm font-medium text-slate-900 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder={`${randomNumbers.number1} + ${randomNumbers.number2}`}
+                      />
+                    </div>
+                  </div>
                   {isSuccessUpdateForm && (
                     <div
                       className="mx-auto mb-8 flex items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
