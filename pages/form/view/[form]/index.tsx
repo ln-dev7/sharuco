@@ -127,7 +127,7 @@ export default function FormViewPage() {
   const [randomNumbers, setRandomNumbers] = useState(generateRandomNumbers())
 
   function generateRandomNumbers() {
-    const number1 = Math.floor(Math.random() * 51) // Nombres aléatoires de 0 à 20
+    const number1 = Math.floor(Math.random() * 51)
     const number2 = Math.floor(Math.random() * 51)
     return { number1, number2 }
   }
