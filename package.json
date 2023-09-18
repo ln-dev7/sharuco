@@ -81,7 +81,7 @@
     "yup": "^1.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.3",
+    "@babel/core": "^7.22.20",
     "@babel/parser": "^7.21.3",
     "@babel/preset-env": "^7.22.15",
     "@ianvs/prettier-plugin-sort-imports": "^3.7.1",
