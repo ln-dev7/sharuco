@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@bradgarropy/next-google-analytics": "^1.0.2",
-    "@hookform/resolvers": "^3.2.0",
+    "@hookform/resolvers": "^3.3.1",
     "@next/font": "^13.4.19",
     "@radix-ui/react-accessible-icon": "^1.0.1",
     "@radix-ui/react-accordion": "^1.1.0",
