@@ -69,7 +69,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.7",
     "react-infinite-scroll-component": "^6.1.0",
-    "react-instantsearch": "^7.0.1",
+    "react-instantsearch": "^7.0.3",
     "react-query": "^3.39.3",
     "react-responsive-masonry": "^2.1.7",
     "react-share": "^4.4.1",
