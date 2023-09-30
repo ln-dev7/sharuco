@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"

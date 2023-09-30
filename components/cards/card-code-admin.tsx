@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useParams } from "next/navigation"
 import {
   allLanguages,
   getExtensionByName,
@@ -119,7 +119,7 @@ export default function CardCodeAdmin({
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
 
-  const searchParams = useSearchParams()
+  const params = useParams()
 
   const { user, userPseudo } = useAuthContext()
 
@@ -334,7 +334,7 @@ export default function CardCodeAdmin({
 
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
-      {searchParams.get("code-preview") !== null && (
+      {params["code-preview"] !== null && (
         <div className="flex w-full items-center justify-center">
           <Dialog>
             <DialogTrigger asChild>
@@ -780,7 +780,7 @@ export default function CardCodeAdmin({
             </AlertDialog>
           </div>
         </div>
-        {searchParams.get("code-preview") === null && !isPrivate ? (
+        {params["code-preview"] === null && !isPrivate ? (
           <Link href={`/code-preview/${id}`}>
             <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
               <code
@@ -794,9 +794,7 @@ export default function CardCodeAdmin({
         ) : (
           <pre
             className={`${
-              searchParams.get("code-preview") === null &&
-              isPrivate &&
-              "max-h-[200px] "
+              params["code-preview"] === null && isPrivate && "max-h-[200px] "
             }
           w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black`}
           >
@@ -862,7 +860,7 @@ export default function CardCodeAdmin({
           </div>
         </a>
         <div className="flex shrink-0 items-center gap-4">
-          {searchParams.get("code-preview") === null && !isPrivate && (
+          {params["code-preview"] === null && !isPrivate && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -996,7 +994,7 @@ export default function CardCodeAdmin({
           )}
         </div>
       </div>
-      {searchParams.get("code-preview") === null && !isPrivate ? (
+      {params["code-preview"] === null && !isPrivate ? (
         <Link
           href={`/code-preview/${id}`}
           className="text-sm text-slate-700 dark:text-slate-400"

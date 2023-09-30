@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import {
   allLanguages,
   getExtensionByName,
@@ -100,7 +100,7 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function PublishForms({ dataForm }: { dataForm: any }) {
-  const searchParams = useSearchParams()
+  const params = useParams()
   const { user, userPseudo } = useAuthContext()
   const router = useRouter()
 
@@ -136,7 +136,7 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
       published: !dataForm?.published,
     }
 
-    const id = searchParams.get("form")
+    const id = params["form"]
 
     await updateFormDocument({ id, updatedFormData })
 
@@ -150,7 +150,7 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
     <div className="flex shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 py-20 dark:border-slate-700">
       <div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center gap-4 p-4 text-center">
         <Link
-          href={`/form/view/${searchParams.get("form")}`}
+          href={`/form/view/${params["form"]}`}
           className={buttonVariants({
             size: "default",
             variant: "subtle",
@@ -198,17 +198,13 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
           <Input
             className="w-full"
             type="text"
-            placeholder={`https://sharuco.lndev.me/form/view/${searchParams.get(
-              "form"
-            )}`}
-            value={`https://sharuco.lndev.me/form/view/${searchParams.get(
-              "form"
-            )}`}
+            placeholder={`https://sharuco.lndev.me/form/view/${params["form"]}`}
+            value={`https://sharuco.lndev.me/form/view/${params["form"]}`}
           />
           <Button
             onClick={() => {
               copyToClipboard(
-                `https://sharuco.lndev.me/form/view/${searchParams.get("form")}`
+                `https://sharuco.lndev.me/form/view/${params["form"]}`
               )
               notifyUrlCopied()
             }}

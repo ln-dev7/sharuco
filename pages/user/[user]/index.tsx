@@ -2,7 +2,7 @@
 
 import Head from "next/head"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -55,8 +55,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 export default function User() {
   const { user, userPseudo } = useAuthContext()
 
-  const searchParams = useSearchParams()
-  const idCurrent = searchParams?.get("user")?.toLowerCase()
+  const params = useParams()
+
+  const userParam = params["user"] as string
+  const idCurrent = userParam?.toLowerCase()
 
   const { login, isPending } = useGitHubLogin()
 

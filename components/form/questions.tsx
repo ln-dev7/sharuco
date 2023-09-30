@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import {
   allLanguages,
   getExtensionByName,
@@ -104,7 +104,7 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function QuestionsForms({ dataForm }: { dataForm: any }) {
-  const searchParams = useSearchParams()
+  const params = useParams()
   const { user, userPseudo } = useAuthContext()
   const router = useRouter()
 
@@ -201,7 +201,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
       questions: data.questions,
     }
 
-    const id = searchParams.get("form")
+    const id = params["form"]
 
     await updateFormDocument({ id, updatedFormData })
 

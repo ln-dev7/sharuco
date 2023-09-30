@@ -2,7 +2,7 @@
 
 import Head from "next/head"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -34,8 +34,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button, buttonVariants } from "@/components/ui/button"
 
 export default function LinkPage() {
-  const searchParams = useSearchParams()
-  const idCurrent = searchParams?.get("link")?.toLowerCase()
+  const params = useParams()
+  const linkParam = params["link"] as string
+  const idCurrent = linkParam?.toLowerCase()
 
   const { data, isLoading, isError } = useDocument(idCurrent, "users")
 
