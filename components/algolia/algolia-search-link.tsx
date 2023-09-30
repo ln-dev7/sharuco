@@ -21,7 +21,7 @@ export default function AlgoliaSearchLink() {
   const params = useParams()
 
   const transformItems = (items) => {
-    if (params["link"] !== null) {
+    if (params["link"] !== undefined) {
       return items.filter((item) => item.idAuthor === params["link"])
     } else {
       return items.filter((item) => item.idAuthor === userPseudo)
@@ -31,9 +31,11 @@ export default function AlgoliaSearchLink() {
   return (
     <InstantSearch indexName="links" searchClient={client}>
       <SearchBox
-        placeholder={`Search links of ${
-          params["link"] !== null ? params["link"] : null
-        }...`}
+        placeholder={` ${
+          params["link"] !== undefined
+            ? `Search links of ${params["link"]}`
+            : "Search links"
+        } ...`}
         submitIconComponent={() => <Search className="h-4 w-4" />}
         resetIconComponent={() => <Trash2 />}
         loadingIconComponent={() => (

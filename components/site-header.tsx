@@ -26,9 +26,9 @@ export function SiteHeader() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <div className="w-full flex-1 lg:w-auto lg:flex-none">
-            {params["link"] !== null || (pathName === "/links" && user) ? (
+            {params["link"] !== undefined || (pathName === "/links" && user) ? (
               <SearchBarLink />
-            ) : (params["form"] !== null && user) ||
+            ) : (params["form"] !== undefined && user) ||
               (pathName === "/forms" && user) ? (
               <SearchBarForm />
             ) : (
