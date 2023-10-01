@@ -1,15 +1,5 @@
 # @ln-dev7/sharuco
 
-## 1.1.0
-
-### Minor Changes
-
-- [Payment on sharuco form](https://github.com/ln-dev7/sharuco/pull/172)
-
-- Thanks [@ln-dev7](https://github.com/ln-dev7)!
-
-**Full Changelog**: https://github.com/ln-dev7/sharuco/compare/v1.0.0...v1.1.0
-
 ## 1.0.0
 
 ### Major Changes
