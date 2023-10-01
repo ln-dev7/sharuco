@@ -334,7 +334,7 @@ export default function CardCodeAdmin({
 
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
-      {params["code-preview"] !== null && (
+      {params["code-preview"] !== undefined && (
         <div className="flex w-full items-center justify-center">
           <Dialog>
             <DialogTrigger asChild>
@@ -780,7 +780,7 @@ export default function CardCodeAdmin({
             </AlertDialog>
           </div>
         </div>
-        {params["code-preview"] === null && !isPrivate ? (
+        {params["code-preview"] === undefined && !isPrivate ? (
           <Link href={`/code-preview/${id}`}>
             <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
               <code
@@ -794,7 +794,9 @@ export default function CardCodeAdmin({
         ) : (
           <pre
             className={`${
-              params["code-preview"] === null && isPrivate && "max-h-[200px] "
+              params["code-preview"] === undefined &&
+              isPrivate &&
+              "max-h-[200px] "
             }
           w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black`}
           >
@@ -860,7 +862,7 @@ export default function CardCodeAdmin({
           </div>
         </a>
         <div className="flex shrink-0 items-center gap-4">
-          {params["code-preview"] === null && !isPrivate && (
+          {params["code-preview"] === undefined && !isPrivate && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -994,7 +996,7 @@ export default function CardCodeAdmin({
           )}
         </div>
       </div>
-      {params["code-preview"] === null && !isPrivate ? (
+      {params["code-preview"] === undefined && !isPrivate ? (
         <Link
           href={`/code-preview/${id}`}
           className="text-sm text-slate-700 dark:text-slate-400"

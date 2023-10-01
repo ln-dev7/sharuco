@@ -200,6 +200,7 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
             type="text"
             placeholder={`https://sharuco.lndev.me/form/view/${params["form"]}`}
             value={`https://sharuco.lndev.me/form/view/${params["form"]}`}
+            disabled
           />
           <Button
             onClick={() => {
