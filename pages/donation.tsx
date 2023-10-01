@@ -58,7 +58,7 @@ export default function Donation() {
       .number()
       .integer()
       .typeError("Amount must be a valid number")
-      .min(2, "Amount must be greater than 2")
+      .min(1, "Amount must be greater than 1")
       .required(),
     email: !user ? yup.string().email().required() : yup.string().email(),
   })
