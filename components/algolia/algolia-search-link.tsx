@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import algoliasearch from "algoliasearch"
 import { Search, Trash2 } from "lucide-react"
@@ -18,11 +18,11 @@ const client = algoliasearch(
 export default function AlgoliaSearchLink() {
   const { user, userPseudo } = useAuthContext()
 
-  const searchParams = useSearchParams()
+  const params = useParams()
 
   const transformItems = (items) => {
-    if (searchParams.get("link") !== null) {
-      return items.filter((item) => item.idAuthor === searchParams.get("link"))
+    if (params["link"] !== null) {
+      return items.filter((item) => item.idAuthor === params["link"])
     } else {
       return items.filter((item) => item.idAuthor === userPseudo)
     }
@@ -32,7 +32,7 @@ export default function AlgoliaSearchLink() {
     <InstantSearch indexName="links" searchClient={client}>
       <SearchBox
         placeholder={`Search links of ${
-          searchParams.get("link") !== null ? searchParams.get("link") : null
+          params["link"] !== null ? params["link"] : null
         }...`}
         submitIconComponent={() => <Search className="h-4 w-4" />}
         resetIconComponent={() => <Trash2 />}

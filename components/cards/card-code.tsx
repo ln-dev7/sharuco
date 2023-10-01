@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useParams } from "next/navigation"
 import { getExtensionByName, getLanguageColor } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
@@ -106,7 +106,7 @@ export default function CardCode({
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
 
-  const searchParams = useSearchParams()
+  const params = useParams()
 
   const { user, userPseudo } = useAuthContext()
 
@@ -181,7 +181,7 @@ export default function CardCode({
 
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
-      {searchParams.get("code-preview") !== null && (
+      {params["code-preview"] !== null && (
         <div className="flex w-full items-center justify-center">
           <Dialog>
             <DialogTrigger asChild>
@@ -399,7 +399,7 @@ export default function CardCode({
             </AlertDialog>
           </div>
         </div>
-        {searchParams.get("code-preview") === null ? (
+        {params["code-preview"] === null ? (
           <Link href={`/code-preview/${id}`}>
             <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
               <code
@@ -474,7 +474,7 @@ export default function CardCode({
           </div>
         </a>
         <div className="flex shrink-0 items-center justify-end gap-3">
-          {searchParams.get("code-preview") === null && (
+          {params["code-preview"] === null && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -700,7 +700,7 @@ export default function CardCode({
         </div>
       </div>
 
-      {searchParams.get("code-preview") === null ? (
+      {params["code-preview"] === null ? (
         <Link
           href={`/code-preview/${id}`}
           className="text-sm text-slate-700 dark:text-slate-400"

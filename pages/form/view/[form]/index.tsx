@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import {
   allLanguages,
   getExtensionByName,
@@ -95,7 +95,7 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function FormViewPage() {
-  const searchParams = useSearchParams()
+  const params = useParams()
   const { user, userPseudo } = useAuthContext()
   const router = useRouter() || ""
 
@@ -121,7 +121,7 @@ export default function FormViewPage() {
     isLoading: boolean
     isError: boolean
     error: any
-  } = useDocument(searchParams.get("form"), "forms")
+  } = useDocument(params["form"], "forms")
 
   //
   const [randomNumbers, setRandomNumbers] = useState(generateRandomNumbers())
@@ -210,7 +210,7 @@ export default function FormViewPage() {
     }
     // console.log("updatedFormData", updatedFormData)
 
-    const id = searchParams.get("form")
+    const id = params["form"]
 
     await updateFormDocument({ id, updatedFormData })
 
@@ -302,8 +302,8 @@ export default function FormViewPage() {
   //     dataForm?.data?.amountNotchPay,
   //     dataForm?.data?.name,
   //     dataForm?.data?.publicNotchPayApiKey,
-  //     `https://sharuco.lndev.me/form/view/${searchParams.get("form")}`
-  //     //`http://localhost:3000/form/view/${searchParams.get("form")}`
+  //     `https://sharuco.lndev.me/form/view/${params["form"]}`
+  //     //`http://localhost:3000/form/view/${params["form"]}`
   //   )
   //   resetPayment({
   //     email: "",
@@ -453,7 +453,7 @@ export default function FormViewPage() {
                             {...register(`responses.${index}.text` as const)}
                             placeholder={question.text}
                             value={question.type}
-                            defaultValue={question.type}
+                            // defaultValue={question.type}
                             className="hidden"
                           />
                         )}

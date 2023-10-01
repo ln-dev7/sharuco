@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 import Head from "next/head"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useParams } from "next/navigation"
 import {
   allLanguages,
   getExtensionByName,
@@ -62,7 +62,7 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function CodePreview() {
-  const searchParams = useSearchParams()
+  const params = useParams()
   const { user, userPseudo } = useAuthContext()
 
   const { toast } = useToast()
@@ -86,7 +86,7 @@ export default function CodePreview() {
     data: dataCode,
     isLoading: isLoadingCode,
     isError: isErrorCode,
-  } = useDocument(searchParams.get("code-preview"), "codes")
+  } = useDocument(params["code-preview"], "codes")
 
   const schema = yup.object().shape({
     code: yup.string(),
@@ -155,7 +155,7 @@ export default function CodePreview() {
       ],
     }
 
-    const id = searchParams.get("code-preview")
+    const id = params["code-preview"]
 
     await updateCodeDocument({ id, updatedCodeData })
 
@@ -173,7 +173,7 @@ export default function CodePreview() {
   }
 
   const handleDeleteComment = async (idComment) => {
-    const id = searchParams.get("code-preview")
+    const id = params["code-preview"]
 
     const updatedCodeData = {
       comments: dataCode?.data?.comments.filter(
@@ -200,7 +200,7 @@ export default function CodePreview() {
   return (
     <Layout>
       <Head>
-        <title>Sharuco - Code : {searchParams.get("code-preview")}</title>
+        <title>Sharuco - Code : {params["code-preview"]}</title>
         <meta
           name="description"
           content="Sharuco allows you to share code codes that you have found
@@ -226,8 +226,8 @@ export default function CodePreview() {
                   {dataUser?.data.pseudo === dataCode.data.idAuthor ||
                   SUPER_ADMIN.includes(dataUser?.data.pseudo) ? (
                     <CardCodeAdmin
-                      key={searchParams.get("code-preview")}
-                      id={searchParams.get("code-preview")}
+                      key={params["code-preview"] as string}
+                      id={params["code-preview"]}
                       idAuthor={dataCode.data.idAuthor}
                       language={dataCode.data.language}
                       code={dataCode.data.code}
@@ -239,8 +239,8 @@ export default function CodePreview() {
                     />
                   ) : (
                     <CardCode
-                      key={searchParams.get("code-preview")}
-                      id={searchParams.get("code-preview")}
+                      key={params["code-preview"] as string}
+                      id={params["code-preview"]}
                       idAuthor={dataCode.data.idAuthor}
                       language={dataCode.data.language}
                       code={dataCode.data.code}

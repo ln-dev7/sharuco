@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import {
   allLanguages,
   getExtensionByName,
@@ -102,7 +102,7 @@ import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function FormPage() {
-  const searchParams = useSearchParams()
+  const params = useParams()
   const { user, userPseudo } = useAuthContext()
   const router = useRouter()
 
@@ -124,12 +124,12 @@ export default function FormPage() {
     isLoading: boolean
     isError: boolean
     error: any
-  } = useDocument(searchParams.get("form"), "forms")
+  } = useDocument(params["form"], "forms")
 
   return (
     <Layout>
       <Head>
-        <title>Sharuco | Form : {searchParams.get("form")}</title>
+        <title>Sharuco | Form : {params["form"]}</title>
         <meta
           name="description"
           content="Sharuco allows you to share code codes that you have found

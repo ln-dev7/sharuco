@@ -6,8 +6,8 @@ import firebase_app from "../config"
 const db = getFirestore(firebase_app)
 
 export const getDocument = async (documentId, collectionName) => {
-  const userDocRef = doc(db, collectionName, documentId)
-  const result = await getDoc(userDocRef)
+  const docRef = doc(db, collectionName, documentId)
+  const result = await getDoc(docRef)
   const exists = result.exists()
   return { data: result.data(), exists: exists }
 }
