@@ -1,15 +1,17 @@
-# sharuco
+# Sharuco
 
-Share your code with everyone.
+Share your code. Manage Form & Link.
 
 ## Features
 
 - Create snippets of your code and share.
 - Generate images from your snippets and share on Social Network.
+- Create forms easily in minutes and collect all your information.
+- Store all the links that are useful to you and with possibilities to make everyone discover them.
 
 ## Requirements
 
-- Node (>14 recommended) + npm
+- Node (>18 recommended) + npm
 - docker + docker-compose
 - make (for Makefile targets)
 
