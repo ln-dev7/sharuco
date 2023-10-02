@@ -201,11 +201,21 @@ export default function CodePreview() {
     <Layout>
       <Head>
         <title>Sharuco - Code : {params["code-preview"]}</title>
+
         <meta
-          name="description"
-          content="Sharuco allows you to share code codes that you have found
-          useful."
+          property="og:description"
+          content={`${dataCode?.data?.description}`}
         />
+        <meta name="description" content={`${dataCode?.data?.description}`} />
+        <meta
+          property="og:url"
+          content={`https://sharuco.lndev.me/${params["code-preview"]}`}
+        />
+        <link
+          rel="canonical"
+          href={`https://sharuco.lndev.me/${params["code-preview"]}`}
+        />
+
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>{" "}
