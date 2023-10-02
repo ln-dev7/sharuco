@@ -1,5 +1,6 @@
 export const allLanguages = [
   { name: "Bash", color: "#89e051", extension: ".sh" },
+  { name: "Bow Framework", color: "#fbd8d2", extension: ".php" },
   { name: "C", color: "#555555", extension: ".c" },
   { name: "C++", color: "#f34b7d", extension: ".cpp" },
   { name: "C#", color: "#178600", extension: ".cs" },
