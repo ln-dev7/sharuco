@@ -179,7 +179,7 @@ export default function CardCode({
     link.click()
   }
 
-  console.log("params", params["code-preview"])
+  // console.log("params", params["code-preview"])
 
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
