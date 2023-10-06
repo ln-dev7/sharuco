@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes"
 
 import { Toaster } from "@/components/ui/toaster"
 import "@/styles/globals.css"
+import "@/styles/style.scss"
 import "prism-themes/themes/prism-one-dark.min.css"
 //import "prism-themes/themes/prism-night-owl.css"
 import { QueryClient, QueryClientProvider } from "react-query"
