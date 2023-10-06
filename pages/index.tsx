@@ -388,7 +388,7 @@ export default function IndexPage() {
                     <h3 className="mb-2 text-center text-lg font-semibold text-white">
                       sharuco.lndev.me
                     </h3>
-                    <div className="max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
+                    <div className="card-code-image max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
                       <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
                         <div className="flex items-center gap-2">
                           <span
