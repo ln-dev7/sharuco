@@ -14,6 +14,7 @@ import {
   Eye,
   FileCog,
   Github,
+  Layers,
   Link2Icon,
   Loader2,
   Star,
@@ -364,7 +365,7 @@ export default function User() {
                     )}
                     {dataPublicCodes.length == 0 && (
                       <EmptyCard
-                        icon={<FileCog className="h-12 w-12" />}
+                        icon={<Layers className="h-12 w-12" />}
                         title="No code found"
                         description="This user has not shared any code yet."
                       />
@@ -424,7 +425,7 @@ export default function User() {
                     )}
                     {dataFavoriteCodes.length == 0 && (
                       <EmptyCard
-                        icon={<FileCog className="h-12 w-12" />}
+                        icon={<Layers className="h-12 w-12" />}
                         title="No code found"
                         description="This user has not favorite any code yet."
                       />

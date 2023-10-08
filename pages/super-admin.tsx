@@ -7,7 +7,7 @@ import { SUPER_ADMIN } from "@/constants/super-admin"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
-import { Code, FileCog, UserIcon } from "lucide-react"
+import { Code, FileCog, Layers, UserIcon } from "lucide-react"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import CardCodeAdmin from "@/components/cards/card-code-admin"
@@ -130,7 +130,7 @@ export default function SuperAdmin() {
                 )}
                 {dataCodes.length == 0 && (
                   <EmptyCard
-                    icon={<FileCog className="h-12 w-12" />}
+                    icon={<Layers className="h-12 w-12" />}
                     title="No code found"
                     description="You don't have any public code any yet."
                   />

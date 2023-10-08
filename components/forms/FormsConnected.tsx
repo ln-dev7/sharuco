@@ -2,7 +2,7 @@
 
 import { useAuthContext } from "@/context/AuthContext"
 import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
-import { FileCog } from "lucide-react"
+import { FileCog, Layers } from "lucide-react"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import CardForm from "@/components/cards/card-form"
@@ -61,7 +61,7 @@ export default function FormsConnected() {
           )}
           {dataForms.length == 0 && (
             <EmptyCard
-              icon={<FileCog className="h-12 w-12" />}
+              icon={<Layers className="h-12 w-12" />}
               title="No form found"
               description="You have not added any form yet."
             />

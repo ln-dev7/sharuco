@@ -15,6 +15,7 @@ import {
   Eye,
   FileCog,
   Github,
+  Layers,
   Loader2,
   Star,
   UserIcon,
@@ -150,7 +151,7 @@ export default function LinkPage() {
                   )}
                   {dataLinks.length == 0 && (
                     <EmptyCard
-                      icon={<FileCog className="h-12 w-12" />}
+                      icon={<Layers className="h-12 w-12" />}
                       title="No link found"
                       description="You have not added any link yet."
                     />

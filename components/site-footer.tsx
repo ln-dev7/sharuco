@@ -28,12 +28,12 @@ export function SiteFooter() {
           <p className="text-center text-sm leading-loose text-slate-600 dark:text-slate-400 md:text-left">
             Built by{" "}
             <a
-              href="https://lndev.me"
+              href="https://leonelngoya.com"
               target="_blank"
               rel="noreferrer"
               className="font-semibold underline underline-offset-4"
             >
-              LN
+              Leonel Ngoya ( LN )
             </a>
             {"  "}
             🇨🇲

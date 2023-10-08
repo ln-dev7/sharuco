@@ -28,6 +28,7 @@ import {
   EyeOff,
   FileCog,
   Heart,
+  Layers,
   LinkIcon,
   Loader2,
   Plus,
@@ -704,7 +705,7 @@ export default function Dashboard() {
                 )}
                 {dataCodes.length == 0 && (
                   <EmptyCard
-                    icon={<FileCog className="h-12 w-12" />}
+                    icon={<Layers className="h-12 w-12" />}
                     title="No code found"
                     description="You don't have any public code any yet."
                   />
@@ -761,7 +762,7 @@ export default function Dashboard() {
                 )}
                 {dataPublicCodes.length == 0 && (
                   <EmptyCard
-                    icon={<FileCog className="h-12 w-12" />}
+                    icon={<Layers className="h-12 w-12" />}
                     title="No code found"
                     description="You don't have any public code any yet."
                   />
@@ -818,7 +819,7 @@ export default function Dashboard() {
                 )}
                 {dataPrivateCodes.length == 0 && (
                   <EmptyCard
-                    icon={<FileCog className="h-12 w-12" />}
+                    icon={<Layers className="h-12 w-12" />}
                     title="No code found"
                     description="You don't have any private code any yet."
                   />
@@ -876,7 +877,7 @@ export default function Dashboard() {
                 {dataFavoriteCodes.length == 0 && (
                   <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 dark:border-slate-700">
                     <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
-                      <FileCog className="h-12 w-12" />
+                      <Layers className="h-12 w-12" />
                       <h3 className="mt-4 text-lg font-semibold">
                         You don&apos;t have any favorite code yet
                       </h3>

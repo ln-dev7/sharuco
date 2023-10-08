@@ -2,7 +2,7 @@
 
 import { useAuthContext } from "@/context/AuthContext"
 import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
-import { FileCog } from "lucide-react"
+import { FileCog, Layers } from "lucide-react"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import CardLinkAdmin from "@/components/cards/card-link-admin"
@@ -59,7 +59,7 @@ export default function LinksConnected() {
           )}
           {dataLinks.length == 0 && (
             <EmptyCard
-              icon={<FileCog className="h-12 w-12" />}
+              icon={<Layers className="h-12 w-12" />}
               title="No link found"
               description="You have not added any link yet."
             />
