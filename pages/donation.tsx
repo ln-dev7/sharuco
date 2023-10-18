@@ -154,12 +154,26 @@ export default function Donation() {
         <div className="flex w-full items-center justify-center">
           <span className="text-lg font-bold">OR</span>
         </div>
-        <div className="flex w-full items-center justify-center">
+        <div className="flex flex-col w-full items-center justify-center gap-4">
+          <a
+            href="https://opencollective.com/sharuco"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`text-center ${buttonVariants({
+              size: "lg",
+              variant: "default",
+            })}`}
+          >
+            Support with OpenCollective
+          </a>
           <a
             href="https://www.buymeacoffee.com/lndev"
             target="_blank"
             rel="noopener noreferrer"
-            className={buttonVariants({ size: "lg", variant: "default" })}
+            className={`text-center ${buttonVariants({
+              size: "lg",
+              variant: "outline",
+            })}`}
           >
             Support with Buy me a coffee
           </a>

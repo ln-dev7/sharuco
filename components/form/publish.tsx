@@ -151,6 +151,7 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
       <div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center gap-4 p-4 text-center">
         <Link
           href={`/form/view/${params["form"]}`}
+          target="_blank"
           className={buttonVariants({
             size: "default",
             variant: "subtle",
