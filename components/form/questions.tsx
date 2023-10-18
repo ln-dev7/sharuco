@@ -236,24 +236,18 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
           <span className="ml-2 text-sm font-semibold">Long answer</span>
         </button>
         <button
-          //onClick={() => handleAddField("link")}
+          onClick={() => handleAddField("link")}
           className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
         >
           <LinkIcon className="h-5 w-5" />
           <span className="ml-2 text-sm font-semibold">Link</span>
-          <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-            soon
-          </span>
         </button>
         <button
-          //onClick={() => handleAddField("email")}
+          onClick={() => handleAddField("email")}
           className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
         >
           <Mail className="h-5 w-5" />
           <span className="ml-2 text-sm font-semibold">E-mail</span>
-          <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-            soon
-          </span>
         </button>
         <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
           <CircleDot className="h-5 w-5" />
@@ -327,12 +321,27 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                     </p>
                   )}
                 </label>
-                {(watchedFieldType === "text" ||
-                  watchedFieldType === "email" ||
-                  watchedFieldType === "link") && (
+                {watchedFieldType === "text" && (
                   <Input
                     {...register(`questions.${index}.text` as const)}
                     placeholder="Enter placeholder"
+                    type="text"
+                    //placeholder={field.text}
+                  />
+                )}
+                {watchedFieldType === "email" && (
+                  <Input
+                    {...register(`questions.${index}.text` as const)}
+                    placeholder="Enter placeholder"
+                    type="email"
+                    //placeholder={field.text}
+                  />
+                )}
+                {watchedFieldType === "link" && (
+                  <Input
+                    {...register(`questions.${index}.text` as const)}
+                    placeholder="Enter placeholder"
+                    type="url"
                     //placeholder={field.text}
                   />
                 )}

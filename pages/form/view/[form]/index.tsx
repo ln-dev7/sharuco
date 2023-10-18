@@ -321,7 +321,7 @@ export default function FormViewPage() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>{" "}
+      </Head>
       <section className="fixed inset-0 z-50 h-screen overflow-scroll bg-white dark:bg-slate-900">
         <div className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
           <div className="flex w-full items-center justify-start">
@@ -367,10 +367,10 @@ export default function FormViewPage() {
                       </a>
                       <div className="flex w-full flex-col items-start gap-2">
                         <p>
-                          This form accepts a payment at the rate of{" "}
+                          This form accepts a payment at the rate of
                           <span className="font-bold">
                             {dataForm?.data?.amountNotchPay} Euro
-                          </span>{" "}
+                          </span>
                           , If you make it this will be notified to the
                           administrator of this form.
                         </p>
@@ -434,11 +434,24 @@ export default function FormViewPage() {
                             {question.label}
                           </h3>
                         )}
-                        {(question.type === "text" ||
-                          question.type === "link" ||
-                          question.type === "email") && (
+                        {question.type === "text" && (
                           <Input
                             {...register(`responses.${index}.text` as const)}
+                            type="text"
+                            placeholder={question.text}
+                          />
+                        )}
+                        {question.type === "link" && (
+                          <Input
+                            {...register(`responses.${index}.text` as const)}
+                            type="url"
+                            placeholder={question.text}
+                          />
+                        )}
+                        {question.type === "email" && (
+                          <Input
+                            {...register(`responses.${index}.text` as const)}
+                            type="email"
                             placeholder={question.text}
                           />
                         )}
@@ -468,7 +481,7 @@ export default function FormViewPage() {
                   <div className="mx-auto my-8 flex w-full flex-col items-center gap-2 sm:w-2/3">
                     <div className="relative flex w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-lg bg-blue-600 p-8">
                       <h3 className="text-md z-10 text-center font-bold uppercase text-white">
-                        Prove you’re not a robot by solving this equation{" "}
+                        Prove you’re not a robot by solving this equation
                       </h3>
                       <span className="z-10 mb-2 block text-center text-4xl font-black text-white">
                         {randomNumbers.number1} + {randomNumbers.number2} = ?
