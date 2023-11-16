@@ -66,7 +66,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Toaster />
             <Component {...pageProps} />
-            <Analytics />
+            {/* <Analytics /> */}
             <GoogleAnalytics measurementId="G-4FTGXMJNPY" />
             {/* <ReactQueryDevtools initialIsOpen={false} /> */}
           </ThemeProvider>
