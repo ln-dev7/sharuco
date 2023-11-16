@@ -320,7 +320,6 @@ export default function FormViewPage() {
           useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="google-adsense-account" content="ca-pub-2222017759396595" />
         <link rel="icon" href="/favicon.ico" />
       </Head>{" "}
       <section className="fixed inset-0 z-50 h-screen overflow-scroll bg-white dark:bg-slate-900">

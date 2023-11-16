@@ -126,7 +126,6 @@ export default function Explore() {
           useful."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="google-adsense-account" content="ca-pub-2222017759396595" />
         <link rel="icon" href="/favicon.ico" />
       </Head>{" "}
       <section className="container grid items-center gap-8 pb-8 pt-6 md:py-10">
