@@ -56,7 +56,7 @@ export default function Forms() {
   const { user, userPseudo } = useAuthContext()
   const { toast } = useToast()
 
-  const notifyCodeAdded = () =>
+  const notifyFormCreated = () =>
     toast({
       title: "Your form has been created successfully !",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
@@ -106,7 +106,7 @@ export default function Forms() {
 
   useEffect(() => {
     if (isSuccess) {
-      notifyCodeAdded()
+      notifyFormCreated()
       setOpenCreateFormDialog(!isSuccess)
     }
   }, [isSuccess])
