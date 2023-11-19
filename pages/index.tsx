@@ -244,13 +244,7 @@ export default function IndexPage() {
                 <Image
                   width={160}
                   height={55}
-                  src={
-                    theme === "dark"
-                      ? support.image
-                      : support.imageDark
-                      ? support.imageDark
-                      : support.image
-                  }
+                  src={theme === "dark" ? support.image : support.imageDark}
                   className="cursor-pointer"
                   alt={support.name}
                   priority={true}
