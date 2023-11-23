@@ -126,6 +126,16 @@ export default function FormPage() {
     error: any
   } = useDocument(params["form"], "forms")
 
+  const goToForm = (id) => {
+    router.push(`/form/${id}`)
+  }
+
+  const {
+    isLoading: isLoadingForms,
+    isError: isErrorForms,
+    data: dataForms,
+  } = useGetDocumentFromUser(userPseudo, "forms")
+
   return (
     <Layout>
       <Head>
@@ -148,13 +158,32 @@ export default function FormPage() {
           dataForm.exists &&
           dataForm.data.idAuthor === userPseudo && (
             <div className="flex w-full flex-col gap-4">
-              <div className="flex flex-col items-start gap-2">
-                <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
-                  {dataForm.data.name}
-                </h1>
-                <p className="text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 sm:text-base md:text-lg lg:text-lg">
-                  {dataForm.data.description}
-                </p>
+              <div className="flex w-full flex-col items-start justify-between gap-4 md:flex-row">
+                <div className="flex flex-col items-start gap-2">
+                  <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
+                    {dataForm.data.name}
+                  </h1>
+                  <p className="text-sm font-medium leading-5 text-gray-500 dark:text-gray-400 sm:text-base md:text-lg lg:text-lg">
+                    {dataForm.data.description}
+                  </p>
+                </div>
+                <div className="md:mtb-0 mb-3">
+                  <Select onValueChange={(value) => goToForm(value)}>
+                    <SelectTrigger className="w-[240px]">
+                      <SelectValue placeholder="Select a form" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Your Forms</SelectLabel>
+                        {dataForms.map((form) => (
+                          <SelectItem key={form.id} value={form.id}>
+                            {form.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <Tabs defaultValue="questions" className="w-full">
                 <TabsList>
