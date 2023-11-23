@@ -12,6 +12,7 @@ import {
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
+import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
@@ -105,6 +106,8 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
   const { user, userPseudo } = useAuthContext()
   const router = useRouter()
 
+  const id = params["form"] as string
+
   const { toast } = useToast()
 
   const notifyUrlCopied = () =>
@@ -191,6 +194,15 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     reset: resetUpdateForm,
   }: any = useUpdateFormDocument("forms")
 
+  const { deleteDocument, isLoading: isLoadingDelete }: any =
+    useDeleteDocument("forms")
+
+  const handleDeleteDocument = () => {
+    deleteDocument(id)
+    index.deleteObject(id)
+    router.push("/forms")
+  }
+
   const onSubmit = async (data) => {
     const {
       name: nameUpdate,
@@ -237,8 +249,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       // amountNotchPay: amountNotchPayUpdate,
       // acceptPayment: acceptPaymentUpdate,
     }
-
-    const id = params["form"]
 
     await updateFormDocument({ id, updatedFormData })
 
@@ -413,18 +423,57 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
         </div> */}
 
         <div className="sticky inset-x-0 bottom-0 flex w-full flex-col items-start gap-2 border-t  bg-white py-4 dark:bg-slate-900">
-          <Button
-            variant="default"
-            disabled={isLoadingUpdateForm}
-            onClick={isLoadingUpdateForm ? undefined : handleSubmit(onSubmit)}
-          >
-            {isLoadingUpdateForm ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Save className="mr-2 h-4 w-4" />
-            )}
-            Save changes
-          </Button>
+          <div className="w-full flex items-center justify-between">
+            <Button
+              variant="default"
+              disabled={isLoadingUpdateForm}
+              onClick={isLoadingUpdateForm ? undefined : handleSubmit(onSubmit)}
+            >
+              {isLoadingUpdateForm ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Save className="mr-2 h-4 w-4" />
+              )}
+              Save changes
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive">
+                  <Trash className="mr-2 h-4 w-4" />
+                  Delete form
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to delete this form ?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action is irreversible, please reflect beforehand.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <button
+                    className={cn(
+                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    )}
+                    disabled={isLoadingDelete}
+                    onClick={
+                      !isLoadingDelete ? handleDeleteDocument : undefined
+                    }
+                  >
+                    {isLoadingDelete ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Trash className="mr-2 h-4 w-4" />
+                    )}
+                    Delete
+                  </button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
           {isSuccessUpdateForm && (
             <div
               className="mt-2 flex w-full items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
