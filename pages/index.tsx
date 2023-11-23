@@ -42,7 +42,7 @@ import { Textarea } from "@/components/ui/textarea"
 
 export default function IndexPage() {
   const { login, isPending } = useGitHubLogin()
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
 
   const { user, userPseudo } = useAuthContext()
 
@@ -244,7 +244,9 @@ export default function IndexPage() {
                 <Image
                   width={160}
                   height={55}
-                  src={theme === "dark" ? support.image : support.imageDark}
+                  src={
+                    resolvedTheme === "dark" ? support.image : support.imageDark
+                  }
                   className="cursor-pointer"
                   alt={support.name}
                   priority={true}

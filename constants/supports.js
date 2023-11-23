@@ -6,22 +6,16 @@ export const COMPANIES = [
     link: "https://laravel.cm/",
   },
   {
+    name: "World Portfolios",
+    image: "/partner/wp.svg",
+    imageDark: "/partner/wp.svg",
+    link: "https://wp.lndev.me/",
+  },
+  {
     name: "NotchPay",
     image: "/partner/notchpay.svg",
     imageDark: "/partner/notchpay-dark.svg",
     link: "http://notchpay.co/",
-  },
-  {
-    name: "DarkCode",
-    image: "/partner/darkcode.svg",
-    imageDark: "/partner/darkcode-dark.svg",
-    link: "https://twitter.com/DarkCodeCompany",
-  },
-  {
-    name: "DevStyle",
-    image: "/partner/devstyle.png",
-    imageDark: "/partner/devstyle-dark.png",
-    link: "https://dev-style.com/",
   },
 ]
 
