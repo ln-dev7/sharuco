@@ -160,20 +160,26 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
           <Eye className="mr-2 h-4 w-4" />
           View form
         </Link>
-        <h3 className="text-md mt-4 font-semibold">
-          {dataForm.published
-            ? "Your form is currently online and can be viewed and answered by anyone at the link"
-            : "Your form is not published so can only be seen by you alone"}
-        </h3>
-        {isLoadingUpdateForm ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <p
-            className="mb-4 mt-2 cursor-pointer text-sm font-semibold uppercase text-muted-foreground underline underline-offset-4"
-            onClick={() => changeStatutOfForm()}
-          >
-            {!dataForm?.published ? "Publish" : "Unpublish"} your form
-          </p>
+        {dataForm.idAuthor === userPseudo && (
+          <>
+            <h3 className="text-md mt-4 font-semibold">
+              {dataForm.published
+                ? "Your form is currently online and can be viewed and answered by anyone at the link"
+                : "Your form is not published so can only be seen by you alone"}
+            </h3>
+            <>
+              {isLoadingUpdateForm ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <p
+                  className="mb-4 mt-2 cursor-pointer text-sm font-semibold uppercase text-muted-foreground underline underline-offset-4"
+                  onClick={() => changeStatutOfForm()}
+                >
+                  {!dataForm?.published ? "Publish" : "Unpublish"} your form
+                </p>
+              )}
+            </>
+          </>
         )}
         {isSuccessUpdateForm && (
           <div

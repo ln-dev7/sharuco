@@ -156,7 +156,10 @@ export default function FormPage() {
         )}
         {dataForm &&
           dataForm.exists &&
-          dataForm.data.idAuthor === userPseudo && (
+          (dataForm.data.idAuthor === userPseudo ||
+            dataForm.data.collaborators.some(
+              (item) => item.pseudo === userPseudo
+            )) && (
             <div className="flex w-full flex-col gap-4">
               <div className="flex w-full flex-col items-start justify-between gap-4 md:flex-row">
                 <div className="flex flex-col items-start gap-2">
@@ -167,23 +170,37 @@ export default function FormPage() {
                     {dataForm.data.description}
                   </p>
                 </div>
-                <div className="md:mtb-0 mb-3">
-                  <Select onValueChange={(value) => goToForm(value)}>
-                    <SelectTrigger className="w-[240px]">
-                      <SelectValue placeholder="Select a form" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Your Forms</SelectLabel>
-                        {dataForms.map((form) => (
-                          <SelectItem key={form.id} value={form.id}>
-                            {form.name}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
+                {dataForm.data.idAuthor === userPseudo ? (
+                  <div className="md:mtb-0 mb-3">
+                    <Select onValueChange={(value) => goToForm(value)}>
+                      <SelectTrigger className="w-[240px]">
+                        <SelectValue placeholder="Select a form" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Your Forms</SelectLabel>
+                          {dataForms.map((form) => (
+                            <SelectItem key={form.id} value={form.id}>
+                              {form.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : (
+                  <div className="">
+                    <span className="italic">
+                      Created by{" "}
+                      <a
+                        className="font-bold underline underline-offset-2"
+                        href={`/user/${dataForm.data.idAuthor}`}
+                      >
+                        @ {dataForm.data.idAuthor}
+                      </a>
+                    </span>
+                  </div>
+                )}
               </div>
               <Tabs defaultValue="questions" className="w-full">
                 <TabsList>
@@ -203,10 +220,12 @@ export default function FormPage() {
                       <Send className="mr-2 h-4 w-4" />
                       Publish
                     </TabsTrigger>
-                    <TabsTrigger value="settings">
-                      <Settings2 className="mr-2 h-4 w-4" />
-                      Settings
-                    </TabsTrigger>
+                    {dataForm.data.idAuthor === userPseudo && (
+                      <TabsTrigger value="settings">
+                        <Settings2 className="mr-2 h-4 w-4" />
+                        Settings
+                      </TabsTrigger>
+                    )}
                   </div>
                 </TabsList>
                 <TabsContent className="border-none p-0 pt-4" value="questions">
@@ -254,28 +273,36 @@ export default function FormPage() {
                     </Masonry>
                   </ResponsiveMasonry>
                 </TabsContent>
-                <TabsContent className="border-none p-0 pt-2" value="settings">
-                  <ResponsiveMasonry
-                    columnsCountBreakPoints={{
-                      659: 1,
-                      660: 1,
-                      720: 1,
-                      1200: 1,
-                    }}
-                    className="w-full"
+                {dataForm.data.idAuthor === userPseudo && (
+                  <TabsContent
+                    className="border-none p-0 pt-2"
+                    value="settings"
                   >
-                    <Masonry gutter="1rem">
-                      <SettingsForms dataForm={dataForm.data} />
-                    </Masonry>
-                  </ResponsiveMasonry>
-                </TabsContent>
+                    <ResponsiveMasonry
+                      columnsCountBreakPoints={{
+                        659: 1,
+                        660: 1,
+                        720: 1,
+                        1200: 1,
+                      }}
+                      className="w-full"
+                    >
+                      <Masonry gutter="1rem">
+                        <SettingsForms dataForm={dataForm.data} />
+                      </Masonry>
+                    </ResponsiveMasonry>
+                  </TabsContent>
+                )}
               </Tabs>
             </div>
           )}
         {((dataForm && !dataForm.exists) ||
           (dataForm &&
             dataForm.exists &&
-            dataForm.data.idAuthor !== userPseudo)) && (
+            dataForm.data.idAuthor !== userPseudo &&
+            dataForm.data.collaborators.some(
+              (item) => item.pseudo !== userPseudo
+            ))) && (
           <div className="flex flex-col items-center gap-4">
             <h1 className="text-2xl font-bold">This form does not exist.</h1>
             <Link

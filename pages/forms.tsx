@@ -94,6 +94,7 @@ export default function Forms() {
       published: false,
       questions: [],
       responses: [],
+      collaborators: [],
     }
 
     createDocument(newDocument)

@@ -1,5 +1,13 @@
 # @ln-dev7/sharuco
 
+## 1.0.1
+
+### Patch Changes
+
+- Thanks [@ln-dev7](https://github.com/ln-dev7)!
+
+**Full Changelog**: https://github.com/ln-dev7/sharuco/compare/v1.0.0...v1.0.1
+
 ## 1.0.0
 
 ### Major Changes

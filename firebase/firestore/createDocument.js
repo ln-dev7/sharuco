@@ -53,6 +53,7 @@ const createDocument = async (newData, collectionName) => {
         responses: newCollection.responses,
         published: newCollection.published,
         idAuthor: newCollection.idAuthor,
+        collaborators: newCollection.collaborators,
       })
       window.location.href = `/form/${newCollection.id}`
       break

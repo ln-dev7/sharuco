@@ -26,6 +26,12 @@ export const updateAllDatataOnCollection = async () => {
     const updatePromise = updateDoc(doc.ref, { favoris })
     promises.push(updatePromise)
   })
+
+  // querySnapshot.docs.forEach((doc) => {
+  //   const updatePromise = updateDoc(doc.ref, { collaborators: [] });
+  //   promises.push(updatePromise);
+  // });
+
   await Promise.all(promises)
   console.log(
     "La propriété a été ajoutée à tous les documents de la collection"

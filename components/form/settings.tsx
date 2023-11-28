@@ -11,6 +11,7 @@ import {
 } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
+import { checkIdAvailability } from "@/firebase/firestore/checkIfIDExistOnCollection"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -204,6 +205,48 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     router.push("/forms")
   }
 
+  const [usernamePeopleToAdd, setUsernamePeopleToAdd] = useState("")
+  const [checkIfUsernameExist, setCheckIfUsernameExist] = useState(false)
+  const addCollaborator = async (pseudo: string) => {
+    setCheckIfUsernameExist(true)
+    checkIdAvailability("users", pseudo)
+      .then((isAvailable) => {
+        if (isAvailable) {
+          let updatedFormData = {
+            collaborators: [
+              ...dataForm.collaborators,
+              {
+                pseudo: pseudo,
+              },
+            ],
+          }
+
+          updateFormDocument({ id, updatedFormData })
+        } else {
+          toast({
+            variant: "destructive",
+            title: "This user not exist on Sharuco",
+            description: "Make sure you have entered the correct user name.",
+            action: <ToastAction altText="Okay">Okay</ToastAction>,
+          })
+          return
+        }
+      })
+      .catch((error) => console.error("Error : ", error))
+      .finally(() => {
+        setCheckIfUsernameExist(false)
+      })
+  }
+  const removeCollaborator = async (pseudo: string) => {
+    let updatedFormData = {
+      collaborators: dataForm.collaborators.filter(
+        (item) => item.pseudo !== pseudo
+      ),
+    }
+
+    updateFormDocument({ id, updatedFormData })
+  }
+
   const onSubmit = async (data) => {
     const {
       name: nameUpdate,
@@ -343,6 +386,74 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             )}
           </p>
         </div>
+        <div className="flex flex-col items-start">
+          <h3 className="text-xl font-semibold">Team</h3>
+        </div>
+        <Separator className="opacity-50" />
+        <div className="flex w-full flex-col items-start gap-2">
+          <div className="flex w-full flex-col items-start gap-1">
+            <Label className="text-left">Add people to manage this form.</Label>
+            <p className="text-left text-sm">
+              The added persons will be able to consult the answers to your
+              form.
+            </p>
+          </div>
+          <div className="mb-2 flex w-full items-center gap-2">
+            <Input
+              placeholder="Enter username"
+              onChange={(e) => {
+                setUsernamePeopleToAdd(e.target.value)
+              }}
+              value={usernamePeopleToAdd}
+            />
+            <Button
+              disabled={
+                usernamePeopleToAdd === "" ||
+                checkIfUsernameExist ||
+                isLoadingUpdateForm
+              }
+              className="shrink-0"
+              onClick={() => {
+                setUsernamePeopleToAdd("")
+                addCollaborator(usernamePeopleToAdd)
+              }}
+            >
+              {checkIfUsernameExist && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Add people
+            </Button>
+          </div>
+          {dataForm.collaborators.length !== 0 && (
+            <div className="flex w-full flex-col gap-2">
+              {dataForm.collaborators.map((collaborator, index) => (
+                <div
+                  key={collaborator.pseudo}
+                  className="flex w-full items-center rounded-md bg-slate-50 px-5 py-3 dark:bg-slate-800"
+                >
+                  <div className="flex w-full">
+                    <a
+                      href={`/user/${collaborator.pseudo}`}
+                      className="cursor-pointer text-sm font-semibold underline underline-offset-4"
+                    >
+                      {collaborator.pseudo}
+                    </a>
+                  </div>
+                  <span
+                    className="block shrink-0 cursor-pointer text-sm font-medium text-red-600 underline underline-offset-4"
+                    onClick={() => {
+                      isLoadingUpdateForm
+                        ? undefined
+                        : removeCollaborator(collaborator.pseudo)
+                    }}
+                  >
+                    Remove
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         {/* <Separator className="my-2" />
         <div className="flex flex-col items-start">
           <h3 className="text-xl font-semibold">Payment</h3>
@@ -423,11 +534,11 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           </Label>
         </div> */}
 
-        <div className="sticky inset-x-0 bottom-0 flex w-full flex-col items-start gap-2 border-t  bg-white py-4 dark:bg-slate-900">
-          <div className="w-full flex items-center justify-between">
+        <div className="sticky inset-x-0 bottom-0 flex w-full flex-col items-start gap-2 border-t bg-white py-4 dark:bg-slate-900">
+          <div className="flex w-full items-center justify-between">
             <Button
               variant="default"
-              disabled={isLoadingUpdateForm}
+              disabled={isLoadingUpdateForm || checkIfUsernameExist}
               onClick={isLoadingUpdateForm ? undefined : handleSubmit(onSubmit)}
             >
               {isLoadingUpdateForm ? (
@@ -451,7 +562,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                   </AlertDialogTitle>
                   <AlertDialogDescription className="space-y-3">
                     <div
-                      className="rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400 font-semibold"
+                      className="rounded-lg bg-red-50 p-4 text-sm font-semibold text-red-800 dark:bg-gray-800 dark:text-red-400"
                       role="alert"
                     >
                       This action is irreversible, please reflect beforehand.

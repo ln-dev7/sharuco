@@ -48,6 +48,7 @@ const useUpdateFormDocument = (collectionName) => {
     updateFormDocument: mutation.mutate,
     isLoading: mutation.isLoading,
     isError: mutation.isError,
+    error: mutation.error,
     isSuccess: mutation.isSuccess,
     reset: mutation.reset,
   }

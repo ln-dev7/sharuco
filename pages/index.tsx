@@ -254,6 +254,13 @@ export default function IndexPage() {
               </a>
             ))}
           </div>
+          <a
+            target="href"
+            href="https://www.buymeacoffee.com/lndev/membership"
+            className="text-center text-xs font-semibold uppercase text-sky-400 underline underline-offset-4"
+          >
+            Your logo here?
+          </a>
         </div>
         <Separator className="my-2" />
         <div className="mt-8 flex flex-col items-start gap-4">

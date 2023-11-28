@@ -50,8 +50,8 @@ export function AvatarUser() {
       <SheetTrigger asChild>
         <div className="relative">
           {data && data.exists && data.data.premium && (
-            <div className="absolute z-10 rounded-full -bottom-1 -right-1 flex items-center justify-center border-2 border-yellow-500 bg-white dark:bg-slate-800">
-              <Verified className="shrink-0 h-5 w-5 text-yellow-500 p-1" />
+            <div className="absolute -bottom-1 -right-1 z-10 flex items-center justify-center rounded-full border-2 border-yellow-500 bg-white dark:bg-slate-800">
+              <Verified className="h-5 w-5 shrink-0 p-1 text-yellow-500" />
             </div>
           )}
           <Avatar
