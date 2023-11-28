@@ -256,45 +256,6 @@ export default function CardForm({
                   </button>
                 </AlertDialogFooter>
               </AlertDialogContent>
-            </AlertDialog>{" "}
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="destructive"
-                  className="h-10 w-10 rounded-full p-0"
-                >
-                  <Trash className="h-4 w-4" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Are you sure you want to delete this form ?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action is irreversible, please reflect beforehand.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <button
-                    className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
-                    )}
-                    disabled={isLoadingDelete}
-                    onClick={
-                      !isLoadingDelete ? handleDeleteDocument : undefined
-                    }
-                  >
-                    {isLoadingDelete ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      <Trash className="mr-2 h-4 w-4" />
-                    )}
-                    Delete
-                  </button>
-                </AlertDialogFooter>
-              </AlertDialogContent>
             </AlertDialog>
           </div>
         </PopoverContent>

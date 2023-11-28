@@ -197,6 +197,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
   const { deleteDocument, isLoading: isLoadingDelete }: any =
     useDeleteDocument("forms")
 
+  const [confirmFormName, setConfirmFormName] = useState("")
   const handleDeleteDocument = () => {
     deleteDocument(id)
     index.deleteObject(id)
@@ -448,8 +449,26 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                   <AlertDialogTitle>
                     Are you sure you want to delete this form ?
                   </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action is irreversible, please reflect beforehand.
+                  <AlertDialogDescription className="space-y-3">
+                    <div
+                      className="rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400 font-semibold"
+                      role="alert"
+                    >
+                      This action is irreversible, please reflect beforehand.
+                    </div>
+                    <div className="space-y-2">
+                      <p>
+                        Enter the form name{" "}
+                        <span className="font-bold">{dataForm.name}</span> to
+                        continue:
+                      </p>
+                      <Input
+                        onChange={(e) => {
+                          setConfirmFormName(e.target.value)
+                        }}
+                        className=""
+                      />
+                    </div>
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -458,7 +477,9 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                     className={cn(
                       "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
                     )}
-                    disabled={isLoadingDelete}
+                    disabled={
+                      isLoadingDelete || confirmFormName !== dataForm.name
+                    }
                     onClick={
                       !isLoadingDelete ? handleDeleteDocument : undefined
                     }
