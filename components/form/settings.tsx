@@ -11,6 +11,7 @@ import {
 } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
+import { checkIdAvailability } from "@/firebase/firestore/checkIfIDExistOnCollection"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -205,14 +206,33 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
   }
 
   const [usernamePeopleToAdd, setUsernamePeopleToAdd] = useState("")
+  const [checkIfUsernameExist, setCheckIfUsernameExist] = useState(false)
   const addOrRemoveCollaborator = async (pseudo: string) => {
-    let updatedFormData = {
-      collaborators: dataForm.collaborators.includes(pseudo)
-        ? dataForm.collaborators.filter((item) => item !== pseudo)
-        : [...dataForm.collaborators, pseudo],
-    }
+    setCheckIfUsernameExist(true)
+    checkIdAvailability("users", pseudo)
+      .then((isAvailable) => {
+        if (isAvailable) {
+          let updatedFormData = {
+            collaborators: dataForm.collaborators.includes(pseudo)
+              ? dataForm.collaborators.filter((item) => item !== pseudo)
+              : [...dataForm.collaborators, pseudo],
+          }
 
-    updateFormDocument({ id, updatedFormData })
+          updateFormDocument({ id, updatedFormData })
+        } else {
+          toast({
+            variant: "destructive",
+            title: "This user not exist on Sharuco",
+            description: "Make sure you have entered the correct user name.",
+            action: <ToastAction altText="Okay">Okay</ToastAction>,
+          })
+          return
+        }
+      })
+      .catch((error) => console.error("Error : ", error))
+      .finally(() => {
+        setCheckIfUsernameExist(false)
+      })
   }
 
   const onSubmit = async (data) => {
@@ -375,13 +395,20 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
               value={usernamePeopleToAdd}
             />
             <Button
-              disabled={usernamePeopleToAdd === "" || isLoadingUpdateForm}
+              disabled={
+                usernamePeopleToAdd === "" ||
+                checkIfUsernameExist ||
+                isLoadingUpdateForm
+              }
               className="shrink-0"
               onClick={() => {
                 setUsernamePeopleToAdd("")
                 addOrRemoveCollaborator(usernamePeopleToAdd)
               }}
             >
+              {checkIfUsernameExist && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
               Add people
             </Button>
           </div>
@@ -395,15 +422,17 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                   <div className="w-full flex">
                     <a
                       href={`/user/${collaborator}`}
-                      className="text-sm font-semibold"
+                      className="text-sm font-semibold underline underline-offset-4 cursor-pointer"
                     >
                       {collaborator}
                     </a>
                   </div>
                   <span
                     className="shrink-0 block text-sm text-red-600 font-medium underline underline-offset-4 cursor-pointer"
-                    onClick={(e) => {
-                      addOrRemoveCollaborator(collaborator)
+                    onClick={() => {
+                      isLoadingUpdateForm
+                        ? undefined
+                        : addOrRemoveCollaborator(collaborator)
                     }}
                   >
                     Remove
@@ -497,7 +526,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           <div className="w-full flex items-center justify-between">
             <Button
               variant="default"
-              disabled={isLoadingUpdateForm}
+              disabled={isLoadingUpdateForm || checkIfUsernameExist}
               onClick={isLoadingUpdateForm ? undefined : handleSubmit(onSubmit)}
             >
               {isLoadingUpdateForm ? (
