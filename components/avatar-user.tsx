@@ -6,6 +6,7 @@ import { useAuthContext } from "@/context/AuthContext"
 import { auth } from "@/firebase/config"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { signOut } from "firebase/auth"
+import { Verified } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { Icons } from "@/components/icons"
@@ -47,36 +48,47 @@ export function AvatarUser() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Avatar className="cursor-pointer">
-          {isLoading && (
-            <AvatarFallback>
-              <Loader />
-            </AvatarFallback>
+        <div className="relative">
+          {data && data.exists && data.data.premium && (
+            <div className="absolute z-10 rounded-full -bottom-1 -right-1 flex items-center justify-center border-2 border-yellow-500 bg-white dark:bg-slate-800">
+              <Verified className="shrink-0 h-5 w-5 text-yellow-500 p-1" />
+            </div>
           )}
-          {data && data.exists && (
-            <>
-              <AvatarImage
-                src={data.data.photoURL}
-                alt={
-                  data.data.displayName !== null
-                    ? data.data.displayName
-                    : userPseudo
-                }
-              />
+          <Avatar
+            className={`cursor-pointer border-2 ${
+              data?.data?.premium ? "border-yellow-500" : "border-green-500"
+            }`}
+          >
+            {isLoading && (
               <AvatarFallback>
-                {data.data.displayName !== null ? (
-                  <>
-                    {data.data.displayName.split(" ")[0]}{" "}
-                    {data.data.displayName.split(" ")[1] &&
-                      data.data.displayName.split(" ")[1]}
-                  </>
-                ) : (
-                  data.data.pseudo[0] + data.data.pseudo[1]
-                )}
+                <Loader />
               </AvatarFallback>
-            </>
-          )}
-        </Avatar>
+            )}
+            {data && data.exists && (
+              <>
+                <AvatarImage
+                  src={data.data.photoURL}
+                  alt={
+                    data.data.displayName !== null
+                      ? data.data.displayName
+                      : userPseudo
+                  }
+                />
+                <AvatarFallback>
+                  {data.data.displayName !== null ? (
+                    <>
+                      {data.data.displayName.split(" ")[0]}{" "}
+                      {data.data.displayName.split(" ")[1] &&
+                        data.data.displayName.split(" ")[1]}
+                    </>
+                  ) : (
+                    data.data.pseudo[0] + data.data.pseudo[1]
+                  )}
+                </AvatarFallback>
+              </>
+            )}
+          </Avatar>
+        </div>
       </SheetTrigger>
       <SheetContent position="right" size="custom_w_200">
         <SheetHeader>
