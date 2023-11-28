@@ -14,3 +14,4 @@ export async function checkIdAvailability(collectionName, id) {
       return false;
     }
   }
+

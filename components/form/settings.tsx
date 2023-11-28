@@ -394,11 +394,11 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           <div className="flex w-full flex-col items-start gap-1">
             <Label className="text-left">Add people to manage this form.</Label>
             <p className="text-left text-sm">
-              The people you have added will be able to modify and view the
-              answers to this form.
+              The added persons will be able to consult the answers to your
+              form.
             </p>
           </div>
-          <div className="w-full flex items-center gap-2 mb-2">
+          <div className="mb-2 flex w-full items-center gap-2">
             <Input
               placeholder="Enter username"
               onChange={(e) => {
@@ -425,22 +425,22 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             </Button>
           </div>
           {dataForm.collaborators.length !== 0 && (
-            <div className="w-full flex flex-col gap-2">
+            <div className="flex w-full flex-col gap-2">
               {dataForm.collaborators.map((collaborator, index) => (
                 <div
                   key={collaborator.pseudo}
-                  className="w-full flex items-center bg-slate-50 dark:bg-slate-800 py-3 px-5 rounded-md"
+                  className="flex w-full items-center rounded-md bg-slate-50 px-5 py-3 dark:bg-slate-800"
                 >
-                  <div className="w-full flex">
+                  <div className="flex w-full">
                     <a
                       href={`/user/${collaborator.pseudo}`}
-                      className="text-sm font-semibold underline underline-offset-4 cursor-pointer"
+                      className="cursor-pointer text-sm font-semibold underline underline-offset-4"
                     >
                       {collaborator.pseudo}
                     </a>
                   </div>
                   <span
-                    className="shrink-0 block text-sm text-red-600 font-medium underline underline-offset-4 cursor-pointer"
+                    className="block shrink-0 cursor-pointer text-sm font-medium text-red-600 underline underline-offset-4"
                     onClick={() => {
                       isLoadingUpdateForm
                         ? undefined
@@ -534,8 +534,8 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           </Label>
         </div> */}
 
-        <div className="sticky inset-x-0 bottom-0 flex w-full border-t flex-col items-start gap-2 bg-white py-4 dark:bg-slate-900">
-          <div className="w-full flex items-center justify-between">
+        <div className="sticky inset-x-0 bottom-0 flex w-full flex-col items-start gap-2 border-t bg-white py-4 dark:bg-slate-900">
+          <div className="flex w-full items-center justify-between">
             <Button
               variant="default"
               disabled={isLoadingUpdateForm || checkIfUsernameExist}
@@ -562,7 +562,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                   </AlertDialogTitle>
                   <AlertDialogDescription className="space-y-3">
                     <div
-                      className="rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400 font-semibold"
+                      className="rounded-lg bg-red-50 p-4 text-sm font-semibold text-red-800 dark:bg-gray-800 dark:text-red-400"
                       role="alert"
                     >
                       This action is irreversible, please reflect beforehand.

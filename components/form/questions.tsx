@@ -121,6 +121,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     updateFormDocument,
     isLoading: isLoadingUpdateForm,
     isError: isErrorUpdateForm,
+    error: errorUpdateForm,
     isSuccess: isSuccessUpdateForm,
     reset: resetUpdateForm,
   }: any = useUpdateFormDocument("forms")
@@ -213,79 +214,85 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
 
   return (
     <div className="flex w-full flex-col items-start gap-4 sm:flex-row">
-      <div className="flex w-full shrink-0 flex-col items-start gap-2 rounded-md sm:sticky sm:top-20 sm:w-[250px]">
-        <button
-          onClick={() => handleAddField("heading")}
-          className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
-        >
-          <Heading className="h-5 w-5" />
-          <span className="ml-2 text-sm font-semibold">Heading</span>
-        </button>
-        <button
-          onClick={() => handleAddField("text")}
-          className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
-        >
-          <Minus className="h-5 w-5" />
-          <span className="ml-2 text-sm font-semibold">Short answer</span>
-        </button>
-        <button
-          onClick={() => handleAddField("longtext")}
-          className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
-        >
-          <AlignJustify className="h-5 w-5" />
-          <span className="ml-2 text-sm font-semibold">Long answer</span>
-        </button>
-        <button
-          //onClick={() => handleAddField("link")}
-          className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
-        >
-          <LinkIcon className="h-5 w-5" />
-          <span className="ml-2 text-sm font-semibold">Link</span>
-          <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-            soon
-          </span>
-        </button>
-        <button
-          //onClick={() => handleAddField("email")}
-          className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
-        >
-          <Mail className="h-5 w-5" />
-          <span className="ml-2 text-sm font-semibold">E-mail</span>
-          <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-            soon
-          </span>
-        </button>
-        <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
-          <CircleDot className="h-5 w-5" />
-          <span className="ml-2 text-sm font-semibold">Unique choice</span>
-          <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-            soon
-          </span>
-        </button>
-        <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
-          <ListChecks className="h-5 w-5" />
-          <span className="ml-2 text-sm font-semibold">Multi choice</span>
-          <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-            soon
-          </span>
-        </button>
-        <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
-          <List className="h-5 w-5" />
-          <span className="ml-2 text-sm font-semibold">List of choices</span>
-          <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-            soon
-          </span>
-        </button>
-        <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
-          <Calendar className="h-5 w-5" />
-          <span className="ml-2 text-sm font-semibold">Date</span>
-          <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-            soon
-          </span>
-        </button>
-        <Separator className="my-2 hidden w-full sm:block" />
-      </div>
-      <Separator className="my-2 block w-full sm:hidden" />
+      {dataForm.idAuthor === userPseudo && (
+        <>
+          <div className="flex w-full shrink-0 flex-col items-start gap-2 rounded-md sm:sticky sm:top-20 sm:w-[250px]">
+            <button
+              onClick={() => handleAddField("heading")}
+              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+            >
+              <Heading className="h-5 w-5" />
+              <span className="ml-2 text-sm font-semibold">Heading</span>
+            </button>
+            <button
+              onClick={() => handleAddField("text")}
+              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+            >
+              <Minus className="h-5 w-5" />
+              <span className="ml-2 text-sm font-semibold">Short answer</span>
+            </button>
+            <button
+              onClick={() => handleAddField("longtext")}
+              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+            >
+              <AlignJustify className="h-5 w-5" />
+              <span className="ml-2 text-sm font-semibold">Long answer</span>
+            </button>
+            <button
+              //onClick={() => handleAddField("link")}
+              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+            >
+              <LinkIcon className="h-5 w-5" />
+              <span className="ml-2 text-sm font-semibold">Link</span>
+              <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+                soon
+              </span>
+            </button>
+            <button
+              //onClick={() => handleAddField("email")}
+              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+            >
+              <Mail className="h-5 w-5" />
+              <span className="ml-2 text-sm font-semibold">E-mail</span>
+              <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+                soon
+              </span>
+            </button>
+            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
+              <CircleDot className="h-5 w-5" />
+              <span className="ml-2 text-sm font-semibold">Unique choice</span>
+              <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+                soon
+              </span>
+            </button>
+            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
+              <ListChecks className="h-5 w-5" />
+              <span className="ml-2 text-sm font-semibold">Multi choice</span>
+              <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+                soon
+              </span>
+            </button>
+            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
+              <List className="h-5 w-5" />
+              <span className="ml-2 text-sm font-semibold">
+                List of choices
+              </span>
+              <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+                soon
+              </span>
+            </button>
+            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
+              <Calendar className="h-5 w-5" />
+              <span className="ml-2 text-sm font-semibold">Date</span>
+              <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
+                soon
+              </span>
+            </button>
+            <Separator className="my-2 hidden w-full sm:block" />
+          </div>
+          <Separator className="my-2 block w-full sm:hidden" />
+        </>
+      )}
       <div
         id="questions"
         className="relative flex w-full flex-col items-start gap-4 overflow-hidden rounded-md border px-4 pb-4 pt-7"
@@ -350,13 +357,15 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                 {/* {errors?.questions?.[index]?.text && (
                 <p>{errors.questions[index].text.message}</p>
               )} */}
-                <Button
-                  variant="destructive"
-                  className="absolute -top-2 right-2 flex h-10 w-10 items-center justify-center rounded-full p-2"
-                  onClick={() => handleRemoveField(index)}
-                >
-                  <Trash className="h-4 w-4" />
-                </Button>
+                {dataForm.idAuthor === userPseudo && (
+                  <Button
+                    variant="destructive"
+                    className="absolute -top-2 right-2 flex h-10 w-10 items-center justify-center rounded-full p-2"
+                    onClick={() => handleRemoveField(index)}
+                  >
+                    <Trash className="h-4 w-4" />
+                  </Button>
+                )}
               </div>
             )
           })}
@@ -390,18 +399,20 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
             </button>
           </div>
         )}
-        <Button
-          variant="outline"
-          disabled={isLoadingUpdateForm}
-          onClick={isLoadingUpdateForm ? undefined : handleSubmit(onSubmit)}
-        >
-          {isLoadingUpdateForm ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Save className="mr-2 h-4 w-4" />
-          )}
-          Save questions
-        </Button>
+        {dataForm.idAuthor === userPseudo && (
+          <Button
+            variant="outline"
+            disabled={isLoadingUpdateForm}
+            onClick={isLoadingUpdateForm ? undefined : handleSubmit(onSubmit)}
+          >
+            {isLoadingUpdateForm ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
+            Save questions
+          </Button>
+        )}
       </div>
     </div>
   )
