@@ -243,7 +243,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                     ? "border-2 border-solid border-emerald-500 dark:border-emerald-900"
                     : ""
                 )}
-                key={index}
+                key={response.idResponse}
               >
                 <Accordion
                   type="single"

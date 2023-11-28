@@ -204,6 +204,17 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     router.push("/forms")
   }
 
+  const [usernamePeopleToAdd, setUsernamePeopleToAdd] = useState("")
+  const addOrRemoveCollaborator = async (pseudo: string) => {
+    let updatedFormData = {
+      collaborators: dataForm.collaborators.includes(pseudo)
+        ? dataForm.collaborators.filter((item) => item !== pseudo)
+        : [...dataForm.collaborators, pseudo],
+    }
+
+    updateFormDocument({ id, updatedFormData })
+  }
+
   const onSubmit = async (data) => {
     const {
       name: nameUpdate,
@@ -343,6 +354,65 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             )}
           </p>
         </div>
+        <div className="flex flex-col items-start">
+          <h3 className="text-xl font-semibold">Team</h3>
+        </div>
+        <Separator className="opacity-50" />
+        <div className="flex w-full flex-col items-start gap-2">
+          <div className="flex w-full flex-col items-start gap-1">
+            <Label className="text-left">Add people to manage this form.</Label>
+            <p className="text-left text-sm">
+              The people you have added will be able to modify and view the
+              answers to this form.
+            </p>
+          </div>
+          <div className="w-full flex items-center gap-2 mb-2">
+            <Input
+              placeholder="Enter username"
+              onChange={(e) => {
+                setUsernamePeopleToAdd(e.target.value)
+              }}
+              value={usernamePeopleToAdd}
+            />
+            <Button
+              disabled={usernamePeopleToAdd === "" || isLoadingUpdateForm}
+              className="shrink-0"
+              onClick={() => {
+                setUsernamePeopleToAdd("")
+                addOrRemoveCollaborator(usernamePeopleToAdd)
+              }}
+            >
+              Add people
+            </Button>
+          </div>
+          {dataForm.collaborators.length !== 0 && (
+            <div className="w-full flex flex-col gap-2">
+              {dataForm.collaborators.map((collaborator, index) => (
+                <div
+                  key={collaborator}
+                  className="w-full flex items-center bg-slate-50 dark:bg-slate-800 py-3 px-5 rounded-md"
+                >
+                  <div className="w-full flex">
+                    <a
+                      href={`/user/${collaborator}`}
+                      className="text-sm font-semibold"
+                    >
+                      {collaborator}
+                    </a>
+                  </div>
+                  <span
+                    className="shrink-0 block text-sm text-red-600 font-medium underline underline-offset-4 cursor-pointer"
+                    onClick={(e) => {
+                      addOrRemoveCollaborator(collaborator)
+                    }}
+                  >
+                    Remove
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         {/* <Separator className="my-2" />
         <div className="flex flex-col items-start">
           <h3 className="text-xl font-semibold">Payment</h3>
@@ -423,7 +493,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           </Label>
         </div> */}
 
-        <div className="sticky inset-x-0 bottom-0 flex w-full flex-col items-start gap-2 border-t  bg-white py-4 dark:bg-slate-900">
+        <div className="sticky inset-x-0 bottom-0 flex w-full border-t flex-col items-start gap-2 bg-white py-4 dark:bg-slate-900">
           <div className="w-full flex items-center justify-between">
             <Button
               variant="default"
