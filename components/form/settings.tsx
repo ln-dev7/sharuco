@@ -207,15 +207,18 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
 
   const [usernamePeopleToAdd, setUsernamePeopleToAdd] = useState("")
   const [checkIfUsernameExist, setCheckIfUsernameExist] = useState(false)
-  const addOrRemoveCollaborator = async (pseudo: string) => {
+  const addCollaborator = async (pseudo: string) => {
     setCheckIfUsernameExist(true)
     checkIdAvailability("users", pseudo)
       .then((isAvailable) => {
         if (isAvailable) {
           let updatedFormData = {
-            collaborators: dataForm.collaborators.includes(pseudo)
-              ? dataForm.collaborators.filter((item) => item !== pseudo)
-              : [...dataForm.collaborators, pseudo],
+            collaborators: [
+              ...dataForm.collaborators,
+              {
+                pseudo: pseudo,
+              },
+            ],
           }
 
           updateFormDocument({ id, updatedFormData })
@@ -233,6 +236,15 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       .finally(() => {
         setCheckIfUsernameExist(false)
       })
+  }
+  const removeCollaborator = async (pseudo: string) => {
+    let updatedFormData = {
+      collaborators: dataForm.collaborators.filter(
+        (item) => item.pseudo !== pseudo
+      ),
+    }
+
+    updateFormDocument({ id, updatedFormData })
   }
 
   const onSubmit = async (data) => {
@@ -403,7 +415,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
               className="shrink-0"
               onClick={() => {
                 setUsernamePeopleToAdd("")
-                addOrRemoveCollaborator(usernamePeopleToAdd)
+                addCollaborator(usernamePeopleToAdd)
               }}
             >
               {checkIfUsernameExist && (
@@ -416,15 +428,15 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             <div className="w-full flex flex-col gap-2">
               {dataForm.collaborators.map((collaborator, index) => (
                 <div
-                  key={collaborator}
+                  key={collaborator.pseudo}
                   className="w-full flex items-center bg-slate-50 dark:bg-slate-800 py-3 px-5 rounded-md"
                 >
                   <div className="w-full flex">
                     <a
-                      href={`/user/${collaborator}`}
+                      href={`/user/${collaborator.pseudo}`}
                       className="text-sm font-semibold underline underline-offset-4 cursor-pointer"
                     >
-                      {collaborator}
+                      {collaborator.pseudo}
                     </a>
                   </div>
                   <span
@@ -432,7 +444,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                     onClick={() => {
                       isLoadingUpdateForm
                         ? undefined
-                        : addOrRemoveCollaborator(collaborator)
+                        : removeCollaborator(collaborator.pseudo)
                     }}
                   >
                     Remove
