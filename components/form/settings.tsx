@@ -144,25 +144,25 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       .string()
       .url("Redirect URL must be a valid URL")
       .nullable(),
-    // acceptPayment: yup.boolean(),
-    // publicNotchPayApiKey: yup.string().when("acceptPayment", {
-    //   is: true,
-    //   then: (schema) =>
-    //     schema
-    //       .matches(
-    //         /^(sb\.|b\.|pk\.)/,
-    //         'Public NotchPay API key must start with "pk." or "b." or "sb."'
-    //       )
-    //       .required("Public NotchPay API key is required"),
-    // }),
-    // amountNotchPay: yup.number().when("acceptPayment", {
-    //   is: true,
-    //   then: (schema) =>
-    //     schema
-    //       .min(2, "Amount for NotchPay must be greater than 2")
-    //       .typeError("Amount for NotchPay must be a valid number")
-    //       .required("Amount for NotchPay is required"),
-    // }),
+    acceptPayment: yup.boolean(),
+    publicNotchPayApiKey: yup.string().when("acceptPayment", {
+      is: true,
+      then: (schema) =>
+        schema
+          .matches(
+            /^(sb\.|b\.|pk\.)/,
+            'Public NotchPay API key must start with "pk." or "b." or "sb."'
+          )
+          .required("Public NotchPay API key is required"),
+    }),
+    amountNotchPay: yup.number().when("acceptPayment", {
+      is: true,
+      then: (schema) =>
+        schema
+          .min(2, "Amount for NotchPay must be greater than 2")
+          .typeError("Amount for NotchPay must be a valid number")
+          .required("Amount for NotchPay is required"),
+    }),
   })
 
   const {
@@ -182,9 +182,9 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     setValue("description", dataForm.description)
     setValue("color", dataForm.color)
     setValue("redirectOnCompletion", dataForm.redirectOnCompletion)
-    // setValue("publicNotchPayApiKey", dataForm.publicNotchPayApiKey)
-    // setValue("amountNotchPay", dataForm.amountNotchPay)
-    // setValue("acceptPayment", dataForm.acceptPayment)
+    setValue("publicNotchPayApiKey", dataForm.publicNotchPayApiKey)
+    setValue("amountNotchPay", dataForm.amountNotchPay)
+    setValue("acceptPayment", dataForm.acceptPayment)
   }, [dataForm])
 
   const {
@@ -253,19 +253,19 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
-      // acceptPayment: acceptPaymentUpdate,
+      publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
+      amountNotchPay: amountNotchPayUpdate,
+      acceptPayment: acceptPaymentUpdate,
     } = data
 
     if (
       nameUpdate === dataForm.name &&
       descriptionUpdate === dataForm.description &&
       colorUpdate === dataForm.color &&
-      redirectOnCompletionUpdate === dataForm.redirectOnCompletion
-      // && publicNotchPayApiKeyUpdate === dataForm.publicNotchPayApiKey &&
-      // amountNotchPayUpdate === dataForm.amountNotchPay &&
-      // acceptPaymentUpdate === dataForm.acceptPayment
+      redirectOnCompletionUpdate === dataForm.redirectOnCompletion &&
+      publicNotchPayApiKeyUpdate === dataForm.publicNotchPayApiKey &&
+      amountNotchPayUpdate === dataForm.amountNotchPay &&
+      acceptPaymentUpdate === dataForm.acceptPayment
     ) {
       toast({
         variant: "destructive",
@@ -281,17 +281,17 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: string
       color: string
       redirectOnCompletion: string
-      // publicNotchPayApiKey: string
-      // amountNotchPay: number
-      // acceptPayment: boolean
+      publicNotchPayApiKey: string
+      amountNotchPay: number
+      acceptPayment: boolean
     } = {
       name: nameUpdate,
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
-      // acceptPayment: acceptPaymentUpdate,
+      publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
+      amountNotchPay: amountNotchPayUpdate,
+      acceptPayment: acceptPaymentUpdate,
     }
 
     await updateFormDocument({ id, updatedFormData })
@@ -302,9 +302,9 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
-      // acceptPayment: acceptPaymentUpdate,
+      publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
+      amountNotchPay: amountNotchPayUpdate,
+      acceptPayment: acceptPaymentUpdate,
     })
 
     reset({
@@ -312,9 +312,9 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
-      // acceptPayment: acceptPaymentUpdate,
+      publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
+      amountNotchPay: amountNotchPayUpdate,
+      acceptPayment: acceptPaymentUpdate,
     })
   }
 
@@ -454,7 +454,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             </div>
           )}
         </div>
-        {/* <Separator className="my-2" />
+        <Separator className="my-2" />
         <div className="flex flex-col items-start">
           <h3 className="text-xl font-semibold">Payment</h3>
           <p className="text-left text-sm">
@@ -532,7 +532,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
               <span className="font-bold text-teal-300"> No</span>
             )}
           </Label>
-        </div> */}
+        </div>
 
         <div className="sticky inset-x-0 bottom-0 flex w-full flex-col items-start gap-2 border-t bg-white py-4 dark:bg-slate-900">
           <div className="flex w-full items-center justify-between">
