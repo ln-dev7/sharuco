@@ -428,7 +428,13 @@ export default function CardCode({
           href={dataAuthor && dataAuthor.exists ? `/user/${idAuthor}` : "#"}
           className="flex items-center justify-start gap-2"
         >
-          <Avatar className="h-8 w-8 cursor-pointer">
+          <Avatar
+            className={`h-8 w-8 cursor-pointer ${
+              dataAuthor?.data?.premium
+                ? "border-2 border-yellow-500"
+                : "border-0 border-green-500"
+            }`}
+          >
             {isLoadingAuthor && (
               <AvatarFallback>
                 <Loader />
