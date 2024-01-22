@@ -57,7 +57,7 @@
     "highlight.js": "^11.7.0",
     "html-to-image": "^1.11.11",
     "jspdf": "^2.5.1",
-    "lucide-react": "0.105.0-alpha.4",
+    "lucide-react": "0.314.0",
     "moment": "^2.29.4",
     "next": "^13.5.3",
     "next-seo": "^6.4.0",
