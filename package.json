@@ -73,7 +73,7 @@
     "react-query": "^3.39.3",
     "react-responsive-masonry": "^2.1.7",
     "react-share": "^4.4.1",
-    "sass": "^1.69.0",
+    "sass": "^1.70.0",
     "sharp": "^0.31.3",
     "tailwind-merge": "^1.14.0",
     "tailwind-scrollbar-hide": "^1.1.7",
