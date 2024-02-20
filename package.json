@@ -51,7 +51,7 @@
     "cheerio": "^1.0.0-rc.12",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "cmdk": "^0.2.0",
+    "cmdk": "^0.2.1",
     "date-fns": "^2.30.0",
     "firebase": "^10.4.0",
     "highlight.js": "^11.7.0",
