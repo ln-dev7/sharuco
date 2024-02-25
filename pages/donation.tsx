@@ -156,7 +156,7 @@ export default function Donation() {
         </div>
         <div className="flex w-full flex-col items-center justify-center gap-4">
           <a href="https://www.buymeacoffee.com/lndev">
-            <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=lndev&button_colour=5F7FFF&font_colour=ffffff&font_family=Lato&outline_colour=000000&coffee_colour=FFDD00" />
+            <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=lndev&button_colour=5F7FFF&font_colour=ffffff&font_family=Bree&outline_colour=000000&coffee_colour=FFDD00" />
           </a>
         </div>
       </section>
