@@ -84,7 +84,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.20",
     "@babel/parser": "^7.21.3",
-    "@babel/preset-env": "^7.22.15",
+    "@babel/preset-env": "^7.23.9",
     "@ianvs/prettier-plugin-sort-imports": "^3.7.1",
     "@next/eslint-plugin-next": "^13.4.19",
     "@types/node": "^20.8.3",
