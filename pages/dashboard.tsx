@@ -219,6 +219,15 @@ export default function Dashboard() {
       comments: [],
     }
 
+    if (userPseudo === null) {
+      toast({
+        title: "You are not logged in",
+        description: "You need to be logged in to add a code",
+        action: <ToastAction altText="Okay">Okay</ToastAction>,
+      })
+      return
+    }
+
     if (isGithubGist && dataUser?.data?.personalAccessToken) {
       try {
         setIsLoadingAddOnGithubGist(true)
