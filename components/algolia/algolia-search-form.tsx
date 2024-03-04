@@ -3,6 +3,8 @@ import algoliasearch from "algoliasearch"
 import { Loader2, Search, Trash2 } from "lucide-react"
 import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch"
 
+import AlgoliaCopyright from "./algolia-copyright"
+
 // https://www.algolia.com/doc/guides/building-search-ui/getting-started/react-hooks/#before-you-start
 
 const client = algoliasearch(
@@ -19,6 +21,7 @@ export default function AlgoliaSearchForm() {
 
   return (
     <InstantSearch indexName="forms" searchClient={client}>
+      <AlgoliaCopyright />
       <SearchBox
         placeholder={`Search forms ...`}
         submitIconComponent={() => <Search className="h-4 w-4" />}
@@ -29,7 +32,7 @@ export default function AlgoliaSearchForm() {
           </div>
         )}
         classNames={{
-          root: "w-full mt-12 mb-3 rounded-none",
+          root: "w-full mt-0 mb-3 rounded-none",
           form: "w-full relative rounded-none",
           input:
             "outline-none w-full rounded-none p-4 pl-12 text-sm text-gray-900 border border-x-0 border-gray-300 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",

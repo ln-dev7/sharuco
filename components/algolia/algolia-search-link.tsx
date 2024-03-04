@@ -7,6 +7,7 @@ import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch"
 
 import LoaderLink from "@/components/loaders/loader-link"
 import { Badge } from "@/components/ui/badge"
+import AlgoliaCopyright from "./algolia-copyright"
 
 // https://www.algolia.com/doc/guides/building-search-ui/getting-started/react-hooks/#before-you-start
 
@@ -30,6 +31,7 @@ export default function AlgoliaSearchLink() {
 
   return (
     <InstantSearch indexName="links" searchClient={client}>
+      <AlgoliaCopyright />
       <SearchBox
         placeholder={` ${
           params["link"] !== undefined
@@ -44,7 +46,7 @@ export default function AlgoliaSearchLink() {
           </div>
         )}
         classNames={{
-          root: "w-full mt-12 mb-3 rounded-none",
+          root: "w-full mt-0 mb-3 rounded-none",
           form: "w-full relative rounded-none",
           input:
             "outline-none w-full rounded-none p-4 pl-12 text-sm text-gray-900 border border-x-0 border-gray-300 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
