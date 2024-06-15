@@ -592,7 +592,7 @@ export default function Dashboard() {
                   )}
                   {isErrorAddOnGithubGist.isUnauthorized && (
                     <div
-                      className="mt-4 w-full rounded-lg bg-red-50 p-4 text-sm font-medium leading-6 text-red-800 dark:bg-gray-800 dark:text-red-400 lg:w-3/4"
+                      className="mt-4 w-full rounded-lg bg-red-50 p-4 text-sm font-medium leading-6 text-red-800 lg:w-3/4 dark:bg-gray-800 dark:text-red-400"
                       role="alert"
                     >
                       <Link href="/add-personal-access-token">

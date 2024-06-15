@@ -13,7 +13,7 @@ export default function AlgoliaCopyright() {
         <img
           src="/assets/algolia.svg"
           alt="Algolia"
-          className="h-4 w-auto ml-1"
+          className="ml-1 h-4 w-auto"
         />
       </a>
     </div>

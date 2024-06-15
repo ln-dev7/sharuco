@@ -41,15 +41,9 @@ export const siteConfig: SiteConfig = {
     },
     {
       title: "Donation",
-      href: "/donation",
-      external: false,
-      support: true,
-    },
-    {
-      title: "Product Hunt",
-      href: "https://www.producthunt.com/products/sharuco",
+      href: "https://www.buymeacoffee.com/lndev",
       external: true,
-      support: true,
+      support: false,
     },
   ],
   links: {

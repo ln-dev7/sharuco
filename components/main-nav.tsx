@@ -59,49 +59,6 @@ export function MainNav({ items }: MainNavProps) {
                 </Link>
               )
           )}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="group relative inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-semibold transition-colors hover:bg-slate-100 focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-slate-50 data-[state=open]:bg-slate-50 dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[active]:bg-slate-800 dark:data-[state=open]:bg-slate-800">
-                Support us
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              {items?.map(
-                (item, index) =>
-                  item.href &&
-                  item.support && (
-                    <React.Fragment key={index}>
-                      <DropdownMenuItem className="cursor-pointer p-0">
-                        <Link
-                          href={item.disabled ? "#" : item.href}
-                          className={cn(
-                            "group relative inline-flex w-full items-center justify-start rounded-md bg-transparent px-4 py-2 text-sm font-semibold transition-colors focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-slate-50 data-[state=open]:bg-slate-50 dark:text-slate-100 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[active]:bg-slate-800 dark:data-[state=open]:bg-slate-800",
-                            item.disabled && "cursor-not-allowed"
-                          )}
-                        >
-                          {item.title}
-                          {item.external && (
-                            <ExternalLink className="ml-2 h-4 w-4" />
-                          )}
-                          {item.disabled && (
-                            <span className="ml-2 rounded-xl bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-slate-900">
-                              Soon
-                            </span>
-                          )}
-                          {item.pined && (
-                            <span className="absolute right-0 top-0 flex h-3 w-3">
-                              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
-                              <span className="inline-flex h-3 w-3 rounded-full bg-sky-500"></span>
-                            </span>
-                          )}
-                        </Link>
-                      </DropdownMenuItem>
-                      {index !== items.length - 1 && <DropdownMenuSeparator />}
-                    </React.Fragment>
-                  )
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
         </nav>
       ) : null}
       <DropdownMenu>

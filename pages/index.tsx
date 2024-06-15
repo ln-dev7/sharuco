@@ -143,10 +143,10 @@ export default function IndexPage() {
             data-orientation="vertical"
             className="mx-2 h-4 w-[1px] shrink-0 bg-slate-200 dark:bg-slate-700"
           ></div>
-          <span className="text-slate-800 dark:text-slate-200 sm:hidden">
+          <span className="text-slate-800 sm:hidden dark:text-slate-200">
             Sharuco Form, Create and share your forms.
           </span>
-          <span className="hidden text-slate-800 dark:text-slate-200 sm:inline">
+          <span className="hidden text-slate-800 sm:inline dark:text-slate-200">
             Introducing Sharuco Form, Create and share your forms.
           </span>
           <svg
@@ -171,7 +171,7 @@ export default function IndexPage() {
             <br className="inline" />
             Manage Form & Link.
           </h1>
-          <p className="max-w-[700px] text-lg text-slate-700 dark:text-slate-400 sm:text-xl">
+          <p className="max-w-[700px] text-lg text-slate-700 sm:text-xl dark:text-slate-400">
             Share and explore essential codes, create forms to retrieve
             information and keep useful links.
           </p>
@@ -270,7 +270,7 @@ export default function IndexPage() {
             </h2>
           </div>
           <div className="flex flex-col gap-6 md:flex-row">
-            <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:bg-slate-800 md:w-1/2">
+            <div className="w-full overflow-hidden rounded-md bg-slate-100 md:w-1/2 dark:bg-slate-800">
               <Image
                 src="/home/code-preview.png"
                 alt="Card preview"
@@ -436,7 +436,7 @@ export default function IndexPage() {
             <h2 className="text-3xl font-bold leading-tight tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
               Sharuco Form
             </h2>
-            <p className="text-md max-w-[700px] text-center text-slate-700 dark:text-slate-400 sm:text-lg">
+            <p className="text-md max-w-[700px] text-center text-slate-700 sm:text-lg dark:text-slate-400">
               Sharuco Form allows you to create forms to collect information
               from your users.
             </p>
@@ -548,7 +548,7 @@ export default function IndexPage() {
             <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-3xl lg:text-4xl">
               Discover Sharuco Link
             </h2>
-            <p className="text-md max-w-[700px] text-slate-700 dark:text-slate-400 sm:text-lg">
+            <p className="text-md max-w-[700px] text-slate-700 sm:text-lg dark:text-slate-400">
               Sharuco Link is a simple way to store all the links that are
               useful to you and with possibilities to make everyone discover
               them.
