@@ -1,5 +1,11 @@
 export const COMPANIES = [
   {
+    name: "lndev-ui",
+    image: "/partner/lndev-ui.svg",
+    imageDark: "/partner/lndev-ui-dark.svg",
+    link: "https://ui.lndev.me/",
+  },
+  {
     name: "Laravel Cameroon",
     image: "/partner/laravelcm.svg",
     imageDark: "/partner/laravelcm-dark.svg",
