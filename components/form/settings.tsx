@@ -1,73 +1,20 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Head from "next/head"
-import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
-import {
-  allLanguages,
-  getExtensionByName,
-  languagesName,
-} from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { checkIdAvailability } from "@/firebase/firestore/checkIfIDExistOnCollection"
-import { useCreateDocument } from "@/firebase/firestore/createDocument"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
-import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
-import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
-import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import copyToClipboard from "@/utils/copyToClipboard.js"
-import embedProject from "@/utils/embedStackblitzProject"
-import indentCode from "@/utils/indentCode.js"
-import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import sdk, { Project } from "@stackblitz/sdk"
 import algoliasearch from "algoliasearch"
-import { data } from "cheerio/lib/api/attributes.js"
-import hljs from "highlight.js"
-import {
-  Calendar,
-  Check,
-  CircleDot,
-  Eye,
-  EyeOff,
-  FileCog,
-  FileQuestion,
-  Heart,
-  LinkIcon,
-  List,
-  ListChecks,
-  Loader2,
-  MessageSquare,
-  Plus,
-  Save,
-  Send,
-  Settings,
-  Trash,
-  Type,
-  User,
-  View,
-  X,
-} from "lucide-react"
-import moment from "moment"
-import { useFieldArray, useForm } from "react-hook-form"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import { Check, Loader2, Save, Trash, X } from "lucide-react"
+import { useForm } from "react-hook-form"
 import * as yup from "yup"
 
-import { TemplateName } from "@/types/templatStackblitzName"
 import { cn } from "@/lib/utils"
-import CardCode from "@/components/cards/card-code"
-import CardCodeAdmin from "@/components/cards/card-code-admin"
-import EmptyCard from "@/components/empty-card"
-import Error from "@/components/error"
-import { Layout } from "@/components/layout"
-import LoaderCodes from "@/components/loaders/loader-codes"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -76,28 +23,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Button, buttonVariants } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
@@ -429,7 +358,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
               {dataForm.collaborators.map((collaborator, index) => (
                 <div
                   key={collaborator.pseudo}
-                  className="flex w-full items-center rounded-md bg-slate-50 px-5 py-3 dark:bg-slate-800"
+                  className="flex w-full items-center rounded-md bg-zinc-50 px-5 py-3 dark:bg-zinc-800"
                 >
                   <div className="flex w-full">
                     <a
@@ -514,10 +443,10 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             {...register("acceptPayment")}
             name="acceptPayment"
             id="acceptPayment"
-            className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
+            className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-zinc-200 outline-none dark:bg-zinc-800
                       ${
                         checkboxAcceptPayment
-                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-slate-500 before:transition-transform"
+                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-zinc-500 before:transition-transform"
                           : ""
                       } 
                       `}
@@ -534,7 +463,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           </Label>
         </div> */}
 
-        <div className="sticky inset-x-0 bottom-0 flex w-full flex-col items-start gap-2 border-t bg-white py-4 dark:bg-slate-900">
+        <div className="sticky inset-x-0 bottom-0 flex w-full flex-col items-start gap-2 border-t bg-white py-4 dark:bg-zinc-900">
           <div className="flex w-full items-center justify-between">
             <Button
               variant="default"
@@ -593,7 +522,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                   </AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     disabled={
                       isLoadingDelete || confirmFormName !== dataForm.name

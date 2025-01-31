@@ -5,7 +5,6 @@ import Link from "next/link"
 import { useParams } from "next/navigation"
 import {
   allLanguages,
-  getExtensionByName,
   getLanguageColor,
   languagesName,
 } from "@/constants/languages"
@@ -55,7 +54,6 @@ import { cn } from "@/lib/utils"
 import Loader from "@/components/loaders/loader"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -397,7 +395,7 @@ export default function CardCodeAdmin({
               </DialogHeader>
               <div
                 id="embed-stackblitz"
-                className="overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800"
+                className="overflow-hidden rounded-lg bg-zinc-200 dark:bg-zinc-800"
               ></div>
             </DialogContent>
           </Dialog>
@@ -503,7 +501,7 @@ export default function CardCodeAdmin({
                           </DialogHeader>
                           <div
                             id="embed-stackblitz"
-                            className="overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800"
+                            className="overflow-hidden rounded-lg bg-zinc-200 dark:bg-zinc-800"
                           ></div>
                         </DialogContent>
                       </Dialog>
@@ -527,7 +525,7 @@ export default function CardCodeAdmin({
                   <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                     <Label htmlFor="language">Edit language</Label>
                     <select
-                      className="flex h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      className="flex h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                       name="language"
                       id="language"
                       {...register("language")}
@@ -554,9 +552,9 @@ export default function CardCodeAdmin({
                       placeholder="Enter a tags ..."
                       {...register("tags")}
                     />
-                    <p className="text-sm font-medium text-slate-500">
+                    <p className="text-sm font-medium text-zinc-500">
                       Please separate tags with{" "}
-                      <span className="text-slate-700 dark:text-slate-300">
+                      <span className="text-zinc-700 dark:text-zinc-300">
                         ,
                       </span>
                     </p>
@@ -570,10 +568,10 @@ export default function CardCodeAdmin({
                       {...register("isPrivate")}
                       name="isPrivate"
                       id="isPrivate"
-                      className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
+                      className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-zinc-200 outline-none dark:bg-zinc-800
                       ${
                         checkboxOn
-                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-slate-500 before:transition-transform"
+                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-zinc-500 before:transition-transform"
                           : ""
                       } 
                       `}
@@ -609,7 +607,7 @@ export default function CardCodeAdmin({
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <button
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                   )}
                   disabled={isLoading}
                   onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -642,7 +640,7 @@ export default function CardCodeAdmin({
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <button
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                   )}
                   disabled={isLoadingDelete}
                   onClick={!isLoadingDelete ? handleDeleteDocument : undefined}
@@ -659,7 +657,7 @@ export default function CardCodeAdmin({
           </AlertDialog>
         </div>
       </div>
-      <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
+      <div className="overflow-hidden rounded-lg bg-zinc-900 dark:bg-black">
         <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
           <span className="text-xs font-medium text-white">
             {language.toLowerCase()}
@@ -686,7 +684,7 @@ export default function CardCodeAdmin({
                   <AlertDialogCancel>Close</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     onClick={downloadImage}
                   >
@@ -745,7 +743,7 @@ export default function CardCodeAdmin({
                   <h3 className="mb-2 text-center text-lg font-semibold text-white">
                     sharuco.lndev.me
                   </h3>
-                  <div className="card-code-image max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
+                  <div className="card-code-image max-w-[1280px] overflow-hidden rounded-lg bg-zinc-900 dark:bg-black">
                     <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
                       <div className="flex items-center gap-2">
                         <span
@@ -766,7 +764,7 @@ export default function CardCodeAdmin({
                         @ {idAuthor}
                       </span>
                     </div>
-                    <pre className="max-w-[1280px] rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
+                    <pre className="max-w-[1280px] rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black">
                       <code
                         className="max-w-[1280px] text-white"
                         dangerouslySetInnerHTML={{
@@ -782,7 +780,7 @@ export default function CardCodeAdmin({
         </div>
         {params["code-preview"] === undefined && !isPrivate ? (
           <Link href={`/code-preview/${id}`}>
-            <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
+            <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
               <code
                 className="text-white"
                 dangerouslySetInnerHTML={{
@@ -798,7 +796,7 @@ export default function CardCodeAdmin({
               isPrivate &&
               "max-h-[200px] "
             }
-          w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black`}
+          w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black`}
           >
             <code
               className="text-white"
@@ -849,7 +847,7 @@ export default function CardCodeAdmin({
             )}
           </Avatar>
           <div className="flex items-center justify-start gap-1">
-            <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
+            <span className="text-md font-bold text-zinc-700 hover:underline dark:text-zinc-400 ">
               {idAuthor}{" "}
             </span>
             {dataUser && dataUser.exists && (
@@ -868,7 +866,7 @@ export default function CardCodeAdmin({
                 <TooltipTrigger asChild>
                   <Link
                     href={`/code-preview/${id}#commentsCode`}
-                    className="flex gap-1 text-slate-700 hover:text-slate-500 dark:text-slate-400 hover:dark:text-white"
+                    className="flex gap-1 text-zinc-700 hover:text-zinc-500 dark:text-zinc-400 hover:dark:text-white"
                   >
                     {commentsInit.length}
                     <svg
@@ -895,7 +893,7 @@ export default function CardCodeAdmin({
             </TooltipProvider>
           )}
           {isPrivate ? null : (
-            <div className="flex items-center text-slate-700 dark:text-slate-400 ">
+            <div className="flex items-center text-zinc-700 dark:text-zinc-400 ">
               {user && favorisInit.includes(userPseudo) ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -920,7 +918,7 @@ export default function CardCodeAdmin({
               onOpenChange={setOpenShareDialog}
             >
               <AlertDialogTrigger asChild>
-                <span className="flex cursor-pointer items-center justify-center rounded-full p-1 text-slate-700 duration-200 hover:bg-[#1C9BEF] hover:text-white dark:text-slate-400 dark:hover:text-white">
+                <span className="flex cursor-pointer items-center justify-center rounded-full p-1 text-zinc-700 duration-200 hover:bg-[#1C9BEF] hover:text-white dark:text-zinc-400 dark:hover:text-white">
                   <Share className="h-5 w-5" />
                 </span>
               </AlertDialogTrigger>
@@ -999,14 +997,14 @@ export default function CardCodeAdmin({
       {params["code-preview"] === undefined && !isPrivate ? (
         <Link
           href={`/code-preview/${id}`}
-          className="text-sm text-slate-700 dark:text-slate-400"
+          className="text-sm text-zinc-700 dark:text-zinc-400"
         >
           {description.length > 300
             ? description.substring(0, 300) + "..."
             : description}
         </Link>
       ) : (
-        <p className="text-sm text-slate-700 dark:text-slate-400">
+        <p className="text-sm text-zinc-700 dark:text-zinc-400">
           {description}
         </p>
       )}
@@ -1015,7 +1013,7 @@ export default function CardCodeAdmin({
           {tags?.map((tag: string) => (
             <span
               key={tag}
-              className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
+              className="rounded-full bg-zinc-700 px-2 py-1 text-xs font-medium text-zinc-100 dark:bg-zinc-600 dark:text-zinc-400"
             >
               {tag}
             </span>

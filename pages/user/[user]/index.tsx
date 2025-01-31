@@ -12,7 +12,6 @@ import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
 import formatDateTime from "@/utils/formatDateTime.js"
 import {
   Eye,
-  FileCog,
   Github,
   Layers,
   Link2Icon,
@@ -45,8 +44,6 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -195,7 +192,7 @@ export default function User() {
                         Do you want to follow{" "}
                         <a
                           href={`/user/${idCurrent}`}
-                          className="font-semibold text-slate-900 hover:underline hover:underline-offset-4 dark:text-slate-100"
+                          className="font-semibold text-zinc-900 hover:underline hover:underline-offset-4 dark:text-zinc-100"
                         >
                           {idCurrent}
                         </a>{" "}
@@ -209,7 +206,7 @@ export default function User() {
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <button
                         className={cn(
-                          "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                          "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                         )}
                         disabled={isPending}
                         onClick={login}
@@ -226,7 +223,7 @@ export default function User() {
                 </AlertDialog>
               )}
               <div className="flex flex-col items-center gap-2">
-                <div className="text-md flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
+                <div className="text-md flex items-center gap-2 font-semibold text-zinc-900 dark:text-zinc-100">
                   <Dialog>
                     <DialogTrigger asChild>
                       <span className="cursor-pointer hover:underline hover:underline-offset-2">
@@ -242,14 +239,14 @@ export default function User() {
                           <a
                             href={`/user/${follower}`}
                             key={follower}
-                            className="flex w-full items-center justify-start gap-2 rounded-lg border-2 border-transparent bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:border-2 hover:border-sky-400 dark:bg-slate-700 dark:text-slate-100"
+                            className="flex w-full items-center justify-start gap-2 rounded-lg border-2 border-transparent bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-900 hover:border-2 hover:border-sky-400 dark:bg-zinc-700 dark:text-zinc-100"
                           >
                             <UserIcon className="h-4 w-4" />
                             <span className="hover:underline">{follower}</span>
                           </a>
                         ))}
                         {data.data.followers.length === 0 && (
-                          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                          <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                             This user has no followers yet.
                           </p>
                         )}
@@ -272,14 +269,14 @@ export default function User() {
                           <a
                             href={`/user/${following}`}
                             key={following}
-                            className="flex w-full items-center justify-start gap-2 rounded-lg border-2 border-transparent bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-900 hover:border-2 hover:border-sky-400 dark:bg-slate-700 dark:text-slate-100"
+                            className="flex w-full items-center justify-start gap-2 rounded-lg border-2 border-transparent bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-900 hover:border-2 hover:border-sky-400 dark:bg-zinc-700 dark:text-zinc-100"
                           >
                             <UserIcon className="h-4 w-4" />
                             <span className="hover:underline">{following}</span>
                           </a>
                         ))}
                         {data.data.following.length === 0 && (
-                          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                          <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                             This user has no following yet.
                           </p>
                         )}
@@ -309,7 +306,7 @@ export default function User() {
                   {data.data.publicLinkPage && (
                     <Link
                       href={`/link/${data.data.pseudo}`}
-                      className="inline-flex min-w-[100px] items-center justify-center px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-200"
+                      className="inline-flex min-w-[100px] items-center justify-center px-3 py-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-200"
                     >
                       <Link2Icon className="mr-2 h-4 w-4" />
                       <span>Public links</span>

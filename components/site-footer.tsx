@@ -2,14 +2,13 @@
 
 import Link from "next/link"
 
-import { siteConfig } from "@/config/site"
 import { Icons } from "@/components/icons"
 import { buttonVariants } from "@/components/ui/button"
 
 export function SiteFooter() {
   return (
     <footer className="container">
-      <div className="flex flex-col items-center justify-between gap-4 border-t border-t-slate-200 py-10 md:h-24 md:flex-row md:py-0 dark:border-t-slate-700">
+      <div className="flex flex-col items-center justify-between gap-4 border-t border-t-zinc-200 py-10 md:h-24 md:flex-row md:py-0 dark:border-t-zinc-700">
         <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +24,7 @@ export function SiteFooter() {
             <polyline points="4 17 10 11 4 5"></polyline>
             <line x1="12" y1="19" x2="20" y2="19"></line>
           </svg>
-          <p className="text-center text-sm leading-loose text-slate-600 md:text-left dark:text-slate-400">
+          <p className="text-center text-sm leading-loose text-zinc-600 md:text-left dark:text-zinc-400">
             Built by{" "}
             <a
               href="https://leonelngoya.com"
@@ -49,7 +48,7 @@ export function SiteFooter() {
               className={buttonVariants({
                 size: "sm",
                 variant: "ghost",
-                className: "text-slate-700 dark:text-slate-400",
+                className: "text-zinc-700 dark:text-zinc-400",
               })}
             >
               <Icons.gitHub className="h-5 w-5" />
@@ -65,7 +64,7 @@ export function SiteFooter() {
               className={buttonVariants({
                 size: "sm",
                 variant: "ghost",
-                className: "text-slate-700 dark:text-slate-400",
+                className: "text-zinc-700 dark:text-zinc-400",
               })}
             >
               <Icons.twitter className="h-5 w-5 fill-current" />

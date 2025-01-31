@@ -3,7 +3,7 @@
 import { useRef, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { getExtensionByName, getLanguageColor } from "@/constants/languages"
+import { getLanguageColor } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -11,8 +11,6 @@ import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
 import embedProject from "@/utils/embedStackblitzProject"
 import highlight from "@/utils/highlight"
-import indentCode from "@/utils/indentCode"
-import sdk, { Project } from "@stackblitz/sdk"
 import * as htmlToImage from "html-to-image"
 import {
   Copy,
@@ -21,7 +19,6 @@ import {
   Loader2,
   Save,
   Share,
-  Star,
   Verified,
 } from "lucide-react"
 import {
@@ -246,13 +243,13 @@ export default function CardCode({
               </DialogHeader>
               <div
                 id="embed-stackblitz"
-                className="overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800"
+                className="overflow-hidden rounded-lg bg-zinc-200 dark:bg-zinc-800"
               ></div>
             </DialogContent>
           </Dialog>
         </div>
       )}
-      <div className="overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
+      <div className="overflow-hidden rounded-lg bg-zinc-900 dark:bg-black">
         <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
           <span className="text-xs font-medium text-white">
             {language.toLowerCase()}
@@ -279,7 +276,7 @@ export default function CardCode({
                   <AlertDialogCancel>Close</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     onClick={downloadImage}
                   >
@@ -338,7 +335,7 @@ export default function CardCode({
                   <h3 className="mb-2 text-center text-lg font-semibold text-white">
                     sharuco.lndev.me
                   </h3>
-                  <div className="card-code-image max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
+                  <div className="card-code-image max-w-[1280px] overflow-hidden rounded-lg bg-zinc-900 dark:bg-black">
                     <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
                       <div className="flex items-center gap-2">
                         <span
@@ -359,7 +356,7 @@ export default function CardCode({
                         @ {idAuthor}
                       </span>
                     </div>
-                    <pre className="max-w-[1280px] rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
+                    <pre className="max-w-[1280px] rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black">
                       <code
                         className="max-w-[1280px] text-white"
                         dangerouslySetInnerHTML={{
@@ -390,7 +387,7 @@ export default function CardCode({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <a
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     href={`mailto:sharuco@leonelngoya.com?subject=REPORTING%20A%20CODE%20ON%20SHARUCO&body=Hello,%20%0D%0A%0D%0AI%20want%20to%20report%20this%20code%20https://sharuco.lndev.me/code-preview/${id}%20that%20I%20saw%20on%20Sharuco.%0D%0AThank%20you`}
                   >
@@ -403,7 +400,7 @@ export default function CardCode({
         </div>
         {params["code-preview"] === undefined ? (
           <Link href={`/code-preview/${id}`}>
-            <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
+            <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
               <code
                 className="text-white"
                 dangerouslySetInnerHTML={{
@@ -413,7 +410,7 @@ export default function CardCode({
             </pre>
           </Link>
         ) : (
-          <pre className="w-auto overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
+          <pre className="w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black">
             <code
               className="text-white"
               dangerouslySetInnerHTML={{
@@ -469,7 +466,7 @@ export default function CardCode({
             )}
           </Avatar>
           <div className="flex items-center justify-start gap-1">
-            <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
+            <span className="text-md font-bold text-zinc-700 hover:underline dark:text-zinc-400 ">
               {idAuthor}{" "}
             </span>
             {dataAuthor && dataAuthor.exists && (
@@ -488,7 +485,7 @@ export default function CardCode({
                 <TooltipTrigger asChild>
                   <Link
                     href={`/code-preview/${id}#commentsCode`}
-                    className="flex gap-1 text-slate-700 hover:text-slate-500 dark:text-slate-400  hover:dark:text-white"
+                    className="flex gap-1 text-zinc-700 hover:text-zinc-500 dark:text-zinc-400  hover:dark:text-white"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -536,7 +533,7 @@ export default function CardCode({
                     </svg>
                   </div>
                 ) : (
-                  <div className="mr-1 flex cursor-pointer items-center justify-center rounded-full p-1 text-slate-700 hover:bg-[#F8E3EB] dark:text-slate-400 dark:hover:bg-[#210C14]">
+                  <div className="mr-1 flex cursor-pointer items-center justify-center rounded-full p-1 text-zinc-700 hover:bg-[#F8E3EB] dark:text-zinc-400 dark:hover:bg-[#210C14]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -552,7 +549,7 @@ export default function CardCode({
                 <span
                   className={`${
                     favorisInit.includes(userPseudo) ? "text-[#F9197F]" : ""
-                  } hover:dark:text-white"  text-base text-slate-700 hover:text-slate-500  dark:text-slate-400`}
+                  } hover:dark:text-white"  text-base text-zinc-700 hover:text-zinc-500  dark:text-zinc-400`}
                 >
                   {favorisInit.length}
                 </span>
@@ -562,7 +559,7 @@ export default function CardCode({
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
-                  <div className="mr-1 flex cursor-pointer items-center  justify-center rounded-full p-1 text-slate-700 hover:bg-[#F8E3EB] dark:text-slate-400 dark:hover:bg-[#210C14]">
+                  <div className="mr-1 flex cursor-pointer items-center  justify-center rounded-full p-1 text-zinc-700 hover:bg-[#F8E3EB] dark:text-zinc-400 dark:hover:bg-[#210C14]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -579,7 +576,7 @@ export default function CardCode({
                     </svg>
                   </div>
                   <span
-                    className={`hover:dark:text-white" text-base text-slate-700 hover:text-slate-500  dark:text-slate-400`}
+                    className={`hover:dark:text-white" text-base text-zinc-700 hover:text-zinc-500  dark:text-zinc-400`}
                   >
                     {favorisInit.length}
                   </span>
@@ -598,7 +595,7 @@ export default function CardCode({
                           ? `/user/${idAuthor}`
                           : "#"
                       }
-                      className="font-semibold text-slate-900 dark:text-slate-100"
+                      className="font-semibold text-zinc-900 dark:text-zinc-100"
                     >
                       {idAuthor}
                     </a>{" "}
@@ -609,7 +606,7 @@ export default function CardCode({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     disabled={isPending}
                     onClick={login}
@@ -631,7 +628,7 @@ export default function CardCode({
               onOpenChange={setOpenShareDialog}
             >
               <AlertDialogTrigger asChild>
-                <span className="flex cursor-pointer items-center justify-center rounded-full p-1 text-slate-700 duration-200 hover:bg-[#1C9BEF] hover:text-white dark:text-slate-400 dark:hover:text-white">
+                <span className="flex cursor-pointer items-center justify-center rounded-full p-1 text-zinc-700 duration-200 hover:bg-[#1C9BEF] hover:text-white dark:text-zinc-400 dark:hover:text-white">
                   <Share className="h-5 w-5" />
                 </span>
               </AlertDialogTrigger>
@@ -711,14 +708,14 @@ export default function CardCode({
       {params["code-preview"] === undefined ? (
         <Link
           href={`/code-preview/${id}`}
-          className="text-sm text-slate-700 dark:text-slate-400"
+          className="text-sm text-zinc-700 dark:text-zinc-400"
         >
           {description.length > 300
             ? description.substring(0, 300) + "..."
             : description}
         </Link>
       ) : (
-        <p className="text-sm text-slate-700 dark:text-slate-400">
+        <p className="text-sm text-zinc-700 dark:text-zinc-400">
           {description}
         </p>
       )}
@@ -727,7 +724,7 @@ export default function CardCode({
           {tags?.map((tag: string) => (
             <span
               key={tag}
-              className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
+              className="rounded-full bg-zinc-700 px-2 py-1 text-xs font-medium text-zinc-100 dark:bg-zinc-600 dark:text-zinc-400"
             >
               {tag}
             </span>

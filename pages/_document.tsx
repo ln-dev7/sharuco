@@ -11,7 +11,7 @@ export default function Document() {
           crossOrigin="anonymous"
         ></script>
       </Head>
-      <body className="min-h-screen bg-white font-sans text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50">
+      <body className="min-h-screen bg-white font-sans text-zinc-900 antialiased dark:bg-zinc-900 dark:text-zinc-50">
         <Main />
         <NextScript />
       </body>

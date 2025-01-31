@@ -4,7 +4,6 @@ import { Trash } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -26,7 +25,7 @@ export default function CardUserAdmin({
   photoURL: string
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-4 rounded-md border border-slate-200 p-4 dark:border-slate-700">
+    <div className="flex flex-col items-center justify-center gap-4 rounded-md border border-zinc-200 p-4 dark:border-zinc-700">
       <div className="flex w-full items-center justify-start gap-4">
         <Avatar className="h-20 w-20 cursor-pointer">
           <AvatarImage
@@ -51,7 +50,7 @@ export default function CardUserAdmin({
           </h1>
           <Link
             href={`/user/${pseudo}`}
-            className="text-slate-600 hover:underline dark:text-slate-400"
+            className="text-zinc-600 hover:underline dark:text-zinc-400"
           >
             {pseudo}
           </Link>
@@ -76,7 +75,7 @@ export default function CardUserAdmin({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <button
               className={cn(
-                "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
               )}
             >
               <Trash className="mr-2 h-4 w-4" />

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import Head from "next/head"
 import Image from "next/image"
 import { useRouter } from "next/router"
@@ -97,7 +97,7 @@ export default function AddPersonalAccessToken() {
           ) : null}
           <Separator className="my-4" />
           <div className="w-full">
-            <p className="text-lg text-slate-700 sm:text-xl dark:text-slate-400">
+            <p className="text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
               1- Follow this link{" "}
               <a
                 href="https://github.com/settings/tokens/new"
@@ -112,13 +112,13 @@ export default function AddPersonalAccessToken() {
           </div>
           <Separator className="my-4" />
           <div className="w-full">
-            <p className="text-lg text-slate-700 sm:text-xl dark:text-slate-400">
+            <p className="text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
               2- Add a note about the use of your token, you can put{" "}
               <span className="font-medium">
                 « Give Sharuco access to create my Gist »
               </span>{" "}
             </p>
-            <p className="mt-4 text-lg text-slate-700 sm:text-xl dark:text-slate-400">
+            <p className="mt-4 text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
               3- Choose an expiry date for your token{" "}
             </p>
             <div
@@ -142,7 +142,7 @@ export default function AddPersonalAccessToken() {
           </div>
           <Separator className="my-4" />
           <div className="w-full">
-            <p className="text-lg text-slate-700 sm:text-xl dark:text-slate-400">
+            <p className="text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
               4- Scroll down and select the{" "}
               <span className="font-medium">« gist »</span> box, then scroll
               down again and click on{" "}
@@ -158,7 +158,7 @@ export default function AddPersonalAccessToken() {
           </div>
           <Separator className="my-4" />
           <div className="w-full">
-            <p className="text-lg text-slate-700 sm:text-xl dark:text-slate-400">
+            <p className="text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
               6- Copy your token ( after it will not be visible anymore, make
               sure you have copied it )
             </p>

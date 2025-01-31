@@ -1,13 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { useParams } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useUpdateLinkDocument } from "@/firebase/firestore/updateLinkDocument"
-import copyToClipboard from "@/utils/copyToClipboard"
 import { yupResolver } from "@hookform/resolvers/yup"
 import algoliasearch from "algoliasearch"
 import axios from "axios"
@@ -19,7 +14,6 @@ import * as yup from "yup"
 import { cn } from "@/lib/utils"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -28,7 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -38,7 +32,6 @@ import {
 } from "@/components/ui/popover"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
-import EmptyCard from "./../empty-card"
 import { Skeleton } from "./../ui/skeleton"
 
 export default function CardLinkAdmin({
@@ -184,7 +177,7 @@ export default function CardLinkAdmin({
   if (errorLinkPreview) {
     return (
       <div
-        className="relative overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
+        className="relative overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900"
         key={id}
       >
         <a
@@ -192,8 +185,8 @@ export default function CardLinkAdmin({
           target="_blank"
           className="flex h-64 items-center justify-center"
         >
-          <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-t-xl bg-slate-50 text-center dark:bg-slate-800">
-            <XCircle className="h-8 w-8 text-slate-400" />
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-t-xl bg-zinc-50 text-center dark:bg-zinc-800">
+            <XCircle className="h-8 w-8 text-zinc-400" />
             <h3 className="text-lg font-semibold">
               This link is not available
             </h3>
@@ -206,7 +199,7 @@ export default function CardLinkAdmin({
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className="absolute right-2 top-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-slate-700"
+              className="absolute right-2 top-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-zinc-700"
             >
               <MoreHorizontal className="h-4 w-4" />
             </Button>
@@ -228,7 +221,7 @@ export default function CardLinkAdmin({
                 <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
                   <AlertDialogHeader>
                     <AlertDialogTitle>
-                      <h3 className="text-lg font-medium leading-6 text-slate-900 dark:text-slate-100">
+                      <h3 className="text-lg font-medium leading-6 text-zinc-900 dark:text-zinc-100">
                         Edit a link
                       </h3>
                     </AlertDialogTitle>
@@ -265,9 +258,9 @@ export default function CardLinkAdmin({
                           placeholder="Enter a tags ..."
                           {...register("tags")}
                         />
-                        <p className="text-sm font-medium text-slate-500">
+                        <p className="text-sm font-medium text-zinc-500">
                           Please separate tags with{" "}
-                          <span className="text-slate-700 dark:text-slate-300">
+                          <span className="text-zinc-700 dark:text-zinc-300">
                             ,
                           </span>
                         </p>
@@ -287,7 +280,7 @@ export default function CardLinkAdmin({
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                       )}
                       disabled={isLoading}
                       onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -322,7 +315,7 @@ export default function CardLinkAdmin({
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                       )}
                       disabled={isLoadingDelete}
                       onClick={
@@ -348,7 +341,7 @@ export default function CardLinkAdmin({
 
   return (
     <div
-      className="relative overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
+      className="relative overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900"
       key={id}
     >
       <a
@@ -357,7 +350,7 @@ export default function CardLinkAdmin({
         className="flex h-64 items-center justify-center"
       >
         {isLoadingLinkPreview ? (
-          <Skeleton className="h-full w-full rounded-none bg-slate-200 dark:bg-slate-800" />
+          <Skeleton className="h-full w-full rounded-none bg-zinc-200 dark:bg-zinc-800" />
         ) : (
           <>
             {dataLinkPreview.image ? (
@@ -367,8 +360,8 @@ export default function CardLinkAdmin({
                 alt={dataLinkPreview.title}
               />
             ) : (
-              <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-t-xl border-b border-slate-100 bg-slate-50 text-center dark:border-slate-700 dark:bg-slate-800">
-                <XCircle className="h-8 w-8 text-slate-400" />
+              <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-t-xl border-b border-zinc-100 bg-zinc-50 text-center dark:border-zinc-700 dark:bg-zinc-800">
+                <XCircle className="h-8 w-8 text-zinc-400" />
                 <h3 className="text-lg font-semibold">Failed to load image</h3>
                 <p className="text-sm text-muted-foreground">
                   The image could not be loaded for this link.
@@ -382,13 +375,13 @@ export default function CardLinkAdmin({
         <a href={link} target="_blank">
           {isLoadingLinkPreview ? (
             <>
-              <Skeleton className="mb-2 h-3 w-full bg-slate-200 dark:bg-slate-800" />
-              <Skeleton className="mb-3 h-3 w-3/4 bg-slate-200 dark:bg-slate-800" />
+              <Skeleton className="mb-2 h-3 w-full bg-zinc-200 dark:bg-zinc-800" />
+              <Skeleton className="mb-3 h-3 w-3/4 bg-zinc-200 dark:bg-zinc-800" />
             </>
           ) : (
             <>
               {dataLinkPreview.title && (
-                <h5 className="mb-2 line-clamp-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                <h5 className="mb-2 line-clamp-2 text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
                   {dataLinkPreview.title}
                 </h5>
               )}
@@ -397,15 +390,15 @@ export default function CardLinkAdmin({
         </a>
         {isLoadingLinkPreview ? (
           <>
-            <Skeleton className="mb-2 h-2 w-3/4 bg-slate-200 dark:bg-slate-800" />
-            <Skeleton className="mb-2 h-2 w-1/2 bg-slate-200 dark:bg-slate-800" />
-            <Skeleton className="mb-2 h-2 w-full bg-slate-200 dark:bg-slate-800" />
-            <Skeleton className="mb-3 h-2 w-4/5 bg-slate-200 dark:bg-slate-800" />
+            <Skeleton className="mb-2 h-2 w-3/4 bg-zinc-200 dark:bg-zinc-800" />
+            <Skeleton className="mb-2 h-2 w-1/2 bg-zinc-200 dark:bg-zinc-800" />
+            <Skeleton className="mb-2 h-2 w-full bg-zinc-200 dark:bg-zinc-800" />
+            <Skeleton className="mb-3 h-2 w-4/5 bg-zinc-200 dark:bg-zinc-800" />
           </>
         ) : (
           <>
             {dataLinkPreview.description && (
-              <p className="text-md mb-3 line-clamp-5 font-normal text-slate-700 dark:text-slate-400">
+              <p className="text-md mb-3 line-clamp-5 font-normal text-zinc-700 dark:text-zinc-400">
                 {dataLinkPreview.description}
               </p>
             )}
@@ -417,7 +410,7 @@ export default function CardLinkAdmin({
             {tags?.map((tag: string) => (
               <span
                 key={tag}
-                className="rounded-full bg-slate-700 px-2 py-1 text-xs font-medium text-slate-100 dark:bg-slate-600 dark:text-slate-400"
+                className="rounded-full bg-zinc-700 px-2 py-1 text-xs font-medium text-zinc-100 dark:bg-zinc-600 dark:text-zinc-400"
               >
                 {tag}
               </span>
@@ -429,7 +422,7 @@ export default function CardLinkAdmin({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="absolute right-2 top-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-slate-700"
+            className="absolute right-2 top-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-zinc-700"
           >
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -448,7 +441,7 @@ export default function CardLinkAdmin({
               <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    <h3 className="text-lg font-medium leading-6 text-slate-900 dark:text-slate-100">
+                    <h3 className="text-lg font-medium leading-6 text-zinc-900 dark:text-zinc-100">
                       Edit a link
                     </h3>
                   </AlertDialogTitle>
@@ -485,9 +478,9 @@ export default function CardLinkAdmin({
                         placeholder="Enter a tags ..."
                         {...register("tags")}
                       />
-                      <p className="text-sm font-medium text-slate-500">
+                      <p className="text-sm font-medium text-zinc-500">
                         Please separate tags with{" "}
-                        <span className="text-slate-700 dark:text-slate-300">
+                        <span className="text-zinc-700 dark:text-zinc-300">
                           ,
                         </span>
                       </p>
@@ -507,7 +500,7 @@ export default function CardLinkAdmin({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     disabled={isLoading}
                     onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -542,7 +535,7 @@ export default function CardLinkAdmin({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     disabled={isLoadingDelete}
                     onClick={

@@ -7,7 +7,7 @@ import { SUPER_ADMIN } from "@/constants/super-admin"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
-import { Code, FileCog, Layers, UserIcon } from "lucide-react"
+import { Code, Layers, UserIcon } from "lucide-react"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import CardCodeAdmin from "@/components/cards/card-code-admin"
@@ -63,7 +63,7 @@ export default function SuperAdmin() {
             Hello Admin
           </h1>
           {dataUsers && dataCodes && (
-            <p className="text-lg text-slate-700 dark:text-slate-400">
+            <p className="text-lg text-zinc-700 dark:text-zinc-400">
               <span className="font-bold">{dataUsers.length} users </span>
               registered and{" "}
               <span className="font-bold">{dataCodes.length} codes</span> shared
