@@ -11,8 +11,6 @@ Share your code. Manage Form & Link.
 ## Requirements
 
 - Node (>=18.18.0 recommended) + npm
-- docker + docker-compose
-- make (for Makefile targets)
 
 ## How to Install
 
@@ -20,39 +18,36 @@ Share your code. Manage Form & Link.
 # clone the repository and cd into it:
 git clone https://github.com/ln-dev7/sharuco && cd sharuco
 
-# Tips : make help to see all make target
-
-## --- WITH DOCKER ---
-# build and up the whole stack and start it with one command:
-# note, all env are available in the example
-make docker-build-up
-
-# to build the app container only:
-make docker-build
-
-# to run the app container:
-make docker-run
-
-## --- NO DOCKER ---
 # copy the .env.example to .env and fill all env variables
 cp .env.example .env
 
-#   - `NEXT_PUBLIC_FIREBASE_API_KEY`: Your Firebase API Key.
-#   - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`: Your Firebase Auth Domain.
-#   - `NEXT_PUBLIC_FIREBASE_PROJECT_ID`: Your Firebase Project ID.
-#   - `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`: Your Firebase Storage Bucket.
-#   - `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`: Your Firebase Messaging Sender ID.
-#   - `NEXT_PUBLIC_FIREBASE_APP_ID`: Your Firebase App ID.
-#   - `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID`: Your Firebase Measurement ID.
+#   - `NEXT_PUBLIC_FIREBASE_API_KEY` : Firebase API Key
+#   - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` : Firebase Auth Domain
+#   - `NEXT_PUBLIC_FIREBASE_PROJECT_ID` : Firebase Project ID
+#   - `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` : Firebase Storage Bucket
+#   - `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` : Firebase Messaging Sender ID
+#   - `NEXT_PUBLIC_FIREBASE_APP_ID` : Firebase App ID
+#   - `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID` : Firebase Measurement ID
+#   - `NEXT_PUBLIC_NOTCH_PAY_API_URL` : Notch Pay API URL
+#   - `NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY` : Notch Pay Public Key
+#   - `NEXT_PUBLIC_NOTCH_PAY_PRIVATE_KEY` : Notch Pay Private Key
+#   - `NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY_TEST` : Notch Pay Public Key Test
+#   - `NEXT_PUBLIC_ALGOLIA_APP_ID` : Algolia App ID
+#   - `NEXT_PUBLIC_ALGOLIA_SEARCH_KEY` : Algolia Search Key
+#   - `NEXT_PUBLIC_ALGOLIA_ADMIN_KEY` : Algolia Admin Key
+#   - `NEXT_PUBLIC_ALGOLIA_USAGE_KEY` : Algolia Usage Key
+#   - `NEXT_PUBLIC_LINK_PREVIEW_KEY` : Link Preview Key
+#   - `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` : Recaptcha Site Key
+#   - `NEXT_PUBLIC_RECAPTCHA_SECRET_KEY` : Recaptcha Secret Key
 
 # Install dependencies:
-make install
+npm install
 
 # build and start
-make build && make start
+npm run build
 
 # or on dev mode
-make dev
+npm run dev
 ```
 
 ## Usage
