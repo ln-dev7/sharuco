@@ -1,97 +1,27 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
-import {
-  allLanguages,
-  getExtensionByName,
-  languagesName,
-} from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogout } from "@/firebase/auth/githubLogout"
-import { useCreateDocument } from "@/firebase/firestore/createDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
-import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
-import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import usePaymentInitialization from "@/notchpay/initializePayment.js"
-import copyToClipboard from "@/utils/copyToClipboard.js"
-import embedProject from "@/utils/embedStackblitzProject"
-import indentCode from "@/utils/indentCode.js"
-import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import sdk, { Project } from "@stackblitz/sdk"
 import algoliasearch from "algoliasearch"
-import axios from "axios"
-import hljs from "highlight.js"
-import {
-  Check,
-  Eye,
-  EyeOff,
-  FileCog,
-  FileQuestion,
-  Heart,
-  LinkIcon,
-  Loader2,
-  MessageSquare,
-  Plus,
-  Send,
-  Settings,
-  Terminal,
-  User,
-  X,
-} from "lucide-react"
+import { Check, Loader2, Send, Terminal, X } from "lucide-react"
 import moment from "moment"
-import { useFieldArray, useForm } from "react-hook-form"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import { useForm } from "react-hook-form"
 import { uid } from "uid"
 import * as yup from "yup"
 
-import { TemplateName } from "@/types/templatStackblitzName"
-import { cn } from "@/lib/utils"
-import CardCode from "@/components/cards/card-code"
-import CardCodeAdmin from "@/components/cards/card-code-admin"
-import EmptyCard from "@/components/empty-card"
 import Error from "@/components/error"
 import { Layout } from "@/components/layout"
-import LoaderCodes from "@/components/loaders/loader-codes"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import { Button, buttonVariants } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
 export default function FormViewPage() {
@@ -322,7 +252,7 @@ export default function FormViewPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>{" "}
-      <section className="fixed inset-0 z-50 h-screen overflow-scroll bg-white dark:bg-slate-900">
+      <section className="fixed inset-0 z-50 h-screen overflow-scroll bg-white dark:bg-zinc-900">
         <div className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
           <div className="flex w-full items-center justify-start">
             <Link href="/forms" className="flex items-center font-bold">
@@ -483,7 +413,7 @@ export default function FormViewPage() {
                         id="answer"
                         name="answer"
                         {...register("answer")}
-                        className="z-10 h-10 w-full rounded-md bg-white px-3 py-2 text-sm font-medium text-slate-900 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                        className="z-10 h-10 w-full rounded-md bg-white px-3 py-2 text-sm font-medium text-zinc-900 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder={`${randomNumbers.number1} + ${randomNumbers.number2}`}
                       />
                     </div>

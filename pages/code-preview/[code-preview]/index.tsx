@@ -4,11 +4,7 @@ import { useEffect } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import {
-  allLanguages,
-  getExtensionByName,
-  languagesName,
-} from "@/constants/languages"
+import { allLanguages, languagesName } from "@/constants/languages"
 import { SUPER_ADMIN } from "@/constants/super-admin"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
@@ -22,7 +18,6 @@ import hljs from "highlight.js"
 import {
   Copy,
   Github,
-  Link2,
   Loader2,
   Trash,
   Trash2,
@@ -44,7 +39,6 @@ import Loader from "@/components/loaders/loader"
 import LoaderCode from "@/components/loaders/loader-code"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -329,7 +323,7 @@ export default function CodePreview() {
                                   </AvatarFallback>
                                 </Avatar>
                                 <div className="flex items-center justify-start gap-1">
-                                  <span className="text-md font-bold text-slate-700 hover:underline dark:text-slate-400 ">
+                                  <span className="text-md font-bold text-zinc-700 hover:underline dark:text-zinc-400 ">
                                     {comment.idAuthor}{" "}
                                   </span>
                                   <span>
@@ -343,25 +337,25 @@ export default function CodePreview() {
                               <div className="flex items-center gap-2">
                                 {comment.idAuthor ===
                                   dataCode?.data.idAuthor && (
-                                  <span className="rounded-xl bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-slate-900">
+                                  <span className="rounded-xl bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-zinc-900">
                                     Author
                                   </span>
                                 )}
                                 •
-                                <span className="rounded-xl py-0.5 text-xs font-semibold text-slate-900 dark:text-white">
+                                <span className="rounded-xl py-0.5 text-xs font-semibold text-zinc-900 dark:text-white">
                                   {moment(comment.createdAt).fromNow()}
                                 </span>
                               </div>
                             </div>
-                            <div className="flex w-full flex-col gap-2 rounded-md bg-slate-100 p-4 dark:bg-slate-800">
-                              <p className="text-md font-semibold text-slate-900 dark:text-white">
+                            <div className="flex w-full flex-col gap-2 rounded-md bg-zinc-100 p-4 dark:bg-zinc-800">
+                              <p className="text-md font-semibold text-zinc-900 dark:text-white">
                                 {comment.comment}
                               </p>
                               {/* <p
                               dangerouslySetInnerHTML={{
                                 __html: comment.comment,
                               }}
-                              className="font-semibold text-md text-slate-900 dark:text-white"
+                              className="font-semibold text-md text-zinc-900 dark:text-white"
                             ></p> */}
 
                               {comment.code && (
@@ -371,7 +365,7 @@ export default function CodePreview() {
                                   }}
                                 >
                                   <Masonry>
-                                    <div className="w-full overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
+                                    <div className="w-full overflow-hidden rounded-lg bg-zinc-900 dark:bg-black">
                                       <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
                                         <span className="text-xs font-medium text-white">
                                           {comment.language.toLowerCase()}
@@ -387,7 +381,7 @@ export default function CodePreview() {
                                           Copy code
                                         </span>
                                       </div>
-                                      <pre className="max-h-[380px] w-full overflow-auto rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
+                                      <pre className="max-h-[380px] w-full overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black">
                                         <code
                                           className="text-white"
                                           dangerouslySetInnerHTML={{
@@ -432,7 +426,7 @@ export default function CodePreview() {
                                       </AlertDialogCancel>
                                       <button
                                         className={cn(
-                                          "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                                          "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                                         )}
                                         onClick={() => {
                                           handleDeleteComment(comment.idComment)
@@ -482,7 +476,7 @@ export default function CodePreview() {
                             Language of code review
                           </Label>
                           <select
-                            className="flex h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                            className="flex h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                             name="language"
                             id="language"
                             {...register("language")}
@@ -503,7 +497,7 @@ export default function CodePreview() {
                         </div>
                         <button
                           className={cn(
-                            "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                            "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                           )}
                           disabled={isLoadingAddComment}
                           onClick={
@@ -521,7 +515,7 @@ export default function CodePreview() {
                     ) : (
                       <button
                         className={cn(
-                          "inline-flex h-10 w-full items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                          "inline-flex h-10 w-full items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                         )}
                         disabled={isPending}
                         onClick={login}
@@ -538,14 +532,14 @@ export default function CodePreview() {
                 </div>
                 <Separator className="my-4" />
                 <div className="mt-4 flex w-full flex-col items-start justify-center gap-4">
-                  <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+                  <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
                     Who likes this code
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {dataCode.data.favoris.map((person) => (
                       <div
                         key={person}
-                        className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-slate-100"
+                        className="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-zinc-100"
                       >
                         <User className="h-4 w-4" />
                         <Link
@@ -557,7 +551,7 @@ export default function CodePreview() {
                       </div>
                     ))}
                     {dataCode.data.favoris.length === 0 && (
-                      <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                      <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                         No one likes this code yet
                       </p>
                     )}

@@ -7,32 +7,17 @@ import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
 import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
 import { yupResolver } from "@hookform/resolvers/yup"
-import {
-  Eye,
-  EyeOff,
-  FileCog,
-  Github,
-  LinkIcon,
-  Loader2,
-  Lock,
-  Plus,
-  Trash,
-} from "lucide-react"
+import { Eye, EyeOff, LinkIcon, Loader2, Plus } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
 import { cn } from "@/lib/utils"
-import CardLinkAdmin from "@/components/cards/card-link-admin"
-import EmptyCard from "@/components/empty-card"
 import { Layout } from "@/components/layout"
 import LinksConnected from "@/components/links/LinksConnected"
 import LinksNotConnected from "@/components/links/LinksNotConnected"
-import LoaderLinks from "@/components/loaders/loader-links"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -43,7 +28,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
@@ -233,9 +218,9 @@ export default function Links() {
                         placeholder="Enter a tags ..."
                         {...register("tags")}
                       />
-                      <p className="text-sm font-medium text-slate-500">
+                      <p className="text-sm font-medium text-zinc-500">
                         Please separate tags with{" "}
-                        <span className="text-slate-700 dark:text-slate-300">
+                        <span className="text-zinc-700 dark:text-zinc-300">
                           ,
                         </span>
                       </p>
@@ -255,7 +240,7 @@ export default function Links() {
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     disabled={isLoading}
                     onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -326,7 +311,7 @@ export default function Links() {
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-slate-200 dark:hover:text-slate-900 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                       )}
                       onClick={() => {
                         changeVisibiltyForLinkPage(userPseudo)

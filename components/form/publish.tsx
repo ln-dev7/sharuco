@@ -1,101 +1,15 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import Head from "next/head"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
-import {
-  allLanguages,
-  getExtensionByName,
-  languagesName,
-} from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogout } from "@/firebase/auth/githubLogout"
-import { useCreateDocument } from "@/firebase/firestore/createDocument"
-import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
-import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
-import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
 import copyToClipboard from "@/utils/copyToClipboard.js"
-import embedProject from "@/utils/embedStackblitzProject"
-import indentCode from "@/utils/indentCode.js"
-import linearizeCode from "@/utils/linearizeCode"
-import { yupResolver } from "@hookform/resolvers/yup"
-import sdk, { Project } from "@stackblitz/sdk"
 import algoliasearch from "algoliasearch"
-import hljs from "highlight.js"
-import {
-  Calendar,
-  Check,
-  CircleDot,
-  Eye,
-  EyeOff,
-  FileCog,
-  FileQuestion,
-  Heart,
-  LinkIcon,
-  List,
-  ListChecks,
-  Loader2,
-  MessageSquare,
-  Plus,
-  Save,
-  Send,
-  Settings,
-  Trash,
-  Type,
-  User,
-  View,
-  X,
-} from "lucide-react"
-import moment from "moment"
-import { useFieldArray, useForm } from "react-hook-form"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
-import * as yup from "yup"
+import { Check, Eye, Loader2, X } from "lucide-react"
 
-import { TemplateName } from "@/types/templatStackblitzName"
-import { cn } from "@/lib/utils"
-import CardCode from "@/components/cards/card-code"
-import CardCodeAdmin from "@/components/cards/card-code-admin"
-import EmptyCard from "@/components/empty-card"
-import Error from "@/components/error"
-import { Layout } from "@/components/layout"
-import LoaderCodes from "@/components/loaders/loader-codes"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import { Button, buttonVariants } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
@@ -147,7 +61,7 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
   }
 
   return (
-    <div className="flex shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 py-20 dark:border-slate-700">
+    <div className="flex shrink-0 items-center justify-center rounded-md border border-dashed border-zinc-300 py-20 dark:border-zinc-700">
       <div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center gap-4 p-4 text-center">
         <Link
           href={`/form/view/${params["form"]}`}

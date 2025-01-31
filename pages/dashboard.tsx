@@ -21,12 +21,10 @@ import embedProject from "@/utils/embedStackblitzProject"
 import indentCode from "@/utils/indentCode.js"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import sdk, { Project } from "@stackblitz/sdk"
 import hljs from "highlight.js"
 import {
   Eye,
   EyeOff,
-  FileCog,
   Heart,
   Layers,
   LinkIcon,
@@ -50,7 +48,6 @@ import { Layout } from "@/components/layout"
 import LoaderCodes from "@/components/loaders/loader-codes"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -456,7 +453,7 @@ export default function Dashboard() {
                           </DialogHeader>
                           <div
                             id="embed-stackblitz"
-                            className="overflow-hidden rounded-lg bg-slate-200 dark:bg-slate-800"
+                            className="overflow-hidden rounded-lg bg-zinc-200 dark:bg-zinc-800"
                           ></div>
                         </DialogContent>
                       </Dialog>
@@ -479,7 +476,7 @@ export default function Dashboard() {
                   <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                     <Label htmlFor="language">Language</Label>
                     <select
-                      className="flex h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      className="flex h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                       name="language"
                       id="language"
                       {...register("language")}
@@ -506,9 +503,9 @@ export default function Dashboard() {
                       placeholder="Enter a tags ..."
                       {...register("tags")}
                     />
-                    <p className="text-sm font-medium text-slate-500">
+                    <p className="text-sm font-medium text-zinc-500">
                       Please separate tags with{" "}
-                      <span className="text-slate-700 dark:text-slate-300">
+                      <span className="text-zinc-700 dark:text-zinc-300">
                         ,
                       </span>
                     </p>
@@ -522,10 +519,10 @@ export default function Dashboard() {
                       {...register("isPrivate")}
                       name="isPrivate"
                       id="isPrivate"
-                      className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
+                      className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-zinc-200 outline-none dark:bg-zinc-800
                       ${
                         checkboxOn
-                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-slate-500 before:transition-transform"
+                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-zinc-500 before:transition-transform"
                           : ""
                       } 
                       `}
@@ -548,10 +545,10 @@ export default function Dashboard() {
                         {...register("isGithubGist")}
                         name="isGithubGist"
                         id="isGithubGist"
-                        className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-slate-200 outline-none dark:bg-slate-800
+                        className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-zinc-200 outline-none dark:bg-zinc-800
                           ${
                             gistCheckboxOn
-                              ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-slate-500 before:transition-transform"
+                              ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-zinc-500 before:transition-transform"
                               : ""
                           }
                           `}
@@ -612,7 +609,7 @@ export default function Dashboard() {
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <button
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                   )}
                   disabled={isLoading || isLoadingAddOnGithubGist}
                   onClick={
@@ -884,7 +881,7 @@ export default function Dashboard() {
                   </ResponsiveMasonry>
                 )}
                 {dataFavoriteCodes.length == 0 && (
-                  <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed border-slate-300 dark:border-slate-700">
+                  <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed border-zinc-300 dark:border-zinc-700">
                     <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
                       <Layers className="h-12 w-12" />
                       <h3 className="mt-4 text-lg font-semibold">
@@ -896,7 +893,7 @@ export default function Dashboard() {
                       <Link
                         href="/explore"
                         className={cn(
-                          "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                          "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                         )}
                       >
                         Explore code
@@ -935,7 +932,7 @@ export default function Dashboard() {
                 <a
                   href="mailto:sharuco@leonelngoya.com"
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                    "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                   )}
                 >
                   Contact us

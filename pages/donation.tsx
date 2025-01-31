@@ -24,7 +24,7 @@ export default function Donation() {
           <h1 className="text-2xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-5xl">
             Support Sharuco
           </h1>
-          <p className="max-w-[700px] text-lg text-slate-700 sm:text-xl dark:text-slate-400">
+          <p className="max-w-[700px] text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
             Sharuco is a free and open source project.
             <br className="hidden sm:inline" /> If you want to support the
             project, you can make a donation.

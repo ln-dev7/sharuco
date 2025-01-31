@@ -1,4 +1,3 @@
-import React from "react"
 import Link from "next/link"
 import { ExternalLink } from "lucide-react"
 
@@ -39,14 +38,14 @@ export function MainNav({ items }: MainNavProps) {
                   key={index}
                   href={item.disabled ? "#" : item.href}
                   className={cn(
-                    "group relative inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-semibold transition-colors hover:bg-slate-100 focus:bg-slate-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-slate-50 data-[state=open]:bg-slate-50 dark:text-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:data-[active]:bg-slate-800 dark:data-[state=open]:bg-slate-800",
+                    "group relative inline-flex h-9 w-max items-center justify-center rounded-md bg-transparent px-4 py-2 text-sm font-semibold transition-colors hover:bg-zinc-100 focus:bg-zinc-100 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-zinc-50 data-[state=open]:bg-zinc-50 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:focus:bg-zinc-800 dark:data-[active]:bg-zinc-800 dark:data-[state=open]:bg-zinc-800",
                     item.disabled && "cursor-not-allowed"
                   )}
                 >
                   {item.title}
                   {item.external && <ExternalLink className="ml-2 h-4 w-4" />}
                   {item.disabled && (
-                    <span className="ml-2 rounded-xl bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-slate-900">
+                    <span className="ml-2 rounded-xl bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-zinc-900">
                       Soon
                     </span>
                   )}
@@ -90,7 +89,7 @@ export function MainNav({ items }: MainNavProps) {
                     {item.title}
                     {item.external && <ExternalLink className="ml-2 h-4 w-4" />}
                     {item.disabled && (
-                      <span className="ml-2 rounded-xl bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-slate-900">
+                      <span className="ml-2 rounded-xl bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-zinc-900">
                         Soon
                       </span>
                     )}

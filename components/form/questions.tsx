@@ -1,104 +1,35 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import Head from "next/head"
-import Link from "next/link"
+import { useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
-import {
-  allLanguages,
-  getExtensionByName,
-  languagesName,
-} from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogout } from "@/firebase/auth/githubLogout"
-import { useCreateDocument } from "@/firebase/firestore/createDocument"
-import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
-import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
-import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import copyToClipboard from "@/utils/copyToClipboard.js"
-import embedProject from "@/utils/embedStackblitzProject"
-import indentCode from "@/utils/indentCode.js"
-import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
-import sdk, { Project } from "@stackblitz/sdk"
 import algoliasearch from "algoliasearch"
-import hljs from "highlight.js"
 import {
   AlignJustify,
   Calendar,
   Check,
   CircleDot,
-  Eye,
-  EyeOff,
-  FileCog,
   FileQuestion,
   Heading,
-  Heart,
   LinkIcon,
   List,
   ListChecks,
   Loader2,
   Mail,
-  MessageSquare,
   Minus,
-  Plus,
   Save,
-  Send,
-  Settings,
   Trash,
-  Type,
-  User,
-  View,
   X,
 } from "lucide-react"
-import moment from "moment"
 import { useFieldArray, useForm } from "react-hook-form"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
-import { TemplateName } from "@/types/templatStackblitzName"
-import { cn } from "@/lib/utils"
-import CardCode from "@/components/cards/card-code"
-import CardCodeAdmin from "@/components/cards/card-code-admin"
 import EmptyCard from "@/components/empty-card"
-import Error from "@/components/error"
-import { Layout } from "@/components/layout"
-import LoaderCodes from "@/components/loaders/loader-codes"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button, buttonVariants } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
@@ -219,28 +150,28 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
           <div className="flex w-full shrink-0 flex-col items-start gap-2 rounded-md sm:sticky sm:top-20 sm:w-[250px]">
             <button
               onClick={() => handleAddField("heading")}
-              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
             >
               <Heading className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">Heading</span>
             </button>
             <button
               onClick={() => handleAddField("text")}
-              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
             >
               <Minus className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">Short answer</span>
             </button>
             <button
               onClick={() => handleAddField("longtext")}
-              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
             >
               <AlignJustify className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">Long answer</span>
             </button>
             <button
               //onClick={() => handleAddField("link")}
-              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
             >
               <LinkIcon className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">Link</span>
@@ -250,7 +181,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
             </button>
             <button
               //onClick={() => handleAddField("email")}
-              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800"
+              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
             >
               <Mail className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">E-mail</span>
@@ -258,21 +189,21 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                 soon
               </span>
             </button>
-            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
+            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800">
               <CircleDot className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">Unique choice</span>
               <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
                 soon
               </span>
             </button>
-            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
+            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800">
               <ListChecks className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">Multi choice</span>
               <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
                 soon
               </span>
             </button>
-            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
+            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800">
               <List className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">
                 List of choices
@@ -281,7 +212,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                 soon
               </span>
             </button>
-            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-slate-100 hover:dark:bg-slate-800">
+            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800">
               <Calendar className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">Date</span>
               <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">

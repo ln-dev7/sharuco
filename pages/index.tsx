@@ -5,7 +5,7 @@ import {
   getLanguageColor,
   languagesName,
 } from "@/constants/languages"
-import { COMPANIES, INDIVIDUALS } from "@/constants/supports.js"
+import { COMPANIES } from "@/constants/supports.js"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import highlight from "@/utils/highlight"
@@ -135,18 +135,18 @@ export default function IndexPage() {
       </Head>
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <a
-          className="inline-flex w-fit items-center rounded-lg bg-slate-100 px-3 py-1 text-sm font-medium dark:bg-slate-800"
+          className="inline-flex w-fit items-center rounded-lg bg-zinc-100 px-3 py-1 text-sm font-medium dark:bg-zinc-800"
           href="/forms"
         >
           🚀
           <div
             data-orientation="vertical"
-            className="mx-2 h-4 w-[1px] shrink-0 bg-slate-200 dark:bg-slate-700"
+            className="mx-2 h-4 w-[1px] shrink-0 bg-zinc-200 dark:bg-zinc-700"
           ></div>
-          <span className="text-slate-800 sm:hidden dark:text-slate-200">
+          <span className="text-zinc-800 sm:hidden dark:text-zinc-200">
             Sharuco Form, Create and share your forms.
           </span>
-          <span className="hidden text-slate-800 sm:inline dark:text-slate-200">
+          <span className="hidden text-zinc-800 sm:inline dark:text-zinc-200">
             Introducing Sharuco Form, Create and share your forms.
           </span>
           <svg
@@ -171,7 +171,7 @@ export default function IndexPage() {
             <br className="inline" />
             Manage Form & Link.
           </h1>
-          <p className="max-w-[700px] text-lg text-slate-700 sm:text-xl dark:text-slate-400">
+          <p className="max-w-[700px] text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
             Share and explore essential codes, create forms to retrieve
             information and keep useful links.
           </p>
@@ -218,7 +218,7 @@ export default function IndexPage() {
             to use a VPN and change your location in order to connect.
           </div>
         )}
-        <p className="text-sm text-slate-700 dark:text-slate-400">
+        <p className="text-sm text-zinc-700 dark:text-zinc-400">
           Follow us on{" "}
           <Link
             href="https://twitter.com/ln_dev7"
@@ -270,7 +270,7 @@ export default function IndexPage() {
             </h2>
           </div>
           <div className="flex flex-col gap-6 md:flex-row">
-            <div className="w-full overflow-hidden rounded-md bg-slate-100 md:w-1/2 dark:bg-slate-800">
+            <div className="w-full overflow-hidden rounded-md bg-zinc-100 md:w-1/2 dark:bg-zinc-800">
               <Image
                 src="/home/code-preview.png"
                 alt="Card preview"
@@ -290,7 +290,7 @@ export default function IndexPage() {
               </div>
               <div className="flex w-full flex-col items-start gap-1.5">
                 <select
-                  className="flex h-10 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                  className="flex h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                   name="languageImage"
                   id="languageImage"
                   value={languageImage}
@@ -312,7 +312,7 @@ export default function IndexPage() {
                   <AlertDialogTrigger asChild>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                       )}
                     >
                       Generate image
@@ -322,7 +322,7 @@ export default function IndexPage() {
                   <button
                     disabled
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                   >
                     You need to fill the fields
@@ -333,7 +333,7 @@ export default function IndexPage() {
                     <AlertDialogCancel>Close</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                        "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                       )}
                       onClick={downloadImage}
                     >
@@ -392,7 +392,7 @@ export default function IndexPage() {
                     <h3 className="mb-2 text-center text-lg font-semibold text-white">
                       sharuco.lndev.me
                     </h3>
-                    <div className="card-code-image max-w-[1280px] overflow-hidden rounded-lg bg-slate-900 dark:bg-black">
+                    <div className="card-code-image max-w-[1280px] overflow-hidden rounded-lg bg-zinc-900 dark:bg-black">
                       <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
                         <div className="flex items-center gap-2">
                           <span
@@ -416,7 +416,7 @@ export default function IndexPage() {
                           </span>
                         )}
                       </div>
-                      <pre className="max-w-[1280px] rounded-lg rounded-t-none bg-slate-900 p-4 dark:bg-black">
+                      <pre className="max-w-[1280px] rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black">
                         <code
                           className="text-sm text-white"
                           dangerouslySetInnerHTML={{
@@ -436,7 +436,7 @@ export default function IndexPage() {
             <h2 className="text-3xl font-bold leading-tight tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
               Sharuco Form
             </h2>
-            <p className="text-md max-w-[700px] text-center text-slate-700 sm:text-lg dark:text-slate-400">
+            <p className="text-md max-w-[700px] text-center text-zinc-700 sm:text-lg dark:text-zinc-400">
               Sharuco Form allows you to create forms to collect information
               from your users.
             </p>
@@ -455,7 +455,7 @@ export default function IndexPage() {
                     customize your form.
                   </p>
                 </div>
-                <div className="w-full overflow-hidden rounded-md border border-slate-200 bg-slate-100 dark:bg-slate-800">
+                <div className="w-full overflow-hidden rounded-md border border-zinc-200 bg-zinc-100 dark:bg-zinc-800">
                   <Image
                     src="/home/form-1.png"
                     alt="Sharuco Form"
@@ -467,7 +467,7 @@ export default function IndexPage() {
                 </div>
               </div>
               <div className="flex flex-col-reverse gap-4 lg:flex-row lg:gap-20">
-                <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-800 dark:bg-slate-800">
+                <div className="w-full overflow-hidden rounded-md bg-zinc-100 dark:border dark:border-zinc-800 dark:bg-zinc-800">
                   <Image
                     src="/home/form-2.png"
                     alt="Sharuco Form"
@@ -499,7 +499,7 @@ export default function IndexPage() {
                     your form
                   </p>
                 </div>
-                <div className="w-full overflow-hidden rounded-md border border-slate-200 bg-slate-100 dark:bg-slate-800">
+                <div className="w-full overflow-hidden rounded-md border border-zinc-200 bg-zinc-100 dark:bg-zinc-800">
                   <Image
                     src="/home/form-3.png"
                     alt="Sharuco Form"
@@ -511,7 +511,7 @@ export default function IndexPage() {
                 </div>
               </div>
               <div className="flex flex-col-reverse gap-4 lg:flex-row lg:gap-20">
-                <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-800 dark:bg-slate-800">
+                <div className="w-full overflow-hidden rounded-md bg-zinc-100 dark:border dark:border-zinc-800 dark:bg-zinc-800">
                   <Image
                     src="/home/form-4.png"
                     alt="Sharuco Form"
@@ -548,14 +548,14 @@ export default function IndexPage() {
             <h2 className="text-xl font-bold leading-tight tracking-tighter sm:text-2xl md:text-3xl lg:text-4xl">
               Discover Sharuco Link
             </h2>
-            <p className="text-md max-w-[700px] text-slate-700 sm:text-lg dark:text-slate-400">
+            <p className="text-md max-w-[700px] text-zinc-700 sm:text-lg dark:text-zinc-400">
               Sharuco Link is a simple way to store all the links that are
               useful to you and with possibilities to make everyone discover
               them.
             </p>
           </div>
           <div className="flex w-full flex-col items-center justify-center gap-4">
-            <div className="w-full overflow-hidden rounded-md bg-slate-100 dark:border dark:border-slate-700 dark:bg-slate-800">
+            <div className="w-full overflow-hidden rounded-md bg-zinc-100 dark:border dark:border-zinc-700 dark:bg-zinc-800">
               <Image
                 src="/home/sharuco-link.png"
                 alt="Sharuco Link"
@@ -578,21 +578,21 @@ export default function IndexPage() {
           <div className="flex items-center space-x-2 text-base">
             <h4
               className="
-              text-lg font-semibold text-slate-900 dark:text-slate-100
+              text-lg font-semibold text-zinc-900 dark:text-zinc-100
             "
             >
               Contributors
             </h4>
-            <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">
+            <span className="rounded-full bg-zinc-100 px-2 py-1 text-xs font-semibold text-zinc-700">
               {contributors?.length}
             </span>
           </div>
           <div className="mt-3 flex -space-x-2">
             {isLoadingContributors && (
               <>
-                <Skeleton className="inline-block h-14 w-14 rounded-full bg-slate-200 ring-2 ring-white hover:ring-sky-500 dark:bg-slate-800" />
-                <Skeleton className="inline-block h-14 w-14 rounded-full bg-slate-200 ring-2 ring-white hover:ring-sky-500 dark:bg-slate-800" />
-                <Skeleton className="inline-block h-14 w-14 rounded-full bg-slate-200 ring-2 ring-white hover:ring-sky-500 dark:bg-slate-800" />
+                <Skeleton className="inline-block h-14 w-14 rounded-full bg-zinc-200 ring-2 ring-white hover:ring-sky-500 dark:bg-zinc-800" />
+                <Skeleton className="inline-block h-14 w-14 rounded-full bg-zinc-200 ring-2 ring-white hover:ring-sky-500 dark:bg-zinc-800" />
+                <Skeleton className="inline-block h-14 w-14 rounded-full bg-zinc-200 ring-2 ring-white hover:ring-sky-500 dark:bg-zinc-800" />
               </>
             )}
             {contributors &&
@@ -625,7 +625,7 @@ export default function IndexPage() {
             </div>
           )}
           {/* https://tailwindcss.com/docs/reusing-styles */}
-          <p className="mt-4 text-sm text-slate-700 dark:text-slate-400">
+          <p className="mt-4 text-sm text-zinc-700 dark:text-zinc-400">
             Many thanks to all of you !
           </p>
         </div>

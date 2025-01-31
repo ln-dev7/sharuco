@@ -1,35 +1,26 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Image from "next/image"
 import Link from "next/link"
-import { useParams } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import copyToClipboard from "@/utils/copyToClipboard"
 import formatDateTime from "@/utils/formatDateTime"
 import { yupResolver } from "@hookform/resolvers/yup"
 import algoliasearch from "algoliasearch"
-import axios from "axios"
 import {
   Loader2,
   MessageSquare,
   MoreHorizontal,
   Pencil,
   Timer,
-  Trash,
-  XCircle,
 } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
-import { useQuery } from "react-query"
 import * as yup from "yup"
 
 import { cn } from "@/lib/utils"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -38,7 +29,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -49,8 +40,6 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
-import EmptyCard from "./../empty-card"
-import { Skeleton } from "./../ui/skeleton"
 
 export default function CardForm({
   id,
@@ -149,7 +138,7 @@ export default function CardForm({
 
   return (
     <div
-      className="relative overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
+      className="relative overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900"
       key={id}
     >
       <div
@@ -159,20 +148,20 @@ export default function CardForm({
         }}
       ></div>
       <Link href={`/form/${id}`} className="flex flex-col items-start p-4">
-        <h5 className="my-4 mr-8 line-clamp-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h5 className="my-4 mr-8 line-clamp-2 text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
           {name}
         </h5>
-        <p className="text-md mb-3 line-clamp-3 font-normal text-slate-700 dark:text-slate-400">
+        <p className="text-md mb-3 line-clamp-3 font-normal text-zinc-700 dark:text-zinc-400">
           {description}
         </p>
         <div className="mt-4 flex w-full items-center justify-between gap-2">
-          <span className="flex items-center gap-1 text-slate-700 dark:text-slate-400">
+          <span className="flex items-center gap-1 text-zinc-700 dark:text-zinc-400">
             <Timer className="mr-1.5 h-4 w-4" />
             <span className="text-sm font-medium">
               {formatDateTime(moment(createdAt))}
             </span>
           </span>
-          <span className="flex items-center gap-1 text-slate-700 dark:text-slate-400">
+          <span className="flex items-center gap-1 text-zinc-700 dark:text-zinc-400">
             <MessageSquare className="mr-1.5 h-4 w-4" />
             <span className="text-sm font-medium">
               {responses.length} response{responses.length > 1 && "s"}
@@ -184,7 +173,7 @@ export default function CardForm({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="absolute right-2 top-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-slate-700"
+            className="absolute right-2 top-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-zinc-700"
           >
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -203,7 +192,7 @@ export default function CardForm({
               <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    <h3 className="text-lg font-medium leading-6 text-slate-900 dark:text-slate-100">
+                    <h3 className="text-lg font-medium leading-6 text-zinc-900 dark:text-zinc-100">
                       Edit a form
                     </h3>
                   </AlertDialogTitle>
@@ -244,7 +233,7 @@ export default function CardForm({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     disabled={isLoading}
                     onClick={!isLoading ? handleSubmit(onSubmit) : undefined}

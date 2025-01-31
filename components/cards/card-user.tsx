@@ -12,7 +12,7 @@ export default function CardUser({
   photoURL: string
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-4 rounded-md border border-slate-200 p-4 dark:border-slate-700">
+    <div className="flex flex-col items-center justify-center gap-4 rounded-md border border-zinc-200 p-4 dark:border-zinc-700">
       <div className="flex w-full items-center justify-start gap-4">
         <Avatar className="h-20 w-20 cursor-pointer">
           <AvatarImage
@@ -35,7 +35,7 @@ export default function CardUser({
           <h1 className="text-2xl font-bold">{displayName}</h1>
           <Link
             href={`/user/${pseudo}`}
-            className="text-slate-600 hover:underline dark:text-slate-400"
+            className="text-zinc-600 hover:underline dark:text-zinc-400"
           >
             {pseudo}
           </Link>

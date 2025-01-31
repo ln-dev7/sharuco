@@ -16,7 +16,6 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -50,7 +49,7 @@ export function AvatarUser() {
       <SheetTrigger asChild>
         <div className="relative">
           {data && data.exists && data.data.premium && (
-            <div className="absolute -bottom-1 -right-1 z-10 flex items-center justify-center rounded-full border-2 border-yellow-500 bg-white dark:bg-slate-800">
+            <div className="absolute -bottom-1 -right-1 z-10 flex items-center justify-center rounded-full border-2 border-yellow-500 bg-white dark:bg-zinc-800">
               <Verified className="h-5 w-5 shrink-0 p-1 text-yellow-500" />
             </div>
           )}
@@ -125,7 +124,7 @@ export function AvatarUser() {
         {user && (
           <>
             <Separator className="mb-4 mt-8" />
-            <p className="mb-1 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mb-1 text-sm text-zinc-500 dark:text-zinc-400">
               Follow Sharuco on{" "}
             </p>
             <Link
@@ -137,7 +136,7 @@ export function AvatarUser() {
                 className={buttonVariants({
                   size: "sm",
                   variant: "ghost",
-                  className: "text-slate-700 dark:text-slate-400",
+                  className: "text-zinc-700 dark:text-zinc-400",
                 })}
               >
                 <Icons.gitHub className="h-5 w-5" />
@@ -153,7 +152,7 @@ export function AvatarUser() {
                 className={buttonVariants({
                   size: "sm",
                   variant: "ghost",
-                  className: "text-slate-700 dark:text-slate-400",
+                  className: "text-zinc-700 dark:text-zinc-400",
                 })}
               >
                 <Icons.twitter className="h-5 w-5 fill-current" />

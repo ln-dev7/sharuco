@@ -2,38 +2,20 @@
 
 import { useEffect, useState } from "react"
 import Head from "next/head"
-import Link from "next/link"
 import { colors, getRandomColor } from "@/constants/colors"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
-import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
 import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
 import { yupResolver } from "@hookform/resolvers/yup"
-import {
-  Eye,
-  EyeOff,
-  FileCog,
-  Github,
-  LinkIcon,
-  Loader2,
-  Lock,
-  Plus,
-  Trash,
-} from "lucide-react"
+import { Loader2, Plus } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 import * as yup from "yup"
 
 import { cn } from "@/lib/utils"
-import CardForm from "@/components/cards/card-form"
-import EmptyCard from "@/components/empty-card"
 import FormsConnected from "@/components/forms/FormsConnected"
 import FormsNotConnected from "@/components/forms/FormsNotConnected"
 import { Layout } from "@/components/layout"
-import LoaderForms from "@/components/loaders/loader-forms"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -44,7 +26,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
@@ -197,7 +179,7 @@ export default function Forms() {
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     disabled={isLoading}
                     onClick={!isLoading ? handleSubmit(onSubmit) : undefined}

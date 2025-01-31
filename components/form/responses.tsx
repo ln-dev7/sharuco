@@ -1,109 +1,25 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import Head from "next/head"
-import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
-import {
-  allLanguages,
-  getExtensionByName,
-  languagesName,
-} from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogout } from "@/firebase/auth/githubLogout"
-import { useCreateDocument } from "@/firebase/firestore/createDocument"
-import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
-import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
-import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
 import copyToClipboard from "@/utils/copyToClipboard.js"
-import embedProject from "@/utils/embedStackblitzProject"
 import formatDateTime from "@/utils/formatDateTime.js"
-import indentCode from "@/utils/indentCode.js"
-import linearizeCode from "@/utils/linearizeCode"
-import { yupResolver } from "@hookform/resolvers/yup"
-import sdk, { Project } from "@stackblitz/sdk"
 import algoliasearch from "algoliasearch"
-import hljs from "highlight.js"
 import jsPDF from "jspdf"
-import {
-  Calendar,
-  CircleDot,
-  DollarSign,
-  Eye,
-  EyeOff,
-  FileCog,
-  FileQuestion,
-  Heart,
-  LinkIcon,
-  List,
-  ListChecks,
-  Loader2,
-  MessageSquare,
-  Plus,
-  Save,
-  Send,
-  Settings,
-  Timer,
-  Trash,
-  Type,
-  User,
-  View,
-} from "lucide-react"
+import { Loader2, MessageSquare, Timer, Trash } from "lucide-react"
 import moment from "moment"
-import { useFieldArray, useForm } from "react-hook-form"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
-import * as yup from "yup"
 
-import { TemplateName } from "@/types/templatStackblitzName"
 import { cn } from "@/lib/utils"
-import CardCode from "@/components/cards/card-code"
-import CardCodeAdmin from "@/components/cards/card-code-admin"
 import EmptyCard from "@/components/empty-card"
-import Error from "@/components/error"
-import { Layout } from "@/components/layout"
-import LoaderCodes from "@/components/loaders/loader-codes"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button, buttonVariants } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
@@ -238,7 +154,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
             .map((response, index) => (
               <div
                 className={cn(
-                  "flex w-full flex-col items-start gap-4 rounded-md border border-dashed border-slate-300 p-4 dark:border-slate-700",
+                  "flex w-full flex-col items-start gap-4 rounded-md border border-dashed border-zinc-300 p-4 dark:border-zinc-700",
                   response.paymentStatut === "complete"
                     ? "border-2 border-solid border-emerald-500 dark:border-emerald-900"
                     : ""
@@ -248,7 +164,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                 <Accordion
                   type="single"
                   collapsible
-                  className="w-full border-b  border-dashed border-slate-300 dark:border-slate-700"
+                  className="w-full border-b  border-dashed border-zinc-300 dark:border-zinc-700"
                 >
                   <AccordionItem value="response" className="border-none">
                     <AccordionTrigger>
@@ -294,7 +210,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                               </h3>
                             ) : (
                               <div
-                                className="flex w-full flex-col items-start gap-2 rounded-md bg-slate-100 p-4 dark:bg-slate-800"
+                                className="flex w-full flex-col items-start gap-2 rounded-md bg-zinc-100 p-4 dark:bg-zinc-800"
                                 key={answerIndex}
                               >
                                 <Label>{answer.label}</Label>
@@ -329,7 +245,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                   </AccordionItem>
                 </Accordion>
                 <div className="flex w-full items-center justify-between">
-                  <span className="flex items-center gap-1 text-slate-700 dark:text-slate-400">
+                  <span className="flex items-center gap-1 text-zinc-700 dark:text-zinc-400">
                     <Timer className="mr-1.5 h-4 w-4" />
                     <span className="text-sm font-medium">
                       {formatDateTime(moment(response.createdAt))}
