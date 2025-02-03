@@ -1,11 +1,9 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
-import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import { yupResolver } from "@hookform/resolvers/yup"
-import algoliasearch from "algoliasearch"
+import { useAuthContext } from "@/context/AuthContext";
+import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { algoliasearch } from "algoliasearch";
 import {
   AlignJustify,
   Calendar,
@@ -22,31 +20,33 @@ import {
   Save,
   Trash,
   X,
-} from "lucide-react"
-import { useFieldArray, useForm } from "react-hook-form"
-import * as yup from "yup"
+} from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import * as yup from "yup";
 
-import EmptyCard from "@/components/empty-card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
-import { Textarea } from "@/components/ui/textarea"
-import { ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
+import EmptyCard from "@/components/empty-card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function QuestionsForms({ dataForm }: { dataForm: any }) {
-  const params = useParams()
-  const { user, userPseudo } = useAuthContext()
-  const router = useRouter()
+  const params = useParams();
+  const { user, userPseudo } = useAuthContext();
+  const router = useRouter();
 
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const notifyUrlCopied = () =>
     toast({
       title: "Url of your code copied to clipboard",
       description: "You can share it wherever you want",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
+    });
 
   const {
     updateFormDocument,
@@ -55,7 +55,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     error: errorUpdateForm,
     isSuccess: isSuccessUpdateForm,
     reset: resetUpdateForm,
-  }: any = useUpdateFormDocument("forms")
+  }: any = useUpdateFormDocument("forms");
 
   type QuestionType =
     | "heading"
@@ -66,16 +66,16 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     | "date"
     | "uniquechoice"
     | "listchoice"
-    | "multiplechoice"
+    | "multiplechoice";
 
   interface Question {
-    text: string
-    type: QuestionType
-    label: string
+    text: string;
+    type: QuestionType;
+    label: string;
   }
 
   interface FormData {
-    questions: Question[]
+    questions: Question[];
   }
 
   const schema = yup.object().shape({
@@ -85,11 +85,11 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
         //text: yup.string().required("The placeholder is required"),
       })
     ),
-  })
+  });
 
   const handleAddField = (type: QuestionType) => {
-    append({ type, text: "", label: "" })
-  }
+    append({ type, text: "", label: "" });
+  };
 
   const {
     register,
@@ -101,47 +101,47 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: dataForm,
-  })
+  });
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "questions",
-  })
+  });
 
   useEffect(() => {
-    setValue("questions", dataForm.questions)
-  }, [dataForm, setValue])
+    setValue("questions", dataForm.questions);
+  }, [dataForm, setValue]);
 
   const handleRemoveField = (index: number) => {
-    remove(index)
-  }
+    remove(index);
+  };
 
-  const ALGOLIA_INDEX_NAME = "forms"
+  const ALGOLIA_INDEX_NAME = "forms";
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
     process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
-  )
-  const index = client.initIndex(ALGOLIA_INDEX_NAME)
+  );
+  const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
   const onSubmit = async (data: FormData) => {
     //console.log(data)
 
     let updatedFormData: {
-      questions: Question[]
+      questions: Question[];
     } = {
       questions: data.questions,
-    }
+    };
 
-    const id = params["form"]
+    const id = params["form"];
 
-    await updateFormDocument({ id, updatedFormData })
+    await updateFormDocument({ id, updatedFormData });
 
     await index.partialUpdateObject({
       objectID: id,
       questions: data.questions,
-    })
-  }
+    });
+  };
 
   return (
     <div className="flex w-full flex-col items-start gap-4 sm:flex-row">
@@ -236,7 +236,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
         ></div>
         <div className="w-full space-y-6">
           {fields.map((field, index) => {
-            const watchedFieldType = watch(`questions[${index}].type`)
+            const watchedFieldType = watch(`questions[${index}].type`);
             return (
               <div
                 className="relative flex w-full flex-col items-start gap-2 first:mt-2"
@@ -298,7 +298,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                   </Button>
                 )}
               </div>
-            )
+            );
           })}
           {fields.length < 1 && (
             <EmptyCard
@@ -346,5 +346,5 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
         )}
       </div>
     </div>
-  )
+  );
 }

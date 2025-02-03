@@ -1,33 +1,33 @@
-import Link from "next/link"
-import { useParams } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
-import algoliasearch from "algoliasearch"
-import { Search, Trash2 } from "lucide-react"
-import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch"
+import { useAuthContext } from "@/context/AuthContext";
+import { algoliasearch } from "algoliasearch";
+import { Search, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch";
 
-import LoaderLink from "@/components/loaders/loader-link"
-import { Badge } from "@/components/ui/badge"
-import AlgoliaCopyright from "./algolia-copyright"
+import LoaderLink from "@/components/loaders/loader-link";
+import { Badge } from "@/components/ui/badge";
+import AlgoliaCopyright from "./algolia-copyright";
 
 // https://www.algolia.com/doc/guides/building-search-ui/getting-started/react-hooks/#before-you-start
 
 const client = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
   process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY
-)
+);
 
 export default function AlgoliaSearchLink() {
-  const { user, userPseudo } = useAuthContext()
+  const { user, userPseudo } = useAuthContext();
 
-  const params = useParams()
+  const params = useParams();
 
   const transformItems = (items) => {
     if (params["link"] !== undefined) {
-      return items.filter((item) => item.idAuthor === params["link"])
+      return items.filter((item) => item.idAuthor === params["link"]);
     } else {
-      return items.filter((item) => item.idAuthor === userPseudo)
+      return items.filter((item) => item.idAuthor === userPseudo);
     }
-  }
+  };
 
   return (
     <InstantSearch indexName="links" searchClient={client}>
@@ -61,7 +61,7 @@ export default function AlgoliaSearchLink() {
       />
       {/* <Configure filters="" analytics={false} /> */}
     </InstantSearch>
-  )
+  );
 }
 
 function Hit({ hit }) {
@@ -96,5 +96,5 @@ function Hit({ hit }) {
         </Link>
       </div>
     </a>
-  )
+  );
 }

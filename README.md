@@ -10,7 +10,7 @@ Share your code. Manage Form & Link.
 
 ## Requirements
 
-- Node (>=18.18.0 recommended) + npm
+- Node (>=18.18.0 recommended) + pnpm
 
 ## How to Install
 
@@ -41,13 +41,13 @@ cp .env.example .env
 #   - `NEXT_PUBLIC_RECAPTCHA_SECRET_KEY` : Recaptcha Secret Key
 
 # Install dependencies:
-npm install
+pnpm install
 
 # build and start
-npm run build
+pnpm run build
 
 # or on dev mode
-npm run dev
+pnpm run dev
 ```
 
 ## Usage

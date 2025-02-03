@@ -1,39 +1,39 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
-import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import copyToClipboard from "@/utils/copyToClipboard.js"
-import algoliasearch from "algoliasearch"
-import { Check, Eye, Loader2, X } from "lucide-react"
+import { useAuthContext } from "@/context/AuthContext";
+import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument";
+import copyToClipboard from "@/utils/copyToClipboard.js";
+import { algoliasearch } from "algoliasearch";
+import { Check, Eye, Loader2, X } from "lucide-react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 
-import { Button, buttonVariants } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function PublishForms({ dataForm }: { dataForm: any }) {
-  const params = useParams()
-  const { user, userPseudo } = useAuthContext()
-  const router = useRouter()
+  const params = useParams();
+  const { user, userPseudo } = useAuthContext();
+  const router = useRouter();
 
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const notifyUrlCopied = () =>
     toast({
       title: "Url of your code copied to clipboard",
       description: "You can share it wherever you want",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
+    });
 
-  const ALGOLIA_INDEX_NAME = "forms"
+  const ALGOLIA_INDEX_NAME = "forms";
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
     process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
-  )
-  const index = client.initIndex(ALGOLIA_INDEX_NAME)
+  );
+  const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
   const {
     updateFormDocument,
@@ -41,24 +41,24 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
     isError: isErrorUpdateForm,
     isSuccess: isSuccessUpdateForm,
     reset: resetUpdateForm,
-  }: any = useUpdateFormDocument("forms")
+  }: any = useUpdateFormDocument("forms");
 
   const changeStatutOfForm = async () => {
     let updatedFormData: {
-      published: boolean
+      published: boolean;
     } = {
       published: !dataForm?.published,
-    }
+    };
 
-    const id = params["form"]
+    const id = params["form"];
 
-    await updateFormDocument({ id, updatedFormData })
+    await updateFormDocument({ id, updatedFormData });
 
     await index.partialUpdateObject({
       objectID: id,
       published: !dataForm?.published,
-    })
-  }
+    });
+  };
 
   return (
     <div className="flex shrink-0 items-center justify-center rounded-md border border-dashed border-zinc-300 py-20 dark:border-zinc-700">
@@ -127,8 +127,8 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
             onClick={() => {
               copyToClipboard(
                 `https://sharuco.lndev.me/form/view/${params["form"]}`
-              )
-              notifyUrlCopied()
+              );
+              notifyUrlCopied();
             }}
             className="w-full shrink-0 sm:w-fit"
           >
@@ -137,5 +137,5 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

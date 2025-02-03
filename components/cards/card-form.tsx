@@ -1,24 +1,23 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Link from "next/link"
-import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
-import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import formatDateTime from "@/utils/formatDateTime"
-import { yupResolver } from "@hookform/resolvers/yup"
-import algoliasearch from "algoliasearch"
+import { useDeleteDocument } from "@/firebase/firestore/deleteDocument";
+import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument";
+import formatDateTime from "@/utils/formatDateTime";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { algoliasearch } from "algoliasearch";
 import {
   Loader2,
   MessageSquare,
   MoreHorizontal,
   Pencil,
   Timer,
-} from "lucide-react"
-import moment from "moment"
-import { useForm } from "react-hook-form"
-import * as yup from "yup"
+} from "lucide-react";
+import moment from "moment";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 
-import { cn } from "@/lib/utils"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -28,18 +27,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Textarea } from "@/components/ui/textarea"
-import { ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
+} from "@/components/ui/popover";
+import { Textarea } from "@/components/ui/textarea";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 export default function CardForm({
   id,
@@ -50,32 +50,32 @@ export default function CardForm({
   color,
   responses,
 }) {
-  const { toast } = useToast()
+  const { toast } = useToast();
 
-  const [openEditDialog, setOpenEditDialog] = useState(false)
+  const [openEditDialog, setOpenEditDialog] = useState(false);
 
   //
 
-  const ALGOLIA_INDEX_NAME = "forms"
+  const ALGOLIA_INDEX_NAME = "forms";
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
     process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
-  )
-  const index = client.initIndex(ALGOLIA_INDEX_NAME)
+  );
+  const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
   const { deleteDocument, isLoading: isLoadingDelete }: any =
-    useDeleteDocument("forms")
+    useDeleteDocument("forms");
 
   const handleDeleteDocument = () => {
-    deleteDocument(id)
-    index.deleteObject(id)
-  }
+    deleteDocument(id);
+    index.deleteObject(id);
+  };
 
   const schema = yup.object().shape({
     name: yup.string().required(),
     description: yup.string().required(),
-  })
+  });
 
   const {
     register,
@@ -85,18 +85,18 @@ export default function CardForm({
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-  })
+  });
 
   useEffect(() => {
-    setValue("name", name)
-    setValue("description", description)
-  }, [name, description, setValue])
+    setValue("name", name);
+    setValue("description", description);
+  }, [name, description, setValue]);
 
   const { updateFormDocument, isLoading, isError, isSuccess }: any =
-    useUpdateFormDocument("forms")
+    useUpdateFormDocument("forms");
 
   const onSubmit = async (data) => {
-    const { name: nameUpdate, description: descriptionUpdate } = data
+    const { name: nameUpdate, description: descriptionUpdate } = data;
 
     if (nameUpdate === name && descriptionUpdate === description) {
       toast({
@@ -104,37 +104,37 @@ export default function CardForm({
         title: "You have not made any changes",
         description: "Please make changes to update your form",
         action: <ToastAction altText="Okay">Okay</ToastAction>,
-      })
-      return
+      });
+      return;
     }
 
     let updatedFormData: {
-      name: string
-      description: string
+      name: string;
+      description: string;
     } = {
       name: nameUpdate,
       description: descriptionUpdate,
-    }
+    };
 
-    await updateFormDocument({ id, updatedFormData })
+    await updateFormDocument({ id, updatedFormData });
 
     await index.partialUpdateObject({
       objectID: id,
       name: nameUpdate,
       description: descriptionUpdate,
-    })
+    });
 
     reset({
       name: nameUpdate,
       description: descriptionUpdate,
-    })
+    });
 
-    setOpenEditDialog(false)
+    setOpenEditDialog(false);
     toast({
       title: "Your form has been updated successfully !",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
-  }
+    });
+  };
 
   return (
     <div
@@ -250,5 +250,5 @@ export default function CardForm({
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }

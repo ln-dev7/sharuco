@@ -1,27 +1,24 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import Link from "next/link"
-import { useParams } from "next/navigation"
 import {
   allLanguages,
   getLanguageColor,
   languagesName,
-} from "@/constants/languages"
-import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogin } from "@/firebase/auth/githubLogin"
-import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
-import { useDocument } from "@/firebase/firestore/getDocument"
-import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
-import copyToClipboard from "@/utils/copyToClipboard"
-import embedProject from "@/utils/embedStackblitzProject"
-import highlight from "@/utils/highlight"
-import indentCode from "@/utils/indentCode"
-import linearizeCode from "@/utils/linearizeCode"
-import { yupResolver } from "@hookform/resolvers/yup"
-import algoliasearch from "algoliasearch"
-import hljs from "highlight.js"
-import * as htmlToImage from "html-to-image"
+} from "@/constants/languages";
+import { useAuthContext } from "@/context/AuthContext";
+import { useGitHubLogin } from "@/firebase/auth/githubLogin";
+import { useDeleteDocument } from "@/firebase/firestore/deleteDocument";
+import { useDocument } from "@/firebase/firestore/getDocument";
+import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument";
+import copyToClipboard from "@/utils/copyToClipboard";
+import embedProject from "@/utils/embedStackblitzProject";
+import highlight from "@/utils/highlight";
+import indentCode from "@/utils/indentCode";
+import linearizeCode from "@/utils/linearizeCode";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { algoliasearch } from "algoliasearch";
+import hljs from "highlight.js";
+import * as htmlToImage from "html-to-image";
 import {
   Copy,
   Edit,
@@ -31,8 +28,11 @@ import {
   Share,
   Trash,
   Verified,
-} from "lucide-react"
-import { useForm } from "react-hook-form"
+} from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import {
   EmailIcon,
   EmailShareButton,
@@ -46,12 +46,10 @@ import {
   TwitterShareButton,
   WhatsappIcon,
   WhatsappShareButton,
-} from "react-share"
-import * as yup from "yup"
+} from "react-share";
+import * as yup from "yup";
 
-import { TemplateName } from "@/types/templatStackblitzName"
-import { cn } from "@/lib/utils"
-import Loader from "@/components/loaders/loader"
+import Loader from "@/components/loaders/loader";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -61,18 +59,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/alert-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -81,16 +79,18 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { ToastAction } from "@/components/ui/toast"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { ToastAction } from "@/components/ui/toast";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { useToast } from "@/components/ui/use-toast"
+} from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
+import { TemplateName } from "@/types/templatStackblitzName";
 
 export default function CardCodeAdmin({
   id,
@@ -103,52 +103,52 @@ export default function CardCodeAdmin({
   isPrivate,
   comments: commentsInit,
 }) {
-  const { toast } = useToast()
+  const { toast } = useToast();
   const notifyCodeCopied = () =>
     toast({
       title: "Code copied to clipboard",
       description: "You can paste it wherever you want",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
+    });
   const notifyUrlCopied = () =>
     toast({
       title: "Url of code copied to clipboard",
       description: "You can share it wherever you want",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
+    });
 
-  const params = useParams()
+  const params = useParams();
 
-  const { user, userPseudo } = useAuthContext()
+  const { user, userPseudo } = useAuthContext();
 
-  const { login, isPending } = useGitHubLogin()
+  const { login, isPending } = useGitHubLogin();
 
-  const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
+  const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`;
 
-  const [openShareDialog, setOpenShareDialog] = useState(false)
+  const [openShareDialog, setOpenShareDialog] = useState(false);
 
-  const [openEditDialog, setOpenEditDialog] = useState(false)
+  const [openEditDialog, setOpenEditDialog] = useState(false);
 
   //
 
-  const ALGOLIA_INDEX_NAME = "codes"
+  const ALGOLIA_INDEX_NAME = "codes";
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
     process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
-  )
-  const index = client.initIndex(ALGOLIA_INDEX_NAME)
+  );
+  const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
   const { deleteDocument, isLoading: isLoadingDelete }: any =
-    useDeleteDocument("codes")
+    useDeleteDocument("codes");
 
   const handleDeleteDocument = () => {
-    deleteDocument(id)
-    index.deleteObject(id)
-  }
+    deleteDocument(id);
+    index.deleteObject(id);
+  };
 
   //
-  const [checkboxOn, setCheckboxOn] = useState(isPrivate)
+  const [checkboxOn, setCheckboxOn] = useState(isPrivate);
 
   const schema = yup.object().shape({
     code: yup.string().required(),
@@ -162,7 +162,7 @@ export default function CardCodeAdmin({
         (val) => !val || /^[a-zA-Z, ]*$/.test(val)
       ),
     isPrivate: yup.boolean(),
-  })
+  });
 
   const {
     register,
@@ -173,18 +173,18 @@ export default function CardCodeAdmin({
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-  })
+  });
 
   useEffect(() => {
-    setValue("code", indentCode(code))
-    setValue("description", description)
-    setValue("language", language)
-    setValue("tags", tags.join().trim().replace(/\s+/g, ""))
-    setValue("isPrivate", checkboxOn)
-  }, [code, description, language, tags, checkboxOn, setValue])
+    setValue("code", indentCode(code));
+    setValue("description", description);
+    setValue("language", language);
+    setValue("tags", tags.join().trim().replace(/\s+/g, ""));
+    setValue("isPrivate", checkboxOn);
+  }, [code, description, language, tags, checkboxOn, setValue]);
 
   const { updateCodeDocument, isLoading, isError, isSuccess }: any =
-    useUpdateCodeDocument("codes")
+    useUpdateCodeDocument("codes");
 
   const onSubmit = async (data) => {
     const {
@@ -193,14 +193,14 @@ export default function CardCodeAdmin({
       language: languageUpdate,
       tags: tagsUpdate,
       isPrivate: isPrivateUpdate,
-    } = data
+    } = data;
 
-    const linearCode = linearizeCode(codeUpdate)
+    const linearCode = linearizeCode(codeUpdate);
     const tabTabs = tagsUpdate
       ? tagsUpdate.split(",").map((word) => word.trim().toLowerCase())
-      : []
+      : [];
     if (tabTabs[tabTabs.length - 1] === "") {
-      tabTabs.pop()
+      tabTabs.pop();
     }
 
     if (
@@ -215,19 +215,19 @@ export default function CardCodeAdmin({
         title: "You have not made any changes",
         description: "Please make changes to update your code",
         action: <ToastAction altText="Okay">Okay</ToastAction>,
-      })
-      return
+      });
+      return;
     }
 
     let updatedCodeData: {
-      code: string
-      description: string
-      isPrivate: boolean
-      language: string
-      tags: string[]
-      favoris?: string[]
-      favorisCount?: number
-      comments?: any[]
+      code: string;
+      description: string;
+      isPrivate: boolean;
+      language: string;
+      tags: string[];
+      favoris?: string[];
+      favorisCount?: number;
+      comments?: any[];
     } = {
       code: linearCode,
       description: descriptionUpdate,
@@ -242,9 +242,9 @@ export default function CardCodeAdmin({
           : favorisInit.length,
       comments:
         isPrivateUpdate === true && isPrivate === false ? [] : commentsInit,
-    }
+    };
 
-    await updateCodeDocument({ id, updatedCodeData })
+    await updateCodeDocument({ id, updatedCodeData });
 
     await index.partialUpdateObject({
       objectID: id,
@@ -252,7 +252,7 @@ export default function CardCodeAdmin({
       isPrivate: !!isPrivateUpdate,
       language: languageUpdate.toLowerCase(),
       tags: tabTabs,
-    })
+    });
 
     reset({
       code: indentCode(linearCode),
@@ -260,15 +260,15 @@ export default function CardCodeAdmin({
       language: languageUpdate,
       tags: tagsUpdate,
       isPrivate: isPrivateUpdate,
-    })
-    setCheckboxOn(isPrivateUpdate)
+    });
+    setCheckboxOn(isPrivateUpdate);
 
-    setOpenEditDialog(false)
+    setOpenEditDialog(false);
     toast({
       title: "Your code has been updated successfully !",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
-  }
+    });
+  };
 
   //
 
@@ -276,56 +276,56 @@ export default function CardCodeAdmin({
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(idAuthor, "users")
+  } = useDocument(idAuthor, "users");
 
-  const domRefImage = useRef(null)
+  const domRefImage = useRef(null);
   const [backgroundImage, setBackgroundImage] = useState(
     "bg-gradient-to-br from-blue-400 to-indigo-700"
-  )
+  );
 
   const handleChangeBgImg1 = () => {
-    setBackgroundImage("bg-gradient-to-br from-blue-400 to-indigo-700")
-  }
+    setBackgroundImage("bg-gradient-to-br from-blue-400 to-indigo-700");
+  };
 
   const handleChangeBgImg2 = () => {
-    setBackgroundImage("bg-gradient-to-r from-pink-500 to-indigo-600")
-  }
+    setBackgroundImage("bg-gradient-to-r from-pink-500 to-indigo-600");
+  };
 
   const handleChangeBgImg3 = () => {
-    setBackgroundImage("bg-gradient-to-br from-teal-400 to-green-500")
-  }
+    setBackgroundImage("bg-gradient-to-br from-teal-400 to-green-500");
+  };
 
   const handleChangeBgImg4 = () => {
-    setBackgroundImage("bg-gradient-to-br from-yellow-300 to-orange-500")
-  }
+    setBackgroundImage("bg-gradient-to-br from-yellow-300 to-orange-500");
+  };
   const handleChangeBgImg5 = () => {
-    setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600")
-  }
+    setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600");
+  };
 
-  const [nameOfImage, setNameOfImage] = useState("")
+  const [nameOfImage, setNameOfImage] = useState("");
 
   const downloadImage = async () => {
-    const dataUrl = await htmlToImage.toPng(domRefImage.current)
+    const dataUrl = await htmlToImage.toPng(domRefImage.current);
 
     // download image
-    const link = document.createElement("a")
-    link.download = nameOfImage !== "" ? nameOfImage : `sharuco-code-${id}.png`
-    link.href = dataUrl
-    link.click()
-  }
+    const link = document.createElement("a");
+    link.download = nameOfImage !== "" ? nameOfImage : `sharuco-code-${id}.png`;
+    link.href = dataUrl;
+    link.click();
+  };
 
   function detectLanguage(code) {
-    const language = hljs.highlightAuto(code).language
-    return language || "text"
+    const language = hljs.highlightAuto(code).language;
+    return language || "text";
   }
 
   function handleCodeChange(code) {
-    const detectedLanguage = detectLanguage(code)
+    const detectedLanguage = detectLanguage(code);
     if (!languagesName.includes(detectedLanguage)) {
-      setValue("language", "other")
-      return
+      setValue("language", "other");
+      return;
     }
-    setValue("language", detectedLanguage)
+    setValue("language", detectedLanguage);
   }
 
   //
@@ -370,7 +370,7 @@ export default function CardCodeAdmin({
                       idAuthor,
                       description,
                       id
-                    )
+                    );
                   }}
                 >
                   <SelectTrigger className="w-[180px]">
@@ -426,7 +426,7 @@ export default function CardCodeAdmin({
                       {...register("code")}
                       className="h-32"
                       onChange={(e) => {
-                        handleCodeChange(e.target.value)
+                        handleCodeChange(e.target.value);
                       }}
                     />
                     <div className="flex w-full items-center justify-center">
@@ -468,7 +468,7 @@ export default function CardCodeAdmin({
                                   getValues("description")
                                     ? getValues("description")
                                     : null
-                                )
+                                );
                               }}
                             >
                               <SelectTrigger className="w-[180px]">
@@ -666,8 +666,8 @@ export default function CardCodeAdmin({
             <span
               className="flex cursor-pointer items-center p-1 text-xs font-medium text-white"
               onClick={() => {
-                copyToClipboard(code)
-                notifyCodeCopied()
+                copyToClipboard(code);
+                notifyCodeCopied();
               }}
             >
               <Copy className="mr-2 h-4 w-4" />
@@ -717,7 +717,7 @@ export default function CardCodeAdmin({
                     className="h-8 w-8 cursor-pointer appearance-none rounded-full border-0 bg-transparent p-0"
                     value={backgroundImage}
                     onChange={(e) => {
-                      setBackgroundImage(`${e.target.value}`)
+                      setBackgroundImage(`${e.target.value}`);
                     }}
                   />
                 </div>
@@ -729,7 +729,7 @@ export default function CardCodeAdmin({
                     placeholder="Name of your image"
                     value={nameOfImage}
                     onChange={(e) => {
-                      setNameOfImage(`${e.target.value}`)
+                      setNameOfImage(`${e.target.value}`);
                     }}
                   />
                 </div>
@@ -978,9 +978,9 @@ export default function CardCodeAdmin({
                     variant="subtle"
                     className="h-10 w-10 rounded-full p-0"
                     onClick={() => {
-                      copyToClipboard(shareUrl)
-                      notifyUrlCopied()
-                      setOpenShareDialog(false)
+                      copyToClipboard(shareUrl);
+                      notifyUrlCopied();
+                      setOpenShareDialog(false);
                     }}
                   >
                     <Copy className="h-4 w-4" />
@@ -1021,5 +1021,5 @@ export default function CardCodeAdmin({
         </div>
       )}
     </div>
-  )
+  );
 }

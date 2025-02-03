@@ -14,7 +14,7 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center rounded-md bg-zinc-100 p-1 dark:bg-zinc-800",
+      "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground",
       className
     )}
     {...props}
@@ -27,12 +27,12 @@ const TabsTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Trigger
+    ref={ref}
     className={cn(
-      "inline-flex min-w-[100px] items-center justify-center rounded-[0.185rem] px-3 py-1.5  text-sm font-medium text-zinc-700 transition-all  disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm dark:text-zinc-200 dark:data-[state=active]:bg-zinc-900 dark:data-[state=active]:text-zinc-100",
+      "inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow",
       className
     )}
     {...props}
-    ref={ref}
   />
 ))
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
@@ -42,14 +42,14 @@ const TabsContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Content
+    ref={ref}
     className={cn(
-      "mt-2 rounded-md border border-zinc-200 p-6 dark:border-zinc-700",
+      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
       className
     )}
     {...props}
-    ref={ref}
   />
 ))
 TabsContent.displayName = TabsPrimitive.Content.displayName
 
-export { Tabs, TabsContent, TabsList, TabsTrigger }
+export { Tabs, TabsList, TabsTrigger, TabsContent }

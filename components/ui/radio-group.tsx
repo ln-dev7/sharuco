@@ -23,18 +23,18 @@ RadioGroup.displayName = RadioGroupPrimitive.Root.displayName
 const RadioGroupItem = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
->(({ className, children, ...props }, ref) => {
+>(({ className, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Item
       ref={ref}
       className={cn(
-        "text:fill-zinc-50 h-4 w-4 rounded-full border border-zinc-300 text-zinc-900 hover:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-100 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900",
+        "aspect-square h-4 w-4 rounded-full border border-primary text-primary shadow focus:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
       {...props}
     >
       <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        <Circle className="h-2.5 w-2.5 fill-zinc-900 dark:fill-zinc-50" />
+        <Circle className="h-3.5 w-3.5 fill-primary" />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   )

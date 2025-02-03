@@ -1,18 +1,18 @@
-import algoliasearch from "algoliasearch"
-import { Search, Trash2 } from "lucide-react"
-import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch"
+import { algoliasearch } from "algoliasearch";
+import { Search, Trash2 } from "lucide-react";
+import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch";
 
-import LoaderCode from "@/components/loaders/loader-code"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import AlgoliaCopyright from "./algolia-copyright"
+import LoaderCode from "@/components/loaders/loader-code";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import AlgoliaCopyright from "./algolia-copyright";
 
 // https://www.algolia.com/doc/guides/building-search-ui/getting-started/react-hooks/#before-you-start
 
 const client = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
   process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY
-)
+);
 
 export default function AlgoliaSearchCode() {
   return (
@@ -38,7 +38,7 @@ export default function AlgoliaSearchCode() {
       />
       <Hits className="px-6" hitComponent={Hit} />
     </InstantSearch>
-  )
+  );
 }
 
 function Hit({ hit }) {
@@ -64,5 +64,5 @@ function Hit({ hit }) {
         </div>
       </div>
     </a>
-  )
+  );
 }

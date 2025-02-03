@@ -1,147 +1,147 @@
-"use client"
+"use client";
 
-import { useParams, useRouter } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
-import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import copyToClipboard from "@/utils/copyToClipboard.js"
-import formatDateTime from "@/utils/formatDateTime.js"
-import algoliasearch from "algoliasearch"
-import jsPDF from "jspdf"
-import { Loader2, MessageSquare, Timer, Trash } from "lucide-react"
-import moment from "moment"
+import { useAuthContext } from "@/context/AuthContext";
+import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument";
+import copyToClipboard from "@/utils/copyToClipboard.js";
+import formatDateTime from "@/utils/formatDateTime.js";
+import { algoliasearch } from "algoliasearch";
+import jsPDF from "jspdf";
+import { Loader2, MessageSquare, Timer, Trash } from "lucide-react";
+import moment from "moment";
+import { useParams, useRouter } from "next/navigation";
 
-import { cn } from "@/lib/utils"
-import EmptyCard from "@/components/empty-card"
+import EmptyCard from "@/components/empty-card";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 export default function ResponsesForms({ dataForm }: { dataForm: any }) {
-  const params = useParams()
-  const { user, userPseudo } = useAuthContext()
-  const router = useRouter()
+  const params = useParams();
+  const { user, userPseudo } = useAuthContext();
+  const router = useRouter();
 
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const notifyUrlCopied = () =>
     toast({
       title: "Url of your code copied to clipboard",
       description: "You can share it wherever you want",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
+    });
 
-  const ALGOLIA_INDEX_NAME = "forms"
+  const ALGOLIA_INDEX_NAME = "forms";
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
     process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
-  )
-  const index = client.initIndex(ALGOLIA_INDEX_NAME)
+  );
+  const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
   // console.log(dataForm.responses)
 
   const { updateFormDocument, isLoading: isLoadingUpdateForm }: any =
-    useUpdateFormDocument("forms")
+    useUpdateFormDocument("forms");
 
   const handleDeleteResponse = async (idResponse: string) => {
     let updatedFormData: {
-      responses: any[]
+      responses: any[];
     } = {
       responses: [
         ...dataForm.responses.filter(
           (response: any) => response.idResponse !== idResponse
         ),
       ],
-    }
+    };
 
-    const id = params["form"]
+    const id = params["form"];
 
     //console.log(updatedFormData.responses,)
 
-    await updateFormDocument({ id, updatedFormData })
+    await updateFormDocument({ id, updatedFormData });
 
     await index.partialUpdateObject({
       objectID: id,
       responses: updatedFormData.responses,
-    })
+    });
 
     //console.log("updatedFormData", updatedFormData)
-  }
+  };
 
   // GENERATE PDF
 
   const generatePDF = (dataForm) => {
-    const pdf = new jsPDF()
+    const pdf = new jsPDF();
 
-    pdf.setFontSize(16)
-    pdf.text(dataForm.name, 10, 10)
-    pdf.setFontSize(12)
-    pdf.text(dataForm.description, 10, 20)
+    pdf.setFontSize(16);
+    pdf.text(dataForm.name, 10, 10);
+    pdf.setFontSize(12);
+    pdf.text(dataForm.description, 10, 20);
 
-    let yPos = 40
+    let yPos = 40;
 
-    pdf.setFontSize(12)
-    pdf.text(`Total Responses: ${dataForm.responses.length}`, 150, 30)
+    pdf.setFontSize(12);
+    pdf.text(`Total Responses: ${dataForm.responses.length}`, 150, 30);
 
     dataForm.responses
       .slice()
       .reverse()
       .forEach((response, index) => {
-        pdf.setFontSize(12)
-        pdf.text(`Response ${index + 1}`, 10, yPos)
-        yPos += 10
+        pdf.setFontSize(12);
+        pdf.text(`Response ${index + 1}`, 10, yPos);
+        yPos += 10;
 
-        pdf.setFontSize(10)
-        pdf.text(`Email Payment : ${response.emailPayment}`, 15, yPos)
-        yPos += 8
+        pdf.setFontSize(10);
+        pdf.text(`Email Payment : ${response.emailPayment}`, 15, yPos);
+        yPos += 8;
 
-        pdf.text(`Payment Status : ${response.paymentStatut}`, 15, yPos)
-        yPos += 8
+        pdf.text(`Payment Status : ${response.paymentStatut}`, 15, yPos);
+        yPos += 8;
 
         pdf.text(
           `Created At : ${new Date(response.createdAt).toLocaleString()}`,
           15,
           yPos
-        )
-        yPos += 10
+        );
+        yPos += 10;
 
         response.responses.forEach((res) => {
           if (yPos + 25 > pdf.internal.pageSize.height - 25) {
-            pdf.addPage() // Ajoute une nouvelle page si nécessaire
-            yPos = 15 // Réinitialise la position Y pour la nouvelle page
+            pdf.addPage(); // Ajoute une nouvelle page si nécessaire
+            yPos = 15; // Réinitialise la position Y pour la nouvelle page
           }
           if (res.type === "heading") {
-            pdf.text(`${res.label}`, 15, yPos)
+            pdf.text(`${res.label}`, 15, yPos);
           } else {
-            pdf.text(`${res.label}: ${res.text}`, 15, yPos)
+            pdf.text(`${res.label}: ${res.text}`, 15, yPos);
           }
-          yPos += 8
-        })
+          yPos += 8;
+        });
 
         // Dessiner une barre noire après chaque réponse
-        pdf.setDrawColor(0) // Couleur de la bordure (noir)
-        pdf.setLineWidth(0.15) // Largeur de la bordure
-        pdf.rect(10, yPos, pdf.internal.pageSize.width - 20, 0.5, "S")
-        yPos += 1 // Ajuste la position Y pour la prochaine section
+        pdf.setDrawColor(0); // Couleur de la bordure (noir)
+        pdf.setLineWidth(0.15); // Largeur de la bordure
+        pdf.rect(10, yPos, pdf.internal.pageSize.width - 20, 0.5, "S");
+        yPos += 1; // Ajuste la position Y pour la prochaine section
 
-        yPos += 10
-      })
+        yPos += 10;
+      });
 
-    pdf.setFontSize(10)
+    pdf.setFontSize(10);
     pdf.textWithLink("Powered by SHARUCO FORM", 10, yPos + 10, {
       url: "https://sharuco.lndev.me/forms",
-    })
+    });
 
     // Preview the PDF in a new tab
-    pdf.output("dataurlnewwindow")
-  }
+    pdf.output("dataurlnewwindow");
+  };
 
   return (
     <>
@@ -220,7 +220,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                                   <span
                                     className="block cursor-pointer underline underline-offset-2"
                                     onClick={() => {
-                                      copyToClipboard(answer.text)
+                                      copyToClipboard(answer.text);
                                       toast({
                                         title: `"${answer.text}" copied to clipboard`,
                                         description:
@@ -230,7 +230,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                                             Okay
                                           </ToastAction>
                                         ),
-                                      })
+                                      });
                                     }}
                                   >
                                     copy
@@ -258,7 +258,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                     onClick={() => {
                       isLoadingUpdateForm
                         ? undefined
-                        : handleDeleteResponse(response.idResponse)
+                        : handleDeleteResponse(response.idResponse);
                     }}
                   >
                     {isLoadingUpdateForm ? (
@@ -280,5 +280,5 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
         />
       )}
     </>
-  )
+  );
 }

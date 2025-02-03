@@ -1,23 +1,23 @@
-import { useAuthContext } from "@/context/AuthContext"
-import algoliasearch from "algoliasearch"
-import { Loader2, Search, Trash2 } from "lucide-react"
-import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch"
+import { useAuthContext } from "@/context/AuthContext";
+import { algoliasearch } from "algoliasearch";
+import { Loader2, Search, Trash2 } from "lucide-react";
+import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch";
 
-import AlgoliaCopyright from "./algolia-copyright"
+import AlgoliaCopyright from "./algolia-copyright";
 
 // https://www.algolia.com/doc/guides/building-search-ui/getting-started/react-hooks/#before-you-start
 
 const client = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
   process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY
-)
+);
 
 export default function AlgoliaSearchForm() {
-  const { user, userPseudo } = useAuthContext()
+  const { user, userPseudo } = useAuthContext();
 
   const transformItems = (items) => {
-    return items.filter((item) => item.idAuthor === userPseudo)
-  }
+    return items.filter((item) => item.idAuthor === userPseudo);
+  };
 
   return (
     <InstantSearch indexName="forms" searchClient={client}>
@@ -47,7 +47,7 @@ export default function AlgoliaSearchForm() {
       />
       {/* <Configure filters="" analytics={false} /> */}
     </InstantSearch>
-  )
+  );
 }
 
 function Hit({ hit }) {
@@ -68,5 +68,5 @@ function Hit({ hit }) {
         </span>
       </div>
     </a>
-  )
+  );
 }

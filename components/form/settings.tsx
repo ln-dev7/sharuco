@@ -1,18 +1,17 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
-import { checkIdAvailability } from "@/firebase/firestore/checkIfIDExistOnCollection"
-import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
-import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import { yupResolver } from "@hookform/resolvers/yup"
-import algoliasearch from "algoliasearch"
-import { Check, Loader2, Save, Trash, X } from "lucide-react"
-import { useForm } from "react-hook-form"
-import * as yup from "yup"
+import { useAuthContext } from "@/context/AuthContext";
+import { checkIdAvailability } from "@/firebase/firestore/checkIfIDExistOnCollection";
+import { useDeleteDocument } from "@/firebase/firestore/deleteDocument";
+import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { algoliasearch } from "algoliasearch";
+import { Check, Loader2, Save, Trash, X } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 
-import { cn } from "@/lib/utils"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -22,42 +21,43 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Textarea } from "@/components/ui/textarea"
-import { ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 export default function SettingsForms({ dataForm }: { dataForm: any }) {
-  const params = useParams()
-  const { user, userPseudo } = useAuthContext()
-  const router = useRouter()
+  const params = useParams();
+  const { user, userPseudo } = useAuthContext();
+  const router = useRouter();
 
-  const id = params["form"] as string
+  const id = params["form"] as string;
 
-  const { toast } = useToast()
+  const { toast } = useToast();
 
   const notifyUrlCopied = () =>
     toast({
       title: "Url of your code copied to clipboard",
       description: "You can share it wherever you want",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
+    });
 
-  const ALGOLIA_INDEX_NAME = "forms"
+  const ALGOLIA_INDEX_NAME = "forms";
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
     process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
-  )
-  const index = client.initIndex(ALGOLIA_INDEX_NAME)
+  );
+  const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
   const [checkboxAcceptPayment, setCheckboxAcceptPayment] = useState(
     dataForm.acceptPayment
-  )
+  );
 
   const schema = yup.object().shape({
     name: yup.string().required("Name is required"),
@@ -92,7 +92,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     //       .typeError("Amount for NotchPay must be a valid number")
     //       .required("Amount for NotchPay is required"),
     // }),
-  })
+  });
 
   const {
     register,
@@ -104,17 +104,17 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-  })
+  });
 
   useEffect(() => {
-    setValue("name", dataForm.name)
-    setValue("description", dataForm.description)
-    setValue("color", dataForm.color)
-    setValue("redirectOnCompletion", dataForm.redirectOnCompletion)
+    setValue("name", dataForm.name);
+    setValue("description", dataForm.description);
+    setValue("color", dataForm.color);
+    setValue("redirectOnCompletion", dataForm.redirectOnCompletion);
     // setValue("publicNotchPayApiKey", dataForm.publicNotchPayApiKey)
     // setValue("amountNotchPay", dataForm.amountNotchPay)
     // setValue("acceptPayment", dataForm.acceptPayment)
-  }, [dataForm])
+  }, [dataForm]);
 
   const {
     updateFormDocument,
@@ -122,22 +122,22 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     isError: isErrorUpdateForm,
     isSuccess: isSuccessUpdateForm,
     reset: resetUpdateForm,
-  }: any = useUpdateFormDocument("forms")
+  }: any = useUpdateFormDocument("forms");
 
   const { deleteDocument, isLoading: isLoadingDelete }: any =
-    useDeleteDocument("forms")
+    useDeleteDocument("forms");
 
-  const [confirmFormName, setConfirmFormName] = useState("")
+  const [confirmFormName, setConfirmFormName] = useState("");
   const handleDeleteDocument = () => {
-    deleteDocument(id)
-    index.deleteObject(id)
-    router.push("/forms")
-  }
+    deleteDocument(id);
+    index.deleteObject(id);
+    router.push("/forms");
+  };
 
-  const [usernamePeopleToAdd, setUsernamePeopleToAdd] = useState("")
-  const [checkIfUsernameExist, setCheckIfUsernameExist] = useState(false)
+  const [usernamePeopleToAdd, setUsernamePeopleToAdd] = useState("");
+  const [checkIfUsernameExist, setCheckIfUsernameExist] = useState(false);
   const addCollaborator = async (pseudo: string) => {
-    setCheckIfUsernameExist(true)
+    setCheckIfUsernameExist(true);
     checkIdAvailability("users", pseudo)
       .then((isAvailable) => {
         if (isAvailable) {
@@ -148,33 +148,33 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                 pseudo: pseudo,
               },
             ],
-          }
+          };
 
-          updateFormDocument({ id, updatedFormData })
+          updateFormDocument({ id, updatedFormData });
         } else {
           toast({
             variant: "destructive",
             title: "This user not exist on Sharuco",
             description: "Make sure you have entered the correct user name.",
             action: <ToastAction altText="Okay">Okay</ToastAction>,
-          })
-          return
+          });
+          return;
         }
       })
       .catch((error) => console.error("Error : ", error))
       .finally(() => {
-        setCheckIfUsernameExist(false)
-      })
-  }
+        setCheckIfUsernameExist(false);
+      });
+  };
   const removeCollaborator = async (pseudo: string) => {
     let updatedFormData = {
       collaborators: dataForm.collaborators.filter(
         (item) => item.pseudo !== pseudo
       ),
-    }
+    };
 
-    updateFormDocument({ id, updatedFormData })
-  }
+    updateFormDocument({ id, updatedFormData });
+  };
 
   const onSubmit = async (data) => {
     const {
@@ -185,7 +185,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
       // amountNotchPay: amountNotchPayUpdate,
       // acceptPayment: acceptPaymentUpdate,
-    } = data
+    } = data;
 
     if (
       nameUpdate === dataForm.name &&
@@ -201,15 +201,15 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
         title: "You have not made any changes",
         description: "Please make changes to update your settings",
         action: <ToastAction altText="Okay">Okay</ToastAction>,
-      })
-      return
+      });
+      return;
     }
 
     let updatedFormData: {
-      name: string
-      description: string
-      color: string
-      redirectOnCompletion: string
+      name: string;
+      description: string;
+      color: string;
+      redirectOnCompletion: string;
       // publicNotchPayApiKey: string
       // amountNotchPay: number
       // acceptPayment: boolean
@@ -221,9 +221,9 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
       // amountNotchPay: amountNotchPayUpdate,
       // acceptPayment: acceptPaymentUpdate,
-    }
+    };
 
-    await updateFormDocument({ id, updatedFormData })
+    await updateFormDocument({ id, updatedFormData });
 
     await index.partialUpdateObject({
       objectID: id,
@@ -234,7 +234,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
       // amountNotchPay: amountNotchPayUpdate,
       // acceptPayment: acceptPaymentUpdate,
-    })
+    });
 
     reset({
       name: nameUpdate,
@@ -244,8 +244,8 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
       // amountNotchPay: amountNotchPayUpdate,
       // acceptPayment: acceptPaymentUpdate,
-    })
-  }
+    });
+  };
 
   return (
     <div className="flex shrink-0 items-center justify-center rounded-md py-6">
@@ -331,7 +331,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             <Input
               placeholder="Enter username"
               onChange={(e) => {
-                setUsernamePeopleToAdd(e.target.value)
+                setUsernamePeopleToAdd(e.target.value);
               }}
               value={usernamePeopleToAdd}
             />
@@ -343,8 +343,8 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
               }
               className="shrink-0"
               onClick={() => {
-                setUsernamePeopleToAdd("")
-                addCollaborator(usernamePeopleToAdd)
+                setUsernamePeopleToAdd("");
+                addCollaborator(usernamePeopleToAdd);
               }}
             >
               {checkIfUsernameExist && (
@@ -373,7 +373,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                     onClick={() => {
                       isLoadingUpdateForm
                         ? undefined
-                        : removeCollaborator(collaborator.pseudo)
+                        : removeCollaborator(collaborator.pseudo);
                     }}
                   >
                     Remove
@@ -504,7 +504,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                       </p>
                       <Input
                         onChange={(e) => {
-                          setConfirmFormName(e.target.value)
+                          setConfirmFormName(e.target.value);
                         }}
                         value={confirmFormName}
                         className=""
@@ -515,7 +515,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                 <AlertDialogFooter>
                   <AlertDialogCancel
                     onClick={() => {
-                      setConfirmFormName("")
+                      setConfirmFormName("");
                     }}
                   >
                     Cancel
@@ -565,5 +565,5 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

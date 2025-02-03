@@ -1,17 +1,16 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
-import { useUpdateLinkDocument } from "@/firebase/firestore/updateLinkDocument"
-import { yupResolver } from "@hookform/resolvers/yup"
-import algoliasearch from "algoliasearch"
-import axios from "axios"
-import { Loader2, MoreHorizontal, Pencil, Trash, XCircle } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { useQuery } from "react-query"
-import * as yup from "yup"
+import { useDeleteDocument } from "@/firebase/firestore/deleteDocument";
+import { useUpdateLinkDocument } from "@/firebase/firestore/updateLinkDocument";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { algoliasearch } from "algoliasearch";
+import axios from "axios";
+import { Loader2, MoreHorizontal, Pencil, Trash, XCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useQuery } from "react-query";
+import * as yup from "yup";
 
-import { cn } from "@/lib/utils"
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -21,18 +20,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
-import { Skeleton } from "./../ui/skeleton"
+} from "@/components/ui/popover";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
+import { Skeleton } from "./../ui/skeleton";
 
 export default function CardLinkAdmin({
   id,
@@ -42,27 +42,27 @@ export default function CardLinkAdmin({
   description,
   tags,
 }) {
-  const { toast } = useToast()
+  const { toast } = useToast();
 
-  const [openEditDialog, setOpenEditDialog] = useState(false)
+  const [openEditDialog, setOpenEditDialog] = useState(false);
 
   //
 
-  const ALGOLIA_INDEX_NAME = "links"
+  const ALGOLIA_INDEX_NAME = "links";
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
     process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
-  )
-  const index = client.initIndex(ALGOLIA_INDEX_NAME)
+  );
+  const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
   const { deleteDocument, isLoading: isLoadingDelete }: any =
-    useDeleteDocument("links")
+    useDeleteDocument("links");
 
   const handleDeleteDocument = () => {
-    deleteDocument(id)
-    index.deleteObject(id)
-  }
+    deleteDocument(id);
+    index.deleteObject(id);
+  };
 
   const schema = yup.object().shape({
     link: yup
@@ -80,7 +80,7 @@ export default function CardLinkAdmin({
         "The tags field must contain only letters, commas and/or spaces",
         (val) => !val || /^[a-zA-Z, ]*$/.test(val)
       ),
-  })
+  });
 
   const {
     register,
@@ -90,29 +90,29 @@ export default function CardLinkAdmin({
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-  })
+  });
 
   useEffect(() => {
-    setValue("link", link)
-    setValue("description", description)
-    setValue("tags", tags.join().trim().replace(/\s+/g, ""))
-  }, [link, description, tags, setValue])
+    setValue("link", link);
+    setValue("description", description);
+    setValue("tags", tags.join().trim().replace(/\s+/g, ""));
+  }, [link, description, tags, setValue]);
 
   const { updateLinkDocument, isLoading, isError, isSuccess }: any =
-    useUpdateLinkDocument("links")
+    useUpdateLinkDocument("links");
 
   const onSubmit = async (data) => {
     const {
       link: linkUpdate,
       description: descriptionUpdate,
       tags: tagsUpdate,
-    } = data
+    } = data;
 
     const tabTabs = tagsUpdate
       ? tagsUpdate.split(",").map((word) => word.trim().toLowerCase())
-      : []
+      : [];
     if (tabTabs[tabTabs.length - 1] === "") {
-      tabTabs.pop()
+      tabTabs.pop();
     }
 
     if (
@@ -125,54 +125,54 @@ export default function CardLinkAdmin({
         title: "You have not made any changes",
         description: "Please make changes to update your link",
         action: <ToastAction altText="Okay">Okay</ToastAction>,
-      })
-      return
+      });
+      return;
     }
 
     let updatedLinkData: {
-      link: string
-      description: string
-      tags: string[]
+      link: string;
+      description: string;
+      tags: string[];
     } = {
       link: linkUpdate,
       description: descriptionUpdate,
       tags: tabTabs,
-    }
+    };
 
-    await updateLinkDocument({ id, updatedLinkData })
+    await updateLinkDocument({ id, updatedLinkData });
 
     await index.partialUpdateObject({
       objectID: id,
       link: linkUpdate,
       description: descriptionUpdate,
       tags: tabTabs,
-    })
+    });
 
     reset({
       link: linkUpdate,
       description: descriptionUpdate,
       tags: tagsUpdate,
-    })
+    });
 
-    setOpenEditDialog(false)
+    setOpenEditDialog(false);
     toast({
       title: "Your link has been updated successfully !",
       action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
-  }
+    });
+  };
 
   //
 
   const fetchLinkPreview = async (url: string) => {
-    const response = await axios.get(`/api/link-preview?url=${url}`)
-    return response.data
-  }
+    const response = await axios.get(`/api/link-preview?url=${url}`);
+    return response.data;
+  };
 
   const {
     data: dataLinkPreview,
     error: errorLinkPreview,
     isLoading: isLoadingLinkPreview,
-  } = useQuery(["preview", link], () => fetchLinkPreview(link))
+  } = useQuery(["preview", link], () => fetchLinkPreview(link));
 
   if (errorLinkPreview) {
     return (
@@ -336,7 +336,7 @@ export default function CardLinkAdmin({
           </PopoverContent>
         </Popover>
       </div>
-    )
+    );
   }
 
   return (
@@ -556,5 +556,5 @@ export default function CardLinkAdmin({
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }
