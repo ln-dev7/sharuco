@@ -1,17 +1,16 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useRouter } from "next/router"
-import { useAuthContext } from "@/context/AuthContext"
-import { auth } from "@/firebase/config"
-import { useDocument } from "@/firebase/firestore/getDocument"
-import { signOut } from "firebase/auth"
-import { Verified } from "lucide-react"
+import { useAuthContext } from "@/context/AuthContext";
+import { auth } from "@/firebase/config";
+import { useDocument } from "@/firebase/firestore/getDocument";
+import { signOut } from "firebase/auth";
+import { Verified } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-import { siteConfig } from "@/config/site"
-import { Icons } from "@/components/icons"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Icons } from "@/components/icons";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -19,31 +18,32 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import Loader from "./loaders/loader"
-import { Separator } from "./ui/separator"
+} from "@/components/ui/sheet";
+import { siteConfig } from "@/config/site";
+import Loader from "./loaders/loader";
+import { Separator } from "./ui/separator";
 
 export const useGitHubLogout = () => {
-  const router = useRouter()
+  const router = useRouter();
   const logout = async () => {
     if (router.pathname === "/dashboard") {
-      router.push("/")
+      router.push("/");
     }
     try {
-      await signOut(auth)
+      await signOut(auth);
     } catch (error) {
-      return
+      return;
     }
-  }
+  };
 
-  return { logout }
-}
+  return { logout };
+};
 
 export function AvatarUser() {
-  const { logout } = useGitHubLogout()
-  const { user, userPseudo } = useAuthContext()
+  const { logout } = useGitHubLogout();
+  const { user, userPseudo } = useAuthContext();
 
-  const { data, isLoading, isError } = useDocument(userPseudo, "users")
+  const { data, isLoading, isError } = useDocument(userPseudo, "users");
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -115,7 +115,7 @@ export function AvatarUser() {
           <Button
             className={buttonVariants({ size: "lg", variant: "destructive" })}
             onClick={() => {
-              logout()
+              logout();
             }}
           >
             Logout
@@ -163,5 +163,5 @@ export function AvatarUser() {
         )}
       </SheetContent>
     </Sheet>
-  )
+  );
 }

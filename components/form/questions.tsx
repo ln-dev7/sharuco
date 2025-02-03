@@ -31,22 +31,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { ToastAction } from "@/components/ui/toast";
-import { useToast } from "@/components/ui/use-toast";
 
 export default function QuestionsForms({ dataForm }: { dataForm: any }) {
   const params = useParams();
   const { user, userPseudo } = useAuthContext();
-  const router = useRouter();
-
-  const { toast } = useToast();
-
-  const notifyUrlCopied = () =>
-    toast({
-      title: "Url of your code copied to clipboard",
-      description: "You can share it wherever you want",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    });
 
   const {
     updateFormDocument,
@@ -119,8 +107,8 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
   const ALGOLIA_INDEX_NAME = "forms";
 
   const client = algoliasearch(
-    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
-    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
+    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
+    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY as string
   );
   const index = client.initIndex(ALGOLIA_INDEX_NAME);
 

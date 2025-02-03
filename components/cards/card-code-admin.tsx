@@ -81,16 +81,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ToastAction } from "@/components/ui/toast";
+
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { TemplateName } from "@/types/templatStackblitzName";
+import { toast } from "sonner";
 
 export default function CardCodeAdmin({
   id,
@@ -103,18 +103,13 @@ export default function CardCodeAdmin({
   isPrivate,
   comments: commentsInit,
 }) {
-  const { toast } = useToast();
   const notifyCodeCopied = () =>
-    toast({
-      title: "Code copied to clipboard",
+    toast.message("Code copied to clipboard", {
       description: "You can paste it wherever you want",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
     });
   const notifyUrlCopied = () =>
-    toast({
-      title: "Url of code copied to clipboard",
+    toast.message("Url of code copied to clipboard", {
       description: "You can share it wherever you want",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
     });
 
   const params = useParams();
@@ -134,8 +129,8 @@ export default function CardCodeAdmin({
   const ALGOLIA_INDEX_NAME = "codes";
 
   const client = algoliasearch(
-    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
-    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
+    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
+    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY as string
   );
   const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
@@ -210,11 +205,8 @@ export default function CardCodeAdmin({
       tagsUpdate === tags.join(",") &&
       isPrivateUpdate === isPrivate
     ) {
-      toast({
-        variant: "destructive",
-        title: "You have not made any changes",
+      toast.error("You have not made any changes", {
         description: "Please make changes to update your code",
-        action: <ToastAction altText="Okay">Okay</ToastAction>,
       });
       return;
     }
@@ -264,10 +256,7 @@ export default function CardCodeAdmin({
     setCheckboxOn(isPrivateUpdate);
 
     setOpenEditDialog(false);
-    toast({
-      title: "Your code has been updated successfully !",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    });
+    toast.success("Your code has been updated successfully !");
   };
 
   //

@@ -1,17 +1,14 @@
-"use client"
+"use client";
 
-import { useRef, useState } from "react"
-import Link from "next/link"
-import { useParams } from "next/navigation"
-import { getLanguageColor } from "@/constants/languages"
-import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogin } from "@/firebase/auth/githubLogin"
-import { useDocument } from "@/firebase/firestore/getDocument"
-import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
-import copyToClipboard from "@/utils/copyToClipboard"
-import embedProject from "@/utils/embedStackblitzProject"
-import highlight from "@/utils/highlight"
-import * as htmlToImage from "html-to-image"
+import { getLanguageColor } from "@/constants/languages";
+import { useAuthContext } from "@/context/AuthContext";
+import { useGitHubLogin } from "@/firebase/auth/githubLogin";
+import { useDocument } from "@/firebase/firestore/getDocument";
+import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument";
+import copyToClipboard from "@/utils/copyToClipboard";
+import embedProject from "@/utils/embedStackblitzProject";
+import highlight from "@/utils/highlight";
+import * as htmlToImage from "html-to-image";
 import {
   Copy,
   Flag,
@@ -20,7 +17,10 @@ import {
   Save,
   Share,
   Verified,
-} from "lucide-react"
+} from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useRef, useState } from "react";
 import {
   EmailIcon,
   EmailShareButton,
@@ -34,11 +34,9 @@ import {
   TwitterShareButton,
   WhatsappIcon,
   WhatsappShareButton,
-} from "react-share"
+} from "react-share";
 
-import { TemplateName } from "@/types/templatStackblitzName"
-import { cn } from "@/lib/utils"
-import Loader from "@/components/loaders/loader"
+import Loader from "@/components/loaders/loader";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -48,16 +46,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/alert-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -66,16 +64,17 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { ToastAction } from "@/components/ui/toast"
+} from "@/components/ui/select";
+import { toast } from "sonner";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { useToast } from "@/components/ui/use-toast"
-import { Input } from "./../ui/input"
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+import { TemplateName } from "@/types/templatStackblitzName";
+import { Input } from "./../ui/input";
 
 export default function CardCode({
   id,
@@ -89,43 +88,38 @@ export default function CardCode({
   currentUser,
   comments,
 }) {
-  const { toast } = useToast()
   const notifyCodeCopied = () =>
-    toast({
-      title: "Code copied to clipboard",
+    toast.message("Code copied to clipboard",{
       description: "You can paste it wherever you want",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
+    });
   const notifyUrlCopied = () =>
-    toast({
-      title: "Url of code copied to clipboard",
+    toast.message("Url of code copied to clipboard",{
       description: "You can share it wherever you want",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
+    });
 
-  const params = useParams()
+  const params = useParams();
 
-  const { user, userPseudo } = useAuthContext()
+  const { user, userPseudo } = useAuthContext();
 
-  const { login, isPending } = useGitHubLogin()
+  const { login, isPending } = useGitHubLogin();
 
-  const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
+  const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`;
 
-  const [openShareDialog, setOpenShareDialog] = useState(false)
+  const [openShareDialog, setOpenShareDialog] = useState(false);
 
   const {
     data: dataAuthor,
     isLoading: isLoadingAuthor,
     isError: isErrorAuthor,
-  } = useDocument(idAuthor, "users")
+  } = useDocument(idAuthor, "users");
 
   const {
     data: dataCodes,
     isLoading: isLoadingCodes,
     isError: isErrorCodes,
-  } = useDocument(id, "codes")
+  } = useDocument(id, "codes");
 
-  const { updateCodeDocument }: any = useUpdateCodeDocument("codes")
+  const { updateCodeDocument }: any = useUpdateCodeDocument("codes");
 
   const addCodeOnFavoris = async (id: string) => {
     let updatedCodeData = {
@@ -135,46 +129,46 @@ export default function CardCode({
       favorisCount: favorisInit.includes(userPseudo)
         ? favorisInit.filter((item) => item !== userPseudo).length
         : [...favorisInit, userPseudo].length,
-    }
+    };
 
-    updateCodeDocument({ id, updatedCodeData })
-  }
+    updateCodeDocument({ id, updatedCodeData });
+  };
 
-  const domRefImage = useRef(null)
+  const domRefImage = useRef(null);
   const [backgroundImage, setBackgroundImage] = useState(
     "bg-gradient-to-br from-blue-400 to-indigo-700"
-  )
+  );
 
   const handleChangeBgImg1 = () => {
-    setBackgroundImage("bg-gradient-to-br from-blue-400 to-indigo-700")
-  }
+    setBackgroundImage("bg-gradient-to-br from-blue-400 to-indigo-700");
+  };
 
   const handleChangeBgImg2 = () => {
-    setBackgroundImage("bg-gradient-to-r from-pink-500 to-indigo-600")
-  }
+    setBackgroundImage("bg-gradient-to-r from-pink-500 to-indigo-600");
+  };
 
   const handleChangeBgImg3 = () => {
-    setBackgroundImage("bg-gradient-to-br from-teal-400 to-green-500")
-  }
+    setBackgroundImage("bg-gradient-to-br from-teal-400 to-green-500");
+  };
 
   const handleChangeBgImg4 = () => {
-    setBackgroundImage("bg-gradient-to-br from-yellow-300 to-orange-500")
-  }
+    setBackgroundImage("bg-gradient-to-br from-yellow-300 to-orange-500");
+  };
   const handleChangeBgImg5 = () => {
-    setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600")
-  }
+    setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600");
+  };
 
-  const [nameOfImage, setNameOfImage] = useState("")
+  const [nameOfImage, setNameOfImage] = useState("");
 
   const downloadImage = async () => {
-    const dataUrl = await htmlToImage.toPng(domRefImage.current)
+    const dataUrl = await htmlToImage.toPng(domRefImage.current);
 
     // download image
-    const link = document.createElement("a")
-    link.download = nameOfImage !== "" ? nameOfImage : `sharuco-code-${id}.png`
-    link.href = dataUrl
-    link.click()
-  }
+    const link = document.createElement("a");
+    link.download = nameOfImage !== "" ? nameOfImage : `sharuco-code-${id}.png`;
+    link.href = dataUrl;
+    link.click();
+  };
 
   // console.log("params", params["code-preview"])
 
@@ -218,7 +212,7 @@ export default function CardCode({
                       idAuthor,
                       description,
                       id
-                    )
+                    );
                   }}
                 >
                   <SelectTrigger className="w-[180px]">
@@ -258,8 +252,8 @@ export default function CardCode({
             <span
               className="flex cursor-pointer items-center p-1 text-xs font-medium text-white"
               onClick={() => {
-                copyToClipboard(code)
-                notifyCodeCopied()
+                copyToClipboard(code);
+                notifyCodeCopied();
               }}
             >
               <Copy className="mr-2 h-4 w-4" />
@@ -309,7 +303,7 @@ export default function CardCode({
                     className="h-8 w-8 cursor-pointer appearance-none rounded-full border-0 bg-transparent p-0"
                     value={backgroundImage}
                     onChange={(e) => {
-                      setBackgroundImage(`${e.target.value}`)
+                      setBackgroundImage(`${e.target.value}`);
                     }}
                   />
                 </div>
@@ -321,7 +315,7 @@ export default function CardCode({
                     placeholder="Name of your image"
                     value={nameOfImage}
                     onChange={(e) => {
-                      setNameOfImage(`${e.target.value}`)
+                      setNameOfImage(`${e.target.value}`);
                     }}
                   />
                 </div>
@@ -516,7 +510,7 @@ export default function CardCode({
               <span
                 className="flex cursor-pointer items-center p-1 text-xs font-medium text-white"
                 onClick={() => {
-                  addCodeOnFavoris(id)
+                  addCodeOnFavoris(id);
                 }}
               >
                 {user && favorisInit.includes(userPseudo) ? (
@@ -688,9 +682,9 @@ export default function CardCode({
                     variant="subtle"
                     className="h-10 w-10 rounded-full p-0"
                     onClick={() => {
-                      copyToClipboard(shareUrl)
-                      notifyUrlCopied()
-                      setOpenShareDialog(false)
+                      copyToClipboard(shareUrl);
+                      notifyUrlCopied();
+                      setOpenShareDialog(false);
                     }}
                   >
                     <Copy className="h-4 w-4" />
@@ -732,5 +726,5 @@ export default function CardCode({
         </div>
       )}
     </div>
-  )
+  );
 }

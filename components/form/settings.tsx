@@ -27,9 +27,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { ToastAction } from "@/components/ui/toast";
-import { useToast } from "@/components/ui/use-toast";
+
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function SettingsForms({ dataForm }: { dataForm: any }) {
   const params = useParams();
@@ -38,20 +38,11 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
 
   const id = params["form"] as string;
 
-  const { toast } = useToast();
-
-  const notifyUrlCopied = () =>
-    toast({
-      title: "Url of your code copied to clipboard",
-      description: "You can share it wherever you want",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    });
-
   const ALGOLIA_INDEX_NAME = "forms";
 
   const client = algoliasearch(
-    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
-    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
+    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
+    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY as string
   );
   const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
@@ -152,11 +143,8 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
 
           updateFormDocument({ id, updatedFormData });
         } else {
-          toast({
-            variant: "destructive",
-            title: "This user not exist on Sharuco",
+          toast.error("This user not exist on Sharuco", {
             description: "Make sure you have entered the correct user name.",
-            action: <ToastAction altText="Okay">Okay</ToastAction>,
           });
           return;
         }
@@ -196,11 +184,8 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       // amountNotchPayUpdate === dataForm.amountNotchPay &&
       // acceptPaymentUpdate === dataForm.acceptPayment
     ) {
-      toast({
-        variant: "destructive",
-        title: "You have not made any changes",
+      toast.error("You have not made any changes", {
         description: "Please make changes to update your settings",
-        action: <ToastAction altText="Okay">Okay</ToastAction>,
       });
       return;
     }

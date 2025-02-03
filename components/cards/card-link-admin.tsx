@@ -29,8 +29,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ToastAction } from "@/components/ui/toast";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "./../ui/skeleton";
 
@@ -42,8 +41,6 @@ export default function CardLinkAdmin({
   description,
   tags,
 }) {
-  const { toast } = useToast();
-
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
   //
@@ -51,8 +48,8 @@ export default function CardLinkAdmin({
   const ALGOLIA_INDEX_NAME = "links";
 
   const client = algoliasearch(
-    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
-    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
+    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
+    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY as string
   );
   const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
@@ -120,11 +117,9 @@ export default function CardLinkAdmin({
       descriptionUpdate === description &&
       tagsUpdate === tags.join(",")
     ) {
-      toast({
-        variant: "destructive",
-        title: "You have not made any changes",
+      toast.error(
+        "You have not made any changes",{
         description: "Please make changes to update your link",
-        action: <ToastAction altText="Okay">Okay</ToastAction>,
       });
       return;
     }
@@ -155,10 +150,7 @@ export default function CardLinkAdmin({
     });
 
     setOpenEditDialog(false);
-    toast({
-      title: "Your link has been updated successfully !",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    });
+    toast.success("Your link has been updated successfully !",)
   };
 
   //

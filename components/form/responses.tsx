@@ -19,29 +19,18 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { ToastAction } from "@/components/ui/toast";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
+
 import { cn } from "@/lib/utils";
 
 export default function ResponsesForms({ dataForm }: { dataForm: any }) {
   const params = useParams();
-  const { user, userPseudo } = useAuthContext();
-  const router = useRouter();
-
-  const { toast } = useToast();
-
-  const notifyUrlCopied = () =>
-    toast({
-      title: "Url of your code copied to clipboard",
-      description: "You can share it wherever you want",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    });
 
   const ALGOLIA_INDEX_NAME = "forms";
 
   const client = algoliasearch(
-    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
-    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
+    process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
+    process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY as string
   );
   const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
@@ -221,16 +210,11 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                                     className="block cursor-pointer underline underline-offset-2"
                                     onClick={() => {
                                       copyToClipboard(answer.text);
-                                      toast({
-                                        title: `"${answer.text}" copied to clipboard`,
+                                      toast.message(
+                                        `"${answer.text}" copied to clipboard`,{
                                         description:
-                                          "You can paste it wherever you want",
-                                        action: (
-                                          <ToastAction altText="Okay">
-                                            Okay
-                                          </ToastAction>
-                                        ),
-                                      });
+                                          "You can paste it wherever you want",}
+                                      );
                                     }}
                                   >
                                     copy
