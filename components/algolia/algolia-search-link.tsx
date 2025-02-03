@@ -1,13 +1,13 @@
-import { useAuthContext } from "@/context/AuthContext";
-import { algoliasearch } from "algoliasearch";
-import { Search, Trash2 } from "lucide-react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { Highlight, Hits, InstantSearch, SearchBox } from "react-instantsearch";
+import { useAuthContext } from '@/context/AuthContext';
+import { algoliasearch } from 'algoliasearch';
+import { Search, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { Highlight, Hits, InstantSearch, SearchBox } from 'react-instantsearch';
 
-import LoaderLink from "@/components/loaders/loader-link";
-import { Badge } from "@/components/ui/badge";
-import AlgoliaCopyright from "./algolia-copyright";
+import LoaderLink from '@/components/loaders/loader-link';
+import { Badge } from '@/components/ui/badge';
+import AlgoliaCopyright from './algolia-copyright';
 
 // https://www.algolia.com/doc/guides/building-search-ui/getting-started/react-hooks/#before-you-start
 
@@ -22,8 +22,8 @@ export default function AlgoliaSearchLink() {
   const params = useParams();
 
   const transformItems = (items) => {
-    if (params["link"] !== undefined) {
-      return items.filter((item) => item.idAuthor === params["link"]);
+    if (params['link'] !== undefined) {
+      return items.filter((item) => item.idAuthor === params['link']);
     } else {
       return items.filter((item) => item.idAuthor === userPseudo);
     }
@@ -34,9 +34,9 @@ export default function AlgoliaSearchLink() {
       <AlgoliaCopyright />
       <SearchBox
         placeholder={` ${
-          params["link"] !== undefined
-            ? `Search links of ${params["link"]}`
-            : "Search links"
+          params['link'] !== undefined
+            ? `Search links of ${params['link']}`
+            : 'Search links'
         } ...`}
         submitIconComponent={() => <Search className="h-4 w-4" />}
         resetIconComponent={() => <Trash2 />}
@@ -46,12 +46,12 @@ export default function AlgoliaSearchLink() {
           </div>
         )}
         classNames={{
-          root: "w-full mt-0 mb-3 rounded-none",
-          form: "w-full relative rounded-none",
+          root: 'w-full mt-0 mb-3 rounded-none',
+          form: 'w-full relative rounded-none',
           input:
-            "outline-none w-full rounded-none p-4 pl-12 text-sm text-gray-900 border border-x-0 border-gray-300 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",
-          submit: "absolute left-[14px] top-[19px]",
-          reset: "hidden",
+            'outline-none w-full rounded-none p-4 pl-12 text-sm text-gray-900 border border-x-0 border-gray-300 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+          submit: 'absolute left-[14px] top-[19px]',
+          reset: 'hidden',
         }}
       />
       <Hits
@@ -72,8 +72,8 @@ function Hit({ hit }) {
           <Highlight
             attribute="description"
             classNames={{
-              root: "line-clamp-4 text-sm text-medium text-zinc-700 dark:text-zinc-300 ",
-              highlighted: "bg-sky-500 text-white",
+              root: 'line-clamp-4 text-sm text-medium text-zinc-700 dark:text-zinc-300 ',
+              highlighted: 'bg-sky-500 text-white',
             }}
             hit={hit}
           />

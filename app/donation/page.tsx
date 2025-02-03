@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
 //import axios from "axios"
-import "highlight.js/styles/vs.css";
-import Head from "next/head";
+import 'highlight.js/styles/vs.css';
+import Head from 'next/head';
 
-import { Layout } from "@/components/layout";
+import { Layout } from '@/components/layout';
 
 export default function Donation() {
   return (

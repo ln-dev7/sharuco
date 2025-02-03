@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { colors, getRandomColor } from "@/constants/colors";
-import { useAuthContext } from "@/context/AuthContext";
-import { useCreateDocument } from "@/firebase/firestore/createDocument";
-import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Loader2, Plus } from "lucide-react";
-import moment from "moment";
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
+import { colors, getRandomColor } from '@/constants/colors';
+import { useAuthContext } from '@/context/AuthContext';
+import { useCreateDocument } from '@/firebase/firestore/createDocument';
+import { useUpdateUserDocument } from '@/firebase/firestore/updateUserDocument';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Loader2, Plus } from 'lucide-react';
+import moment from 'moment';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
-import FormsConnected from "@/components/forms/FormsConnected";
-import FormsNotConnected from "@/components/forms/FormsNotConnected";
-import { Layout } from "@/components/layout";
+import FormsConnected from '@/components/forms/FormsConnected';
+import FormsNotConnected from '@/components/forms/FormsNotConnected';
+import { Layout } from '@/components/layout';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -24,23 +24,23 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/alert-dialog';
+import { buttonVariants } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 export default function Forms() {
   const { user, userPseudo } = useAuthContext();
 
   const notifyFormCreated = () =>
-    toast.success("Your form has been created successfully !");
+    toast.success('Your form has been created successfully !');
 
-  const { updateUserDocument }: any = useUpdateUserDocument("users");
+  const { updateUserDocument }: any = useUpdateUserDocument('users');
 
   const schema = yup.object().shape({
     name: yup.string().required(),
@@ -58,7 +58,7 @@ export default function Forms() {
 
   const [openCreateFormDialog, setOpenCreateFormDialog] = useState(false);
   const { createDocument, isLoading, isError, isSuccess }: any =
-    useCreateDocument("forms");
+    useCreateDocument('forms');
 
   const onSubmit = async (data) => {
     const { name, description } = data;
@@ -78,8 +78,8 @@ export default function Forms() {
     createDocument(newDocument);
 
     reset({
-      name: "",
-      description: "",
+      name: '',
+      description: '',
     });
   };
 
@@ -109,8 +109,8 @@ export default function Forms() {
           </h1>
           <p
             className={cn(
-              "text-sm font-medium leading-5 text-gray-500 dark:text-gray-400",
-              "sm:text-base md:text-lg lg:text-lg"
+              'text-sm font-medium leading-5 text-gray-500 dark:text-gray-400',
+              'sm:text-base md:text-lg lg:text-lg'
             )}
           >
             Create and share forms to receive answers very quickly.
@@ -124,7 +124,7 @@ export default function Forms() {
             >
               <AlertDialogTrigger className="w-full shrink-0 sm:w-fit" asChild>
                 <button
-                  className={buttonVariants({ size: "lg" })}
+                  className={buttonVariants({ size: 'lg' })}
                   onClick={() => setOpenCreateFormDialog(true)}
                 >
                   <Plus className="mr-2 h-4 w-4" />
@@ -144,7 +144,7 @@ export default function Forms() {
                       <Input
                         placeholder="Insert name of your form here..."
                         id="name"
-                        {...register("name")}
+                        {...register('name')}
                       />
                       <p className="text-sm text-red-500">
                         {errors.name && <>{errors.name.message}</>}
@@ -156,7 +156,7 @@ export default function Forms() {
                         placeholder="Insert description of your form..."
                         id="description"
                         className="h-24"
-                        {...register("description")}
+                        {...register('description')}
                       />
                       <p className="text-sm text-red-500">
                         {errors.description && (
@@ -175,7 +175,7 @@ export default function Forms() {
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                     )}
                     disabled={isLoading}
                     onClick={!isLoading ? handleSubmit(onSubmit) : undefined}

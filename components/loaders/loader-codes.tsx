@@ -1,13 +1,13 @@
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from '@/components/ui/skeleton';
 
-const numbers = [1, 2, 3, 4, 5, 6]
+const numbers = [1, 2, 3, 4, 5, 6];
 
 export default function LoaderCodes({
   isUserProfile,
 }: {
-  isUserProfile?: boolean
+  isUserProfile?: boolean;
 }) {
   return (
     <>
@@ -55,5 +55,5 @@ export default function LoaderCodes({
         </Masonry>
       </ResponsiveMasonry>
     </>
-  )
+  );
 }

@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import { useAuthContext } from "@/context/AuthContext";
-import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument";
-import copyToClipboard from "@/utils/copyToClipboard.js";
-import formatDateTime from "@/utils/formatDateTime.js";
-import { algoliasearch } from "algoliasearch";
-import jsPDF from "jspdf";
-import { Loader2, MessageSquare, Timer, Trash } from "lucide-react";
-import moment from "moment";
-import { useParams, useRouter } from "next/navigation";
+import { useAuthContext } from '@/context/AuthContext';
+import { useUpdateFormDocument } from '@/firebase/firestore/updateFormDocument';
+import copyToClipboard from '@/utils/copyToClipboard.js';
+import formatDateTime from '@/utils/formatDateTime.js';
+import { algoliasearch } from 'algoliasearch';
+import jsPDF from 'jspdf';
+import { Loader2, MessageSquare, Timer, Trash } from 'lucide-react';
+import moment from 'moment';
+import { useParams, useRouter } from 'next/navigation';
 
-import EmptyCard from "@/components/empty-card";
+import EmptyCard from '@/components/empty-card';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
+} from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 export default function ResponsesForms({ dataForm }: { dataForm: any }) {
   const params = useParams();
 
-  const ALGOLIA_INDEX_NAME = "forms";
+  const ALGOLIA_INDEX_NAME = 'forms';
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
@@ -37,7 +37,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
   // console.log(dataForm.responses)
 
   const { updateFormDocument, isLoading: isLoadingUpdateForm }: any =
-    useUpdateFormDocument("forms");
+    useUpdateFormDocument('forms');
 
   const handleDeleteResponse = async (idResponse: string) => {
     let updatedFormData: {
@@ -50,7 +50,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
       ],
     };
 
-    const id = params["form"];
+    const id = params['form'];
 
     //console.log(updatedFormData.responses,)
 
@@ -106,7 +106,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
             pdf.addPage(); // Ajoute une nouvelle page si nécessaire
             yPos = 15; // Réinitialise la position Y pour la nouvelle page
           }
-          if (res.type === "heading") {
+          if (res.type === 'heading') {
             pdf.text(`${res.label}`, 15, yPos);
           } else {
             pdf.text(`${res.label}: ${res.text}`, 15, yPos);
@@ -117,19 +117,19 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
         // Dessiner une barre noire après chaque réponse
         pdf.setDrawColor(0); // Couleur de la bordure (noir)
         pdf.setLineWidth(0.15); // Largeur de la bordure
-        pdf.rect(10, yPos, pdf.internal.pageSize.width - 20, 0.5, "S");
+        pdf.rect(10, yPos, pdf.internal.pageSize.width - 20, 0.5, 'S');
         yPos += 1; // Ajuste la position Y pour la prochaine section
 
         yPos += 10;
       });
 
     pdf.setFontSize(10);
-    pdf.textWithLink("Powered by SHARUCO FORM", 10, yPos + 10, {
-      url: "https://sharuco.lndev.me/forms",
+    pdf.textWithLink('Powered by SHARUCO FORM', 10, yPos + 10, {
+      url: 'https://sharuco.lndev.me/forms',
     });
 
     // Preview the PDF in a new tab
-    pdf.output("dataurlnewwindow");
+    pdf.output('dataurlnewwindow');
   };
 
   return (
@@ -143,10 +143,10 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
             .map((response, index) => (
               <div
                 className={cn(
-                  "flex w-full flex-col items-start gap-4 rounded-md border border-dashed border-zinc-300 p-4 dark:border-zinc-700",
-                  response.paymentStatut === "complete"
-                    ? "border-2 border-solid border-emerald-500 dark:border-emerald-900"
-                    : ""
+                  'flex w-full flex-col items-start gap-4 rounded-md border border-dashed border-zinc-300 p-4 dark:border-zinc-700',
+                  response.paymentStatut === 'complete'
+                    ? 'border-2 border-solid border-emerald-500 dark:border-emerald-900'
+                    : ''
                 )}
                 key={response.idResponse}
               >
@@ -159,7 +159,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                     <AccordionTrigger>
                       <div className="flex items-center justify-start gap-2">
                         View response
-                        {response.paymentStatut === "complete" ? (
+                        {response.paymentStatut === 'complete' ? (
                           <span className="mr-2 flex items-center gap-2 rounded bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
                             PAID
                           </span>
@@ -167,30 +167,30 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
-                      {response.paymentStatut === "complete" ? (
+                      {response.paymentStatut === 'complete' ? (
                         <div className="text-md mb-4 flex items-center gap-2 rounded bg-green-100 px-2.5 py-1.5 font-medium text-green-800 dark:bg-emerald-900 dark:text-green-300">
                           <p>
-                            This user paid with this address :{" "}
+                            This user paid with this address :{' '}
                             <a
                               href={`mailto:${response.emailPayment}`}
                               className="underline underline-offset-4"
                             >
                               {response.emailPayment}
-                            </a>{" "}
-                            , you can check it in your{" "}
+                            </a>{' '}
+                            , you can check it in your{' '}
                             <a
                               href="https://business.notchpay.co/transactions"
                               className="underline underline-offset-4"
                             >
                               NotchPay Dashboard
-                            </a>{" "}
+                            </a>{' '}
                           </p>
                         </div>
                       ) : null}
                       <div className="flex w-full flex-col items-start gap-2 ">
                         {response.responses.map((answer, answerIndex) => (
                           <>
-                            {answer.type === "heading" ? (
+                            {answer.type === 'heading' ? (
                               <h3
                                 className="text-xl font-semibold"
                                 key={answerIndex}
@@ -211,9 +211,11 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                                     onClick={() => {
                                       copyToClipboard(answer.text);
                                       toast.message(
-                                        `"${answer.text}" copied to clipboard`,{
-                                        description:
-                                          "You can paste it wherever you want",}
+                                        `"${answer.text}" copied to clipboard`,
+                                        {
+                                          description:
+                                            'You can paste it wherever you want',
+                                        }
                                       );
                                     }}
                                   >

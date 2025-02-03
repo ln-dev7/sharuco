@@ -1,6 +1,6 @@
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LoaderCode() {
   return (
@@ -38,5 +38,5 @@ export default function LoaderCode() {
         </div>
       </Masonry>
     </ResponsiveMasonry>
-  )
+  );
 }

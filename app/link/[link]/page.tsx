@@ -1,16 +1,16 @@
-"use client"
+'use client';
 
-import Head from "next/head"
-import Link from "next/link"
-import { useParams } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogin } from "@/firebase/auth/githubLogin"
-import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
-import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
-import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
-import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
-import formatDateTime from "@/utils/formatDateTime.js"
+import Head from 'next/head';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useAuthContext } from '@/context/AuthContext';
+import { useGitHubLogin } from '@/firebase/auth/githubLogin';
+import { useDocument } from '@/firebase/firestore/getDocument';
+import { useGetDocumentFromUser } from '@/firebase/firestore/getDocumentFromUser';
+import { useGetFavoriteCode } from '@/firebase/firestore/getFavoriteCode';
+import { useGetIsPrivateCodeFromUser } from '@/firebase/firestore/getIsPrivateCodeFromUser';
+import { useUpdateUserDocument } from '@/firebase/firestore/updateUserDocument';
+import formatDateTime from '@/utils/formatDateTime.js';
 import {
   Eye,
   FileCog,
@@ -20,32 +20,32 @@ import {
   Star,
   UserIcon,
   Verified,
-} from "lucide-react"
-import moment from "moment"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+} from 'lucide-react';
+import moment from 'moment';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
-import { cn } from "@/lib/utils"
-import CardCode from "@/components/cards/card-code"
-import CardLink from "@/components/cards/card-link"
-import EmptyCard from "@/components/empty-card"
-import Error from "@/components/error"
-import { Layout } from "@/components/layout"
-import LoaderLinks from "@/components/loaders/loader-links"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { cn } from '@/lib/utils';
+import CardCode from '@/components/cards/card-code';
+import CardLink from '@/components/cards/card-link';
+import EmptyCard from '@/components/empty-card';
+import Error from '@/components/error';
+import { Layout } from '@/components/layout';
+import LoaderLinks from '@/components/loaders/loader-links';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button, buttonVariants } from '@/components/ui/button';
 
 export default function LinkPage() {
-  const params = useParams()
-  const linkParam = params["link"] as string
-  const idCurrent = linkParam?.toLowerCase()
+  const params = useParams();
+  const linkParam = params['link'] as string;
+  const idCurrent = linkParam?.toLowerCase();
 
-  const { data, isLoading, isError } = useDocument(idCurrent, "users")
+  const { data, isLoading, isError } = useDocument(idCurrent, 'users');
 
   const {
     isLoading: isLoadingLinks,
     isError: isErrorLinks,
     data: dataLinks,
-  } = useGetDocumentFromUser(idCurrent, "links")
+  } = useGetDocumentFromUser(idCurrent, 'links');
 
   return (
     <Layout>
@@ -58,7 +58,7 @@ export default function LinkPage() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>{" "}
+      </Head>{' '}
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         {isLoading && <LoaderLinks />}
         {data && data.exists && data.data.publicLinkPage && (
@@ -86,9 +86,9 @@ export default function LinkPage() {
                   <h1 className="text-center text-xl font-bold">
                     {data.data.displayName !== null ? (
                       <>
-                        {data.data.displayName.split(" ")[0]}{" "}
-                        {data.data.displayName.split(" ")[1] &&
-                          data.data.displayName.split(" ")[1]}
+                        {data.data.displayName.split(' ')[0]}{' '}
+                        {data.data.displayName.split(' ')[1] &&
+                          data.data.displayName.split(' ')[1]}
                       </>
                     ) : (
                       idCurrent
@@ -101,7 +101,7 @@ export default function LinkPage() {
                   </span>
                 </div>
                 <p className="fonr-medium">
-                  All the links of{" "}
+                  All the links of{' '}
                   <Link
                     href={`/user/${idCurrent}`}
                     className="font-bold hover:underline hover:underline-offset-4"
@@ -128,12 +128,12 @@ export default function LinkPage() {
                       <Masonry gutter="2rem">
                         {dataLinks.map(
                           (link: {
-                            id: string
-                            idAuthor: string
-                            link: string
-                            description: string
-                            tags: string[]
-                            createdAt: any
+                            id: string;
+                            idAuthor: string;
+                            link: string;
+                            description: string;
+                            tags: string[];
+                            createdAt: any;
                           }) => (
                             <CardLink
                               key={link.id}
@@ -175,7 +175,7 @@ export default function LinkPage() {
             </h1>
             <Link
               href="/"
-              className={buttonVariants({ size: "lg", variant: "outline" })}
+              className={buttonVariants({ size: 'lg', variant: 'outline' })}
             >
               Go to home
             </Link>
@@ -184,5 +184,5 @@ export default function LinkPage() {
         {isError && <Error />}
       </section>
     </Layout>
-  )
+  );
 }

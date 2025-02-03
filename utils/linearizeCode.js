@@ -1,8 +1,8 @@
 function linearizeCode(codeString) {
-  const firstLinearCode = codeString.replace(/\n/g, "\\n")
-  const linearCode = firstLinearCode.replace(/\t/g, "\\t")
+  const firstLinearCode = codeString.replace(/\n/g, '\\n');
+  const linearCode = firstLinearCode.replace(/\t/g, '\\t');
 
-  return linearCode
+  return linearCode;
 }
 
-export default linearizeCode
+export default linearizeCode;

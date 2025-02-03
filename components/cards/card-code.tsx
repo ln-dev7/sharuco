@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { getLanguageColor } from "@/constants/languages";
-import { useAuthContext } from "@/context/AuthContext";
-import { useGitHubLogin } from "@/firebase/auth/githubLogin";
-import { useDocument } from "@/firebase/firestore/getDocument";
-import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument";
-import copyToClipboard from "@/utils/copyToClipboard";
-import embedProject from "@/utils/embedStackblitzProject";
-import highlight from "@/utils/highlight";
-import * as htmlToImage from "html-to-image";
+import { getLanguageColor } from '@/constants/languages';
+import { useAuthContext } from '@/context/AuthContext';
+import { useGitHubLogin } from '@/firebase/auth/githubLogin';
+import { useDocument } from '@/firebase/firestore/getDocument';
+import { useUpdateCodeDocument } from '@/firebase/firestore/updateCodeDocument';
+import copyToClipboard from '@/utils/copyToClipboard';
+import embedProject from '@/utils/embedStackblitzProject';
+import highlight from '@/utils/highlight';
+import * as htmlToImage from 'html-to-image';
 import {
   Copy,
   Flag,
@@ -17,10 +17,10 @@ import {
   Save,
   Share,
   Verified,
-} from "lucide-react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useRef, useState } from "react";
+} from 'lucide-react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useRef, useState } from 'react';
 import {
   EmailIcon,
   EmailShareButton,
@@ -34,9 +34,9 @@ import {
   TwitterShareButton,
   WhatsappIcon,
   WhatsappShareButton,
-} from "react-share";
+} from 'react-share';
 
-import Loader from "@/components/loaders/loader";
+import Loader from '@/components/loaders/loader';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -46,16 +46,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
@@ -64,17 +64,17 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { toast } from 'sonner';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import { TemplateName } from "@/types/templatStackblitzName";
-import { Input } from "./../ui/input";
+} from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
+import { TemplateName } from '@/types/templatStackblitzName';
+import { Input } from './../ui/input';
 
 export default function CardCode({
   id,
@@ -89,12 +89,12 @@ export default function CardCode({
   comments,
 }) {
   const notifyCodeCopied = () =>
-    toast.message("Code copied to clipboard",{
-      description: "You can paste it wherever you want",
+    toast.message('Code copied to clipboard', {
+      description: 'You can paste it wherever you want',
     });
   const notifyUrlCopied = () =>
-    toast.message("Url of code copied to clipboard",{
-      description: "You can share it wherever you want",
+    toast.message('Url of code copied to clipboard', {
+      description: 'You can share it wherever you want',
     });
 
   const params = useParams();
@@ -111,15 +111,15 @@ export default function CardCode({
     data: dataAuthor,
     isLoading: isLoadingAuthor,
     isError: isErrorAuthor,
-  } = useDocument(idAuthor, "users");
+  } = useDocument(idAuthor, 'users');
 
   const {
     data: dataCodes,
     isLoading: isLoadingCodes,
     isError: isErrorCodes,
-  } = useDocument(id, "codes");
+  } = useDocument(id, 'codes');
 
-  const { updateCodeDocument }: any = useUpdateCodeDocument("codes");
+  const { updateCodeDocument }: any = useUpdateCodeDocument('codes');
 
   const addCodeOnFavoris = async (id: string) => {
     let updatedCodeData = {
@@ -136,36 +136,36 @@ export default function CardCode({
 
   const domRefImage = useRef(null);
   const [backgroundImage, setBackgroundImage] = useState(
-    "bg-gradient-to-br from-blue-400 to-indigo-700"
+    'bg-gradient-to-br from-blue-400 to-indigo-700'
   );
 
   const handleChangeBgImg1 = () => {
-    setBackgroundImage("bg-gradient-to-br from-blue-400 to-indigo-700");
+    setBackgroundImage('bg-gradient-to-br from-blue-400 to-indigo-700');
   };
 
   const handleChangeBgImg2 = () => {
-    setBackgroundImage("bg-gradient-to-r from-pink-500 to-indigo-600");
+    setBackgroundImage('bg-gradient-to-r from-pink-500 to-indigo-600');
   };
 
   const handleChangeBgImg3 = () => {
-    setBackgroundImage("bg-gradient-to-br from-teal-400 to-green-500");
+    setBackgroundImage('bg-gradient-to-br from-teal-400 to-green-500');
   };
 
   const handleChangeBgImg4 = () => {
-    setBackgroundImage("bg-gradient-to-br from-yellow-300 to-orange-500");
+    setBackgroundImage('bg-gradient-to-br from-yellow-300 to-orange-500');
   };
   const handleChangeBgImg5 = () => {
-    setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600");
+    setBackgroundImage('bg-gradient-to-br from-red-500 to-pink-600');
   };
 
-  const [nameOfImage, setNameOfImage] = useState("");
+  const [nameOfImage, setNameOfImage] = useState('');
 
   const downloadImage = async () => {
     const dataUrl = await htmlToImage.toPng(domRefImage.current);
 
     // download image
-    const link = document.createElement("a");
-    link.download = nameOfImage !== "" ? nameOfImage : `sharuco-code-${id}.png`;
+    const link = document.createElement('a');
+    link.download = nameOfImage !== '' ? nameOfImage : `sharuco-code-${id}.png`;
     link.href = dataUrl;
     link.click();
   };
@@ -174,7 +174,7 @@ export default function CardCode({
 
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
-      {params["code-preview"] !== undefined && (
+      {params['code-preview'] !== undefined && (
         <div className="flex w-full items-center justify-center">
           <Dialog>
             <DialogTrigger asChild>
@@ -201,7 +201,7 @@ export default function CardCode({
             <DialogContent className="sm:max-w-7xl">
               <DialogHeader>
                 <DialogDescription>
-                  Choose the template with which the code will be executed{" "}
+                  Choose the template with which the code will be executed{' '}
                 </DialogDescription>
                 <Select
                   onValueChange={(value: TemplateName) => {
@@ -270,7 +270,7 @@ export default function CardCode({
                   <AlertDialogCancel>Close</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                     )}
                     onClick={downloadImage}
                   >
@@ -281,11 +281,11 @@ export default function CardCode({
                   <button
                     className="h-6 w-6 rounded-full bg-gradient-to-br from-blue-400 to-indigo-700"
                     onClick={handleChangeBgImg1}
-                  ></button>{" "}
+                  ></button>{' '}
                   <button
                     className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-indigo-600"
                     onClick={handleChangeBgImg2}
-                  ></button>{" "}
+                  ></button>{' '}
                   <button
                     className="h-6 w-6 rounded-full bg-gradient-to-br from-teal-400 to-green-500"
                     onClick={handleChangeBgImg3}
@@ -338,7 +338,7 @@ export default function CardCode({
                         `}
                           style={{
                             backgroundColor: `${
-                              language !== "" && getLanguageColor(language)
+                              language !== '' && getLanguageColor(language)
                             }`,
                           }}
                         ></span>
@@ -381,7 +381,7 @@ export default function CardCode({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <a
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                     )}
                     href={`mailto:sharuco@leonelngoya.com?subject=REPORTING%20A%20CODE%20ON%20SHARUCO&body=Hello,%20%0D%0A%0D%0AI%20want%20to%20report%20this%20code%20https://sharuco.lndev.me/code-preview/${id}%20that%20I%20saw%20on%20Sharuco.%0D%0AThank%20you`}
                   >
@@ -392,7 +392,7 @@ export default function CardCode({
             </AlertDialog>
           </div>
         </div>
-        {params["code-preview"] === undefined ? (
+        {params['code-preview'] === undefined ? (
           <Link href={`/code-preview/${id}`}>
             <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
               <code
@@ -416,14 +416,14 @@ export default function CardCode({
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <a
-          href={dataAuthor && dataAuthor.exists ? `/user/${idAuthor}` : "#"}
+          href={dataAuthor && dataAuthor.exists ? `/user/${idAuthor}` : '#'}
           className="flex items-center justify-start gap-2"
         >
           <Avatar
             className={`h-8 w-8 cursor-pointer ${
               dataAuthor?.data?.premium
-                ? "border-2 border-yellow-500"
-                : "border-0 border-green-500"
+                ? 'border-2 border-yellow-500'
+                : 'border-0 border-green-500'
             }`}
           >
             {isLoadingAuthor && (
@@ -444,11 +444,11 @@ export default function CardCode({
                 <AvatarFallback>
                   {dataAuthor.data.displayName !== null ? (
                     <>
-                      {dataAuthor.data.displayName.split(" ")[1] === undefined
-                        ? dataAuthor.data.displayName.split(" ")[0][0] +
-                          dataAuthor.data.displayName.split(" ")[0][1]
-                        : dataAuthor.data.displayName.split(" ")[0][0] +
-                          dataAuthor.data.displayName.split(" ")[1][0]}
+                      {dataAuthor.data.displayName.split(' ')[1] === undefined
+                        ? dataAuthor.data.displayName.split(' ')[0][0] +
+                          dataAuthor.data.displayName.split(' ')[0][1]
+                        : dataAuthor.data.displayName.split(' ')[0][0] +
+                          dataAuthor.data.displayName.split(' ')[1][0]}
                     </>
                   ) : (
                     dataAuthor.data.pseudo[0] + dataAuthor.data.pseudo[1]
@@ -461,7 +461,7 @@ export default function CardCode({
           </Avatar>
           <div className="flex items-center justify-start gap-1">
             <span className="text-md font-bold text-zinc-700 hover:underline dark:text-zinc-400 ">
-              {idAuthor}{" "}
+              {idAuthor}{' '}
             </span>
             {dataAuthor && dataAuthor.exists && (
               <span>
@@ -473,7 +473,7 @@ export default function CardCode({
           </div>
         </a>
         <div className="flex shrink-0 items-center justify-end gap-3">
-          {params["code-preview"] === undefined && (
+          {params['code-preview'] === undefined && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -542,7 +542,7 @@ export default function CardCode({
                 )}
                 <span
                   className={`${
-                    favorisInit.includes(userPseudo) ? "text-[#F9197F]" : ""
+                    favorisInit.includes(userPseudo) ? 'text-[#F9197F]' : ''
                   } hover:dark:text-white"  text-base text-zinc-700 hover:text-zinc-500  dark:text-zinc-400`}
                 >
                   {favorisInit.length}
@@ -582,17 +582,17 @@ export default function CardCode({
                     Like a Code to share the love.
                   </AlertDialogTitle>
                   <AlertDialogDescription>
-                    Join Sharuco now to let{" "}
+                    Join Sharuco now to let{' '}
                     <a
                       href={
                         dataAuthor && dataAuthor.exists
                           ? `/user/${idAuthor}`
-                          : "#"
+                          : '#'
                       }
                       className="font-semibold text-zinc-900 dark:text-zinc-100"
                     >
                       {idAuthor}
-                    </a>{" "}
+                    </a>{' '}
                     know you like.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
@@ -600,7 +600,7 @@ export default function CardCode({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                     )}
                     disabled={isPending}
                     onClick={login}
@@ -643,7 +643,7 @@ export default function CardCode({
                   <TwitterShareButton
                     url={shareUrl}
                     title={`I discovered this code on @sharuco_app , I share it with you here. - « ${description} »`}
-                    hashtags={["CaParleDev", "ShareWithSharuco"]}
+                    hashtags={['CaParleDev', 'ShareWithSharuco']}
                     onClick={() => setOpenShareDialog(false)}
                   >
                     <TwitterIcon size={38} round />
@@ -699,13 +699,13 @@ export default function CardCode({
         </div>
       </div>
 
-      {params["code-preview"] === undefined ? (
+      {params['code-preview'] === undefined ? (
         <Link
           href={`/code-preview/${id}`}
           className="text-sm text-zinc-700 dark:text-zinc-400"
         >
           {description.length > 300
-            ? description.substring(0, 300) + "..."
+            ? description.substring(0, 300) + '...'
             : description}
         </Link>
       ) : (

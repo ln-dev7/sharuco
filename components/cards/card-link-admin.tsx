@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useDeleteDocument } from "@/firebase/firestore/deleteDocument";
-import { useUpdateLinkDocument } from "@/firebase/firestore/updateLinkDocument";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { algoliasearch } from "algoliasearch";
-import axios from "axios";
-import { Loader2, MoreHorizontal, Pencil, Trash, XCircle } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useQuery } from "react-query";
-import * as yup from "yup";
+import { useDeleteDocument } from '@/firebase/firestore/deleteDocument';
+import { useUpdateLinkDocument } from '@/firebase/firestore/updateLinkDocument';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { algoliasearch } from 'algoliasearch';
+import axios from 'axios';
+import { Loader2, MoreHorizontal, Pencil, Trash, XCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useQuery } from 'react-query';
+import * as yup from 'yup';
 
 import {
   AlertDialog,
@@ -20,18 +20,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { Skeleton } from "./../ui/skeleton";
+} from '@/components/ui/popover';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import { Skeleton } from './../ui/skeleton';
 
 export default function CardLinkAdmin({
   id,
@@ -45,7 +45,7 @@ export default function CardLinkAdmin({
 
   //
 
-  const ALGOLIA_INDEX_NAME = "links";
+  const ALGOLIA_INDEX_NAME = 'links';
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
@@ -54,7 +54,7 @@ export default function CardLinkAdmin({
   const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
   const { deleteDocument, isLoading: isLoadingDelete }: any =
-    useDeleteDocument("links");
+    useDeleteDocument('links');
 
   const handleDeleteDocument = () => {
     deleteDocument(id);
@@ -66,15 +66,15 @@ export default function CardLinkAdmin({
       .string()
       .matches(
         /^(http|https):\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/,
-        "Invalid link format"
+        'Invalid link format'
       )
       .required(),
     description: yup.string().required(),
     tags: yup
       .string()
       .test(
-        "tags",
-        "The tags field must contain only letters, commas and/or spaces",
+        'tags',
+        'The tags field must contain only letters, commas and/or spaces',
         (val) => !val || /^[a-zA-Z, ]*$/.test(val)
       ),
   });
@@ -90,13 +90,13 @@ export default function CardLinkAdmin({
   });
 
   useEffect(() => {
-    setValue("link", link);
-    setValue("description", description);
-    setValue("tags", tags.join().trim().replace(/\s+/g, ""));
+    setValue('link', link);
+    setValue('description', description);
+    setValue('tags', tags.join().trim().replace(/\s+/g, ''));
   }, [link, description, tags, setValue]);
 
   const { updateLinkDocument, isLoading, isError, isSuccess }: any =
-    useUpdateLinkDocument("links");
+    useUpdateLinkDocument('links');
 
   const onSubmit = async (data) => {
     const {
@@ -106,20 +106,19 @@ export default function CardLinkAdmin({
     } = data;
 
     const tabTabs = tagsUpdate
-      ? tagsUpdate.split(",").map((word) => word.trim().toLowerCase())
+      ? tagsUpdate.split(',').map((word) => word.trim().toLowerCase())
       : [];
-    if (tabTabs[tabTabs.length - 1] === "") {
+    if (tabTabs[tabTabs.length - 1] === '') {
       tabTabs.pop();
     }
 
     if (
       linkUpdate === link &&
       descriptionUpdate === description &&
-      tagsUpdate === tags.join(",")
+      tagsUpdate === tags.join(',')
     ) {
-      toast.error(
-        "You have not made any changes",{
-        description: "Please make changes to update your link",
+      toast.error('You have not made any changes', {
+        description: 'Please make changes to update your link',
       });
       return;
     }
@@ -150,7 +149,7 @@ export default function CardLinkAdmin({
     });
 
     setOpenEditDialog(false);
-    toast.success("Your link has been updated successfully !",)
+    toast.success('Your link has been updated successfully !');
   };
 
   //
@@ -164,7 +163,7 @@ export default function CardLinkAdmin({
     data: dataLinkPreview,
     error: errorLinkPreview,
     isLoading: isLoadingLinkPreview,
-  } = useQuery(["preview", link], () => fetchLinkPreview(link));
+  } = useQuery(['preview', link], () => fetchLinkPreview(link));
 
   if (errorLinkPreview) {
     return (
@@ -223,7 +222,7 @@ export default function CardLinkAdmin({
                         <Input
                           placeholder="Insert your link here..."
                           id="link"
-                          {...register("link")}
+                          {...register('link')}
                         />
                         <p className="text-sm text-red-500">
                           {errors.link && <>{errors.link.message}</>}
@@ -234,7 +233,7 @@ export default function CardLinkAdmin({
                         <Input
                           placeholder="Insert description of your link here..."
                           id="description"
-                          {...register("description")}
+                          {...register('description')}
                         />
                         <p className="text-sm text-red-500">
                           {errors.description && (
@@ -248,10 +247,10 @@ export default function CardLinkAdmin({
                           type="text"
                           id="tags"
                           placeholder="Enter a tags ..."
-                          {...register("tags")}
+                          {...register('tags')}
                         />
                         <p className="text-sm font-medium text-zinc-500">
-                          Please separate tags with{" "}
+                          Please separate tags with{' '}
                           <span className="text-zinc-700 dark:text-zinc-300">
                             ,
                           </span>
@@ -272,7 +271,7 @@ export default function CardLinkAdmin({
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                        'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                       )}
                       disabled={isLoading}
                       onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -284,7 +283,7 @@ export default function CardLinkAdmin({
                     </button>
                   </AlertDialogFooter>
                 </AlertDialogContent>
-              </AlertDialog>{" "}
+              </AlertDialog>{' '}
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button
@@ -307,7 +306,7 @@ export default function CardLinkAdmin({
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                        'inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                       )}
                       disabled={isLoadingDelete}
                       onClick={
@@ -443,7 +442,7 @@ export default function CardLinkAdmin({
                       <Input
                         placeholder="Insert your link here..."
                         id="link"
-                        {...register("link")}
+                        {...register('link')}
                       />
                       <p className="text-sm text-red-500">
                         {errors.link && <>{errors.link.message}</>}
@@ -454,7 +453,7 @@ export default function CardLinkAdmin({
                       <Input
                         placeholder="Insert description of your link here..."
                         id="description"
-                        {...register("description")}
+                        {...register('description')}
                       />
                       <p className="text-sm text-red-500">
                         {errors.description && (
@@ -468,10 +467,10 @@ export default function CardLinkAdmin({
                         type="text"
                         id="tags"
                         placeholder="Enter a tags ..."
-                        {...register("tags")}
+                        {...register('tags')}
                       />
                       <p className="text-sm font-medium text-zinc-500">
-                        Please separate tags with{" "}
+                        Please separate tags with{' '}
                         <span className="text-zinc-700 dark:text-zinc-300">
                           ,
                         </span>
@@ -492,7 +491,7 @@ export default function CardLinkAdmin({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                     )}
                     disabled={isLoading}
                     onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -504,7 +503,7 @@ export default function CardLinkAdmin({
                   </button>
                 </AlertDialogFooter>
               </AlertDialogContent>
-            </AlertDialog>{" "}
+            </AlertDialog>{' '}
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
@@ -527,7 +526,7 @@ export default function CardLinkAdmin({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      'inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                     )}
                     disabled={isLoadingDelete}
                     onClick={

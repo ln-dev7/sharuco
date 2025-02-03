@@ -1,7 +1,7 @@
-import Link from "next/link"
-import { Trash } from "lucide-react"
+import Link from 'next/link';
+import { Trash } from 'lucide-react';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -11,18 +11,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+} from '@/components/ui/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 
 export default function CardUserAdmin({
   pseudo,
   displayName,
   photoURL,
 }: {
-  pseudo: string
-  displayName: string
-  photoURL: string
+  pseudo: string;
+  displayName: string;
+  photoURL: string;
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-4 rounded-md border border-zinc-200 p-4 dark:border-zinc-700">
@@ -35,9 +35,9 @@ export default function CardUserAdmin({
           <AvatarFallback>
             {displayName !== null ? (
               <>
-                {displayName.split(" ")[1] === undefined
-                  ? displayName.split(" ")[0][0] + displayName.split(" ")[0][1]
-                  : displayName.split(" ")[0][0] + displayName.split(" ")[1][0]}
+                {displayName.split(' ')[1] === undefined
+                  ? displayName.split(' ')[0][0] + displayName.split(' ')[0][1]
+                  : displayName.split(' ')[0][0] + displayName.split(' ')[1][0]}
               </>
             ) : (
               pseudo[0] + pseudo[1]
@@ -75,7 +75,7 @@ export default function CardUserAdmin({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <button
               className={cn(
-                "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                'inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
               )}
             >
               <Trash className="mr-2 h-4 w-4" />
@@ -85,5 +85,5 @@ export default function CardUserAdmin({
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

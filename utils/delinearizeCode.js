@@ -1,8 +1,8 @@
 function delinearizeCode(linearCode) {
-  const codeWithoutNewLines = linearCode.replace(/\\n/g, "")
-  const finalCode = codeWithoutNewLines.replace(/\\t/g, "")
+  const codeWithoutNewLines = linearCode.replace(/\\n/g, '');
+  const finalCode = codeWithoutNewLines.replace(/\\t/g, '');
 
-  return finalCode
+  return finalCode;
 }
 
-export default delinearizeCode
+export default delinearizeCode;

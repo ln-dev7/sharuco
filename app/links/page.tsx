@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { useAuthContext } from "@/context/AuthContext";
-import { useGitHubLogin } from "@/firebase/auth/githubLogin";
-import { useCreateDocument } from "@/firebase/firestore/createDocument";
-import { useDocument } from "@/firebase/firestore/getDocument";
-import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Eye, EyeOff, LinkIcon, Loader2, Plus } from "lucide-react";
-import moment from "moment";
-import Head from "next/head";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
+import { useAuthContext } from '@/context/AuthContext';
+import { useGitHubLogin } from '@/firebase/auth/githubLogin';
+import { useCreateDocument } from '@/firebase/firestore/createDocument';
+import { useDocument } from '@/firebase/firestore/getDocument';
+import { useUpdateUserDocument } from '@/firebase/firestore/updateUserDocument';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Eye, EyeOff, LinkIcon, Loader2, Plus } from 'lucide-react';
+import moment from 'moment';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
-import { Layout } from "@/components/layout";
-import LinksConnected from "@/components/links/LinksConnected";
-import LinksNotConnected from "@/components/links/LinksNotConnected";
+import { Layout } from '@/components/layout';
+import LinksConnected from '@/components/links/LinksConnected';
+import LinksNotConnected from '@/components/links/LinksNotConnected';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -26,31 +26,31 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/alert-dialog';
+import { buttonVariants } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 export default function Links() {
   const { user, userPseudo } = useAuthContext();
   const { login, isPending } = useGitHubLogin();
 
   const notifyCodeAdded = () =>
-    toast.success("Your link has been added successfully !");
+    toast.success('Your link has been added successfully !');
 
   const {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(userPseudo, "users");
+  } = useDocument(userPseudo, 'users');
 
   const [openChangeVisibilityDialog, setOpenChangeVisibilityDialog] =
     useState(false);
 
-  const { updateUserDocument }: any = useUpdateUserDocument("users");
+  const { updateUserDocument }: any = useUpdateUserDocument('users');
 
   const changeVisibiltyForLinkPage = async (pseudo: string) => {
     let updatedUserData = {
@@ -59,9 +59,9 @@ export default function Links() {
     updateUserDocument({ pseudo, updatedUserData });
     setOpenChangeVisibilityDialog(false);
     const description = dataUser.data.publicLinkPage
-      ? "Your link page is now public anyone can access it."
-      : "Your link page is kept private, you are the only person who can view it ";
-    toast.message("Visibility changed", {
+      ? 'Your link page is now public anyone can access it.'
+      : 'Your link page is kept private, you are the only person who can view it ';
+    toast.message('Visibility changed', {
       description: description,
     });
   };
@@ -71,15 +71,15 @@ export default function Links() {
       .string()
       .matches(
         /^(http|https):\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/,
-        "Invalid link format"
+        'Invalid link format'
       )
       .required(),
     description: yup.string().required(),
     tags: yup
       .string()
       .test(
-        "tags",
-        "The tags field must contain only letters, commas and/or spaces",
+        'tags',
+        'The tags field must contain only letters, commas and/or spaces',
         (val) => !val || /^[a-zA-Z, ]*$/.test(val)
       ),
   });
@@ -95,14 +95,14 @@ export default function Links() {
 
   const [openCreateLinkDialog, setOpenCreateLinkDialog] = useState(false);
   const { createDocument, isLoading, isError, isSuccess }: any =
-    useCreateDocument("links");
+    useCreateDocument('links');
 
   const onSubmit = async (data) => {
     const { link, description, tags } = data;
     const tabTabs = tags
-      ? tags.split(",").map((word) => word.trim().toLowerCase())
+      ? tags.split(',').map((word) => word.trim().toLowerCase())
       : [];
-    if (tabTabs[tabTabs.length - 1] === "") {
+    if (tabTabs[tabTabs.length - 1] === '') {
       tabTabs.pop();
     }
 
@@ -117,9 +117,9 @@ export default function Links() {
     createDocument(newDocument);
 
     reset({
-      link: "",
-      description: "",
-      tags: "",
+      link: '',
+      description: '',
+      tags: '',
     });
   };
 
@@ -149,8 +149,8 @@ export default function Links() {
           </h1>
           <p
             className={cn(
-              "text-sm font-medium leading-5 text-gray-500 dark:text-gray-400",
-              "sm:text-base md:text-lg lg:text-lg"
+              'text-sm font-medium leading-5 text-gray-500 dark:text-gray-400',
+              'sm:text-base md:text-lg lg:text-lg'
             )}
           >
             Keep the links that you found useful and that will help you later.
@@ -164,7 +164,7 @@ export default function Links() {
             >
               <AlertDialogTrigger className="w-full shrink-0 sm:w-fit" asChild>
                 <button
-                  className={buttonVariants({ size: "lg" })}
+                  className={buttonVariants({ size: 'lg' })}
                   onClick={() => setOpenCreateLinkDialog(true)}
                 >
                   <Plus className="mr-2 h-4 w-4" />
@@ -184,7 +184,7 @@ export default function Links() {
                       <Input
                         placeholder="Insert your link here..."
                         id="code"
-                        {...register("link")}
+                        {...register('link')}
                       />
                       <p className="text-sm text-red-500">
                         {errors.link && <>{errors.link.message}</>}
@@ -195,7 +195,7 @@ export default function Links() {
                       <Input
                         placeholder="Insert description of your link here..."
                         id="description"
-                        {...register("description")}
+                        {...register('description')}
                       />
                       <p className="text-sm text-red-500">
                         {errors.description && (
@@ -209,10 +209,10 @@ export default function Links() {
                         type="text"
                         id="tags"
                         placeholder="Enter a tags ..."
-                        {...register("tags")}
+                        {...register('tags')}
                       />
                       <p className="text-sm font-medium text-zinc-500">
-                        Please separate tags with{" "}
+                        Please separate tags with{' '}
                         <span className="text-zinc-700 dark:text-zinc-300">
                           ,
                         </span>
@@ -233,7 +233,7 @@ export default function Links() {
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                     )}
                     disabled={isLoading}
                     onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -250,7 +250,7 @@ export default function Links() {
               {dataUser?.data?.publicLinkPage && (
                 <Link
                   href={`/link/${userPseudo}`}
-                  className={buttonVariants({ size: "lg", variant: "outline" })}
+                  className={buttonVariants({ size: 'lg', variant: 'outline' })}
                 >
                   <LinkIcon className="mr-2 h-4 w-4" />
                   Your public links
@@ -263,8 +263,8 @@ export default function Links() {
                 <AlertDialogTrigger asChild>
                   <button
                     className={buttonVariants({
-                      size: "lg",
-                      variant: "subtle",
+                      size: 'lg',
+                      variant: 'subtle',
                     })}
                     onClick={() => setOpenChangeVisibilityDialog(true)}
                   >
@@ -289,7 +289,7 @@ export default function Links() {
                         </>
                       ) : (
                         <>
-                          By going in public everyone to see your links here :{" "}
+                          By going in public everyone to see your links here :{' '}
                           <Link
                             href={`/link/${userPseudo}`}
                             className="font-bold hover:underline hover:underline-offset-4"
@@ -304,7 +304,7 @@ export default function Links() {
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                        'inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                       )}
                       onClick={() => {
                         changeVisibiltyForLinkPage(userPseudo);

@@ -1,9 +1,9 @@
-"use client"
+'use client';
 
-import Link from "next/link"
+import Link from 'next/link';
 
-import { Icons } from "@/components/icons"
-import { buttonVariants } from "@/components/ui/button"
+import { Icons } from '@/components/icons';
+import { buttonVariants } from '@/components/ui/button';
 
 export function SiteFooter() {
   return (
@@ -25,7 +25,7 @@ export function SiteFooter() {
             <line x1="12" y1="19" x2="20" y2="19"></line>
           </svg>
           <p className="text-center text-sm leading-loose text-zinc-600 md:text-left dark:text-zinc-400">
-            Built by{" "}
+            Built by{' '}
             <a
               href="https://leonelngoya.com"
               target="_blank"
@@ -34,7 +34,7 @@ export function SiteFooter() {
             >
               Leonel Ngoya ( LN )
             </a>
-            {"  "}
+            {'  '}
             🇨🇲
           </p>
         </div>
@@ -46,9 +46,9 @@ export function SiteFooter() {
           >
             <div
               className={buttonVariants({
-                size: "sm",
-                variant: "ghost",
-                className: "text-zinc-700 dark:text-zinc-400",
+                size: 'sm',
+                variant: 'ghost',
+                className: 'text-zinc-700 dark:text-zinc-400',
               })}
             >
               <Icons.gitHub className="h-5 w-5" />
@@ -62,9 +62,9 @@ export function SiteFooter() {
           >
             <div
               className={buttonVariants({
-                size: "sm",
-                variant: "ghost",
-                className: "text-zinc-700 dark:text-zinc-400",
+                size: 'sm',
+                variant: 'ghost',
+                className: 'text-zinc-700 dark:text-zinc-400',
               })}
             >
               <Icons.twitter className="h-5 w-5 fill-current" />
@@ -74,5 +74,5 @@ export function SiteFooter() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

@@ -5,39 +5,39 @@ import {
   orderBy,
   query,
   where,
-} from "firebase/firestore"
-import { useQuery } from "react-query"
+} from 'firebase/firestore';
+import { useQuery } from 'react-query';
 
-import firebase_app from "../config"
-import { useState } from "react"
+import firebase_app from '../config';
+import { useState } from 'react';
 
-const db = getFirestore(firebase_app)
+const db = getFirestore(firebase_app);
 
 export const useGetCodesWithLanguage = () => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const getCodesWithLanguage = async (language, isPrivate) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const querySnapshot = await getDocs(
         query(
-          collection(db, "codes"),
-          where("language", "==", language),
-          where("isPrivate", "==", isPrivate),
-          orderBy("createdAt", "desc")
+          collection(db, 'codes'),
+          where('language', '==', language),
+          where('isPrivate', '==', isPrivate),
+          orderBy('createdAt', 'desc')
         )
-      )
+      );
       const collections = querySnapshot.docs.map((doc) => {
-        const data = doc.data()
-        data.id = doc.id
-        return data
-      })
-      return collections
+        const data = doc.data();
+        data.id = doc.id;
+        return data;
+      });
+      return collections;
     } catch (e) {
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
-  return { getCodesWithLanguage, isLoading }
-}
+  return { getCodesWithLanguage, isLoading };
+};

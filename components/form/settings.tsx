@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useAuthContext } from "@/context/AuthContext";
-import { checkIdAvailability } from "@/firebase/firestore/checkIfIDExistOnCollection";
-import { useDeleteDocument } from "@/firebase/firestore/deleteDocument";
-import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { algoliasearch } from "algoliasearch";
-import { Check, Loader2, Save, Trash, X } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
+import { useAuthContext } from '@/context/AuthContext';
+import { checkIdAvailability } from '@/firebase/firestore/checkIfIDExistOnCollection';
+import { useDeleteDocument } from '@/firebase/firestore/deleteDocument';
+import { useUpdateFormDocument } from '@/firebase/firestore/updateFormDocument';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { algoliasearch } from 'algoliasearch';
+import { Check, Loader2, Save, Trash, X } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
 import {
   AlertDialog,
@@ -21,24 +21,24 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 export default function SettingsForms({ dataForm }: { dataForm: any }) {
   const params = useParams();
   const { user, userPseudo } = useAuthContext();
   const router = useRouter();
 
-  const id = params["form"] as string;
+  const id = params['form'] as string;
 
-  const ALGOLIA_INDEX_NAME = "forms";
+  const ALGOLIA_INDEX_NAME = 'forms';
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
@@ -51,18 +51,18 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
   );
 
   const schema = yup.object().shape({
-    name: yup.string().required("Name is required"),
-    description: yup.string().required("Description is required"),
+    name: yup.string().required('Name is required'),
+    description: yup.string().required('Description is required'),
     color: yup
       .string()
       .matches(
         /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
         'Color must be a valid hex color code starting with "#"'
       )
-      .required("Color is required"),
+      .required('Color is required'),
     redirectOnCompletion: yup
       .string()
-      .url("Redirect URL must be a valid URL")
+      .url('Redirect URL must be a valid URL')
       .nullable(),
     // acceptPayment: yup.boolean(),
     // publicNotchPayApiKey: yup.string().when("acceptPayment", {
@@ -98,10 +98,10 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
   });
 
   useEffect(() => {
-    setValue("name", dataForm.name);
-    setValue("description", dataForm.description);
-    setValue("color", dataForm.color);
-    setValue("redirectOnCompletion", dataForm.redirectOnCompletion);
+    setValue('name', dataForm.name);
+    setValue('description', dataForm.description);
+    setValue('color', dataForm.color);
+    setValue('redirectOnCompletion', dataForm.redirectOnCompletion);
     // setValue("publicNotchPayApiKey", dataForm.publicNotchPayApiKey)
     // setValue("amountNotchPay", dataForm.amountNotchPay)
     // setValue("acceptPayment", dataForm.acceptPayment)
@@ -113,23 +113,23 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     isError: isErrorUpdateForm,
     isSuccess: isSuccessUpdateForm,
     reset: resetUpdateForm,
-  }: any = useUpdateFormDocument("forms");
+  }: any = useUpdateFormDocument('forms');
 
   const { deleteDocument, isLoading: isLoadingDelete }: any =
-    useDeleteDocument("forms");
+    useDeleteDocument('forms');
 
-  const [confirmFormName, setConfirmFormName] = useState("");
+  const [confirmFormName, setConfirmFormName] = useState('');
   const handleDeleteDocument = () => {
     deleteDocument(id);
     index.deleteObject(id);
-    router.push("/forms");
+    router.push('/forms');
   };
 
-  const [usernamePeopleToAdd, setUsernamePeopleToAdd] = useState("");
+  const [usernamePeopleToAdd, setUsernamePeopleToAdd] = useState('');
   const [checkIfUsernameExist, setCheckIfUsernameExist] = useState(false);
   const addCollaborator = async (pseudo: string) => {
     setCheckIfUsernameExist(true);
-    checkIdAvailability("users", pseudo)
+    checkIdAvailability('users', pseudo)
       .then((isAvailable) => {
         if (isAvailable) {
           let updatedFormData = {
@@ -143,13 +143,13 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
 
           updateFormDocument({ id, updatedFormData });
         } else {
-          toast.error("This user not exist on Sharuco", {
-            description: "Make sure you have entered the correct user name.",
+          toast.error('This user not exist on Sharuco', {
+            description: 'Make sure you have entered the correct user name.',
           });
           return;
         }
       })
-      .catch((error) => console.error("Error : ", error))
+      .catch((error) => console.error('Error : ', error))
       .finally(() => {
         setCheckIfUsernameExist(false);
       });
@@ -184,8 +184,8 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       // amountNotchPayUpdate === dataForm.amountNotchPay &&
       // acceptPaymentUpdate === dataForm.acceptPayment
     ) {
-      toast.error("You have not made any changes", {
-        description: "Please make changes to update your settings",
+      toast.error('You have not made any changes', {
+        description: 'Please make changes to update your settings',
       });
       return;
     }
@@ -243,7 +243,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           <Label>Name</Label>
           <Input
             placeholder="Name of the form"
-            {...register("name")}
+            {...register('name')}
             defaultValue={dataForm.name}
           />
           <p className="text-sm text-red-500">
@@ -255,7 +255,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           <Textarea
             placeholder="Description of the form"
             className="h-24"
-            {...register("description")}
+            {...register('description')}
           />
           <p className="text-sm text-red-500">
             {errors.description && <>{errors.description.message}</>}
@@ -268,7 +268,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             <Input
               className="w-full"
               placeholder="#000000"
-              {...register("color")}
+              {...register('color')}
             />
             <div
               className="block h-9 w-9 shrink-0 rounded-full"
@@ -292,7 +292,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           </div>
           <Input
             placeholder="https://example.com?success=true"
-            {...register("redirectOnCompletion")}
+            {...register('redirectOnCompletion')}
           />
           <p className="text-sm text-red-500">
             {errors.redirectOnCompletion && (
@@ -322,13 +322,13 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             />
             <Button
               disabled={
-                usernamePeopleToAdd === "" ||
+                usernamePeopleToAdd === '' ||
                 checkIfUsernameExist ||
                 isLoadingUpdateForm
               }
               className="shrink-0"
               onClick={() => {
-                setUsernamePeopleToAdd("");
+                setUsernamePeopleToAdd('');
                 addCollaborator(usernamePeopleToAdd);
               }}
             >
@@ -483,7 +483,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                     </div>
                     <div className="space-y-2">
                       <p>
-                        Enter the form name{" "}
+                        Enter the form name{' '}
                         <span className="font-bold">{dataForm.name}</span> to
                         continue:
                       </p>
@@ -500,14 +500,14 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                 <AlertDialogFooter>
                   <AlertDialogCancel
                     onClick={() => {
-                      setConfirmFormName("");
+                      setConfirmFormName('');
                     }}
                   >
                     Cancel
                   </AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      'inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                     )}
                     disabled={
                       isLoadingDelete || confirmFormName !== dataForm.name

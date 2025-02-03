@@ -1,42 +1,42 @@
-"use client";
+'use client';
 
-import { useAuthContext } from "@/context/AuthContext";
-import { useDocument } from "@/firebase/firestore/getDocument";
-import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument";
-import { yupResolver } from "@hookform/resolvers/yup";
-import algoliasearch from "algoliasearch";
-import { Check, Loader2, Send, Terminal, X } from "lucide-react";
-import moment from "moment";
-import Head from "next/head";
-import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { uid } from "uid";
-import * as yup from "yup";
+import { useAuthContext } from '@/context/AuthContext';
+import { useDocument } from '@/firebase/firestore/getDocument';
+import { useUpdateFormDocument } from '@/firebase/firestore/updateFormDocument';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { algoliasearch } from 'algoliasearch';
+import { Check, Loader2, Send, Terminal, X } from 'lucide-react';
+import moment from 'moment';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { uid } from 'uid';
+import * as yup from 'yup';
 
-import Error from "@/components/error";
-import { Layout } from "@/components/layout";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
+import Error from '@/components/error';
+import { Layout } from '@/components/layout';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function FormViewPage() {
   const params = useParams();
   const { user, userPseudo } = useAuthContext();
-  const router = useRouter() || "";
+  const router = useRouter() || '';
 
   type QuestionType =
-    | "text"
-    | "email"
-    | "link"
-    | "longtext"
-    | "date"
-    | "uniquechoice"
-    | "listchoice"
-    | "multiplechoice";
+    | 'text'
+    | 'email'
+    | 'link'
+    | 'longtext'
+    | 'date'
+    | 'uniquechoice'
+    | 'listchoice'
+    | 'multiplechoice';
 
   const {
     data: dataForm,
@@ -48,7 +48,7 @@ export default function FormViewPage() {
     isLoading: boolean;
     isError: boolean;
     error: any;
-  } = useDocument(params["form"], "forms");
+  } = useDocument(params['form'], 'forms');
 
   //
   const [randomNumbers, setRandomNumbers] = useState(generateRandomNumbers());
@@ -63,7 +63,7 @@ export default function FormViewPage() {
   const schema = yup.object().shape({
     responses: yup.array().of(
       yup.object().shape({
-        text: yup.string().required("This field is required"),
+        text: yup.string().required('This field is required'),
       })
     ),
     answer: yup.number().integer(),
@@ -71,7 +71,7 @@ export default function FormViewPage() {
     // emailPayment: yup.string(),
   });
 
-  const ALGOLIA_INDEX_NAME = "forms";
+  const ALGOLIA_INDEX_NAME = 'forms';
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
@@ -97,7 +97,7 @@ export default function FormViewPage() {
     isError: isErrorUpdateForm,
     isSuccess: isSuccessUpdateForm,
     reset: resetUpdateForm,
-  }: any = useUpdateFormDocument("forms");
+  }: any = useUpdateFormDocument('forms');
 
   const onSubmit = async (data) => {
     // setPaymentDone(false)
@@ -107,7 +107,7 @@ export default function FormViewPage() {
     const correctAnswer = randomNumbers.number1 + randomNumbers.number2;
 
     if (userAnswer !== correctAnswer) {
-      alert("The answer to the mathematical question is incorrect.");
+      alert('The answer to the mathematical question is incorrect.');
       return;
     }
 
@@ -137,7 +137,7 @@ export default function FormViewPage() {
     };
     // console.log("updatedFormData", updatedFormData)
 
-    const id = params["form"];
+    const id = params['form'];
 
     await updateFormDocument({ id, updatedFormData });
 
@@ -150,7 +150,7 @@ export default function FormViewPage() {
       responses: [
         ...dataForm?.data?.questions.map((question: any) => {
           return {
-            text: question.type === "heading" ? "heading" : "",
+            text: question.type === 'heading' ? 'heading' : '',
           };
         }),
       ],
@@ -248,7 +248,7 @@ export default function FormViewPage() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>{" "}
+      </Head>{' '}
       <section className="fixed inset-0 z-50 h-screen overflow-scroll bg-white dark:bg-zinc-900">
         <div className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
           <div className="flex w-full items-center justify-start">
@@ -354,28 +354,28 @@ export default function FormViewPage() {
                         className="flex w-full flex-col items-start gap-2"
                         key={index}
                       >
-                        {question.type !== "heading" ? (
+                        {question.type !== 'heading' ? (
                           <Label>{question.label}</Label>
                         ) : (
                           <h3 className="text-xl font-semibold">
                             {question.label}
                           </h3>
                         )}
-                        {(question.type === "text" ||
-                          question.type === "link" ||
-                          question.type === "email") && (
+                        {(question.type === 'text' ||
+                          question.type === 'link' ||
+                          question.type === 'email') && (
                           <Input
                             {...register(`responses.${index}.text` as const)}
                             placeholder={question.text}
                           />
                         )}
-                        {question.type === "longtext" && (
+                        {question.type === 'longtext' && (
                           <Textarea
                             {...register(`responses.${index}.text` as const)}
                             placeholder={question.text}
                           />
                         )}
-                        {question.type === "heading" && (
+                        {question.type === 'heading' && (
                           <Input
                             {...register(`responses.${index}.text` as const)}
                             placeholder={question.text}
@@ -395,7 +395,7 @@ export default function FormViewPage() {
                   <div className="mx-auto my-8 flex w-full flex-col items-center gap-2 sm:w-2/3">
                     <div className="relative flex w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-lg bg-blue-600 p-8">
                       <h3 className="text-md z-10 text-center font-bold uppercase text-white">
-                        Prove you’re not a robot by solving this equation{" "}
+                        Prove you’re not a robot by solving this equation{' '}
                       </h3>
                       <span className="z-10 mb-2 block text-center text-4xl font-black text-white">
                         {randomNumbers.number1} + {randomNumbers.number2} = ?
@@ -409,7 +409,7 @@ export default function FormViewPage() {
                         type="number"
                         id="answer"
                         name="answer"
-                        {...register("answer")}
+                        {...register('answer')}
                         className="z-10 h-10 w-full rounded-md bg-white px-3 py-2 text-sm font-medium text-zinc-900 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder={`${randomNumbers.number1} + ${randomNumbers.number2}`}
                       />
@@ -461,7 +461,7 @@ export default function FormViewPage() {
               <h1 className="text-2xl font-bold">This form does not exist.</h1>
               <Link
                 href="/forms"
-                className={buttonVariants({ size: "lg", variant: "outline" })}
+                className={buttonVariants({ size: 'lg', variant: 'outline' })}
               >
                 Create your own form
               </Link>
@@ -469,7 +469,7 @@ export default function FormViewPage() {
           )}
           {isErrorForm && (
             <>
-              {errorForm.message == "Missing or insufficient permissions." ? (
+              {errorForm.message == 'Missing or insufficient permissions.' ? (
                 <div className="flex flex-col items-center gap-4">
                   <h1 className="text-2xl font-bold">
                     This form does not exist.
@@ -477,8 +477,8 @@ export default function FormViewPage() {
                   <Link
                     href="/forms"
                     className={buttonVariants({
-                      size: "lg",
-                      variant: "outline",
+                      size: 'lg',
+                      variant: 'outline',
                     })}
                   >
                     Create your own form
@@ -513,7 +513,7 @@ export default function FormViewPage() {
               </div>
             </div>
             <Link href="/">
-              Powered by{" "}
+              Powered by{' '}
               <span className="font-bold hover:underline hover:underline-offset-4">
                 Sharuco
               </span>

@@ -1,20 +1,20 @@
-"use client"
+'use client';
 
-import { useEffect } from "react"
-import Head from "next/head"
-import Link from "next/link"
-import { useParams } from "next/navigation"
-import { allLanguages, languagesName } from "@/constants/languages"
-import { SUPER_ADMIN } from "@/constants/super-admin"
-import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogin } from "@/firebase/auth/githubLogin"
-import { useDocument } from "@/firebase/firestore/getDocument"
-import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
-import copyToClipboard from "@/utils/copyToClipboard"
-import highlight from "@/utils/highlight"
-import linearizeCode from "@/utils/linearizeCode"
-import { yupResolver } from "@hookform/resolvers/yup"
-import hljs from "highlight.js"
+import { useEffect } from 'react';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { allLanguages, languagesName } from '@/constants/languages';
+import { SUPER_ADMIN } from '@/constants/super-admin';
+import { useAuthContext } from '@/context/AuthContext';
+import { useGitHubLogin } from '@/firebase/auth/githubLogin';
+import { useDocument } from '@/firebase/firestore/getDocument';
+import { useUpdateCodeDocument } from '@/firebase/firestore/updateCodeDocument';
+import copyToClipboard from '@/utils/copyToClipboard';
+import highlight from '@/utils/highlight';
+import linearizeCode from '@/utils/linearizeCode';
+import { yupResolver } from '@hookform/resolvers/yup';
+import hljs from 'highlight.js';
 import {
   Copy,
   Github,
@@ -24,19 +24,19 @@ import {
   User,
   Verified,
   View,
-} from "lucide-react"
-import moment from "moment"
-import { useForm } from "react-hook-form"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
-import * as yup from "yup"
+} from 'lucide-react';
+import moment from 'moment';
+import { useForm } from 'react-hook-form';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import * as yup from 'yup';
 
-import { cn } from "@/lib/utils"
-import CardCode from "@/components/cards/card-code"
-import CardCodeAdmin from "@/components/cards/card-code-admin"
-import Error from "@/components/error"
-import { Layout } from "@/components/layout"
-import Loader from "@/components/loaders/loader"
-import LoaderCode from "@/components/loaders/loader-code"
+import { cn } from '@/lib/utils';
+import CardCode from '@/components/cards/card-code';
+import CardCodeAdmin from '@/components/cards/card-code-admin';
+import Error from '@/components/error';
+import { Layout } from '@/components/layout';
+import Loader from '@/components/loaders/loader';
+import LoaderCode from '@/components/loaders/loader-code';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -46,42 +46,42 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { buttonVariants } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner";
+} from '@/components/ui/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { buttonVariants } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
 
 export default function CodePreview() {
-  const params = useParams()
-  const { user, userPseudo } = useAuthContext()
+  const params = useParams();
+  const { user, userPseudo } = useAuthContext();
 
   const notifyCodeCopied = () =>
-    toast.message("Code copied to clipboard", {
-      description: "You can paste it wherever you want",
-    })
+    toast.message('Code copied to clipboard', {
+      description: 'You can paste it wherever you want',
+    });
 
-  const { login, isPending } = useGitHubLogin()
+  const { login, isPending } = useGitHubLogin();
 
   const {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(userPseudo, "users")
+  } = useDocument(userPseudo, 'users');
 
   const {
     data: dataCode,
     isLoading: isLoadingCode,
     isError: isErrorCode,
-  } = useDocument(params["code-preview"], "codes")
+  } = useDocument(params['code-preview'], 'codes');
 
   const schema = yup.object().shape({
     code: yup.string(),
     comment: yup.string().required(),
     language: yup.string(),
-  })
+  });
 
   const {
     register,
@@ -91,20 +91,20 @@ export default function CodePreview() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-  })
+  });
 
   function detectLanguage(code) {
-    const language = hljs.highlightAuto(code).language
-    return language || "text"
+    const language = hljs.highlightAuto(code).language;
+    return language || 'text';
   }
 
   function handleCodeChange(code) {
-    const detectedLanguage = detectLanguage(code)
+    const detectedLanguage = detectLanguage(code);
     if (!languagesName.includes(detectedLanguage)) {
-      setValue("language", "other")
-      return
+      setValue('language', 'other');
+      return;
     }
-    setValue("language", detectedLanguage)
+    setValue('language', detectedLanguage);
   }
 
   const {
@@ -112,21 +112,21 @@ export default function CodePreview() {
     isLoading: isLoadingAddComment,
     isError: isErrorAddComment,
     isSuccess: isSuccessAddComment,
-  }: any = useUpdateCodeDocument("codes")
+  }: any = useUpdateCodeDocument('codes');
 
   function convertirMentionsEnLiens(texte) {
-    var regExp = /@([\w-]+)/g
-    var texteAvecLiens = texte.replace(regExp, '<a href="/$1">@$1</a>')
-    return texteAvecLiens
+    var regExp = /@([\w-]+)/g;
+    var texteAvecLiens = texte.replace(regExp, '<a href="/$1">@$1</a>');
+    return texteAvecLiens;
   }
 
   const onSubmit = async (data) => {
-    const { code, comment, language } = data
+    const { code, comment, language } = data;
 
-    const linearCode = linearizeCode(code)
+    const linearCode = linearizeCode(code);
 
     let updatedCodeData: {
-      comments: any[]
+      comments: any[];
     } = {
       comments: [
         ...dataCode?.data?.comments,
@@ -142,50 +142,50 @@ export default function CodePreview() {
           language: language,
         },
       ],
-    }
+    };
 
-    const id = params["code-preview"]
+    const id = params['code-preview'];
 
-    await updateCodeDocument({ id, updatedCodeData })
+    await updateCodeDocument({ id, updatedCodeData });
 
     reset({
-      code: "",
-      comment: "",
-      language: "",
-    })
+      code: '',
+      comment: '',
+      language: '',
+    });
 
-    toast.message("Your comment has been submitted successfully", {
-      description: "You can now see your comment below",
-    })
-  }
+    toast.message('Your comment has been submitted successfully', {
+      description: 'You can now see your comment below',
+    });
+  };
 
   const handleDeleteComment = async (idComment) => {
-    const id = params["code-preview"]
+    const id = params['code-preview'];
 
     const updatedCodeData = {
       comments: dataCode?.data?.comments.filter(
         (comment) => comment.idComment !== idComment
       ),
-    }
+    };
 
-    await updateCodeDocument({ id, updatedCodeData })
+    await updateCodeDocument({ id, updatedCodeData });
 
-    toast.message("Your comment has been deleted successfully", {
-      description: "You can now see the updated comments below",
-    })
-  }
+    toast.message('Your comment has been deleted successfully', {
+      description: 'You can now see the updated comments below',
+    });
+  };
 
   useEffect(() => {
-    if (window.location.hash === "#commentsCode" && dataCode) {
-      const el = document.querySelector("#commentsCode")
-      el.scrollIntoView()
+    if (window.location.hash === '#commentsCode' && dataCode) {
+      const el = document.querySelector('#commentsCode');
+      el.scrollIntoView();
     }
-  }, [dataCode])
+  }, [dataCode]);
 
   return (
     <Layout>
       <Head>
-        <title>Sharuco - Code : {params["code-preview"]}</title>
+        <title>Sharuco - Code : {params['code-preview']}</title>
 
         <meta
           property="og:description"
@@ -194,11 +194,11 @@ export default function CodePreview() {
         <meta name="description" content={`${dataCode?.data?.description}`} />
         <meta
           property="og:url"
-          content={`https://sharuco.lndev.me/${params["code-preview"]}`}
+          content={`https://sharuco.lndev.me/${params['code-preview']}`}
         />
         <link
           rel="canonical"
-          href={`https://sharuco.lndev.me/${params["code-preview"]}`}
+          href={`https://sharuco.lndev.me/${params['code-preview']}`}
         />
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -221,8 +221,8 @@ export default function CodePreview() {
                   {dataUser?.data.pseudo === dataCode.data.idAuthor ||
                   SUPER_ADMIN.includes(dataUser?.data.pseudo) ? (
                     <CardCodeAdmin
-                      key={params["code-preview"] as string}
-                      id={params["code-preview"]}
+                      key={params['code-preview'] as string}
+                      id={params['code-preview']}
                       idAuthor={dataCode.data.idAuthor}
                       language={dataCode.data.language}
                       code={dataCode.data.code}
@@ -234,8 +234,8 @@ export default function CodePreview() {
                     />
                   ) : (
                     <CardCode
-                      key={params["code-preview"] as string}
-                      id={params["code-preview"]}
+                      key={params['code-preview'] as string}
+                      id={params['code-preview']}
                       idAuthor={dataCode.data.idAuthor}
                       language={dataCode.data.language}
                       code={dataCode.data.code}
@@ -260,8 +260,8 @@ export default function CodePreview() {
                     href={dataCode?.data?.githubGistInfos?.gistUrl}
                     target="_blank"
                     className={buttonVariants({
-                      size: "lg",
-                      variant: "subtle",
+                      size: 'lg',
+                      variant: 'subtle',
                     })}
                   >
                     <View className="mr-2 h-4 w-4" />
@@ -305,17 +305,17 @@ export default function CodePreview() {
                                     alt={comment.idAuthor}
                                   />
                                   <AvatarFallback>
-                                    {comment.idAuthor.split(" ")[1] ===
+                                    {comment.idAuthor.split(' ')[1] ===
                                     undefined
-                                      ? comment.idAuthor.split(" ")[0][0] +
-                                        comment.idAuthor.split(" ")[0][1]
-                                      : comment.idAuthor.split(" ")[0][0] +
-                                        comment.idAuthor.split(" ")[1][0]}
+                                      ? comment.idAuthor.split(' ')[0][0] +
+                                        comment.idAuthor.split(' ')[0][1]
+                                      : comment.idAuthor.split(' ')[0][0] +
+                                        comment.idAuthor.split(' ')[1][0]}
                                   </AvatarFallback>
                                 </Avatar>
                                 <div className="flex items-center justify-start gap-1">
                                   <span className="text-md font-bold text-zinc-700 hover:underline dark:text-zinc-400 ">
-                                    {comment.idAuthor}{" "}
+                                    {comment.idAuthor}{' '}
                                   </span>
                                   <span>
                                     {comment.premium && (
@@ -364,8 +364,8 @@ export default function CodePreview() {
                                         <span
                                           className="flex cursor-pointer items-center p-1 text-xs font-medium text-white"
                                           onClick={() => {
-                                            copyToClipboard(comment.code)
-                                            notifyCodeCopied()
+                                            copyToClipboard(comment.code);
+                                            notifyCodeCopied();
                                           }}
                                         >
                                           <Copy className="mr-2 h-4 w-4" />
@@ -417,10 +417,12 @@ export default function CodePreview() {
                                       </AlertDialogCancel>
                                       <button
                                         className={cn(
-                                          "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                                          'inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                                         )}
                                         onClick={() => {
-                                          handleDeleteComment(comment.idComment)
+                                          handleDeleteComment(
+                                            comment.idComment
+                                          );
                                         }}
                                       >
                                         <Trash className="mr-2 h-4 w-4" />
@@ -442,7 +444,7 @@ export default function CodePreview() {
                           <Textarea
                             placeholder="Insert your comment here..."
                             id="comment"
-                            {...register("comment")}
+                            {...register('comment')}
                           />
                           <p className="text-sm text-red-500">
                             {errors.comment && <>{errors.comment.message}</>}
@@ -453,9 +455,9 @@ export default function CodePreview() {
                           <Textarea
                             placeholder="Insert your code review here..."
                             id="code"
-                            {...register("code")}
+                            {...register('code')}
                             onChange={(e) => {
-                              handleCodeChange(e.target.value)
+                              handleCodeChange(e.target.value);
                             }}
                           />
                           <p className="text-sm text-red-500">
@@ -470,10 +472,10 @@ export default function CodePreview() {
                             className="flex h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                             name="language"
                             id="language"
-                            {...register("language")}
+                            {...register('language')}
                           >
                             <option value="" disabled selected>
-                              {" "}
+                              {' '}
                               The code is written in what language ?
                             </option>
                             {allLanguages.map((language) => (
@@ -488,7 +490,7 @@ export default function CodePreview() {
                         </div>
                         <button
                           className={cn(
-                            "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                            'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                           )}
                           disabled={isLoadingAddComment}
                           onClick={
@@ -506,7 +508,7 @@ export default function CodePreview() {
                     ) : (
                       <button
                         className={cn(
-                          "inline-flex h-10 w-full items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                          'inline-flex h-10 w-full items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                         )}
                         disabled={isPending}
                         onClick={login}
@@ -560,7 +562,7 @@ export default function CodePreview() {
             <h1 className="text-2xl font-bold">This code does not exist.</h1>
             <Link
               href="/explore"
-              className={buttonVariants({ size: "lg", variant: "outline" })}
+              className={buttonVariants({ size: 'lg', variant: 'outline' })}
             >
               Explore code
             </Link>
@@ -569,5 +571,5 @@ export default function CodePreview() {
         {isErrorCode && <Error />}
       </section>
     </Layout>
-  )
+  );
 }

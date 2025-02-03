@@ -1,13 +1,13 @@
-import React from "react"
+import React from 'react';
 
 export default function EmptyCard({
   icon,
   title,
   description,
 }: {
-  icon?: React.ReactNode
-  title: string
-  description?: string
+  icon?: React.ReactNode;
+  title: string;
+  description?: string;
 }) {
   return (
     <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed border-zinc-300 dark:border-zinc-700">
@@ -17,5 +17,5 @@ export default function EmptyCard({
         <p className="mb-4 mt-2 text-sm text-muted-foreground">{description}</p>
       </div>
     </div>
-  )
+  );
 }

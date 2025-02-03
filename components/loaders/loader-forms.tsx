@@ -1,8 +1,8 @@
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from '@/components/ui/skeleton';
 
-const numbers = [1, 2, 3, 4, 5, 6]
+const numbers = [1, 2, 3, 4, 5, 6];
 
 export default function LoaderForms() {
   return (
@@ -37,5 +37,5 @@ export default function LoaderForms() {
         ))}
       </Masonry>
     </ResponsiveMasonry>
-  )
+  );
 }

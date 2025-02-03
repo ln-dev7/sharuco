@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useAuthContext } from "@/context/AuthContext";
-import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { algoliasearch } from "algoliasearch";
+import { useAuthContext } from '@/context/AuthContext';
+import { useUpdateFormDocument } from '@/firebase/firestore/updateFormDocument';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { algoliasearch } from 'algoliasearch';
 import {
   AlignJustify,
   Calendar,
@@ -20,17 +20,17 @@ import {
   Save,
   Trash,
   X,
-} from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import * as yup from "yup";
+} from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
-import EmptyCard from "@/components/empty-card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
+import EmptyCard from '@/components/empty-card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function QuestionsForms({ dataForm }: { dataForm: any }) {
   const params = useParams();
@@ -43,18 +43,18 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     error: errorUpdateForm,
     isSuccess: isSuccessUpdateForm,
     reset: resetUpdateForm,
-  }: any = useUpdateFormDocument("forms");
+  }: any = useUpdateFormDocument('forms');
 
   type QuestionType =
-    | "heading"
-    | "text"
-    | "email"
-    | "link"
-    | "longtext"
-    | "date"
-    | "uniquechoice"
-    | "listchoice"
-    | "multiplechoice";
+    | 'heading'
+    | 'text'
+    | 'email'
+    | 'link'
+    | 'longtext'
+    | 'date'
+    | 'uniquechoice'
+    | 'listchoice'
+    | 'multiplechoice';
 
   interface Question {
     text: string;
@@ -69,14 +69,14 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
   const schema = yup.object().shape({
     questions: yup.array().of(
       yup.object().shape({
-        label: yup.string().required("The label is required"),
+        label: yup.string().required('The label is required'),
         //text: yup.string().required("The placeholder is required"),
       })
     ),
   });
 
   const handleAddField = (type: QuestionType) => {
-    append({ type, text: "", label: "" });
+    append({ type, text: '', label: '' });
   };
 
   const {
@@ -93,18 +93,18 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "questions",
+    name: 'questions',
   });
 
   useEffect(() => {
-    setValue("questions", dataForm.questions);
+    setValue('questions', dataForm.questions);
   }, [dataForm, setValue]);
 
   const handleRemoveField = (index: number) => {
     remove(index);
   };
 
-  const ALGOLIA_INDEX_NAME = "forms";
+  const ALGOLIA_INDEX_NAME = 'forms';
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
@@ -121,7 +121,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
       questions: data.questions,
     };
 
-    const id = params["form"];
+    const id = params['form'];
 
     await updateFormDocument({ id, updatedFormData });
 
@@ -137,21 +137,21 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
         <>
           <div className="flex w-full shrink-0 flex-col items-start gap-2 rounded-md sm:sticky sm:top-20 sm:w-[250px]">
             <button
-              onClick={() => handleAddField("heading")}
+              onClick={() => handleAddField('heading')}
               className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
             >
               <Heading className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">Heading</span>
             </button>
             <button
-              onClick={() => handleAddField("text")}
+              onClick={() => handleAddField('text')}
               className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
             >
               <Minus className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">Short answer</span>
             </button>
             <button
-              onClick={() => handleAddField("longtext")}
+              onClick={() => handleAddField('longtext')}
               className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
             >
               <AlignJustify className="h-5 w-5" />
@@ -231,7 +231,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                 key={field.id}
               >
                 <label className="flex w-3/4 flex-col items-start">
-                  {watchedFieldType === "heading" ? (
+                  {watchedFieldType === 'heading' ? (
                     <Input
                       {...register(`questions.${index}.label` as const)}
                       //defaultValue={field.label}
@@ -253,16 +253,16 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                     </p>
                   )}
                 </label>
-                {(watchedFieldType === "text" ||
-                  watchedFieldType === "email" ||
-                  watchedFieldType === "link") && (
+                {(watchedFieldType === 'text' ||
+                  watchedFieldType === 'email' ||
+                  watchedFieldType === 'link') && (
                   <Input
                     {...register(`questions.${index}.text` as const)}
                     placeholder="Enter placeholder"
                     //placeholder={field.text}
                   />
                 )}
-                {watchedFieldType === "longtext" && (
+                {watchedFieldType === 'longtext' && (
                   <Textarea
                     {...register(`questions.${index}.text` as const)}
                     placeholder="Enter placeholder"

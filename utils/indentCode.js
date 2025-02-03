@@ -1,25 +1,25 @@
 function indentCode(linearCode) {
-  let codeString = linearCode.replace(/\\t/g, "\t")
-  codeString = codeString.replace(/\\n/g, "\n")
+  let codeString = linearCode.replace(/\\t/g, '\t');
+  codeString = codeString.replace(/\\n/g, '\n');
 
   // Ajouter une indentation pour chaque niveau de tabulation
-  let indentationLevel = 0
-  let indentedCode = ""
+  let indentationLevel = 0;
+  let indentedCode = '';
   for (let i = 0; i < codeString.length; i++) {
-    const char = codeString[i]
-    if (char === "\t") {
-      indentationLevel++
-    } else if (char === "\n") {
-      indentedCode += "\n"
+    const char = codeString[i];
+    if (char === '\t') {
+      indentationLevel++;
+    } else if (char === '\n') {
+      indentedCode += '\n';
       for (let j = 0; j < indentationLevel; j++) {
-        indentedCode += "\t"
+        indentedCode += '\t';
       }
     } else {
-      indentedCode += char
+      indentedCode += char;
     }
   }
 
-  return indentedCode
+  return indentedCode;
 }
 
-export default indentCode
+export default indentCode;

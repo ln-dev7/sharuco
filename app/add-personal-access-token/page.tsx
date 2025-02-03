@@ -1,20 +1,20 @@
-import { useAuthContext } from "@/context/AuthContext";
-import { useDocument } from "@/firebase/firestore/getDocument";
-import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument.js";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Loader2 } from "lucide-react";
-import Head from "next/head";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
+import { useAuthContext } from '@/context/AuthContext';
+import { useDocument } from '@/firebase/firestore/getDocument';
+import { useUpdateUserDocument } from '@/firebase/firestore/updateUserDocument.js';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Loader2 } from 'lucide-react';
+import Head from 'next/head';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
-import { Layout } from "@/components/layout";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
+import { Layout } from '@/components/layout';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import { toast } from 'sonner';
 
 export default function AddPersonalAccessToken() {
   const { user, userPseudo } = useAuthContext();
@@ -22,7 +22,7 @@ export default function AddPersonalAccessToken() {
   const router = useRouter();
   useEffect(() => {
     if (!user) {
-      router.push("/");
+      router.push('/');
     }
   });
 
@@ -30,7 +30,7 @@ export default function AddPersonalAccessToken() {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(userPseudo, "users");
+  } = useDocument(userPseudo, 'users');
 
   const schema = yup.object().shape({
     personalAccessToken: yup.string().required(),
@@ -48,7 +48,7 @@ export default function AddPersonalAccessToken() {
   });
 
   const { updateUserDocument, isLoading, isError, isSuccess }: any =
-    useUpdateUserDocument("users");
+    useUpdateUserDocument('users');
 
   const onSubmit = async (data) => {
     const { personalAccessToken } = data;
@@ -60,11 +60,11 @@ export default function AddPersonalAccessToken() {
 
     updateUserDocument({ userPseudo, updatedUserData });
     reset({
-      personalAccessToken: "",
+      personalAccessToken: '',
     });
-    toast.message("Your personal access token has been added / updated",{
-      description: "You can now add your code to your Github Gist",
-    })
+    toast.message('Your personal access token has been added / updated', {
+      description: 'You can now add your code to your Github Gist',
+    });
   };
 
   return (
@@ -93,28 +93,28 @@ export default function AddPersonalAccessToken() {
           <Separator className="my-4" />
           <div className="w-full">
             <p className="text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
-              1- Follow this link{" "}
+              1- Follow this link{' '}
               <a
                 href="https://github.com/settings/tokens/new"
                 target="_blank"
                 rel="noreferrer"
                 className="font-semibold underline underline-offset-4"
               >
-                https://github.com/settings/tokens/new{" "}
-              </a>{" "}
+                https://github.com/settings/tokens/new{' '}
+              </a>{' '}
               to create a new personal access token on your GitHub account.
             </p>
           </div>
           <Separator className="my-4" />
           <div className="w-full">
             <p className="text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
-              2- Add a note about the use of your token, you can put{" "}
+              2- Add a note about the use of your token, you can put{' '}
               <span className="font-medium">
                 « Give Sharuco access to create my Gist »
-              </span>{" "}
+              </span>{' '}
             </p>
             <p className="mt-4 text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
-              3- Choose an expiry date for your token{" "}
+              3- Choose an expiry date for your token{' '}
             </p>
             <div
               className="mt-2 w-full rounded-lg bg-red-50 p-4 text-sm font-medium leading-6 text-red-800 lg:w-3/4 dark:bg-gray-800 dark:text-red-400"
@@ -138,9 +138,9 @@ export default function AddPersonalAccessToken() {
           <Separator className="my-4" />
           <div className="w-full">
             <p className="text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
-              4- Scroll down and select the{" "}
+              4- Scroll down and select the{' '}
               <span className="font-medium">« gist »</span> box, then scroll
-              down again and click on{" "}
+              down again and click on{' '}
               <span className="font-medium">« Generate token »</span>.
             </p>
             <Image
@@ -171,7 +171,7 @@ export default function AddPersonalAccessToken() {
               type="text"
               placeholder="Paste your token here"
               id="personalAccessToken"
-              {...register("personalAccessToken")}
+              {...register('personalAccessToken')}
             />
             <Button
               className="w-full shrink-0 sm:w-fit"

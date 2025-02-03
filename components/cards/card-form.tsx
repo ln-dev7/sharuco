@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { useDeleteDocument } from "@/firebase/firestore/deleteDocument";
-import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument";
-import formatDateTime from "@/utils/formatDateTime";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { algoliasearch } from "algoliasearch";
+import { useDeleteDocument } from '@/firebase/firestore/deleteDocument';
+import { useUpdateFormDocument } from '@/firebase/firestore/updateFormDocument';
+import formatDateTime from '@/utils/formatDateTime';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { algoliasearch } from 'algoliasearch';
 import {
   Loader2,
   MessageSquare,
   MoreHorizontal,
   Pencil,
   Timer,
-} from "lucide-react";
-import moment from "moment";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
+} from 'lucide-react';
+import moment from 'moment';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
 import {
   AlertDialog,
@@ -27,18 +27,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/popover';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 export default function CardForm({
   id,
@@ -53,7 +53,7 @@ export default function CardForm({
 
   //
 
-  const ALGOLIA_INDEX_NAME = "forms";
+  const ALGOLIA_INDEX_NAME = 'forms';
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
@@ -62,7 +62,7 @@ export default function CardForm({
   const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
   const { deleteDocument, isLoading: isLoadingDelete }: any =
-    useDeleteDocument("forms");
+    useDeleteDocument('forms');
 
   const handleDeleteDocument = () => {
     deleteDocument(id);
@@ -85,19 +85,19 @@ export default function CardForm({
   });
 
   useEffect(() => {
-    setValue("name", name);
-    setValue("description", description);
+    setValue('name', name);
+    setValue('description', description);
   }, [name, description, setValue]);
 
   const { updateFormDocument, isLoading, isError, isSuccess }: any =
-    useUpdateFormDocument("forms");
+    useUpdateFormDocument('forms');
 
   const onSubmit = async (data) => {
     const { name: nameUpdate, description: descriptionUpdate } = data;
 
     if (nameUpdate === name && descriptionUpdate === description) {
-      toast.error("You have not made any changes", {
-        description: "Please make changes to update your form",
+      toast.error('You have not made any changes', {
+        description: 'Please make changes to update your form',
       });
       return;
     }
@@ -124,7 +124,7 @@ export default function CardForm({
     });
 
     setOpenEditDialog(false);
-    toast.success("Your form has been updated successfully !");
+    toast.success('Your form has been updated successfully !');
   };
 
   return (
@@ -155,7 +155,7 @@ export default function CardForm({
           <span className="flex items-center gap-1 text-zinc-700 dark:text-zinc-400">
             <MessageSquare className="mr-1.5 h-4 w-4" />
             <span className="text-sm font-medium">
-              {responses.length} response{responses.length > 1 && "s"}
+              {responses.length} response{responses.length > 1 && 's'}
             </span>
           </span>
         </div>
@@ -193,7 +193,7 @@ export default function CardForm({
                       <Input
                         placeholder="Insert name of your form here..."
                         id="name"
-                        {...register("name")}
+                        {...register('name')}
                       />
                       <p className="text-sm text-red-500">
                         {errors.name && <>{errors.name.message}</>}
@@ -205,7 +205,7 @@ export default function CardForm({
                         placeholder="Insert description of your form..."
                         id="description"
                         className="h-24"
-                        {...register("description")}
+                        {...register('description')}
                       />
                       <p className="text-sm text-red-500">
                         {errors.description && (
@@ -224,7 +224,7 @@ export default function CardForm({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                     )}
                     disabled={isLoading}
                     onClick={!isLoading ? handleSubmit(onSubmit) : undefined}

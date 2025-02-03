@@ -1,4 +1,4 @@
-import { algoliasearch } from "algoliasearch";
+import { algoliasearch } from 'algoliasearch';
 import {
   collection,
   getDocs,
@@ -6,12 +6,12 @@ import {
   orderBy,
   query,
   where,
-} from "firebase/firestore";
+} from 'firebase/firestore';
 
-import firebase_app from "../firebase/config.js";
+import firebase_app from '../firebase/config.js';
 
 const db = getFirestore(firebase_app);
-const ALGOLIA_INDEX_NAME = "codes";
+const ALGOLIA_INDEX_NAME = 'codes';
 
 const client = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
@@ -22,9 +22,9 @@ const index = client.initIndex(ALGOLIA_INDEX_NAME);
 const addCodesOnAlgolia = async () => {
   const querySnapshot = await getDocs(
     query(
-      collection(db, "codes"),
-      where("isPrivate", "==", false),
-      orderBy("createdAt", "desc")
+      collection(db, 'codes'),
+      where('isPrivate', '==', false),
+      orderBy('createdAt', 'desc')
     )
   );
   const documents = querySnapshot.docs.map((doc) => {

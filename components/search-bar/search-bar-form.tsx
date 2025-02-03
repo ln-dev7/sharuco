@@ -1,27 +1,27 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { DialogProps } from "@radix-ui/react-alert-dialog"
+import * as React from 'react';
+import { DialogProps } from '@radix-ui/react-alert-dialog';
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import AlgoliaSearchForm from "./../algolia/algolia-search-form"
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import AlgoliaSearchForm from './../algolia/algolia-search-form';
 
 export function SearchBarForm({ ...props }: DialogProps) {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setOpen((open) => !open)
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
       }
-    }
+    };
 
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
-  }, [])
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
 
   return (
     <>
@@ -31,7 +31,7 @@ export function SearchBarForm({ ...props }: DialogProps) {
             defaultChecked={false}
             variant="outline"
             className={cn(
-              "relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 lg:w-72"
+              'relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 lg:w-72'
             )}
             onClick={() => setOpen(true)}
             {...props}
@@ -48,5 +48,5 @@ export function SearchBarForm({ ...props }: DialogProps) {
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

@@ -1,31 +1,31 @@
-"use client"
+'use client';
 
-import Head from "next/head"
-import { NBR_OF_POPULAR_CODES } from "@/constants/nbr-codes.js"
-import { useAuthContext } from "@/context/AuthContext"
-import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetPopularCodes } from "@/firebase/firestore/getPopularCodes.js"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import Head from 'next/head';
+import { NBR_OF_POPULAR_CODES } from '@/constants/nbr-codes.js';
+import { useAuthContext } from '@/context/AuthContext';
+import { useDocument } from '@/firebase/firestore/getDocument';
+import { useGetPopularCodes } from '@/firebase/firestore/getPopularCodes.js';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
-import CardCode from "@/components/cards/card-code"
-import Error from "@/components/error"
-import { Layout } from "@/components/layout"
-import LoaderCodes from "@/components/loaders/loader-codes"
+import CardCode from '@/components/cards/card-code';
+import Error from '@/components/error';
+import { Layout } from '@/components/layout';
+import LoaderCodes from '@/components/loaders/loader-codes';
 
 export default function Popular() {
-  const { user, userPseudo } = useAuthContext()
+  const { user, userPseudo } = useAuthContext();
 
   const {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(userPseudo, "users")
+  } = useDocument(userPseudo, 'users');
 
   const {
     isLoading: isLoadingPopularCodes,
     isError: isErrorPopularCodes,
     data: dataPopularCodes,
-  } = useGetPopularCodes()
+  } = useGetPopularCodes();
 
   return (
     <Layout>
@@ -85,5 +85,5 @@ export default function Popular() {
         </div>
       </section>
     </Layout>
-  )
+  );
 }

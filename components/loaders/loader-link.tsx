@@ -1,6 +1,6 @@
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LoaderLink() {
   return (
@@ -36,5 +36,5 @@ export default function LoaderLink() {
         </div>
       </Masonry>
     </ResponsiveMasonry>
-  )
+  );
 }

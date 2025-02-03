@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import Link from "next/link";
+import Link from 'next/link';
 
-import { Layout } from "@/components/layout";
-import { buttonVariants } from "@/components/ui/button";
+import { Layout } from '@/components/layout';
+import { buttonVariants } from '@/components/ui/button';
 
 export default function NotFound() {
   return (
@@ -13,7 +13,7 @@ export default function NotFound() {
           <h1 className="text-2xl font-bold">This page does not exist.</h1>
           <Link
             href="/"
-            className={buttonVariants({ size: "lg", variant: "outline" })}
+            className={buttonVariants({ size: 'lg', variant: 'outline' })}
           >
             Go back to home
           </Link>

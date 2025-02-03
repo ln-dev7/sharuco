@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
 import {
   allLanguages,
   getLanguageColor,
   languagesName,
-} from "@/constants/languages";
-import { useAuthContext } from "@/context/AuthContext";
-import { useGitHubLogin } from "@/firebase/auth/githubLogin";
-import { useDeleteDocument } from "@/firebase/firestore/deleteDocument";
-import { useDocument } from "@/firebase/firestore/getDocument";
-import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument";
-import copyToClipboard from "@/utils/copyToClipboard";
-import embedProject from "@/utils/embedStackblitzProject";
-import highlight from "@/utils/highlight";
-import indentCode from "@/utils/indentCode";
-import linearizeCode from "@/utils/linearizeCode";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { algoliasearch } from "algoliasearch";
-import hljs from "highlight.js";
-import * as htmlToImage from "html-to-image";
+} from '@/constants/languages';
+import { useAuthContext } from '@/context/AuthContext';
+import { useGitHubLogin } from '@/firebase/auth/githubLogin';
+import { useDeleteDocument } from '@/firebase/firestore/deleteDocument';
+import { useDocument } from '@/firebase/firestore/getDocument';
+import { useUpdateCodeDocument } from '@/firebase/firestore/updateCodeDocument';
+import copyToClipboard from '@/utils/copyToClipboard';
+import embedProject from '@/utils/embedStackblitzProject';
+import highlight from '@/utils/highlight';
+import indentCode from '@/utils/indentCode';
+import linearizeCode from '@/utils/linearizeCode';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { algoliasearch } from 'algoliasearch';
+import hljs from 'highlight.js';
+import * as htmlToImage from 'html-to-image';
 import {
   Copy,
   Edit,
@@ -28,11 +28,11 @@ import {
   Share,
   Trash,
   Verified,
-} from "lucide-react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+} from 'lucide-react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   EmailIcon,
   EmailShareButton,
@@ -46,10 +46,10 @@ import {
   TwitterShareButton,
   WhatsappIcon,
   WhatsappShareButton,
-} from "react-share";
-import * as yup from "yup";
+} from 'react-share';
+import * as yup from 'yup';
 
-import Loader from "@/components/loaders/loader";
+import Loader from '@/components/loaders/loader';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -59,18 +59,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -79,18 +79,18 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import { TemplateName } from "@/types/templatStackblitzName";
-import { toast } from "sonner";
+} from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
+import { TemplateName } from '@/types/templatStackblitzName';
+import { toast } from 'sonner';
 
 export default function CardCodeAdmin({
   id,
@@ -104,12 +104,12 @@ export default function CardCodeAdmin({
   comments: commentsInit,
 }) {
   const notifyCodeCopied = () =>
-    toast.message("Code copied to clipboard", {
-      description: "You can paste it wherever you want",
+    toast.message('Code copied to clipboard', {
+      description: 'You can paste it wherever you want',
     });
   const notifyUrlCopied = () =>
-    toast.message("Url of code copied to clipboard", {
-      description: "You can share it wherever you want",
+    toast.message('Url of code copied to clipboard', {
+      description: 'You can share it wherever you want',
     });
 
   const params = useParams();
@@ -126,7 +126,7 @@ export default function CardCodeAdmin({
 
   //
 
-  const ALGOLIA_INDEX_NAME = "codes";
+  const ALGOLIA_INDEX_NAME = 'codes';
 
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
@@ -135,7 +135,7 @@ export default function CardCodeAdmin({
   const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
   const { deleteDocument, isLoading: isLoadingDelete }: any =
-    useDeleteDocument("codes");
+    useDeleteDocument('codes');
 
   const handleDeleteDocument = () => {
     deleteDocument(id);
@@ -152,8 +152,8 @@ export default function CardCodeAdmin({
     tags: yup
       .string()
       .test(
-        "tags",
-        "The tags field must contain only letters, commas and/or spaces",
+        'tags',
+        'The tags field must contain only letters, commas and/or spaces',
         (val) => !val || /^[a-zA-Z, ]*$/.test(val)
       ),
     isPrivate: yup.boolean(),
@@ -171,15 +171,15 @@ export default function CardCodeAdmin({
   });
 
   useEffect(() => {
-    setValue("code", indentCode(code));
-    setValue("description", description);
-    setValue("language", language);
-    setValue("tags", tags.join().trim().replace(/\s+/g, ""));
-    setValue("isPrivate", checkboxOn);
+    setValue('code', indentCode(code));
+    setValue('description', description);
+    setValue('language', language);
+    setValue('tags', tags.join().trim().replace(/\s+/g, ''));
+    setValue('isPrivate', checkboxOn);
   }, [code, description, language, tags, checkboxOn, setValue]);
 
   const { updateCodeDocument, isLoading, isError, isSuccess }: any =
-    useUpdateCodeDocument("codes");
+    useUpdateCodeDocument('codes');
 
   const onSubmit = async (data) => {
     const {
@@ -192,9 +192,9 @@ export default function CardCodeAdmin({
 
     const linearCode = linearizeCode(codeUpdate);
     const tabTabs = tagsUpdate
-      ? tagsUpdate.split(",").map((word) => word.trim().toLowerCase())
+      ? tagsUpdate.split(',').map((word) => word.trim().toLowerCase())
       : [];
-    if (tabTabs[tabTabs.length - 1] === "") {
+    if (tabTabs[tabTabs.length - 1] === '') {
       tabTabs.pop();
     }
 
@@ -202,11 +202,11 @@ export default function CardCodeAdmin({
       linearCode === code &&
       descriptionUpdate === description &&
       languageUpdate === language &&
-      tagsUpdate === tags.join(",") &&
+      tagsUpdate === tags.join(',') &&
       isPrivateUpdate === isPrivate
     ) {
-      toast.error("You have not made any changes", {
-        description: "Please make changes to update your code",
+      toast.error('You have not made any changes', {
+        description: 'Please make changes to update your code',
       });
       return;
     }
@@ -256,7 +256,7 @@ export default function CardCodeAdmin({
     setCheckboxOn(isPrivateUpdate);
 
     setOpenEditDialog(false);
-    toast.success("Your code has been updated successfully !");
+    toast.success('Your code has been updated successfully !');
   };
 
   //
@@ -265,63 +265,63 @@ export default function CardCodeAdmin({
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(idAuthor, "users");
+  } = useDocument(idAuthor, 'users');
 
   const domRefImage = useRef(null);
   const [backgroundImage, setBackgroundImage] = useState(
-    "bg-gradient-to-br from-blue-400 to-indigo-700"
+    'bg-gradient-to-br from-blue-400 to-indigo-700'
   );
 
   const handleChangeBgImg1 = () => {
-    setBackgroundImage("bg-gradient-to-br from-blue-400 to-indigo-700");
+    setBackgroundImage('bg-gradient-to-br from-blue-400 to-indigo-700');
   };
 
   const handleChangeBgImg2 = () => {
-    setBackgroundImage("bg-gradient-to-r from-pink-500 to-indigo-600");
+    setBackgroundImage('bg-gradient-to-r from-pink-500 to-indigo-600');
   };
 
   const handleChangeBgImg3 = () => {
-    setBackgroundImage("bg-gradient-to-br from-teal-400 to-green-500");
+    setBackgroundImage('bg-gradient-to-br from-teal-400 to-green-500');
   };
 
   const handleChangeBgImg4 = () => {
-    setBackgroundImage("bg-gradient-to-br from-yellow-300 to-orange-500");
+    setBackgroundImage('bg-gradient-to-br from-yellow-300 to-orange-500');
   };
   const handleChangeBgImg5 = () => {
-    setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600");
+    setBackgroundImage('bg-gradient-to-br from-red-500 to-pink-600');
   };
 
-  const [nameOfImage, setNameOfImage] = useState("");
+  const [nameOfImage, setNameOfImage] = useState('');
 
   const downloadImage = async () => {
     const dataUrl = await htmlToImage.toPng(domRefImage.current);
 
     // download image
-    const link = document.createElement("a");
-    link.download = nameOfImage !== "" ? nameOfImage : `sharuco-code-${id}.png`;
+    const link = document.createElement('a');
+    link.download = nameOfImage !== '' ? nameOfImage : `sharuco-code-${id}.png`;
     link.href = dataUrl;
     link.click();
   };
 
   function detectLanguage(code) {
     const language = hljs.highlightAuto(code).language;
-    return language || "text";
+    return language || 'text';
   }
 
   function handleCodeChange(code) {
     const detectedLanguage = detectLanguage(code);
     if (!languagesName.includes(detectedLanguage)) {
-      setValue("language", "other");
+      setValue('language', 'other');
       return;
     }
-    setValue("language", detectedLanguage);
+    setValue('language', detectedLanguage);
   }
 
   //
 
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
-      {params["code-preview"] !== undefined && (
+      {params['code-preview'] !== undefined && (
         <div className="flex w-full items-center justify-center">
           <Dialog>
             <DialogTrigger asChild>
@@ -348,7 +348,7 @@ export default function CardCodeAdmin({
             <DialogContent className="sm:max-w-7xl">
               <DialogHeader>
                 <DialogDescription>
-                  Choose the template with which the code will be executed{" "}
+                  Choose the template with which the code will be executed{' '}
                 </DialogDescription>
                 <Select
                   onValueChange={(value: TemplateName) => {
@@ -412,7 +412,7 @@ export default function CardCodeAdmin({
                     <Textarea
                       placeholder="Insert your code here..."
                       id="code"
-                      {...register("code")}
+                      {...register('code')}
                       className="h-32"
                       onChange={(e) => {
                         handleCodeChange(e.target.value);
@@ -445,17 +445,17 @@ export default function CardCodeAdmin({
                           <DialogHeader>
                             <DialogDescription>
                               Choose the template with which the code will be
-                              executed{" "}
+                              executed{' '}
                             </DialogDescription>
                             <Select
                               onValueChange={(value: TemplateName) => {
                                 embedProject(
                                   value,
-                                  getValues("code"),
-                                  getValues("language"),
+                                  getValues('code'),
+                                  getValues('language'),
                                   userPseudo,
-                                  getValues("description")
-                                    ? getValues("description")
+                                  getValues('description')
+                                    ? getValues('description')
                                     : null
                                 );
                               }}
@@ -505,7 +505,7 @@ export default function CardCodeAdmin({
                     <Textarea
                       placeholder="What does this code do ?"
                       id="description"
-                      {...register("description")}
+                      {...register('description')}
                     />
                     <p className="text-sm text-red-500">
                       {errors.description && <>{errors.description.message}</>}
@@ -517,10 +517,10 @@ export default function CardCodeAdmin({
                       className="flex h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                       name="language"
                       id="language"
-                      {...register("language")}
+                      {...register('language')}
                     >
                       <option value="" disabled selected>
-                        {" "}
+                        {' '}
                         The code is written in what language ?
                       </option>
                       {allLanguages.map((language) => (
@@ -539,10 +539,10 @@ export default function CardCodeAdmin({
                       type="text"
                       id="tags"
                       placeholder="Enter a tags ..."
-                      {...register("tags")}
+                      {...register('tags')}
                     />
                     <p className="text-sm font-medium text-zinc-500">
-                      Please separate tags with{" "}
+                      Please separate tags with{' '}
                       <span className="text-zinc-700 dark:text-zinc-300">
                         ,
                       </span>
@@ -554,21 +554,21 @@ export default function CardCodeAdmin({
                   <div className="flex items-center gap-4">
                     <input
                       type="checkbox"
-                      {...register("isPrivate")}
+                      {...register('isPrivate')}
                       name="isPrivate"
                       id="isPrivate"
                       className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-zinc-200 outline-none dark:bg-zinc-800
                       ${
                         checkboxOn
-                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-zinc-500 before:transition-transform"
-                          : ""
+                          ? 'before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-zinc-500 before:transition-transform'
+                          : ''
                       } 
                       `}
                       checked={checkboxOn}
                       onChange={() => setCheckboxOn(!checkboxOn)}
                     />
                     <Label htmlFor="isPrivate">
-                      Will this code be private ?{" "}
+                      Will this code be private ?{' '}
                       {checkboxOn ? (
                         <span className="font-bold text-teal-300">Yes</span>
                       ) : (
@@ -596,7 +596,7 @@ export default function CardCodeAdmin({
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <button
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                    'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                   )}
                   disabled={isLoading}
                   onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -608,7 +608,7 @@ export default function CardCodeAdmin({
                 </button>
               </AlertDialogFooter>
             </AlertDialogContent>
-          </AlertDialog>{" "}
+          </AlertDialog>{' '}
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive">
@@ -629,7 +629,7 @@ export default function CardCodeAdmin({
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <button
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                    'inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                   )}
                   disabled={isLoadingDelete}
                   onClick={!isLoadingDelete ? handleDeleteDocument : undefined}
@@ -673,7 +673,7 @@ export default function CardCodeAdmin({
                   <AlertDialogCancel>Close</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                     )}
                     onClick={downloadImage}
                   >
@@ -684,11 +684,11 @@ export default function CardCodeAdmin({
                   <button
                     className="h-6 w-6 rounded-full bg-gradient-to-br from-blue-400 to-indigo-700"
                     onClick={handleChangeBgImg1}
-                  ></button>{" "}
+                  ></button>{' '}
                   <button
                     className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-indigo-600"
                     onClick={handleChangeBgImg2}
-                  ></button>{" "}
+                  ></button>{' '}
                   <button
                     className="h-6 w-6 rounded-full bg-gradient-to-br from-teal-400 to-green-500"
                     onClick={handleChangeBgImg3}
@@ -741,7 +741,7 @@ export default function CardCodeAdmin({
                         `}
                           style={{
                             backgroundColor: `${
-                              language !== "" && getLanguageColor(language)
+                              language !== '' && getLanguageColor(language)
                             }`,
                           }}
                         ></span>
@@ -767,7 +767,7 @@ export default function CardCodeAdmin({
             </AlertDialog>
           </div>
         </div>
-        {params["code-preview"] === undefined && !isPrivate ? (
+        {params['code-preview'] === undefined && !isPrivate ? (
           <Link href={`/code-preview/${id}`}>
             <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
               <code
@@ -781,9 +781,9 @@ export default function CardCodeAdmin({
         ) : (
           <pre
             className={`${
-              params["code-preview"] === undefined &&
+              params['code-preview'] === undefined &&
               isPrivate &&
-              "max-h-[200px] "
+              'max-h-[200px] '
             }
           w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black`}
           >
@@ -798,7 +798,7 @@ export default function CardCodeAdmin({
       </div>
       <div className="flex items-center justify-between gap-4">
         <a
-          href={dataUser && dataUser.exists ? `/user/${idAuthor}` : "#"}
+          href={dataUser && dataUser.exists ? `/user/${idAuthor}` : '#'}
           className="flex items-center justify-start gap-2"
         >
           <Avatar className="h-8 w-8 cursor-pointer">
@@ -820,11 +820,11 @@ export default function CardCodeAdmin({
                 <AvatarFallback>
                   {dataUser.data.displayName !== null ? (
                     <>
-                      {dataUser.data.displayName.split(" ")[1] === undefined
-                        ? dataUser.data.displayName.split(" ")[0][0] +
-                          dataUser.data.displayName.split(" ")[0][1]
-                        : dataUser.data.displayName.split(" ")[0][0] +
-                          dataUser.data.displayName.split(" ")[1][0]}
+                      {dataUser.data.displayName.split(' ')[1] === undefined
+                        ? dataUser.data.displayName.split(' ')[0][0] +
+                          dataUser.data.displayName.split(' ')[0][1]
+                        : dataUser.data.displayName.split(' ')[0][0] +
+                          dataUser.data.displayName.split(' ')[1][0]}
                     </>
                   ) : (
                     dataUser.data.pseudo[0] + dataUser.data.pseudo[1]
@@ -837,7 +837,7 @@ export default function CardCodeAdmin({
           </Avatar>
           <div className="flex items-center justify-start gap-1">
             <span className="text-md font-bold text-zinc-700 hover:underline dark:text-zinc-400 ">
-              {idAuthor}{" "}
+              {idAuthor}{' '}
             </span>
             {dataUser && dataUser.exists && (
               <span>
@@ -849,7 +849,7 @@ export default function CardCodeAdmin({
           </div>
         </a>
         <div className="flex shrink-0 items-center gap-4">
-          {params["code-preview"] === undefined && !isPrivate && (
+          {params['code-preview'] === undefined && !isPrivate && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -928,7 +928,7 @@ export default function CardCodeAdmin({
                   <TwitterShareButton
                     url={shareUrl}
                     title={`I discovered this code on @sharuco_app , I share it with you here. - « ${description} »`}
-                    hashtags={["CaParleDev", "ShareWithSharuco"]}
+                    hashtags={['CaParleDev', 'ShareWithSharuco']}
                     onClick={() => setOpenShareDialog(false)}
                   >
                     <TwitterIcon size={38} round />
@@ -983,13 +983,13 @@ export default function CardCodeAdmin({
           )}
         </div>
       </div>
-      {params["code-preview"] === undefined && !isPrivate ? (
+      {params['code-preview'] === undefined && !isPrivate ? (
         <Link
           href={`/code-preview/${id}`}
           className="text-sm text-zinc-700 dark:text-zinc-400"
         >
           {description.length > 300
-            ? description.substring(0, 300) + "..."
+            ? description.substring(0, 300) + '...'
             : description}
         </Link>
       ) : (

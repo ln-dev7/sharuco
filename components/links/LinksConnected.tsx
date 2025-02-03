@@ -1,22 +1,22 @@
-"use client"
+'use client';
 
-import { useAuthContext } from "@/context/AuthContext"
-import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
-import { FileCog, Layers } from "lucide-react"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import { useAuthContext } from '@/context/AuthContext';
+import { useGetDocumentFromUser } from '@/firebase/firestore/getDocumentFromUser';
+import { FileCog, Layers } from 'lucide-react';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
-import CardLinkAdmin from "@/components/cards/card-link-admin"
-import EmptyCard from "@/components/empty-card"
-import LoaderLinks from "@/components/loaders/loader-links"
+import CardLinkAdmin from '@/components/cards/card-link-admin';
+import EmptyCard from '@/components/empty-card';
+import LoaderLinks from '@/components/loaders/loader-links';
 
 export default function LinksConnected() {
-  const { user, userPseudo } = useAuthContext()
+  const { user, userPseudo } = useAuthContext();
 
   const {
     isLoading: isLoadingLinks,
     isError: isErrorLinks,
     data: dataLinks,
-  } = useGetDocumentFromUser(userPseudo, "links")
+  } = useGetDocumentFromUser(userPseudo, 'links');
 
   return (
     <>
@@ -36,12 +36,12 @@ export default function LinksConnected() {
               <Masonry gutter="2rem">
                 {dataLinks.map(
                   (link: {
-                    id: string
-                    idAuthor: string
-                    link: string
-                    description: string
-                    tags: string[]
-                    createdAt: any
+                    id: string;
+                    idAuthor: string;
+                    link: string;
+                    description: string;
+                    tags: string[];
+                    createdAt: any;
                   }) => (
                     <CardLinkAdmin
                       key={link.id}
@@ -74,5 +74,5 @@ export default function LinksConnected() {
         />
       )}
     </>
-  )
+  );
 }

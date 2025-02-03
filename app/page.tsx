@@ -1,44 +1,44 @@
-"use client";
+'use client';
 
 import {
   allLanguages,
   getLanguageColor,
   languagesName,
-} from "@/constants/languages";
-import { COMPANIES } from "@/constants/supports.js";
-import { useAuthContext } from "@/context/AuthContext";
-import { useGitHubLogin } from "@/firebase/auth/githubLogin";
-import highlight from "@/utils/highlight";
-import linearizeCode from "@/utils/linearizeCode";
-import hljs from "highlight.js";
+} from '@/constants/languages';
+import { COMPANIES } from '@/constants/supports.js';
+import { useAuthContext } from '@/context/AuthContext';
+import { useGitHubLogin } from '@/firebase/auth/githubLogin';
+import highlight from '@/utils/highlight';
+import linearizeCode from '@/utils/linearizeCode';
+import hljs from 'highlight.js';
 
-import { Separator } from "@/components/ui/separator";
-import "highlight.js/styles/vs.css";
-import { useEffect, useRef, useState } from "react";
-import { useQuery } from "react-query";
+import { Separator } from '@/components/ui/separator';
+import 'highlight.js/styles/vs.css';
+import { useEffect, useRef, useState } from 'react';
+import { useQuery } from 'react-query';
 
-import "highlight.js/styles/vs.css";
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import * as htmlToImage from "html-to-image";
-import { ArrowRight, Code2, Github, Loader2 } from "lucide-react";
-import { useTheme } from "next-themes";
+import 'highlight.js/styles/vs.css';
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import * as htmlToImage from 'html-to-image';
+import { ArrowRight, Code2, Github, Loader2 } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
-import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
-import { Layout } from "@/components/layout";
+import { siteConfig } from '@/config/site';
+import { cn } from '@/lib/utils';
+import { Layout } from '@/components/layout';
 import {
   AlertDialog,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/alert-dialog';
+import { buttonVariants } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function Home() {
   const { login, isPending } = useGitHubLogin();
@@ -46,9 +46,9 @@ export default function Home() {
 
   const { user, userPseudo } = useAuthContext();
 
-  const [userCountry, setUserCountry] = useState("");
+  const [userCountry, setUserCountry] = useState('');
   useEffect(() => {
-    setUserCountry(window.navigator.language.split("-")[1]);
+    setUserCountry(window.navigator.language.split('-')[1]);
   }, []);
 
   // Contributors
@@ -56,41 +56,41 @@ export default function Home() {
     data: contributors,
     isLoading: isLoadingContributors,
     isError: isErrorContributors,
-  } = useQuery("contributors", () =>
-    fetch("https://api.github.com/repos/ln-dev7/sharuco/contributors").then(
+  } = useQuery('contributors', () =>
+    fetch('https://api.github.com/repos/ln-dev7/sharuco/contributors').then(
       (response) => response.json()
     )
   );
   //
 
-  const [codeImage, setCodeImage] = useState("");
-  const [languageImage, setLanguageImage] = useState("");
+  const [codeImage, setCodeImage] = useState('');
+  const [languageImage, setLanguageImage] = useState('');
 
   const domRefImage = useRef(null);
   const [backgroundImage, setBackgroundImage] = useState(
-    "bg-gradient-to-br from-blue-400 to-indigo-700"
+    'bg-gradient-to-br from-blue-400 to-indigo-700'
   );
 
   const handleChangeBgImg1 = () => {
-    setBackgroundImage("bg-gradient-to-br from-blue-400 to-indigo-700");
+    setBackgroundImage('bg-gradient-to-br from-blue-400 to-indigo-700');
   };
 
   const handleChangeBgImg2 = () => {
-    setBackgroundImage("bg-gradient-to-r from-pink-500 to-indigo-600");
+    setBackgroundImage('bg-gradient-to-r from-pink-500 to-indigo-600');
   };
 
   const handleChangeBgImg3 = () => {
-    setBackgroundImage("bg-gradient-to-br from-teal-400 to-green-500");
+    setBackgroundImage('bg-gradient-to-br from-teal-400 to-green-500');
   };
 
   const handleChangeBgImg4 = () => {
-    setBackgroundImage("bg-gradient-to-br from-yellow-300 to-orange-500");
+    setBackgroundImage('bg-gradient-to-br from-yellow-300 to-orange-500');
   };
   const handleChangeBgImg5 = () => {
-    setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600");
+    setBackgroundImage('bg-gradient-to-br from-red-500 to-pink-600');
   };
 
-  const [nameOfImage, setNameOfImage] = useState("");
+  const [nameOfImage, setNameOfImage] = useState('');
 
   const downloadImage = async () => {
     const dataUrl = await htmlToImage.toPng(
@@ -98,9 +98,9 @@ export default function Home() {
     );
 
     // download image
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.download =
-      nameOfImage !== ""
+      nameOfImage !== ''
         ? nameOfImage
         : `sharuco-code-${Math.random().toString(36).substring(7)}.png`;
     link.href = dataUrl;
@@ -110,14 +110,14 @@ export default function Home() {
 
   function detectLanguage(code: string) {
     const language = hljs.highlightAuto(code).language;
-    return language || "text";
+    return language || 'text';
   }
 
   function handleCodeChange(code: string) {
     const detectedLanguage = detectLanguage(code);
     if (!languagesName.includes(detectedLanguage)) {
       setCodeImage(linearizeCode(code));
-      setLanguageImage("other");
+      setLanguageImage('other');
       return;
     }
     setCodeImage(linearizeCode(code));
@@ -171,21 +171,21 @@ export default function Home() {
         <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0 md:flex-row">
           <Link
             href={siteConfig.links.explore}
-            className={buttonVariants({ size: "lg" })}
+            className={buttonVariants({ size: 'lg' })}
           >
             Explore code
           </Link>
           {user ? (
             <Link
               href="/dashboard"
-              className={buttonVariants({ size: "lg", variant: "outline" })}
+              className={buttonVariants({ size: 'lg', variant: 'outline' })}
             >
               <Code2 className="mr-2 h-4 w-4" />
               Your dashboard
             </Link>
           ) : (
             <button
-              className={buttonVariants({ variant: "outline", size: "lg" })}
+              className={buttonVariants({ variant: 'outline', size: 'lg' })}
               disabled={isPending}
               onClick={login}
             >
@@ -198,26 +198,26 @@ export default function Home() {
             </button>
           )}
         </div>
-        {!user && userCountry == "CM" && (
+        {!user && userCountry == 'CM' && (
           <div
             className="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
             role="alert"
           >
             <span className="font-semibold">Warning alert !</span> We have
-            noticed that you are in{" "}
+            noticed that you are in{' '}
             <span className="font-semibold">Cameroon</span> , if you are using
             an <span className="font-semibold">Orange connection</span> you need
             to use a VPN and change your location in order to connect.
           </div>
         )}
         <p className="text-sm text-zinc-700 dark:text-zinc-400">
-          Follow us on{" "}
+          Follow us on{' '}
           <Link
             href="https://twitter.com/ln_dev7"
             className="font-bold underline underline-offset-4"
           >
             Twitter
-          </Link>{" "}
+          </Link>{' '}
           for the latest updates
         </p>
         <Separator className="my-2" />
@@ -238,7 +238,7 @@ export default function Home() {
                   width={160}
                   height={55}
                   src={
-                    resolvedTheme === "dark" ? support.image : support.imageDark
+                    resolvedTheme === 'dark' ? support.image : support.imageDark
                   }
                   className="cursor-pointer"
                   alt={support.name}
@@ -290,7 +290,7 @@ export default function Home() {
                   onChange={(e) => setLanguageImage(e.target.value)}
                 >
                   <option value="" disabled selected>
-                    {" "}
+                    {' '}
                     The code is written in what language ?
                   </option>
                   {allLanguages.map((language) => (
@@ -304,11 +304,11 @@ export default function Home() {
                 </select>
               </div>
               <AlertDialog>
-                {codeImage !== "" && languageImage !== "" ? (
+                {codeImage !== '' && languageImage !== '' ? (
                   <AlertDialogTrigger asChild>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                        'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                       )}
                     >
                       Generate image
@@ -318,7 +318,7 @@ export default function Home() {
                   <button
                     disabled
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                     )}
                   >
                     You need to fill the fields
@@ -329,7 +329,7 @@ export default function Home() {
                     <AlertDialogCancel>Close</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                        'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                       )}
                       onClick={downloadImage}
                     >
@@ -340,11 +340,11 @@ export default function Home() {
                     <button
                       className="h-6 w-6 rounded-full bg-gradient-to-br from-blue-400 to-indigo-700"
                       onClick={handleChangeBgImg1}
-                    ></button>{" "}
+                    ></button>{' '}
                     <button
                       className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-indigo-600"
                       onClick={handleChangeBgImg2}
-                    ></button>{" "}
+                    ></button>{' '}
                     <button
                       className="h-6 w-6 rounded-full bg-gradient-to-br from-teal-400 to-green-500"
                       onClick={handleChangeBgImg3}
@@ -397,7 +397,7 @@ export default function Home() {
                         `}
                             style={{
                               backgroundColor: `${
-                                languageImage !== "" &&
+                                languageImage !== '' &&
                                 getLanguageColor(languageImage)
                               }`,
                             }}
@@ -444,7 +444,7 @@ export default function Home() {
                 <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
                   <h3 className="text-2xl font-medium sm:text-4xl">
                     Create forms
-                    <br className="hidden sm:inline" /> easily in minutes{" "}
+                    <br className="hidden sm:inline" /> easily in minutes{' '}
                   </h3>
                   <p>
                     Choose from all the different question types present to
@@ -531,7 +531,7 @@ export default function Home() {
             <div className="flex w-fit items-center justify-center">
               <Link
                 href="/forms"
-                className={buttonVariants({ size: "lg", variant: "ghost" })}
+                className={buttonVariants({ size: 'lg', variant: 'ghost' })}
               >
                 Go to Sharuco Form
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -562,7 +562,7 @@ export default function Home() {
               />
             </div>
             <div className="flex w-fit items-center justify-center">
-              <Link href="/links" className={buttonVariants({ size: "lg" })}>
+              <Link href="/links" className={buttonVariants({ size: 'lg' })}>
                 Go to Sharuco Link
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -593,12 +593,12 @@ export default function Home() {
             )}
             {contributors &&
               contributors
-                .filter((user: any) => user.login !== "dependabot[bot]")
+                .filter((user: any) => user.login !== 'dependabot[bot]')
                 .sort((a: any, b: any) => b.contributions - a.contributions)
                 .slice(0, 6)
                 .map((user: any) => (
                   <a
-                    href={"https://github.com/" + user.login}
+                    href={'https://github.com/' + user.login}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

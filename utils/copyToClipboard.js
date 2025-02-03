@@ -1,8 +1,8 @@
-import indentCode from "@/utils/indentCode"
+import indentCode from '@/utils/indentCode';
 
 function copyToClipboard(code) {
-  const text = indentCode(code)
-  navigator.clipboard.writeText(text)
+  const text = indentCode(code);
+  navigator.clipboard.writeText(text);
 }
 
-export default copyToClipboard
+export default copyToClipboard;

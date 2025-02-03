@@ -1,5 +1,5 @@
 import moment from 'moment';
-import 'moment/locale/fr'; 
+import 'moment/locale/fr';
 
 function formatDateTime(date) {
   moment.locale('en');
@@ -14,7 +14,6 @@ function formatDateTime(date) {
   } else {
     return targetDateLocal.fromNow();
   }
-  
 }
 
 export default formatDateTime;

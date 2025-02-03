@@ -1,15 +1,15 @@
-import Link from "next/link"
+import Link from 'next/link';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function CardUser({
   pseudo,
   displayName,
   photoURL,
 }: {
-  pseudo: string
-  displayName: string
-  photoURL: string
+  pseudo: string;
+  displayName: string;
+  photoURL: string;
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-4 rounded-md border border-zinc-200 p-4 dark:border-zinc-700">
@@ -22,9 +22,9 @@ export default function CardUser({
           <AvatarFallback>
             {displayName !== null ? (
               <>
-                {displayName.split(" ")[1] === undefined
-                  ? displayName.split(" ")[0][0] + displayName.split(" ")[0][1]
-                  : displayName.split(" ")[0][0] + displayName.split(" ")[1][0]}
+                {displayName.split(' ')[1] === undefined
+                  ? displayName.split(' ')[0][0] + displayName.split(' ')[0][1]
+                  : displayName.split(' ')[0][0] + displayName.split(' ')[1][0]}
               </>
             ) : (
               pseudo[0] + pseudo[1]
@@ -42,5 +42,5 @@ export default function CardUser({
         </div>
       </div>
     </div>
-  )
+  );
 }

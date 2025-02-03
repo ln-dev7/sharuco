@@ -1,15 +1,15 @@
-"use client"
+'use client';
 
-import Head from "next/head"
-import Link from "next/link"
-import { useParams } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogin } from "@/firebase/auth/githubLogin"
-import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
-import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
-import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
-import formatDateTime from "@/utils/formatDateTime.js"
+import Head from 'next/head';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { useAuthContext } from '@/context/AuthContext';
+import { useGitHubLogin } from '@/firebase/auth/githubLogin';
+import { useDocument } from '@/firebase/firestore/getDocument';
+import { useGetFavoriteCode } from '@/firebase/firestore/getFavoriteCode';
+import { useGetIsPrivateCodeFromUser } from '@/firebase/firestore/getIsPrivateCodeFromUser';
+import { useUpdateUserDocument } from '@/firebase/firestore/updateUserDocument';
+import formatDateTime from '@/utils/formatDateTime.js';
 import {
   Eye,
   Github,
@@ -19,16 +19,16 @@ import {
   Star,
   UserIcon,
   Verified,
-} from "lucide-react"
-import moment from "moment"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+} from 'lucide-react';
+import moment from 'moment';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
-import { cn } from "@/lib/utils"
-import CardCode from "@/components/cards/card-code"
-import EmptyCard from "@/components/empty-card"
-import Error from "@/components/error"
-import { Layout } from "@/components/layout"
-import LoaderCodes from "@/components/loaders/loader-codes"
+import { cn } from '@/lib/utils';
+import CardCode from '@/components/cards/card-code';
+import EmptyCard from '@/components/empty-card';
+import Error from '@/components/error';
+import { Layout } from '@/components/layout';
+import LoaderCodes from '@/components/loaders/loader-codes';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -38,69 +38,69 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button, buttonVariants } from "@/components/ui/button"
+} from '@/components/ui/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function User() {
-  const { user, userPseudo } = useAuthContext()
+  const { user, userPseudo } = useAuthContext();
 
-  const params = useParams()
+  const params = useParams();
 
-  const userParam = params["user"] as string
-  const idCurrent = userParam?.toLowerCase()
+  const userParam = params['user'] as string;
+  const idCurrent = userParam?.toLowerCase();
 
-  const { login, isPending } = useGitHubLogin()
+  const { login, isPending } = useGitHubLogin();
 
   const {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(userPseudo, "users")
+  } = useDocument(userPseudo, 'users');
 
-  const { data, isLoading, isError } = useDocument(idCurrent, "users")
+  const { data, isLoading, isError } = useDocument(idCurrent, 'users');
 
   const {
     isLoading: isLoadingPublicCodes,
     isError: isErrorPublicCodes,
     data: dataPublicCodes,
-  } = useGetIsPrivateCodeFromUser(false, idCurrent)
+  } = useGetIsPrivateCodeFromUser(false, idCurrent);
 
   const {
     isLoading: isLoadingFavoriteCodes,
     isError: isErrorFavoriteCodes,
     data: dataFavoriteCodes,
-  } = useGetFavoriteCode(idCurrent)
+  } = useGetFavoriteCode(idCurrent);
 
-  const { updateUserDocument }: any = useUpdateUserDocument("users")
+  const { updateUserDocument }: any = useUpdateUserDocument('users');
 
   const addUserOnFollowers = async (pseudo: string, id: string) => {
     let updatedUserData = {
       followers: data.data.followers.includes(id)
         ? data.data.followers.filter((item) => item !== id)
         : [...data.data.followers, id],
-    }
+    };
 
-    updateUserDocument({ pseudo, updatedUserData })
-  }
+    updateUserDocument({ pseudo, updatedUserData });
+  };
 
   const addUserOnFollowing = async (id: string, pseudo: string) => {
     let updatedUserData = {
       following: dataUser?.data?.following.includes(id)
         ? dataUser?.data?.following.filter((item) => item !== id)
         : [...dataUser?.data?.following, id],
-    }
+    };
 
-    updateUserDocument({ pseudo, updatedUserData })
-  }
+    updateUserDocument({ pseudo, updatedUserData });
+  };
   return (
     <Layout>
       <Head>
@@ -112,7 +112,7 @@ export default function User() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>{" "}
+      </Head>{' '}
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         {isLoading && <LoaderCodes isUserProfile={true} />}
         {data && data.exists && (
@@ -139,9 +139,9 @@ export default function User() {
                 <h1 className="text-center text-4xl font-bold">
                   {data.data.displayName !== null ? (
                     <>
-                      {data.data.displayName.split(" ")[0]}{" "}
-                      {data.data.displayName.split(" ")[1] &&
-                        data.data.displayName.split(" ")[1]}
+                      {data.data.displayName.split(' ')[0]}{' '}
+                      {data.data.displayName.split(' ')[1] &&
+                        data.data.displayName.split(' ')[1]}
                     </>
                   ) : (
                     idCurrent
@@ -159,8 +159,8 @@ export default function User() {
                     dataUser?.data?.following.includes(idCurrent) ? (
                       <Button
                         onClick={() => {
-                          addUserOnFollowers(idCurrent, dataUser?.data?.pseudo)
-                          addUserOnFollowing(idCurrent, dataUser?.data?.pseudo)
+                          addUserOnFollowers(idCurrent, dataUser?.data?.pseudo);
+                          addUserOnFollowing(idCurrent, dataUser?.data?.pseudo);
                         }}
                         className="my-2 rounded-full"
                       >
@@ -169,8 +169,8 @@ export default function User() {
                     ) : (
                       <Button
                         onClick={() => {
-                          addUserOnFollowers(idCurrent, dataUser?.data?.pseudo)
-                          addUserOnFollowing(idCurrent, dataUser?.data?.pseudo)
+                          addUserOnFollowers(idCurrent, dataUser?.data?.pseudo);
+                          addUserOnFollowing(idCurrent, dataUser?.data?.pseudo);
                         }}
                         className="my-2 rounded-full"
                       >
@@ -189,13 +189,13 @@ export default function User() {
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>
-                        Do you want to follow{" "}
+                        Do you want to follow{' '}
                         <a
                           href={`/user/${idCurrent}`}
                           className="font-semibold text-zinc-900 hover:underline hover:underline-offset-4 dark:text-zinc-100"
                         >
                           {idCurrent}
-                        </a>{" "}
+                        </a>{' '}
                         ?
                       </AlertDialogTitle>
                       <AlertDialogDescription>
@@ -206,7 +206,7 @@ export default function User() {
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <button
                         className={cn(
-                          "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                          'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                         )}
                         disabled={isPending}
                         onClick={login}
@@ -285,7 +285,7 @@ export default function User() {
                   </Dialog>
                 </div>
                 <p className="text-center text-gray-500">
-                  Joined{" "}
+                  Joined{' '}
                   <span className="font-bold">
                     {formatDateTime(moment(data.data.createdAt))}
                   </span>
@@ -302,7 +302,7 @@ export default function User() {
                   <TabsTrigger value="favorite-code">
                     <Star className="mr-2 h-4 w-4" />
                     Favorite code
-                  </TabsTrigger>{" "}
+                  </TabsTrigger>{' '}
                   {data.data.publicLinkPage && (
                     <Link
                       href={`/link/${data.data.pseudo}`}
@@ -331,16 +331,16 @@ export default function User() {
                         <Masonry gutter="2rem">
                           {dataPublicCodes.map(
                             (code: {
-                              id: string
-                              idAuthor: string
-                              language: string
-                              code: string
-                              description: string
-                              tags: string[]
-                              favoris: string[]
-                              isPrivate: boolean
-                              currentUser: any
-                              comments: any
+                              id: string;
+                              idAuthor: string;
+                              language: string;
+                              code: string;
+                              description: string;
+                              tags: string[];
+                              favoris: string[];
+                              isPrivate: boolean;
+                              currentUser: any;
+                              comments: any;
                             }) => (
                               <CardCode
                                 key={code.id}
@@ -391,16 +391,16 @@ export default function User() {
                         <Masonry gutter="2rem">
                           {dataFavoriteCodes.map(
                             (code: {
-                              id: string
-                              idAuthor: string
-                              language: string
-                              code: string
-                              description: string
-                              tags: string[]
-                              favoris: string[]
-                              isPrivate: boolean
-                              currentUser: any
-                              comments: any
+                              id: string;
+                              idAuthor: string;
+                              language: string;
+                              code: string;
+                              description: string;
+                              tags: string[];
+                              favoris: string[];
+                              isPrivate: boolean;
+                              currentUser: any;
+                              comments: any;
                             }) => (
                               <CardCode
                                 key={code.id}
@@ -439,7 +439,7 @@ export default function User() {
             <h1 className="text-2xl font-bold">User not found</h1>
             <Link
               href="/"
-              className={buttonVariants({ size: "lg", variant: "outline" })}
+              className={buttonVariants({ size: 'lg', variant: 'outline' })}
             >
               Go back to home
             </Link>
@@ -448,5 +448,5 @@ export default function User() {
         {isError && <Error />}
       </section>
     </Layout>
-  )
+  );
 }

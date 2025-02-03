@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
-import { useAuthContext } from "@/context/AuthContext";
-import { useDocument } from "@/firebase/firestore/getDocument";
-import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser";
+import { useAuthContext } from '@/context/AuthContext';
+import { useDocument } from '@/firebase/firestore/getDocument';
+import { useGetDocumentFromUser } from '@/firebase/firestore/getDocumentFromUser';
 import {
   FileQuestion,
   Loader2,
   MessageSquare,
   Send,
   Settings2,
-} from "lucide-react";
-import Head from "next/head";
-import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+} from 'lucide-react';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
-import Error from "@/components/error";
-import PublishForms from "@/components/form/publish";
-import QuestionsForms from "@/components/form/questions";
-import ResponsesForms from "@/components/form/responses";
-import SettingsForms from "@/components/form/settings";
-import { Layout } from "@/components/layout";
-import { buttonVariants } from "@/components/ui/button";
+import Error from '@/components/error';
+import PublishForms from '@/components/form/publish';
+import QuestionsForms from '@/components/form/questions';
+import ResponsesForms from '@/components/form/responses';
+import SettingsForms from '@/components/form/settings';
+import { Layout } from '@/components/layout';
+import { buttonVariants } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -31,8 +31,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function FormPage() {
   const params = useParams();
@@ -41,7 +41,7 @@ export default function FormPage() {
 
   useEffect(() => {
     if (!user) {
-      router.push("/forms");
+      router.push('/forms');
     }
   });
 
@@ -55,7 +55,7 @@ export default function FormPage() {
     isLoading: boolean;
     isError: boolean;
     error: any;
-  } = useDocument(params["form"], "forms");
+  } = useDocument(params['form'], 'forms');
 
   const goToForm = (id) => {
     router.push(`/form/${id}`);
@@ -65,12 +65,12 @@ export default function FormPage() {
     isLoading: isLoadingForms,
     isError: isErrorForms,
     data: dataForms,
-  } = useGetDocumentFromUser(userPseudo, "forms");
+  } = useGetDocumentFromUser(userPseudo, 'forms');
 
   return (
     <Layout>
       <Head>
-        <title>Sharuco | Form : {params["form"]}</title>
+        <title>Sharuco | Form : {params['form']}</title>
         <meta
           name="description"
           content="Sharuco allows you to share code codes that you have found
@@ -78,7 +78,7 @@ export default function FormPage() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>{" "}
+      </Head>{' '}
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         {isLoadingForm && (
           <div className="flex w-full items-center justify-center">
@@ -122,7 +122,7 @@ export default function FormPage() {
                 ) : (
                   <div className="">
                     <span className="italic">
-                      Created by{" "}
+                      Created by{' '}
                       <a
                         className="font-bold underline underline-offset-2"
                         href={`/user/${dataForm.data.idAuthor}`}
@@ -238,7 +238,7 @@ export default function FormPage() {
             <h1 className="text-2xl font-bold">This form does not exist.</h1>
             <Link
               href="/forms"
-              className={buttonVariants({ size: "lg", variant: "outline" })}
+              className={buttonVariants({ size: 'lg', variant: 'outline' })}
             >
               Create your own form
             </Link>
@@ -246,14 +246,14 @@ export default function FormPage() {
         )}
         {isErrorForm && (
           <>
-            {errorForm.message == "Missing or insufficient permissions." ? (
+            {errorForm.message == 'Missing or insufficient permissions.' ? (
               <div className="flex flex-col items-center gap-4">
                 <h1 className="text-2xl font-bold">
                   This form does not exist.
                 </h1>
                 <Link
                   href="/forms"
-                  className={buttonVariants({ size: "lg", variant: "outline" })}
+                  className={buttonVariants({ size: 'lg', variant: 'outline' })}
                 >
                   Create your own form
                 </Link>

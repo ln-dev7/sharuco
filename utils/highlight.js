@@ -1,12 +1,12 @@
-import indentCode from "@/utils/indentCode"
-import Prism from "prismjs"
+import indentCode from '@/utils/indentCode';
+import Prism from 'prismjs';
 
 function highlight(code, language) {
-  let grammar = Prism.languages[language]
+  let grammar = Prism.languages[language];
   if (!grammar) {
-    grammar = Prism.languages["javascript"]
+    grammar = Prism.languages['javascript'];
   }
-  return Prism.highlight(indentCode(code), grammar, language)
+  return Prism.highlight(indentCode(code), grammar, language);
 }
 
-export default highlight
+export default highlight;

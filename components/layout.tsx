@@ -1,8 +1,8 @@
-import { SiteFooter } from "@/components/site-footer"
-import { SiteHeader } from "@/components/site-header"
+import { SiteFooter } from '@/components/site-footer';
+import { SiteHeader } from '@/components/site-header';
 
 interface LayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export function Layout({ children }: LayoutProps) {
@@ -12,5 +12,5 @@ export function Layout({ children }: LayoutProps) {
       <main>{children}</main>
       <SiteFooter />
     </>
-  )
+  );
 }

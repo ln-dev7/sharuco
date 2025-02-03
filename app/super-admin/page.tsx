@@ -1,49 +1,49 @@
-"use client"
+'use client';
 
-import { useEffect } from "react"
-import Head from "next/head"
-import { useRouter } from "next/navigation"
-import { SUPER_ADMIN } from "@/constants/super-admin"
-import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogout } from "@/firebase/auth/githubLogout"
-import { useDocuments } from "@/firebase/firestore/getDocuments"
-import { Code, Layers, UserIcon } from "lucide-react"
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import { useEffect } from 'react';
+import Head from 'next/head';
+import { useRouter } from 'next/navigation';
+import { SUPER_ADMIN } from '@/constants/super-admin';
+import { useAuthContext } from '@/context/AuthContext';
+import { useGitHubLogout } from '@/firebase/auth/githubLogout';
+import { useDocuments } from '@/firebase/firestore/getDocuments';
+import { Code, Layers, UserIcon } from 'lucide-react';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
-import CardCodeAdmin from "@/components/cards/card-code-admin"
-import CardUserAdmin from "@/components/cards/card-user-admin"
-import EmptyCard from "@/components/empty-card"
-import Error from "@/components/error"
-import { Layout } from "@/components/layout"
-import Loader from "@/components/loaders/loader"
-import LoaderCodes from "@/components/loaders/loader-codes"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import CardCodeAdmin from '@/components/cards/card-code-admin';
+import CardUserAdmin from '@/components/cards/card-user-admin';
+import EmptyCard from '@/components/empty-card';
+import Error from '@/components/error';
+import { Layout } from '@/components/layout';
+import Loader from '@/components/loaders/loader';
+import LoaderCodes from '@/components/loaders/loader-codes';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function SuperAdmin() {
-  const { logout } = useGitHubLogout()
+  const { logout } = useGitHubLogout();
 
-  const { user, userPseudo } = useAuthContext()
-  const router = useRouter()
+  const { user, userPseudo } = useAuthContext();
+  const router = useRouter();
   useEffect(() => {
     if (
       !user ||
       !SUPER_ADMIN.includes(user.reloadUserInfo.screenName.toLowerCase())
     ) {
-      router.push("/")
+      router.push('/');
     }
-  })
+  });
 
   const {
     data: dataUsers,
     isLoading: isLoadingUsers,
     isError: isErrorUsers,
-  } = useDocuments("users")
+  } = useDocuments('users');
 
   const {
     data: dataCodes,
     isLoading: isLoadingCodes,
     isError: isErrorCodes,
-  } = useDocuments("codes")
+  } = useDocuments('codes');
 
   return (
     <Layout>
@@ -65,7 +65,7 @@ export default function SuperAdmin() {
           {dataUsers && dataCodes && (
             <p className="text-lg text-zinc-700 dark:text-zinc-400">
               <span className="font-bold">{dataUsers.length} users </span>
-              registered and{" "}
+              registered and{' '}
               <span className="font-bold">{dataCodes.length} codes</span> shared
               on Sharuco
             </p>
@@ -101,15 +101,15 @@ export default function SuperAdmin() {
                     <Masonry gutter="2rem">
                       {dataCodes.map(
                         (code: {
-                          id: string
-                          idAuthor: string
-                          language: string
-                          code: string
-                          description: string
-                          tags: string[]
-                          favoris: string[]
-                          isPrivate: boolean
-                          comments: any
+                          id: string;
+                          idAuthor: string;
+                          language: string;
+                          code: string;
+                          description: string;
+                          tags: string[];
+                          favoris: string[];
+                          isPrivate: boolean;
+                          comments: any;
                         }) => (
                           <CardCodeAdmin
                             key={code.id}
@@ -155,16 +155,16 @@ export default function SuperAdmin() {
                 <Masonry gutter="2rem">
                   {dataUsers.map(
                     (dataUser: {
-                      pseudo: string
-                      displayName: string
-                      photoURL: string
+                      pseudo: string;
+                      displayName: string;
+                      photoURL: string;
                     }) => (
                       <CardUserAdmin
                         key={dataUser.pseudo}
                         pseudo={dataUser.pseudo}
                         displayName={
                           dataUser.displayName
-                            ? dataUser.displayName.split(" ")[0]
+                            ? dataUser.displayName.split(' ')[0]
                             : dataUser.pseudo
                         }
                         photoURL={dataUser.photoURL}
@@ -179,5 +179,5 @@ export default function SuperAdmin() {
         </Tabs>
       </section>
     </Layout>
-  )
+  );
 }

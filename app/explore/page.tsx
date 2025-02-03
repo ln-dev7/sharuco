@@ -1,26 +1,26 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Head from "next/head";
-import { addCodesOnAlgolia } from "@/algolia/addCodesOnAlgolia";
-import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes.js";
-import { useAuthContext } from "@/context/AuthContext";
-import { useGetCodesWithLanguage } from "@/firebase/firestore/getCodesWithLanguage";
-import { useGetCodesWithTag } from "@/firebase/firestore/getCodesWithTag";
-import { useDocument } from "@/firebase/firestore/getDocument";
+import { useEffect, useState } from 'react';
+import Head from 'next/head';
+import { addCodesOnAlgolia } from '@/algolia/addCodesOnAlgolia';
+import { NBR_OF_CODES_PER_PAGE } from '@/constants/nbr-codes.js';
+import { useAuthContext } from '@/context/AuthContext';
+import { useGetCodesWithLanguage } from '@/firebase/firestore/getCodesWithLanguage';
+import { useGetCodesWithTag } from '@/firebase/firestore/getCodesWithTag';
+import { useDocument } from '@/firebase/firestore/getDocument';
 import {
   getIsPrivateCodeWithPagination,
   useGetIsPrivateCodeWithPagination,
-} from "@/firebase/firestore/getIsPrivateCodeWithPagination";
-import InfiniteScroll from "react-infinite-scroll-component";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+} from '@/firebase/firestore/getIsPrivateCodeWithPagination';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
-import CardCode from "@/components/cards/card-code";
-import Error from "@/components/error";
-import { Layout } from "@/components/layout";
-import LoaderCode from "@/components/loaders/loader-code";
-import LoaderCodes from "@/components/loaders/loader-codes";
-import { Button } from "@/components/ui/button";
+import CardCode from '@/components/cards/card-code';
+import Error from '@/components/error';
+import { Layout } from '@/components/layout';
+import LoaderCode from '@/components/loaders/loader-code';
+import LoaderCodes from '@/components/loaders/loader-codes';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -29,8 +29,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -39,8 +39,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
+} from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Explore() {
   const { user, userPseudo } = useAuthContext();
@@ -49,7 +49,7 @@ export default function Explore() {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(userPseudo, "users");
+  } = useDocument(userPseudo, 'users');
 
   const [currentData, setCurrentData] = useState(null);
   const [lastDocc, setLastDocc] = useState(null);
@@ -86,7 +86,7 @@ export default function Explore() {
   const fetchCodesWithTag = async (tag) => {
     setTagSelected(true);
     setLanguageSelected(false);
-    if (tag === "all") {
+    if (tag === 'all') {
       setCurrentData(data.collections);
       setHasMore(true);
       setTagSelected(false);
@@ -104,7 +104,7 @@ export default function Explore() {
   const fetchCodesWithLanguage = async (language) => {
     setTagSelected(false);
     setLanguageSelected(true);
-    if (language === "all") {
+    if (language === 'all') {
       setCurrentData(data.collections);
       setHasMore(true);
       setLanguageSelected(false);
@@ -127,7 +127,7 @@ export default function Explore() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>{" "}
+      </Head>{' '}
       <section className="container grid items-center gap-8 pb-8 pt-6 md:py-10">
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
@@ -193,7 +193,7 @@ export default function Explore() {
                             .sort((a: any, b: any) => a.localeCompare(b))
                             .map((tag) => (
                               <SelectItem
-                                key={tag.replace(/\s+/g, "")}
+                                key={tag.replace(/\s+/g, '')}
                                 value={tag}
                               >
                                 {tag}
@@ -220,7 +220,7 @@ export default function Explore() {
               }
               className="scrollbar-hide"
               style={{
-                overflow: "visible",
+                overflow: 'visible',
               }}
             >
               <ResponsiveMasonry

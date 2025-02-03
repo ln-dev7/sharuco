@@ -1,7 +1,7 @@
 export default function Error({
-  description = "Please try again later.",
+  description = 'Please try again later.',
 }: {
-  description?: string
+  description?: string;
 }) {
   return (
     <div className="flex flex-col items-center gap-4">
@@ -10,5 +10,5 @@ export default function Error({
       </h1>
       <p className="text-lg text-gray-500">{description}</p>
     </div>
-  )
+  );
 }

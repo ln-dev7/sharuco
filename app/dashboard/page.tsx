@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   allLanguages,
   getExtensionByName,
   languagesName,
-} from "@/constants/languages";
-import { useAuthContext } from "@/context/AuthContext";
-import { useGitHubLogout } from "@/firebase/auth/githubLogout";
-import { useCreateDocument } from "@/firebase/firestore/createDocument";
-import { useDocument } from "@/firebase/firestore/getDocument";
-import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser";
-import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode";
-import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser";
-import copyToClipboard from "@/utils/copyToClipboard.js";
-import embedProject from "@/utils/embedStackblitzProject";
-import indentCode from "@/utils/indentCode.js";
-import linearizeCode from "@/utils/linearizeCode";
-import { yupResolver } from "@hookform/resolvers/yup";
-import hljs from "highlight.js";
+} from '@/constants/languages';
+import { useAuthContext } from '@/context/AuthContext';
+import { useGitHubLogout } from '@/firebase/auth/githubLogout';
+import { useCreateDocument } from '@/firebase/firestore/createDocument';
+import { useDocument } from '@/firebase/firestore/getDocument';
+import { useGetDocumentFromUser } from '@/firebase/firestore/getDocumentFromUser';
+import { useGetFavoriteCode } from '@/firebase/firestore/getFavoriteCode';
+import { useGetIsPrivateCodeFromUser } from '@/firebase/firestore/getIsPrivateCodeFromUser';
+import copyToClipboard from '@/utils/copyToClipboard.js';
+import embedProject from '@/utils/embedStackblitzProject';
+import indentCode from '@/utils/indentCode.js';
+import linearizeCode from '@/utils/linearizeCode';
+import { yupResolver } from '@hookform/resolvers/yup';
+import hljs from 'highlight.js';
 import {
   Eye,
   EyeOff,
@@ -32,20 +32,20 @@ import {
   Plus,
   Settings,
   User,
-} from "lucide-react";
-import moment from "moment";
-import { useForm } from "react-hook-form";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import * as yup from "yup";
+} from 'lucide-react';
+import moment from 'moment';
+import { useForm } from 'react-hook-form';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import * as yup from 'yup';
 
-import { TemplateName } from "@/types/templatStackblitzName";
-import { cn } from "@/lib/utils";
-import CardCode from "@/components/cards/card-code";
-import CardCodeAdmin from "@/components/cards/card-code-admin";
-import EmptyCard from "@/components/empty-card";
-import Error from "@/components/error";
-import { Layout } from "@/components/layout";
-import LoaderCodes from "@/components/loaders/loader-codes";
+import { TemplateName } from '@/types/templatStackblitzName';
+import { cn } from '@/lib/utils';
+import CardCode from '@/components/cards/card-code';
+import CardCodeAdmin from '@/components/cards/card-code-admin';
+import EmptyCard from '@/components/empty-card';
+import Error from '@/components/error';
+import { Layout } from '@/components/layout';
+import LoaderCodes from '@/components/loaders/loader-codes';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -55,17 +55,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button, buttonVariants } from "@/components/ui/button";
+} from '@/components/ui/alert-dialog';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -74,37 +74,37 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
 
 export default function Dashboard() {
   const { user, userPseudo } = useAuthContext();
   const router = useRouter();
   useEffect(() => {
     if (!user) {
-      router.push("/");
+      router.push('/');
     }
   });
 
   const { logout } = useGitHubLogout();
   const notifyCodeAdded = () =>
-    toast.message("Your code has been added successfully !", {
-      description: "You can find it in the manage code section.",
+    toast.message('Your code has been added successfully !', {
+      description: 'You can find it in the manage code section.',
     });
 
   const notifyUserTokenCopied = () =>
-    toast.message("Your user token has been copied to your clipboard !",
-      {description: "You can find it in your profile section.",}
-    );
+    toast.message('Your user token has been copied to your clipboard !', {
+      description: 'You can find it in your profile section.',
+    });
 
   const {
     data: dataUser,
     isLoading: isLoadingUser,
     isError: isErrorUser,
-  } = useDocument(userPseudo, "users");
+  } = useDocument(userPseudo, 'users');
 
   const {
     isLoading: isLoadingPrivateCodes,
@@ -122,7 +122,7 @@ export default function Dashboard() {
     isLoading: isLoadingCodes,
     isError: isErrorCodes,
     data: dataCodes,
-  } = useGetDocumentFromUser(userPseudo, "codes");
+  } = useGetDocumentFromUser(userPseudo, 'codes');
 
   const {
     isLoading: isLoadingFavoriteCodes,
@@ -146,8 +146,8 @@ export default function Dashboard() {
     tags: yup
       .string()
       .test(
-        "tags",
-        "The tags field must contain only letters, commas and/or spaces",
+        'tags',
+        'The tags field must contain only letters, commas and/or spaces',
         (val) => !val || /^[a-zA-Z, ]*$/.test(val)
       ),
     isPrivate: yup.boolean(),
@@ -167,30 +167,30 @@ export default function Dashboard() {
 
   function detectLanguage(code) {
     const language = hljs.highlightAuto(code).language;
-    return language || "text";
+    return language || 'text';
   }
 
-  const [codeValue, setCodeValue] = useState("");
+  const [codeValue, setCodeValue] = useState('');
   function handleCodeChange(code) {
     const detectedLanguage = detectLanguage(code);
     if (!languagesName.includes(detectedLanguage)) {
-      setValue("language", "other");
+      setValue('language', 'other');
       return;
     }
-    setValue("language", detectedLanguage);
+    setValue('language', detectedLanguage);
   }
 
   const [openDialog, setOpenDialog] = useState(false);
   const { createDocument, isLoading, isError, isSuccess }: any =
-    useCreateDocument("codes");
+    useCreateDocument('codes');
 
   const onSubmit = async (data) => {
     const { code, description, language, tags, isPrivate, isGithubGist } = data;
     const linearCode = linearizeCode(code);
     const tabTabs = tags
-      ? tags.split(",").map((word) => word.trim().toLowerCase())
+      ? tags.split(',').map((word) => word.trim().toLowerCase())
       : [];
-    if (tabTabs[tabTabs.length - 1] === "") {
+    if (tabTabs[tabTabs.length - 1] === '') {
       tabTabs.pop();
     }
 
@@ -210,9 +210,9 @@ export default function Dashboard() {
     };
 
     if (userPseudo === null) {
-      toast.message(
-         "You are not logged in",
-        {description: "You need to be logged in to add a code",});
+      toast.message('You are not logged in', {
+        description: 'You need to be logged in to add a code',
+      });
       return;
     }
 
@@ -223,11 +223,11 @@ export default function Dashboard() {
           isError: false,
           isUnauthorized: false,
         });
-        const response = await fetch("https://api.github.com/gists", {
-          method: "POST",
+        const response = await fetch('https://api.github.com/gists', {
+          method: 'POST',
           headers: {
             Authorization: `token ${dataUser?.data?.personalAccessToken}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             description: description,
@@ -254,8 +254,9 @@ export default function Dashboard() {
         const id = data.id;
         copyToClipboard(gistUrl);
 
-        toast.message("Your code has been added on your GitHub Gist !",
-          {description: "Link of your has been copied to your clipboard !",});
+        toast.message('Your code has been added on your GitHub Gist !', {
+          description: 'Link of your has been copied to your clipboard !',
+        });
 
         const newDocumentWithGist = {
           ...newDocument,
@@ -276,10 +277,10 @@ export default function Dashboard() {
     }
 
     reset({
-      code: "",
-      description: "",
-      language: "",
-      tags: "",
+      code: '',
+      description: '',
+      language: '',
+      tags: '',
       isPrivate: false,
       isGithubGist: false,
     });
@@ -305,7 +306,7 @@ export default function Dashboard() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>{" "}
+      </Head>{' '}
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl font-extrabold leading-tight tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
@@ -313,17 +314,17 @@ export default function Dashboard() {
           </h1>
           <p
             className={cn(
-              "text-sm font-medium leading-5 text-gray-500 dark:text-gray-400",
-              "sm:text-base md:text-lg lg:text-lg"
+              'text-sm font-medium leading-5 text-gray-500 dark:text-gray-400',
+              'sm:text-base md:text-lg lg:text-lg'
             )}
           >
-            You can{" "}
-            <span className="text-gray-700 dark:text-gray-300">modify</span> or{" "}
+            You can{' '}
+            <span className="text-gray-700 dark:text-gray-300">modify</span> or{' '}
             <span className="text-gray-700 dark:text-gray-300">delete</span> a
-            code only on the{" "}
+            code only on the{' '}
             <span className="font-semibold text-gray-700 dark:text-gray-300">
               manage code
-            </span>{" "}
+            </span>{' '}
             section.
           </p>
 
@@ -340,7 +341,7 @@ export default function Dashboard() {
           <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
             <AlertDialogTrigger asChild>
               <button
-                className={buttonVariants({ size: "lg" })}
+                className={buttonVariants({ size: 'lg' })}
                 onClick={() => setOpenDialog(true)}
               >
                 <Plus className="mr-2 h-4 w-4" />
@@ -360,7 +361,7 @@ export default function Dashboard() {
                     <Textarea
                       placeholder="Insert your code here..."
                       id="code"
-                      {...register("code")}
+                      {...register('code')}
                       className="h-32"
                       onChange={(e) => {
                         setCodeValue(e.target.value);
@@ -369,7 +370,7 @@ export default function Dashboard() {
                     />
                     <div className="flex w-full items-center justify-center">
                       <Dialog>
-                        {codeValue !== "" && (
+                        {codeValue !== '' && (
                           <DialogTrigger asChild>
                             <button className="mt-2 flex items-center justify-center gap-2 rounded-md bg-[#1574ef] px-3 py-1 text-white">
                               <svg
@@ -396,17 +397,17 @@ export default function Dashboard() {
                           <DialogHeader>
                             <DialogDescription>
                               Choose the template with which the code will be
-                              executed{" "}
+                              executed{' '}
                             </DialogDescription>
                             <Select
                               onValueChange={(value: TemplateName) => {
                                 embedProject(
                                   value,
-                                  getValues("code"),
-                                  getValues("language"),
+                                  getValues('code'),
+                                  getValues('language'),
                                   userPseudo,
-                                  getValues("description")
-                                    ? getValues("description")
+                                  getValues('description')
+                                    ? getValues('description')
                                     : null
                                 );
                               }}
@@ -455,7 +456,7 @@ export default function Dashboard() {
                     <Textarea
                       placeholder="What does this code do ?"
                       id="description"
-                      {...register("description")}
+                      {...register('description')}
                     />
                     <p className="text-sm text-red-500">
                       {errors.description && <>{errors.description.message}</>}
@@ -467,10 +468,10 @@ export default function Dashboard() {
                       className="flex h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                       name="language"
                       id="language"
-                      {...register("language")}
+                      {...register('language')}
                     >
                       <option value="" disabled selected>
-                        {" "}
+                        {' '}
                         The code is written in what language ?
                       </option>
                       {allLanguages.map((language) => (
@@ -489,10 +490,10 @@ export default function Dashboard() {
                       type="text"
                       id="tags"
                       placeholder="Enter a tags ..."
-                      {...register("tags")}
+                      {...register('tags')}
                     />
                     <p className="text-sm font-medium text-zinc-500">
-                      Please separate tags with{" "}
+                      Please separate tags with{' '}
                       <span className="text-zinc-700 dark:text-zinc-300">
                         ,
                       </span>
@@ -504,21 +505,21 @@ export default function Dashboard() {
                   <div className="flex items-center gap-4">
                     <input
                       type="checkbox"
-                      {...register("isPrivate")}
+                      {...register('isPrivate')}
                       name="isPrivate"
                       id="isPrivate"
                       className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-zinc-200 outline-none dark:bg-zinc-800
                       ${
                         checkboxOn
-                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-zinc-500 before:transition-transform"
-                          : ""
+                          ? 'before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-zinc-500 before:transition-transform'
+                          : ''
                       } 
                       `}
                       checked={checkboxOn}
                       onChange={() => setCheckboxOn(!checkboxOn)}
                     />
                     <Label htmlFor="isPrivate">
-                      Will this code be private ?{" "}
+                      Will this code be private ?{' '}
                       {checkboxOn ? (
                         <span className="font-bold text-teal-300">Yes</span>
                       ) : (
@@ -530,14 +531,14 @@ export default function Dashboard() {
                     <div className="mt-4 flex items-center gap-4">
                       <input
                         type="checkbox"
-                        {...register("isGithubGist")}
+                        {...register('isGithubGist')}
                         name="isGithubGist"
                         id="isGithubGist"
                         className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-zinc-200 outline-none dark:bg-zinc-800
                           ${
                             gistCheckboxOn
-                              ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-zinc-500 before:transition-transform"
-                              : ""
+                              ? 'before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-zinc-500 before:transition-transform'
+                              : ''
                           }
                           `}
                         checked={gistCheckboxOn}
@@ -545,7 +546,7 @@ export default function Dashboard() {
                       />
                       <Label htmlFor="isGithubGist">
                         Do you also want to publish this code on your Github
-                        Gist ?{" "}
+                        Gist ?{' '}
                         {gistCheckboxOn ? (
                           <span className="font-bold text-teal-300">Yes</span>
                         ) : (
@@ -560,7 +561,7 @@ export default function Dashboard() {
                     >
                       <Link href="/add-personal-access-token">
                         You cannot publish code on your Github Gist because you
-                        have not yet followed{" "}
+                        have not yet followed{' '}
                         <span className="underline underline-offset-4">
                           this guide
                         </span>
@@ -583,7 +584,7 @@ export default function Dashboard() {
                       <Link href="/add-personal-access-token">
                         Your personal access token is not valid. <br />
                         So you can&apos;t add code to your Github Gist. <br />
-                        Please create a new one and update it by following{" "}
+                        Please create a new one and update it by following{' '}
                         <span className="underline underline-offset-4">
                           this guide
                         </span>
@@ -597,7 +598,7 @@ export default function Dashboard() {
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <button
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                    'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                   )}
                   disabled={isLoading || isLoadingAddOnGithubGist}
                   onClick={
@@ -617,14 +618,14 @@ export default function Dashboard() {
           <div className="flex flex-col gap-2 sm:flex-row">
             <Link
               href={`/user/${userPseudo}`}
-              className={buttonVariants({ size: "lg", variant: "outline" })}
+              className={buttonVariants({ size: 'lg', variant: 'outline' })}
             >
               <User className="mr-2 h-4 w-4" />
               Your profile
             </Link>
             <Link
               href={`/links`}
-              className={buttonVariants({ size: "lg", variant: "subtle" })}
+              className={buttonVariants({ size: 'lg', variant: 'subtle' })}
             >
               <LinkIcon className="mr-2 h-4 w-4" />
               Your links
@@ -881,7 +882,7 @@ export default function Dashboard() {
                       <Link
                         href="/explore"
                         className={cn(
-                          "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                          'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                         )}
                       >
                         Explore code
@@ -920,7 +921,7 @@ export default function Dashboard() {
                 <a
                   href="mailto:sharuco@leonelngoya.com"
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                    'inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900'
                   )}
                 >
                   Contact us

@@ -1,10 +1,10 @@
-"use client"
+'use client';
 
-import axios from "axios"
-import { XCircle } from "lucide-react"
-import { useQuery } from "react-query"
+import axios from 'axios';
+import { XCircle } from 'lucide-react';
+import { useQuery } from 'react-query';
 
-import { Skeleton } from "./../ui/skeleton"
+import { Skeleton } from './../ui/skeleton';
 
 export default function CardLink({
   id,
@@ -17,15 +17,15 @@ export default function CardLink({
   //
 
   const fetchLinkPreview = async (url: string) => {
-    const response = await axios.get(`/api/link-preview?url=${url}`)
-    return response.data
-  }
+    const response = await axios.get(`/api/link-preview?url=${url}`);
+    return response.data;
+  };
 
   const {
     data: dataLinkPreview,
     error: errorLinkPreview,
     isLoading: isLoadingLinkPreview,
-  } = useQuery(["preview", link], () => fetchLinkPreview(link))
+  } = useQuery(['preview', link], () => fetchLinkPreview(link));
 
   if (errorLinkPreview) {
     return (
@@ -49,7 +49,7 @@ export default function CardLink({
           </div>
         </a>
       </div>
-    )
+    );
   }
 
   return (
@@ -132,5 +132,5 @@ export default function CardLink({
         )}
       </div>
     </div>
-  )
+  );
 }
