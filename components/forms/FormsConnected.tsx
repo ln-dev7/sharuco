@@ -10,7 +10,7 @@ import EmptyCard from "@/components/empty-card"
 import LoaderForms from "@/components/loaders/loader-forms"
 
 export default function FormsConnected() {
-  const { user, userPseudo } = useAuthContext()
+  const { userPseudo } = useAuthContext()
 
   const {
     isLoading: isLoadingForms,

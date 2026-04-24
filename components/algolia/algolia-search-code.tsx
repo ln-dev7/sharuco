@@ -36,7 +36,7 @@ export default function AlgoliaSearchCode() {
           reset: "hidden",
         }}
       />
-      <Hits className="px-6" hitComponent={Hit} />
+      <Hits classNames={{ list: "px-6" }} hitComponent={Hit} />
     </InstantSearch>
   )
 }
@@ -46,7 +46,7 @@ function Hit({ hit }) {
     <a href={`/code-preview/${hit.objectID}`}>
       <div className="mb-4 w-full overflow-hidden rounded-lg border p-4 hover:border-sky-500 dark:border-zinc-300 dark:hover:border-sky-500">
         <div className="flex flex-col items-start">
-          <h3 className="mb-2 text-lg font-semibold leading-none tracking-tight text-zinc-700 dark:text-zinc-300 ">
+          <h3 className="mb-2 text-lg leading-none font-semibold tracking-tight text-zinc-700 dark:text-zinc-300">
             {hit.idAuthor}
           </h3>
           <Badge variant="outline">{hit.language}</Badge>

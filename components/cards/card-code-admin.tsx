@@ -1,16 +1,14 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import {
   allLanguages,
   getExtensionByName,
-  getLanguageColor,
   languagesName,
 } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
@@ -21,7 +19,6 @@ import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
 import algoliasearch from "algoliasearch"
 import hljs from "highlight.js"
-import * as htmlToImage from "html-to-image"
 import {
   Copy,
   Edit,
@@ -123,8 +120,6 @@ export default function CardCodeAdmin({
 
   const { user, userPseudo } = useAuthContext()
 
-  const { login, isPending } = useGitHubLogin()
-
   const shareUrl = `https://sharuco.lndev.me/code-preview/${id}`
 
   const [openShareDialog, setOpenShareDialog] = useState(false)
@@ -185,7 +180,7 @@ export default function CardCodeAdmin({
     setValue("isPrivate", checkboxOn)
   }, [code, description, language, tags, checkboxOn, setValue])
 
-  const { updateCodeDocument, isLoading, isError, isSuccess }: any =
+  const { updateCodeDocument, isLoading, isError }: any =
     useUpdateCodeDocument("codes")
 
   const onSubmit = async (data) => {
@@ -221,7 +216,7 @@ export default function CardCodeAdmin({
       return
     }
 
-    let updatedCodeData: {
+    const updatedCodeData: {
       code: string
       description: string
       isPrivate: boolean
@@ -274,47 +269,10 @@ export default function CardCodeAdmin({
 
   //
 
-  const {
-    data: dataUser,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
-  } = useDocument(idAuthor, "users")
-
-  const domRefImage = useRef(null)
-  const [backgroundImage, setBackgroundImage] = useState(
-    "bg-gradient-to-br from-blue-400 to-indigo-700"
+  const { data: dataUser, isLoading: isLoadingUser } = useDocument(
+    idAuthor,
+    "users"
   )
-
-  const handleChangeBgImg1 = () => {
-    setBackgroundImage("bg-gradient-to-br from-blue-400 to-indigo-700")
-  }
-
-  const handleChangeBgImg2 = () => {
-    setBackgroundImage("bg-gradient-to-r from-pink-500 to-indigo-600")
-  }
-
-  const handleChangeBgImg3 = () => {
-    setBackgroundImage("bg-gradient-to-br from-teal-400 to-green-500")
-  }
-
-  const handleChangeBgImg4 = () => {
-    setBackgroundImage("bg-gradient-to-br from-yellow-300 to-orange-500")
-  }
-  const handleChangeBgImg5 = () => {
-    setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600")
-  }
-
-  const [nameOfImage, setNameOfImage] = useState("")
-
-  const downloadImage = async () => {
-    const dataUrl = await htmlToImage.toPng(domRefImage.current)
-
-    // download image
-    const link = document.createElement("a")
-    link.download = nameOfImage !== "" ? nameOfImage : `sharuco-code-${id}.png`
-    link.href = dataUrl
-    link.click()
-  }
 
   function detectLanguage(code) {
     const language = hljs.highlightAuto(code).language
@@ -537,7 +495,10 @@ export default function CardCodeAdmin({
                         The code is written in what language ?
                       </option>
                       {allLanguages.map((language) => (
-                        <option value={language.name.toLocaleLowerCase()}>
+                        <option
+                          key={language.name}
+                          value={language.name.toLocaleLowerCase()}
+                        >
                           {language.name}
                         </option>
                       ))}
@@ -832,8 +793,7 @@ export default function CardCodeAdmin({
                 <div className="flex gap-2">
                   <FacebookShareButton
                     url={shareUrl}
-                    quote={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
-                    onClick={() => setOpenShareDialog(false)}
+                    hashtag="#ShareWithSharuco"
                   >
                     <FacebookIcon size={38} round />
                   </FacebookShareButton>
@@ -857,7 +817,6 @@ export default function CardCodeAdmin({
                     url={shareUrl}
                     subject={`Share code on sharuco.lndev.me`}
                     body={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
-                    onClick={() => setOpenShareDialog(false)}
                   >
                     <EmailIcon size={38} round />
                   </EmailShareButton>

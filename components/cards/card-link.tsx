@@ -8,11 +8,15 @@ import { Skeleton } from "./../ui/skeleton"
 
 export default function CardLink({
   id,
-  idAuthor,
-  createdAt,
   link,
-  description,
   tags,
+}: {
+  id: string
+  link: string
+  tags: string[]
+  idAuthor?: string
+  description?: string
+  createdAt?: number
 }) {
   //
 

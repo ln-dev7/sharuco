@@ -17,7 +17,7 @@ const client = algoliasearch(
 )
 
 export default function AlgoliaSearchLink() {
-  const { user, userPseudo } = useAuthContext()
+  const { userPseudo } = useAuthContext()
 
   const params = useParams()
 
@@ -55,11 +55,10 @@ export default function AlgoliaSearchLink() {
         }}
       />
       <Hits
-        className="px-6"
+        classNames={{ list: "px-6" }}
         hitComponent={Hit}
         transformItems={transformItems}
       />
-      {/* <Configure filters="" analytics={false} /> */}
     </InstantSearch>
   )
 }

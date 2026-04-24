@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
 import { checkIdAvailability } from "@/firebase/firestore/checkIfIDExistOnCollection"
 import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
@@ -33,19 +32,11 @@ import { useToast } from "@/components/ui/use-toast"
 
 export default function SettingsForms({ dataForm }: { dataForm: any }) {
   const params = useParams()
-  const { user, userPseudo } = useAuthContext()
   const router = useRouter()
 
   const id = params["form"] as string
 
   const { toast } = useToast()
-
-  const notifyUrlCopied = () =>
-    toast({
-      title: "Url of your code copied to clipboard",
-      description: "You can share it wherever you want",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
 
   const ALGOLIA_INDEX_NAME = "forms"
 
@@ -54,10 +45,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
   )
   const index = client.initIndex(ALGOLIA_INDEX_NAME)
-
-  const [checkboxAcceptPayment, setCheckboxAcceptPayment] = useState(
-    dataForm.acceptPayment
-  )
 
   const schema = yup.object().shape({
     name: yup.string().required("Name is required"),
@@ -73,33 +60,12 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       .string()
       .url("Redirect URL must be a valid URL")
       .nullable(),
-    // acceptPayment: yup.boolean(),
-    // publicNotchPayApiKey: yup.string().when("acceptPayment", {
-    //   is: true,
-    //   then: (schema) =>
-    //     schema
-    //       .matches(
-    //         /^(sb\.|b\.|pk\.)/,
-    //         'Public NotchPay API key must start with "pk." or "b." or "sb."'
-    //       )
-    //       .required("Public NotchPay API key is required"),
-    // }),
-    // amountNotchPay: yup.number().when("acceptPayment", {
-    //   is: true,
-    //   then: (schema) =>
-    //     schema
-    //       .min(2, "Amount for NotchPay must be greater than 2")
-    //       .typeError("Amount for NotchPay must be a valid number")
-    //       .required("Amount for NotchPay is required"),
-    // }),
   })
 
   const {
     register,
     handleSubmit,
-    control,
     setValue,
-    watch,
     reset,
     formState: { errors },
   } = useForm({
@@ -111,15 +77,11 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     setValue("description", dataForm.description)
     setValue("color", dataForm.color)
     setValue("redirectOnCompletion", dataForm.redirectOnCompletion)
-    // setValue("publicNotchPayApiKey", dataForm.publicNotchPayApiKey)
-    // setValue("amountNotchPay", dataForm.amountNotchPay)
-    // setValue("acceptPayment", dataForm.acceptPayment)
-  }, [dataForm])
+  }, [dataForm, setValue])
 
   const {
     updateFormDocument,
     isLoading: isLoadingUpdateForm,
-    isError: isErrorUpdateForm,
     isSuccess: isSuccessUpdateForm,
     reset: resetUpdateForm,
   }: any = useUpdateFormDocument("forms")
@@ -141,7 +103,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
     checkIdAvailability("users", pseudo)
       .then((isAvailable) => {
         if (isAvailable) {
-          let updatedFormData = {
+          const updatedFormData = {
             collaborators: [
               ...dataForm.collaborators,
               {
@@ -167,7 +129,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       })
   }
   const removeCollaborator = async (pseudo: string) => {
-    let updatedFormData = {
+    const updatedFormData = {
       collaborators: dataForm.collaborators.filter(
         (item) => item.pseudo !== pseudo
       ),
@@ -182,9 +144,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
-      // acceptPayment: acceptPaymentUpdate,
     } = data
 
     if (
@@ -192,9 +151,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       descriptionUpdate === dataForm.description &&
       colorUpdate === dataForm.color &&
       redirectOnCompletionUpdate === dataForm.redirectOnCompletion
-      // && publicNotchPayApiKeyUpdate === dataForm.publicNotchPayApiKey &&
-      // amountNotchPayUpdate === dataForm.amountNotchPay &&
-      // acceptPaymentUpdate === dataForm.acceptPayment
     ) {
       toast({
         variant: "destructive",
@@ -205,22 +161,16 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       return
     }
 
-    let updatedFormData: {
+    const updatedFormData: {
       name: string
       description: string
       color: string
       redirectOnCompletion: string
-      // publicNotchPayApiKey: string
-      // amountNotchPay: number
-      // acceptPayment: boolean
     } = {
       name: nameUpdate,
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
-      // acceptPayment: acceptPaymentUpdate,
     }
 
     await updateFormDocument({ id, updatedFormData })
@@ -231,9 +181,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
-      // acceptPayment: acceptPaymentUpdate,
     })
 
     reset({
@@ -241,9 +188,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
       description: descriptionUpdate,
       color: colorUpdate,
       redirectOnCompletion: redirectOnCompletionUpdate,
-      // publicNotchPayApiKey: publicNotchPayApiKeyUpdate,
-      // amountNotchPay: amountNotchPayUpdate,
-      // acceptPayment: acceptPaymentUpdate,
     })
   }
 
@@ -355,7 +299,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
           </div>
           {dataForm.collaborators.length !== 0 && (
             <div className="flex w-full flex-col gap-2">
-              {dataForm.collaborators.map((collaborator, index) => (
+              {dataForm.collaborators.map((collaborator) => (
                 <div
                   key={collaborator.pseudo}
                   className="flex w-full items-center rounded-md bg-zinc-50 px-5 py-3 dark:bg-zinc-800"
@@ -371,9 +315,9 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                   <span
                     className="block shrink-0 cursor-pointer text-sm font-medium text-red-600 underline underline-offset-4"
                     onClick={() => {
-                      isLoadingUpdateForm
-                        ? undefined
-                        : removeCollaborator(collaborator.pseudo)
+                      if (!isLoadingUpdateForm) {
+                        removeCollaborator(collaborator.pseudo)
+                      }
                     }}
                   >
                     Remove
@@ -383,85 +327,6 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
             </div>
           )}
         </div>
-        {/* <Separator className="my-2" />
-        <div className="flex flex-col items-start">
-          <h3 className="text-xl font-semibold">Payment</h3>
-          <p className="text-left text-sm">
-            You can use{" "}
-            <a
-              href="https://business.notchpay.co"
-              className="font-bold underline underline-offset-4"
-            >
-              NotchPay
-            </a>{" "}
-            to accept payments on your form. You can create a NotchPay account{" "}
-            <a
-              href="https://business.notchpay.co"
-              className="font-bold underline underline-offset-4"
-            >
-              here
-            </a>
-            .
-          </p>
-        </div>
-        <Separator className="opacity-50" />
-        <div className="flex w-full flex-col items-start gap-2">
-          <div className="flex w-full flex-col items-start gap-1">
-            <Label>Public NotchPay API key</Label>
-            <p className="text-left text-sm">
-              You can have it here :{" "}
-              <a
-                href="https://business.notchpay.co/settings/developer"
-                className="font-semibold underline underline-offset-4"
-              >
-                https://business.notchpay.co/settings/developer
-              </a>
-            </p>
-          </div>
-          <Input
-            placeholder="(pk or sb or b).xxxxxxx...xxxxxxxx"
-            {...register("publicNotchPayApiKey")}
-          />
-          <p className="text-sm text-red-500">
-            {errors.publicNotchPayApiKey && checkboxAcceptPayment && (
-              <>{errors.publicNotchPayApiKey.message}</>
-            )}
-          </p>
-        </div>
-        <div className="flex w-full flex-col items-start gap-2">
-          <Label>Amount ( in EURO ) </Label>
-          <Input placeholder="2 EURO" {...register("amountNotchPay")} />
-          <p className="text-sm text-red-500">
-            {errors.amountNotchPay && checkboxAcceptPayment && (
-              <>{errors.amountNotchPay.message}</>
-            )}
-          </p>
-        </div>
-        <div className="flex w-full items-center justify-start gap-2">
-          <input
-            type="checkbox"
-            {...register("acceptPayment")}
-            name="acceptPayment"
-            id="acceptPayment"
-            className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-zinc-200 outline-none dark:bg-zinc-800
-                      ${
-                        checkboxAcceptPayment
-                          ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-zinc-500 before:transition-transform"
-                          : ""
-                      } 
-                      `}
-            checked={checkboxAcceptPayment}
-            onChange={() => setCheckboxAcceptPayment(!checkboxAcceptPayment)}
-          />
-          <Label htmlFor="acceptPayment">
-            Does this form accept payments ?{" "}
-            {checkboxAcceptPayment ? (
-              <span className="font-bold text-teal-300"> Yes</span>
-            ) : (
-              <span className="font-bold text-teal-300"> No</span>
-            )}
-          </Label>
-        </div> */}
 
         <div className="sticky inset-x-0 bottom-0 flex w-full flex-col items-start gap-2 border-t bg-white py-4 dark:bg-zinc-900">
           <div className="flex w-full items-center justify-between">
@@ -522,7 +387,7 @@ export default function SettingsForms({ dataForm }: { dataForm: any }) {
                   </AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     disabled={
                       isLoadingDelete || confirmFormName !== dataForm.name

@@ -13,7 +13,7 @@ const client = algoliasearch(
 )
 
 export default function AlgoliaSearchForm() {
-  const { user, userPseudo } = useAuthContext()
+  const { userPseudo } = useAuthContext()
 
   const transformItems = (items) => {
     return items.filter((item) => item.idAuthor === userPseudo)
@@ -41,11 +41,10 @@ export default function AlgoliaSearchForm() {
         }}
       />
       <Hits
-        className="px-6"
+        classNames={{ list: "px-6" }}
         hitComponent={Hit}
         transformItems={transformItems}
       />
-      {/* <Configure filters="" analytics={false} /> */}
     </InstantSearch>
   )
 }

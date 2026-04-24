@@ -16,7 +16,7 @@ import { SearchBarForm } from "./search-bar/search-bar-form"
 import { SearchBarLink } from "./search-bar/search-bar-link"
 
 export function SiteHeader() {
-  const { user, userPseudo } = useAuthContext()
+  const { user } = useAuthContext()
   const pathName = usePathname()
   const params = useParams()
 

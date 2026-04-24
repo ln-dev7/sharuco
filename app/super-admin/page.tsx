@@ -4,7 +4,6 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { SUPER_ADMIN } from "@/constants/super-admin"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useDocuments } from "@/firebase/firestore/getDocuments"
 import { Code, Layers, UserIcon } from "lucide-react"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
@@ -18,9 +17,7 @@ import LoaderCodes from "@/components/loaders/loader-codes"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function SuperAdmin() {
-  const { logout } = useGitHubLogout()
-
-  const { user, userPseudo } = useAuthContext()
+  const { user } = useAuthContext()
   const router = useRouter()
   useEffect(() => {
     if (
@@ -141,24 +138,24 @@ export default function SuperAdmin() {
                 className="w-full"
               >
                 <Masonry gutter="2rem">
-                  {dataUsers.map(
-                    (dataUser: {
+                  {(
+                    dataUsers as unknown as Array<{
                       pseudo: string
                       displayName: string
                       photoURL: string
-                    }) => (
-                      <CardUserAdmin
-                        key={dataUser.pseudo}
-                        pseudo={dataUser.pseudo}
-                        displayName={
-                          dataUser.displayName
-                            ? dataUser.displayName.split(" ")[0]
-                            : dataUser.pseudo
-                        }
-                        photoURL={dataUser.photoURL}
-                      />
-                    )
-                  )}
+                    }>
+                  ).map((dataUser) => (
+                    <CardUserAdmin
+                      key={dataUser.pseudo}
+                      pseudo={dataUser.pseudo}
+                      displayName={
+                        dataUser.displayName
+                          ? dataUser.displayName.split(" ")[0]
+                          : dataUser.pseudo
+                      }
+                      photoURL={dataUser.photoURL}
+                    />
+                  ))}
                 </Masonry>
               </ResponsiveMasonry>
             )}

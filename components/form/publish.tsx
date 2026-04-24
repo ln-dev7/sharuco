@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
@@ -15,8 +15,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 export default function PublishForms({ dataForm }: { dataForm: any }) {
   const params = useParams()
-  const { user, userPseudo } = useAuthContext()
-  const router = useRouter()
+  const { userPseudo } = useAuthContext()
 
   const { toast } = useToast()
 
@@ -38,13 +37,12 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
   const {
     updateFormDocument,
     isLoading: isLoadingUpdateForm,
-    isError: isErrorUpdateForm,
     isSuccess: isSuccessUpdateForm,
     reset: resetUpdateForm,
   }: any = useUpdateFormDocument("forms")
 
   const changeStatutOfForm = async () => {
-    let updatedFormData: {
+    const updatedFormData: {
       published: boolean
     } = {
       published: !dataForm?.published,

@@ -58,11 +58,7 @@ export default function User() {
 
   const { login, isPending } = useGitHubLogin()
 
-  const {
-    data: dataUser,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
-  } = useDocument(userPseudo, "users")
+  const { data: dataUser } = useDocument(userPseudo, "users")
 
   const { data, isLoading, isError } = useDocument(idCurrent, "users")
 
@@ -81,7 +77,7 @@ export default function User() {
   const { updateUserDocument }: any = useUpdateUserDocument("users")
 
   const addUserOnFollowers = async (pseudo: string, id: string) => {
-    let updatedUserData = {
+    const updatedUserData = {
       followers: data.data.followers.includes(id)
         ? data.data.followers.filter((item) => item !== id)
         : [...data.data.followers, id],
@@ -91,7 +87,7 @@ export default function User() {
   }
 
   const addUserOnFollowing = async (id: string, pseudo: string) => {
-    let updatedUserData = {
+    const updatedUserData = {
       following: dataUser?.data?.following.includes(id)
         ? dataUser?.data?.following.filter((item) => item !== id)
         : [...dataUser?.data?.following, id],
@@ -276,7 +272,7 @@ export default function User() {
                 <p className="text-center text-gray-500">
                   Joined{" "}
                   <span className="font-bold">
-                    {formatDateTime(moment(data.data.createdAt))}
+                    {formatDateTime(moment(data.data.createdAt).toDate())}
                   </span>
                 </p>
               </div>

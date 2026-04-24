@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import Image from "next/image"
-import { useParams, usePathname, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
@@ -29,11 +29,7 @@ export default function AddPersonalAccessToken() {
 
   const { toast } = useToast()
 
-  const {
-    data: dataUser,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
-  } = useDocument(userPseudo, "users")
+  const { data: dataUser } = useDocument(userPseudo, "users")
 
   const schema = yup.object().shape({
     personalAccessToken: yup.string().required(),
@@ -43,19 +39,16 @@ export default function AddPersonalAccessToken() {
     register,
     handleSubmit,
     reset,
-    setValue,
-    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   })
 
-  const { updateUserDocument, isLoading, isError, isSuccess }: any =
-    useUpdateUserDocument("users")
+  const { updateUserDocument, isLoading }: any = useUpdateUserDocument("users")
 
   const onSubmit = async (data) => {
     const { personalAccessToken } = data
-    let updatedUserData: {
+    const updatedUserData: {
       personalAccessToken: string
     } = {
       personalAccessToken: personalAccessToken,

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -23,7 +23,7 @@ import {
   Trash,
   X,
 } from "lucide-react"
-import { useFieldArray, useForm } from "react-hook-form"
+import { useFieldArray, useForm, useWatch } from "react-hook-form"
 import * as yup from "yup"
 
 import EmptyCard from "@/components/empty-card"
@@ -31,28 +31,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import { ToastAction } from "@/components/ui/toast"
-import { useToast } from "@/components/ui/use-toast"
 
 export default function QuestionsForms({ dataForm }: { dataForm: any }) {
   const params = useParams()
-  const { user, userPseudo } = useAuthContext()
-  const router = useRouter()
-
-  const { toast } = useToast()
-
-  const notifyUrlCopied = () =>
-    toast({
-      title: "Url of your code copied to clipboard",
-      description: "You can share it wherever you want",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
+  const { userPseudo } = useAuthContext()
 
   const {
     updateFormDocument,
     isLoading: isLoadingUpdateForm,
-    isError: isErrorUpdateForm,
-    error: errorUpdateForm,
     isSuccess: isSuccessUpdateForm,
     reset: resetUpdateForm,
   }: any = useUpdateFormDocument("forms")
@@ -82,7 +68,6 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     questions: yup.array().of(
       yup.object().shape({
         label: yup.string().required("The label is required"),
-        //text: yup.string().required("The placeholder is required"),
       })
     ),
   })
@@ -96,7 +81,6 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     handleSubmit,
     control,
     setValue,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -107,6 +91,8 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     control,
     name: "questions",
   })
+
+  const watchedQuestions = useWatch({ control, name: "questions" })
 
   useEffect(() => {
     setValue("questions", dataForm.questions)
@@ -125,9 +111,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
   const index = client.initIndex(ALGOLIA_INDEX_NAME)
 
   const onSubmit = async (data: FormData) => {
-    //console.log(data)
-
-    let updatedFormData: {
+    const updatedFormData: {
       questions: Question[]
     } = {
       questions: data.questions,
@@ -169,20 +153,14 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
               <AlignJustify className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">Long answer</span>
             </button>
-            <button
-              //onClick={() => handleAddField("link")}
-              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
-            >
+            <button className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800">
               <LinkIcon className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">Link</span>
               <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
                 soon
               </span>
             </button>
-            <button
-              //onClick={() => handleAddField("email")}
-              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
-            >
+            <button className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800">
               <Mail className="h-5 w-5" />
               <span className="ml-2 text-sm font-semibold">E-mail</span>
               <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
@@ -226,7 +204,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
       )}
       <div
         id="questions"
-        className="relative flex w-full flex-col items-start gap-4 overflow-hidden rounded-md border px-4 pb-4 pt-7"
+        className="relative flex w-full flex-col items-start gap-4 overflow-hidden rounded-md border px-4 pt-7 pb-4"
       >
         <div
           className={`absolute inset-x-0 top-0 h-3 w-full`}
@@ -236,7 +214,7 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
         ></div>
         <div className="w-full space-y-6">
           {fields.map((field, index) => {
-            const watchedFieldType = watch(`questions[${index}].type`)
+            const watchedFieldType = watchedQuestions?.[index]?.type
             return (
               <div
                 className="relative flex w-full flex-col items-start gap-2 first:mt-2"
@@ -246,15 +224,13 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                   {watchedFieldType === "heading" ? (
                     <Input
                       {...register(`questions.${index}.label` as const)}
-                      //defaultValue={field.label}
-                      className="text-md h-6 border-none p-0 font-semibold outline-none hover:border-none hover:outline-none hover:ring-0 focus:border-none focus:outline-none focus:ring-0"
+                      className="text-md h-6 border-none p-0 font-semibold outline-none hover:border-none hover:ring-0 hover:outline-none focus:border-none focus:ring-0 focus:outline-none"
                       placeholder="Your label"
                     />
                   ) : (
                     <Input
                       {...register(`questions.${index}.label` as const)}
-                      //defaultValue={field.label}
-                      className="h-8 border-none pl-0 outline-none hover:border-none hover:outline-none hover:ring-0 focus:border-none focus:outline-none focus:ring-0"
+                      className="h-8 border-none pl-0 outline-none hover:border-none hover:ring-0 hover:outline-none focus:border-none focus:ring-0 focus:outline-none"
                       placeholder="Your label"
                     />
                   )}
@@ -271,7 +247,6 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                   <Input
                     {...register(`questions.${index}.text` as const)}
                     placeholder="Enter placeholder"
-                    //placeholder={field.text}
                   />
                 )}
                 {watchedFieldType === "longtext" && (
@@ -285,9 +260,6 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
                     {watchedFieldType}
                   </span>
                 </div>
-                {/* {errors?.questions?.[index]?.text && (
-                <p>{errors.questions[index].text.message}</p>
-              )} */}
                 {dataForm.idAuthor === userPseudo && (
                   <Button
                     variant="destructive"

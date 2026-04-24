@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
 import formatDateTime from "@/utils/formatDateTime"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -43,12 +42,19 @@ import { useToast } from "@/components/ui/use-toast"
 
 export default function CardForm({
   id,
-  idAuthor,
   createdAt,
   name,
   description,
   color,
   responses,
+}: {
+  id: string
+  createdAt: number
+  name: string
+  description: string
+  color: string
+  responses: any[]
+  idAuthor?: string
 }) {
   const { toast } = useToast()
 
@@ -63,14 +69,6 @@ export default function CardForm({
     process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
   )
   const index = client.initIndex(ALGOLIA_INDEX_NAME)
-
-  const { deleteDocument, isLoading: isLoadingDelete }: any =
-    useDeleteDocument("forms")
-
-  const handleDeleteDocument = () => {
-    deleteDocument(id)
-    index.deleteObject(id)
-  }
 
   const schema = yup.object().shape({
     name: yup.string().required(),
@@ -92,7 +90,7 @@ export default function CardForm({
     setValue("description", description)
   }, [name, description, setValue])
 
-  const { updateFormDocument, isLoading, isError, isSuccess }: any =
+  const { updateFormDocument, isLoading, isError }: any =
     useUpdateFormDocument("forms")
 
   const onSubmit = async (data) => {
@@ -108,7 +106,7 @@ export default function CardForm({
       return
     }
 
-    let updatedFormData: {
+    const updatedFormData: {
       name: string
       description: string
     } = {
@@ -158,7 +156,7 @@ export default function CardForm({
           <span className="flex items-center gap-1 text-zinc-700 dark:text-zinc-400">
             <Timer className="mr-1.5 h-4 w-4" />
             <span className="text-sm font-medium">
-              {formatDateTime(moment(createdAt))}
+              {formatDateTime(moment(createdAt).toDate())}
             </span>
           </span>
           <span className="flex items-center gap-1 text-zinc-700 dark:text-zinc-400">
@@ -173,7 +171,7 @@ export default function CardForm({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="absolute right-2 top-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-zinc-700"
+            className="absolute top-2 right-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-zinc-700"
           >
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -192,7 +190,7 @@ export default function CardForm({
               <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    <h3 className="text-lg font-medium leading-6 text-zinc-900 dark:text-zinc-100">
+                    <h3 className="text-lg leading-6 font-medium text-zinc-900 dark:text-zinc-100">
                       Edit a form
                     </h3>
                   </AlertDialogTitle>
@@ -233,7 +231,7 @@ export default function CardForm({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     disabled={isLoading}
                     onClick={!isLoading ? handleSubmit(onSubmit) : undefined}

@@ -68,17 +68,16 @@ export default function CodePreview() {
 
   const { login, isPending } = useGitHubLogin()
 
-  const {
-    data: dataUser,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
-  } = useDocument(userPseudo, "users")
+  const { data: dataUser, isLoading: isLoadingUser } = useDocument(
+    userPseudo,
+    "users"
+  )
 
   const {
     data: dataCode,
     isLoading: isLoadingCode,
     isError: isErrorCode,
-  } = useDocument(params["code-preview"], "codes")
+  } = useDocument(params["code-preview"] as string, "codes")
 
   const schema = yup.object().shape({
     code: yup.string(),
@@ -110,25 +109,15 @@ export default function CodePreview() {
     setValue("language", detectedLanguage)
   }
 
-  const {
-    updateCodeDocument,
-    isLoading: isLoadingAddComment,
-    isError: isErrorAddComment,
-    isSuccess: isSuccessAddComment,
-  }: any = useUpdateCodeDocument("codes")
-
-  function convertirMentionsEnLiens(texte) {
-    var regExp = /@([\w-]+)/g
-    var texteAvecLiens = texte.replace(regExp, '<a href="/$1">@$1</a>')
-    return texteAvecLiens
-  }
+  const { updateCodeDocument, isLoading: isLoadingAddComment }: any =
+    useUpdateCodeDocument("codes")
 
   const onSubmit = async (data) => {
     const { code, comment, language } = data
 
     const linearCode = linearizeCode(code)
 
-    let updatedCodeData: {
+    const updatedCodeData: {
       comments: any[]
     } = {
       comments: [
@@ -136,7 +125,6 @@ export default function CodePreview() {
         {
           idComment: userPseudo + moment().valueOf(),
           idAuthor: userPseudo,
-          //comment: convertirMentionsEnLiens(comment),
           comment: comment,
           createdAt: moment().valueOf(),
           photoURL: dataUser?.data.photoURL,
@@ -200,11 +188,7 @@ export default function CodePreview() {
             (dataCode.data.isPrivate &&
               dataCode.data.idAuthor === userPseudo)) && (
             <div className="w-full">
-              <ResponsiveMasonry
-                columnsCountBreakPoints={{
-                  all: 1,
-                }}
-              >
+              <ResponsiveMasonry columnsCountBreakPoints={{ 0: 1 }}>
                 <Masonry>
                   {dataUser?.data.pseudo === dataCode.data.idAuthor ||
                   SUPER_ADMIN.includes(dataUser?.data.pseudo) ? (
@@ -223,7 +207,7 @@ export default function CodePreview() {
                   ) : (
                     <CardCode
                       key={params["code-preview"] as string}
-                      id={params["code-preview"]}
+                      id={params["code-preview"] as string}
                       idAuthor={dataCode.data.idAuthor}
                       language={dataCode.data.language}
                       code={dataCode.data.code}
@@ -270,157 +254,144 @@ export default function CodePreview() {
                 <div className="flex w-full flex-col-reverse items-center gap-4 lg:flex-row lg:items-start">
                   <div className="flex w-full flex-col gap-8">
                     {dataCode.data.comments &&
-                      dataCode.data.comments
-                        //.sort((a, b) => b.createdAt - a.createdAt)
-                        .map((comment) => (
-                          <div
-                            key={comment.idComment}
-                            className="flex flex-col gap-4"
-                          >
-                            <div className="flex flex-wrap items-center">
-                              <Link
-                                href={`/user/${comment.idAuthor}`}
-                                className="mr-2 flex items-center justify-start gap-2"
-                              >
-                                <Avatar className="h-8 w-8 cursor-pointer">
-                                  {isLoadingUser && (
-                                    <AvatarFallback>
-                                      <Loader />
-                                    </AvatarFallback>
-                                  )}
-                                  <AvatarImage
-                                    src={comment.photoURL}
-                                    alt={comment.idAuthor}
-                                  />
+                      dataCode.data.comments.map((comment) => (
+                        <div
+                          key={comment.idComment}
+                          className="flex flex-col gap-4"
+                        >
+                          <div className="flex flex-wrap items-center">
+                            <Link
+                              href={`/user/${comment.idAuthor}`}
+                              className="mr-2 flex items-center justify-start gap-2"
+                            >
+                              <Avatar className="h-8 w-8 cursor-pointer">
+                                {isLoadingUser && (
                                   <AvatarFallback>
-                                    {comment.idAuthor.split(" ")[1] ===
-                                    undefined
-                                      ? comment.idAuthor.split(" ")[0][0] +
-                                        comment.idAuthor.split(" ")[0][1]
-                                      : comment.idAuthor.split(" ")[0][0] +
-                                        comment.idAuthor.split(" ")[1][0]}
+                                    <Loader />
                                   </AvatarFallback>
-                                </Avatar>
-                                <div className="flex items-center justify-start gap-1">
-                                  <span className="text-md font-bold text-zinc-700 hover:underline dark:text-zinc-400">
-                                    {comment.idAuthor}{" "}
-                                  </span>
-                                  <span>
-                                    {comment.premium && (
-                                      <Verified className="h-4 w-4 text-green-500" />
-                                    )}
-                                  </span>
-                                </div>
-                              </Link>
-
-                              <div className="flex items-center gap-2">
-                                {comment.idAuthor ===
-                                  dataCode?.data.idAuthor && (
-                                  <span className="rounded-xl bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-zinc-900">
-                                    Author
-                                  </span>
                                 )}
-                                •
-                                <span className="rounded-xl py-0.5 text-xs font-semibold text-zinc-900 dark:text-white">
-                                  {moment(comment.createdAt).fromNow()}
+                                <AvatarImage
+                                  src={comment.photoURL}
+                                  alt={comment.idAuthor}
+                                />
+                                <AvatarFallback>
+                                  {comment.idAuthor.split(" ")[1] === undefined
+                                    ? comment.idAuthor.split(" ")[0][0] +
+                                      comment.idAuthor.split(" ")[0][1]
+                                    : comment.idAuthor.split(" ")[0][0] +
+                                      comment.idAuthor.split(" ")[1][0]}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="flex items-center justify-start gap-1">
+                                <span className="text-md font-bold text-zinc-700 hover:underline dark:text-zinc-400">
+                                  {comment.idAuthor}{" "}
+                                </span>
+                                <span>
+                                  {comment.premium && (
+                                    <Verified className="h-4 w-4 text-green-500" />
+                                  )}
                                 </span>
                               </div>
-                            </div>
-                            <div className="flex w-full flex-col gap-2 rounded-md bg-zinc-100 p-4 dark:bg-zinc-800">
-                              <p className="text-md font-semibold text-zinc-900 dark:text-white">
-                                {comment.comment}
-                              </p>
-                              {/* <p
-                              dangerouslySetInnerHTML={{
-                                __html: comment.comment,
-                              }}
-                              className="font-semibold text-md text-zinc-900 dark:text-white"
-                            ></p> */}
+                            </Link>
 
-                              {comment.code && (
-                                <ResponsiveMasonry
-                                  columnsCountBreakPoints={{
-                                    all: 1,
-                                  }}
-                                >
-                                  <Masonry>
-                                    <div className="w-full overflow-hidden rounded-lg bg-zinc-900 dark:bg-black">
-                                      <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
-                                        <span className="text-xs font-medium text-white">
-                                          {comment.language.toLowerCase()}
-                                        </span>
-                                        <span
-                                          className="flex cursor-pointer items-center p-1 text-xs font-medium text-white"
-                                          onClick={() => {
-                                            copyToClipboard(comment.code)
-                                            notifyCodeCopied()
-                                          }}
-                                        >
-                                          <Copy className="mr-2 h-4 w-4" />
-                                          Copy code
-                                        </span>
-                                      </div>
-                                      <pre className="max-h-[380px] w-full overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black">
-                                        <code
-                                          className="text-white"
-                                          dangerouslySetInnerHTML={{
-                                            __html: highlight(
-                                              comment.code,
-                                              comment.language.toLowerCase()
-                                            ),
-                                          }}
-                                        />
-                                      </pre>
-                                    </div>
-                                  </Masonry>
-                                </ResponsiveMasonry>
+                            <div className="flex items-center gap-2">
+                              {comment.idAuthor === dataCode?.data.idAuthor && (
+                                <span className="rounded-xl bg-teal-100 px-1.5 py-0.5 text-xs no-underline group-hover:no-underline dark:text-zinc-900">
+                                  Author
+                                </span>
                               )}
+                              •
+                              <span className="rounded-xl py-0.5 text-xs font-semibold text-zinc-900 dark:text-white">
+                                {moment(comment.createdAt).fromNow()}
+                              </span>
                             </div>
-                            {(comment.idAuthor === dataUser?.data.pseudo ||
-                              dataCode.data.idAuthor ===
-                                dataUser?.data.pseudo ||
-                              SUPER_ADMIN.includes(dataUser?.data.pseudo)) && (
-                              <div>
-                                <AlertDialog>
-                                  <AlertDialogTrigger asChild>
-                                    <button className="flex items-center justify-center gap-2 text-sm font-semibold text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500">
-                                      <Trash2 className="h-4 w-4" />
-                                      <span>Delete</span>
-                                    </button>
-                                  </AlertDialogTrigger>
-                                  <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                      <AlertDialogTitle>
-                                        Are you sure you want to delete this
-                                        comment ?
-                                      </AlertDialogTitle>
-                                      <AlertDialogDescription>
-                                        This action is irreversible, please
-                                        reflect beforehand.
-                                      </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                      <AlertDialogCancel>
-                                        Cancel
-                                      </AlertDialogCancel>
-                                      <button
-                                        className={cn(
-                                          "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
-                                        )}
+                          </div>
+                          <div className="flex w-full flex-col gap-2 rounded-md bg-zinc-100 p-4 dark:bg-zinc-800">
+                            <p className="text-md font-semibold text-zinc-900 dark:text-white">
+                              {comment.comment}
+                            </p>
+
+                            {comment.code && (
+                              <ResponsiveMasonry
+                                columnsCountBreakPoints={{ 0: 1 }}
+                              >
+                                <Masonry>
+                                  <div className="w-full overflow-hidden rounded-lg bg-zinc-900 dark:bg-black">
+                                    <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
+                                      <span className="text-xs font-medium text-white">
+                                        {comment.language.toLowerCase()}
+                                      </span>
+                                      <span
+                                        className="flex cursor-pointer items-center p-1 text-xs font-medium text-white"
                                         onClick={() => {
-                                          handleDeleteComment(comment.idComment)
+                                          copyToClipboard(comment.code)
+                                          notifyCodeCopied()
                                         }}
                                       >
-                                        <Trash className="mr-2 h-4 w-4" />
-                                        Delete
-                                      </button>
-                                    </AlertDialogFooter>
-                                  </AlertDialogContent>
-                                </AlertDialog>
-                              </div>
+                                        <Copy className="mr-2 h-4 w-4" />
+                                        Copy code
+                                      </span>
+                                    </div>
+                                    <pre className="max-h-[380px] w-full overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black">
+                                      <code
+                                        className="text-white"
+                                        dangerouslySetInnerHTML={{
+                                          __html: highlight(
+                                            comment.code,
+                                            comment.language.toLowerCase()
+                                          ),
+                                        }}
+                                      />
+                                    </pre>
+                                  </div>
+                                </Masonry>
+                              </ResponsiveMasonry>
                             )}
                           </div>
-                        ))}
+                          {(comment.idAuthor === dataUser?.data.pseudo ||
+                            dataCode.data.idAuthor === dataUser?.data.pseudo ||
+                            SUPER_ADMIN.includes(dataUser?.data.pseudo)) && (
+                            <div>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <button className="flex items-center justify-center gap-2 text-sm font-semibold text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-500">
+                                    <Trash2 className="h-4 w-4" />
+                                    <span>Delete</span>
+                                  </button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                      Are you sure you want to delete this
+                                      comment ?
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      This action is irreversible, please
+                                      reflect beforehand.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>
+                                      Cancel
+                                    </AlertDialogCancel>
+                                    <button
+                                      className={cn(
+                                        "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                                      )}
+                                      onClick={() => {
+                                        handleDeleteComment(comment.idComment)
+                                      }}
+                                    >
+                                      <Trash className="mr-2 h-4 w-4" />
+                                      Delete
+                                    </button>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </div>
+                          )}
+                        </div>
+                      ))}
                   </div>
                   <div className="flex w-full items-center justify-center md:w-[600px]">
                     {user ? (
@@ -465,7 +436,10 @@ export default function CodePreview() {
                               The code is written in what language ?
                             </option>
                             {allLanguages.map((language) => (
-                              <option value={language.name.toLocaleLowerCase()}>
+                              <option
+                                key={language.name}
+                                value={language.name.toLocaleLowerCase()}
+                              >
                                 {language.name}
                               </option>
                             ))}

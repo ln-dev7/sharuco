@@ -1,5 +1,5 @@
 import { getExtensionByName } from "@/constants/languages"
-import sdk, { Project } from "@stackblitz/sdk"
+import sdk from "@stackblitz/sdk"
 
 import { TemplateName } from "@/types/templatStackblitzName"
 import indentCode from "./indentCode"

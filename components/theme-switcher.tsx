@@ -373,7 +373,7 @@ export function ThemeSwitcher() {
           <Paintbrush className="size-4" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="flex w-80 flex-col p-0">
+      <SheetContent position="right" className="flex w-80 flex-col p-0">
         <SheetHeader className="border-b px-5 pt-5 pb-3">
           <SheetTitle className="text-sm font-semibold">Appearance</SheetTitle>
           <p className="-mt-1 text-xs text-muted-foreground">

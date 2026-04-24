@@ -1,9 +1,9 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { getExtensionByName, getLanguageColor } from "@/constants/languages"
+import { getExtensionByName } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -11,7 +11,6 @@ import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
 import embedProject from "@/utils/embedStackblitzProject"
 import indentCode from "@/utils/indentCode"
-import * as htmlToImage from "html-to-image"
 import {
   Copy,
   Flag,
@@ -77,7 +76,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { useToast } from "@/components/ui/use-toast"
-import { Input } from "./../ui/input"
 
 export default function CardCode({
   id,
@@ -88,8 +86,18 @@ export default function CardCode({
   tags,
   favoris: favorisInit,
   isPrivate,
-  currentUser,
   comments,
+}: {
+  id: string
+  idAuthor: string
+  language: string
+  code: string
+  description: string
+  tags: string[]
+  favoris: string[]
+  isPrivate: boolean
+  comments: any
+  currentUser?: any
 }) {
   const { toast } = useToast()
   const notifyCodeCopied = () =>
@@ -115,22 +123,15 @@ export default function CardCode({
 
   const [openShareDialog, setOpenShareDialog] = useState(false)
 
-  const {
-    data: dataAuthor,
-    isLoading: isLoadingAuthor,
-    isError: isErrorAuthor,
-  } = useDocument(idAuthor, "users")
-
-  const {
-    data: dataCodes,
-    isLoading: isLoadingCodes,
-    isError: isErrorCodes,
-  } = useDocument(id, "codes")
+  const { data: dataAuthor, isLoading: isLoadingAuthor } = useDocument(
+    idAuthor,
+    "users"
+  )
 
   const { updateCodeDocument }: any = useUpdateCodeDocument("codes")
 
   const addCodeOnFavoris = async (id: string) => {
-    let updatedCodeData = {
+    const updatedCodeData = {
       favoris: favorisInit.includes(userPseudo)
         ? favorisInit.filter((item) => item !== userPseudo)
         : [...favorisInit, userPseudo],
@@ -141,44 +142,6 @@ export default function CardCode({
 
     updateCodeDocument({ id, updatedCodeData })
   }
-
-  const domRefImage = useRef(null)
-  const [backgroundImage, setBackgroundImage] = useState(
-    "bg-gradient-to-br from-blue-400 to-indigo-700"
-  )
-
-  const handleChangeBgImg1 = () => {
-    setBackgroundImage("bg-gradient-to-br from-blue-400 to-indigo-700")
-  }
-
-  const handleChangeBgImg2 = () => {
-    setBackgroundImage("bg-gradient-to-r from-pink-500 to-indigo-600")
-  }
-
-  const handleChangeBgImg3 = () => {
-    setBackgroundImage("bg-gradient-to-br from-teal-400 to-green-500")
-  }
-
-  const handleChangeBgImg4 = () => {
-    setBackgroundImage("bg-gradient-to-br from-yellow-300 to-orange-500")
-  }
-  const handleChangeBgImg5 = () => {
-    setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600")
-  }
-
-  const [nameOfImage, setNameOfImage] = useState("")
-
-  const downloadImage = async () => {
-    const dataUrl = await htmlToImage.toPng(domRefImage.current)
-
-    // download image
-    const link = document.createElement("a")
-    link.download = nameOfImage !== "" ? nameOfImage : `sharuco-code-${id}.png`
-    link.href = dataUrl
-    link.click()
-  }
-
-  // console.log("params", params["code-preview"])
 
   return (
     <div key={id} className="mb-0 flex flex-col gap-2">
@@ -546,8 +509,7 @@ export default function CardCode({
                 <div className="flex gap-2">
                   <FacebookShareButton
                     url={shareUrl}
-                    quote={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
-                    onClick={() => setOpenShareDialog(false)}
+                    hashtag="#ShareWithSharuco"
                   >
                     <FacebookIcon size={38} round />
                   </FacebookShareButton>
@@ -571,7 +533,6 @@ export default function CardCode({
                     url={shareUrl}
                     subject={`Share code on sharuco.lndev.me`}
                     body={`I discovered this code on sharuco.lndev.me , I share it with you here. - « ${description} » #CaParleDev #ShareWithSharuco`}
-                    onClick={() => setOpenShareDialog(false)}
                   >
                     <EmailIcon size={38} round />
                   </EmailShareButton>

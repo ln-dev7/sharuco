@@ -36,11 +36,16 @@ import { Skeleton } from "./../ui/skeleton"
 
 export default function CardLinkAdmin({
   id,
-  idAuthor,
-  createdAt,
   link,
   description,
   tags,
+}: {
+  id: string
+  link: string
+  description: string
+  tags: string[]
+  idAuthor?: string
+  createdAt?: number
 }) {
   const { toast } = useToast()
 
@@ -98,7 +103,7 @@ export default function CardLinkAdmin({
     setValue("tags", tags.join().trim().replace(/\s+/g, ""))
   }, [link, description, tags, setValue])
 
-  const { updateLinkDocument, isLoading, isError, isSuccess }: any =
+  const { updateLinkDocument, isLoading, isError }: any =
     useUpdateLinkDocument("links")
 
   const onSubmit = async (data) => {
@@ -129,7 +134,7 @@ export default function CardLinkAdmin({
       return
     }
 
-    let updatedLinkData: {
+    const updatedLinkData: {
       link: string
       description: string
       tags: string[]
@@ -199,7 +204,7 @@ export default function CardLinkAdmin({
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className="absolute right-2 top-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-zinc-700"
+              className="absolute top-2 right-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-zinc-700"
             >
               <MoreHorizontal className="h-4 w-4" />
             </Button>
@@ -221,7 +226,7 @@ export default function CardLinkAdmin({
                 <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
                   <AlertDialogHeader>
                     <AlertDialogTitle>
-                      <h3 className="text-lg font-medium leading-6 text-zinc-900 dark:text-zinc-100">
+                      <h3 className="text-lg leading-6 font-medium text-zinc-900 dark:text-zinc-100">
                         Edit a link
                       </h3>
                     </AlertDialogTitle>
@@ -280,7 +285,7 @@ export default function CardLinkAdmin({
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                        "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                       )}
                       disabled={isLoading}
                       onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -315,7 +320,7 @@ export default function CardLinkAdmin({
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <button
                       className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                        "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                       )}
                       disabled={isLoadingDelete}
                       onClick={
@@ -422,7 +427,7 @@ export default function CardLinkAdmin({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="absolute right-2 top-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-zinc-700"
+            className="absolute top-2 right-2 z-30 h-10 w-10 rounded-full bg-white p-0 dark:bg-zinc-700"
           >
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -441,7 +446,7 @@ export default function CardLinkAdmin({
               <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    <h3 className="text-lg font-medium leading-6 text-zinc-900 dark:text-zinc-100">
+                    <h3 className="text-lg leading-6 font-medium text-zinc-900 dark:text-zinc-100">
                       Edit a link
                     </h3>
                   </AlertDialogTitle>
@@ -500,7 +505,7 @@ export default function CardLinkAdmin({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     disabled={isLoading}
                     onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -535,7 +540,7 @@ export default function CardLinkAdmin({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     disabled={isLoadingDelete}
                     onClick={

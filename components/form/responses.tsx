@@ -1,7 +1,6 @@
 "use client"
 
-import { useParams, useRouter } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
+import { useParams } from "next/navigation"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
 import formatDateTime from "@/utils/formatDateTime"
@@ -25,17 +24,8 @@ import { useToast } from "@/components/ui/use-toast"
 
 export default function ResponsesForms({ dataForm }: { dataForm: any }) {
   const params = useParams()
-  const { user, userPseudo } = useAuthContext()
-  const router = useRouter()
 
   const { toast } = useToast()
-
-  const notifyUrlCopied = () =>
-    toast({
-      title: "Url of your code copied to clipboard",
-      description: "You can share it wherever you want",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
 
   const ALGOLIA_INDEX_NAME = "forms"
 
@@ -45,13 +35,11 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
   )
   const index = client.initIndex(ALGOLIA_INDEX_NAME)
 
-  // console.log(dataForm.responses)
-
   const { updateFormDocument, isLoading: isLoadingUpdateForm }: any =
     useUpdateFormDocument("forms")
 
   const handleDeleteResponse = async (idResponse: string) => {
-    let updatedFormData: {
+    const updatedFormData: {
       responses: any[]
     } = {
       responses: [
@@ -63,16 +51,12 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
 
     const id = params["form"]
 
-    //console.log(updatedFormData.responses,)
-
     await updateFormDocument({ id, updatedFormData })
 
     await index.partialUpdateObject({
       objectID: id,
       responses: updatedFormData.responses,
     })
-
-    //console.log("updatedFormData", updatedFormData)
   }
 
   // GENERATE PDF
@@ -151,7 +135,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
           {dataForm.responses
             .slice()
             .reverse()
-            .map((response, index) => (
+            .map((response) => (
               <div
                 className={cn(
                   "flex w-full flex-col items-start gap-4 rounded-md border border-dashed border-zinc-300 p-4 dark:border-zinc-700",
@@ -248,7 +232,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                   <span className="flex items-center gap-1 text-zinc-700 dark:text-zinc-400">
                     <Timer className="mr-1.5 h-4 w-4" />
                     <span className="text-sm font-medium">
-                      {formatDateTime(moment(response.createdAt))}
+                      {formatDateTime(moment(response.createdAt).toDate())}
                     </span>
                   </span>
                   <Button
@@ -256,9 +240,9 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                     className="text-semibold flex items-center justify-center gap-2 rounded-md px-4 text-white"
                     disabled={isLoadingUpdateForm}
                     onClick={() => {
-                      isLoadingUpdateForm
-                        ? undefined
-                        : handleDeleteResponse(response.idResponse)
+                      if (!isLoadingUpdateForm) {
+                        handleDeleteResponse(response.idResponse)
+                      }
                     }}
                   >
                     {isLoadingUpdateForm ? (

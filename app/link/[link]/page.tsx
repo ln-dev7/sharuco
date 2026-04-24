@@ -2,35 +2,17 @@
 
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
-import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
-import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
-import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
-import formatDateTime from "@/utils/formatDateTime"
-import {
-  Eye,
-  FileCog,
-  Github,
-  Layers,
-  Loader2,
-  Star,
-  UserIcon,
-  Verified,
-} from "lucide-react"
-import moment from "moment"
+import { FileCog, Layers, Verified } from "lucide-react"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
-import { cn } from "@/lib/utils"
-import CardCode from "@/components/cards/card-code"
 import CardLink from "@/components/cards/card-link"
 import EmptyCard from "@/components/empty-card"
 import Error from "@/components/error"
 import LoaderLinks from "@/components/loaders/loader-links"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 
 export default function LinkPage() {
   const params = useParams()

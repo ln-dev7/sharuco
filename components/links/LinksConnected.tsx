@@ -10,7 +10,7 @@ import EmptyCard from "@/components/empty-card"
 import LoaderLinks from "@/components/loaders/loader-links"
 
 export default function LinksConnected() {
-  const { user, userPseudo } = useAuthContext()
+  const { userPseudo } = useAuthContext()
 
   const {
     isLoading: isLoadingLinks,

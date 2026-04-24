@@ -32,7 +32,7 @@ export const useGitHubLogout = () => {
     }
     try {
       await signOut(auth)
-    } catch (error) {
+    } catch (_error) {
       return
     }
   }
@@ -44,7 +44,7 @@ export function AvatarUser() {
   const { logout } = useGitHubLogout()
   const { user, userPseudo } = useAuthContext()
 
-  const { data, isLoading, isError } = useDocument(userPseudo, "users")
+  const { data, isLoading } = useDocument(userPseudo, "users")
   return (
     <Sheet>
       <SheetTrigger asChild>

@@ -31,14 +31,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useToast } from "@/components/ui/use-toast"
 
 export default function FormPage() {
   const params = useParams()
   const { user, userPseudo } = useAuthContext()
   const router = useRouter()
-
-  const { toast } = useToast()
 
   useEffect(() => {
     if (!user) {
@@ -56,17 +53,13 @@ export default function FormPage() {
     isLoading: boolean
     isError: boolean
     error: any
-  } = useDocument(params["form"], "forms")
+  } = useDocument(params["form"] as string, "forms")
 
   const goToForm = (id) => {
     router.push(`/form/${id}`)
   }
 
-  const {
-    isLoading: isLoadingForms,
-    isError: isErrorForms,
-    data: dataForms,
-  } = useGetDocumentFromUser(userPseudo, "forms")
+  const { data: dataForms } = useGetDocumentFromUser(userPseudo, "forms")
 
   return (
     <>

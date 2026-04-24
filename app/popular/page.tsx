@@ -11,13 +11,9 @@ import Error from "@/components/error"
 import LoaderCodes from "@/components/loaders/loader-codes"
 
 export default function Popular() {
-  const { user, userPseudo } = useAuthContext()
+  const { userPseudo } = useAuthContext()
 
-  const {
-    data: dataUser,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
-  } = useDocument(userPseudo, "users")
+  const { data: dataUser } = useDocument(userPseudo, "users")
 
   const {
     isLoading: isLoadingPopularCodes,
@@ -32,11 +28,6 @@ export default function Popular() {
           <h1 className="text-2xl leading-tight font-extrabold tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Discover the {NBR_OF_POPULAR_CODES} most popular codes.
           </h1>
-          {/* <SearchCode
-            dataCodes={dataPopularCodes}
-            isLoadingCodes={isLoadingPopularCodes}
-            isErrorCodes={isErrorPopularCodes}
-          /> */}
         </div>
         <div className="">
           {isLoadingPopularCodes && <LoaderCodes />}

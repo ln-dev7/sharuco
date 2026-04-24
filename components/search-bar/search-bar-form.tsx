@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { DialogProps } from "@radix-ui/react-alert-dialog"
+import type { DialogProps } from "@radix-ui/react-dialog"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -38,7 +38,7 @@ export function SearchBarForm({ ...props }: DialogProps) {
           >
             <span className="hidden sm:inline-flex">Search forms ...</span>
             <span className="inline-flex sm:hidden">Search forms ...</span>
-            <kbd className="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+            <kbd className="pointer-events-none absolute top-2 right-1.5 hidden h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 select-none sm:flex">
               <span className="text-xs">⌘</span>K
             </kbd>
           </Button>
