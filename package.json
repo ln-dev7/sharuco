@@ -91,6 +91,7 @@
     "@types/react-responsive-masonry": "^2.6.0",
     "eslint": "^9.39.4",
     "eslint-config-next": "16.1.7",
+    "eslint-plugin-unused-imports": "^4.4.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.3.0",
     "postcss": "^8",
