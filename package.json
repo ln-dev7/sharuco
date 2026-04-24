@@ -72,7 +72,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-instantsearch": "^7.15.0",
     "react-query": "^3.39.3",
-    "react-responsive-masonry": "^2.3.0",
+    "react-responsive-masonry": "2.1.7",
     "react-share": "^5.2.0",
     "shiki": "^1.26.1",
     "sonner": "^2.0.7",

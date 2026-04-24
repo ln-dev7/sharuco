@@ -186,8 +186,8 @@ importers:
         specifier: ^3.39.3
         version: 3.39.3(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       react-responsive-masonry:
-        specifier: ^2.3.0
-        version: 2.7.2
+        specifier: 2.1.7
+        version: 2.1.7
       react-share:
         specifier: ^5.2.0
         version: 5.3.0(react@19.2.5)
@@ -3680,8 +3680,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-responsive-masonry@2.7.2:
-    resolution: {integrity: sha512-33j38neZYAb3ymO1A/xuiq6Pi09/nOKAfphn2vG5Uz46d95UhMWOyM2n4LLNR/pf/8FAc9myPkHPE7k0Ijix5w==}
+  react-responsive-masonry@2.1.7:
+    resolution: {integrity: sha512-/jOqnTVNtO8zRJMTl6ZXBex7EFYEIFBLVlkIFjiCT7omfm0CgNF2z4ST8RIr0v2ut15NWAQs7Q3kJJPhMoe3Ew==}
 
   react-share@5.3.0:
     resolution: {integrity: sha512-NU4TqizVi2TuyLpN93/ng2ux+uIGHK5b2dT15cHvZDwfi5b5NuzGych4htCGObN8lubygeamhRxUot4lZ0Pv6Q==}
@@ -7963,9 +7963,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.14
 
-  react-responsive-masonry@2.7.2:
-    dependencies:
-      prop-types: 15.8.1
+  react-responsive-masonry@2.1.7: {}
 
   react-share@5.3.0(react@19.2.5):
     dependencies:
