@@ -40,6 +40,12 @@ export const siteConfig: SiteConfig = {
       support: false,
     },
     {
+      title: "Image",
+      href: "/image",
+      pined: true,
+      support: false,
+    },
+    {
       title: "Donation",
       href: "https://lndev.mychariow.shop/prd_3cu1s0",
       external: true,
