@@ -6,7 +6,7 @@ import indentCode from "@/utils/indentCode"
 import { cn } from "@/lib/utils"
 import { CODE_FONTS, loadGoogleFont } from "@/components/image/fonts"
 import { useShikiHtml } from "@/components/image/use-shiki"
-import { useCodeStyleStore } from "@/store/code-style-store"
+import { resolveBackground, useCodeStyleStore } from "@/store/code-style-store"
 
 const LANGUAGE_ALIASES: Record<string, string> = {
   "c++": "cpp",
@@ -42,7 +42,8 @@ export function CodeBlock({
   preformatted = false,
   className,
 }: CodeBlockProps) {
-  const { shikiTheme, fontId } = useCodeStyleStore()
+  const { backgroundId, fontId } = useCodeStyleStore()
+  const shikiTheme = resolveBackground(backgroundId).shikiDark
   const font = CODE_FONTS.find((f) => f.id === fontId) ?? CODE_FONTS[0]
 
   useEffect(() => {

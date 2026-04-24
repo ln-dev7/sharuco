@@ -17,9 +17,10 @@ import {
   useColorThemeStore,
   type ColorTheme,
 } from "@/store/color-theme-store"
-import { CARD_SHIKI_THEMES, useCodeStyleStore } from "@/store/code-style-store"
+import { useCodeStyleStore } from "@/store/code-style-store"
 import { cn } from "@/lib/utils"
 import { CODE_FONTS, loadGoogleFont } from "@/components/image/fonts"
+import { ThemeSelect } from "@/components/image/theme-select"
 import {
   Select,
   SelectContent,
@@ -348,8 +349,8 @@ export function ThemeSwitcher() {
 
   const isDark = resolvedTheme === "dark"
   const [search, setSearch] = useState("")
-  const shikiTheme = useCodeStyleStore((s) => s.shikiTheme)
-  const setShikiTheme = useCodeStyleStore((s) => s.setShikiTheme)
+  const backgroundId = useCodeStyleStore((s) => s.backgroundId)
+  const setBackgroundId = useCodeStyleStore((s) => s.setBackgroundId)
   const fontId = useCodeStyleStore((s) => s.fontId)
   const setFontId = useCodeStyleStore((s) => s.setFontId)
 
@@ -394,18 +395,7 @@ export function ThemeSwitcher() {
           </p>
           <div className="flex flex-col gap-1.5">
             <label className="text-[11px] text-muted-foreground">Theme</label>
-            <Select value={shikiTheme} onValueChange={setShikiTheme}>
-              <SelectTrigger className="h-8 text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {CARD_SHIKI_THEMES.map((t) => (
-                  <SelectItem key={t.id} value={t.id} className="text-xs">
-                    {t.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <ThemeSelect value={backgroundId} onChange={setBackgroundId} />
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-[11px] text-muted-foreground">Font</label>
