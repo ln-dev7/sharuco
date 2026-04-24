@@ -79,6 +79,7 @@ export function CodeEditor({
 
       <textarea
         ref={textareaRef}
+        data-code-editor=""
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}

@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { allLanguages, languagesName } from "@/constants/languages"
 import * as htmlToImage from "html-to-image"
 import { Check, Clipboard, Copy, Download, Hash, Loader2 } from "lucide-react"
@@ -87,7 +87,7 @@ export function ImagePageClient() {
   const selectedBg =
     IMAGE_BACKGROUNDS.find((b) => b.id === background) ?? IMAGE_BACKGROUNDS[0]
 
-  async function downloadImage() {
+  const downloadImage = useCallback(async () => {
     if (!frameRef.current) return
     setIsExporting(true)
     try {
@@ -102,9 +102,9 @@ export function ImagePageClient() {
     } finally {
       setIsExporting(false)
     }
-  }
+  }, [title])
 
-  async function copyImage() {
+  const copyImage = useCallback(async () => {
     if (!frameRef.current) return
     try {
       const blob = await htmlToImage.toBlob(frameRef.current, {
@@ -120,16 +120,123 @@ export function ImagePageClient() {
     } catch (error) {
       console.error(error)
     }
-  }
+  }, [])
 
-  async function pasteFromClipboard() {
+  const pasteFromClipboard = useCallback(async () => {
     try {
       const text = await navigator.clipboard.readText()
       if (text) setCode(text)
     } catch {
       // user might block clipboard read
     }
-  }
+  }, [])
+
+  const cycleTheme = useCallback(() => {
+    setBackground((current) => {
+      const idx = IMAGE_BACKGROUNDS.findIndex((b) => b.id === current)
+      const next = IMAGE_BACKGROUNDS[(idx + 1) % IMAGE_BACKGROUNDS.length]
+      return next.id
+    })
+  }, [])
+
+  const cyclePadding = useCallback(() => {
+    setPadding((current) => {
+      const idx = PADDING_OPTIONS.findIndex((p) => p.value === current)
+      const next = PADDING_OPTIONS[(idx + 1) % PADDING_OPTIONS.length]
+      return next.value
+    })
+  }, [])
+
+  const focusEditor = useCallback(() => {
+    const el = document.querySelector<HTMLTextAreaElement>("[data-code-editor]")
+    el?.focus()
+  }, [])
+
+  const blurActive = useCallback(() => {
+    const active = document.activeElement as HTMLElement | null
+    active?.blur()
+  }, [])
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null
+      const isInInput =
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target?.isContentEditable === true
+      const isMeta = e.metaKey || e.ctrlKey
+
+      if (e.key === "Escape") {
+        blurActive()
+        return
+      }
+
+      if (isMeta && (e.key === "s" || e.key === "S")) {
+        e.preventDefault()
+        downloadImage()
+        return
+      }
+
+      if (isMeta && (e.key === "c" || e.key === "C")) {
+        const selection = window.getSelection()?.toString()
+        if (!isInInput && !selection) {
+          e.preventDefault()
+          copyImage()
+        }
+        return
+      }
+
+      if (isMeta && (e.key === "v" || e.key === "V")) {
+        if (!isInInput) {
+          e.preventDefault()
+          pasteFromClipboard()
+        }
+        return
+      }
+
+      if (isInInput || isMeta || e.altKey) return
+
+      switch (e.key.toLowerCase()) {
+        case "f":
+          e.preventDefault()
+          focusEditor()
+          break
+        case "c":
+          e.preventDefault()
+          cycleTheme()
+          break
+        case "d":
+          e.preventDefault()
+          setDarkCode((v) => !v)
+          break
+        case "n":
+          e.preventDefault()
+          setShowLineNumbers((v) => !v)
+          break
+        case "p":
+          e.preventDefault()
+          cyclePadding()
+          break
+        case "l":
+          e.preventDefault()
+          document
+            .querySelector<HTMLButtonElement>("[data-language-trigger]")
+            ?.click()
+          break
+      }
+    }
+
+    window.addEventListener("keydown", handler)
+    return () => window.removeEventListener("keydown", handler)
+  }, [
+    blurActive,
+    copyImage,
+    cyclePadding,
+    cycleTheme,
+    downloadImage,
+    focusEditor,
+    pasteFromClipboard,
+  ])
 
   return (
     <section className="container flex flex-col gap-6 py-8 md:py-12">
@@ -179,7 +286,7 @@ export function ImagePageClient() {
               Language
             </Label>
             <Select value={language} onValueChange={setLanguage}>
-              <SelectTrigger>
+              <SelectTrigger data-language-trigger="">
                 <SelectValue placeholder="Select language" />
               </SelectTrigger>
               <SelectContent>

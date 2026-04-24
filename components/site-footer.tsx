@@ -27,7 +27,7 @@ export function SiteFooter() {
           <p className="text-center text-sm leading-loose text-zinc-600 md:text-left dark:text-zinc-400">
             Built by{" "}
             <a
-              href="https://leonelngoya.com"
+              href="https://lndev.me"
               target="_blank"
               rel="noreferrer"
               className="font-semibold underline underline-offset-4"

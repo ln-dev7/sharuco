@@ -103,7 +103,7 @@ export function AboutDialog() {
           <p className="pt-2 text-center text-xs text-muted-foreground">
             Made by{" "}
             <Link
-              href="https://leonelngoya.com"
+              href="https://lndev.me"
               target="_blank"
               rel="noreferrer"
               className="text-foreground underline underline-offset-2"
