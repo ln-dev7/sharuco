@@ -65,14 +65,20 @@ export function LanguageCombobox({ value, onChange }: LanguageComboboxProps) {
             <CommandGroup>
               {allLanguages.map((lang) => {
                 const id = lang.name.toLowerCase()
+                const pick = () => {
+                  onChange(id)
+                  setOpen(false)
+                }
                 return (
                   <CommandItem
                     key={lang.name}
                     value={lang.name}
-                    onSelect={() => {
-                      onChange(id)
-                      setOpen(false)
+                    onSelect={pick}
+                    onMouseDown={(e) => {
+                      e.preventDefault()
+                      pick()
                     }}
+                    className="cursor-pointer"
                   >
                     <span
                       aria-hidden

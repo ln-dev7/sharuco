@@ -59,22 +59,30 @@ function BackgroundGroup({
 }) {
   return (
     <CommandGroup heading={heading}>
-      {items.map((bg) => (
-        <CommandItem
-          key={bg.id}
-          value={`${heading} ${bg.name}`}
-          onSelect={() => onSelect(bg.id)}
-        >
-          <BackgroundPreview bg={bg} />
-          <span className="ml-2 truncate">{bg.name}</span>
-          <Check
-            className={cn(
-              "ml-auto h-4 w-4",
-              value === bg.id ? "opacity-100" : "opacity-0"
-            )}
-          />
-        </CommandItem>
-      ))}
+      {items.map((bg) => {
+        const pick = () => onSelect(bg.id)
+        return (
+          <CommandItem
+            key={bg.id}
+            value={`${heading} ${bg.name}`}
+            onSelect={pick}
+            onMouseDown={(e) => {
+              e.preventDefault()
+              pick()
+            }}
+            className="cursor-pointer"
+          >
+            <BackgroundPreview bg={bg} />
+            <span className="ml-2 truncate">{bg.name}</span>
+            <Check
+              className={cn(
+                "ml-auto h-4 w-4",
+                value === bg.id ? "opacity-100" : "opacity-0"
+              )}
+            />
+          </CommandItem>
+        )
+      })}
     </CommandGroup>
   )
 }
