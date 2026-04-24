@@ -21,7 +21,18 @@ import "highlight.js/styles/vs.css"
 import Image from "next/image"
 import Link from "next/link"
 import * as htmlToImage from "html-to-image"
-import { ArrowRight, Code2, Github, Loader2 } from "lucide-react"
+import {
+  ArrowRight,
+  Check,
+  Code2,
+  Download,
+  Github,
+  Hash,
+  Keyboard,
+  Loader2,
+  Paintbrush,
+  Sparkles,
+} from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { siteConfig } from "@/config/site"
@@ -252,180 +263,121 @@ export default function IndexPage() {
         </div>
         <Separator className="my-2" />
         <div className="mt-8 flex flex-col items-start gap-4">
-          <div className="flex w-full flex-col items-start justify-between gap-3 sm:flex-row sm:items-end">
-            <div>
-              <h2 className="text-xl leading-tight font-bold tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
-                Create beautiful images of your code.
-              </h2>
-              <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                Want more themes, backgrounds, partner presets and line numbers?
-              </p>
-            </div>
-            <Link
-              href="/image"
-              className={cn(buttonVariants({ size: "sm" }), "shrink-0 gap-2")}
-            >
-              Open full editor
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-          <div className="flex flex-col gap-6 md:flex-row">
-            <div className="w-full overflow-hidden rounded-md bg-zinc-100 md:w-1/2 dark:bg-zinc-800">
-              <Image
-                src="/home/code-preview.png"
-                alt="Card preview"
-                width={1598}
-                height={904}
-                priority={true}
-              />
-            </div>
-            <div className="flex w-full flex-col gap-4 md:w-1/2">
-              <div className="flex w-full flex-col items-start gap-1.5">
-                <Textarea
-                  placeholder="Insert your code here"
-                  id="codeImage"
-                  onChange={(e) => handleCodeChange(e.target.value)}
-                  className="h-44"
-                />
-              </div>
-              <div className="flex w-full flex-col items-start gap-1.5">
-                <select
-                  className="flex h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
-                  name="languageImage"
-                  id="languageImage"
-                  value={languageImage}
-                  onChange={(e) => setLanguageImage(e.target.value)}
-                >
-                  <option value="" disabled selected>
-                    {" "}
-                    The code is written in what language ?
-                  </option>
-                  {allLanguages.map((language) => (
-                    <option value={language.name.toLocaleLowerCase()}>
-                      {language.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <AlertDialog>
-                {codeImage !== "" && languageImage !== "" ? (
-                  <AlertDialogTrigger asChild>
-                    <button
-                      className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
-                      )}
+          <div className="relative w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-12 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -top-24 -right-20 h-64 w-64 rounded-full bg-gradient-to-br from-pink-500/30 via-violet-500/20 to-indigo-500/30 blur-3xl"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -bottom-24 -left-16 h-56 w-56 rounded-full bg-gradient-to-br from-emerald-500/25 via-sky-500/20 to-blue-500/25 blur-3xl"
+            />
+
+            <div className="relative grid gap-10 md:grid-cols-[1.1fr_1fr] md:items-center">
+              <div className="flex flex-col items-start gap-5">
+                <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/60 px-3 py-1 text-xs font-medium text-zinc-700 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Powered by Shiki · 30+ themes
+                </span>
+
+                <h2 className="text-3xl leading-[1.05] font-extrabold tracking-tighter md:text-4xl lg:text-5xl">
+                  Create beautiful images of your code.
+                </h2>
+                <p className="max-w-[520px] text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+                  Paste a snippet, pick a theme, and export a ready-to-share
+                  screenshot. Syntax colors change with the theme just like on
+                  ray.so — no more flat white code.
+                </p>
+
+                <ul className="mt-1 grid grid-cols-1 gap-x-6 gap-y-2 text-sm text-zinc-700 sm:grid-cols-2 dark:text-zinc-300">
+                  <li className="flex items-center gap-2">
+                    <Paintbrush className="h-4 w-4 shrink-0 text-pink-500" />
+                    14 themes + 16 partner presets
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Hash className="h-4 w-4 shrink-0 text-violet-500" />
+                    Line numbers & traffic lights
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Download className="h-4 w-4 shrink-0 text-emerald-500" />
+                    PNG download & clipboard copy
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Keyboard className="h-4 w-4 shrink-0 text-sky-500" />
+                    Full keyboard shortcuts
+                  </li>
+                </ul>
+
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  {[
+                    {
+                      name: "Midnight",
+                      gradient: "from-[#4CC8C8] to-[#202033]",
+                    },
+                    { name: "Candy", gradient: "from-[#A58EFB] to-[#E9BFF8]" },
+                    { name: "Sunset", gradient: "from-[#FFCF73] to-[#FF7A2F]" },
+                    { name: "Breeze", gradient: "from-[#CF2F98] to-[#6A3DEC]" },
+                    { name: "Vercel", gradient: "from-[#000000] to-[#000000]" },
+                    {
+                      name: "Supabase",
+                      gradient: "from-[#1F1F1F] to-[#0E0E0E]",
+                    },
+                  ].map((t) => (
+                    <span
+                      key={t.name}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white/70 py-1 pr-3 pl-1.5 text-xs font-medium text-zinc-700 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300"
                     >
-                      Generate image
-                    </button>
-                  </AlertDialogTrigger>
-                ) : (
-                  <button
-                    disabled
+                      <span
+                        aria-hidden
+                        className={cn(
+                          "h-3.5 w-3.5 shrink-0 rounded-full bg-gradient-to-br",
+                          t.gradient
+                        )}
+                      />
+                      {t.name}
+                    </span>
+                  ))}
+                  <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                    + 24 more
+                  </span>
+                </div>
+
+                <div className="mt-3 flex flex-wrap items-center gap-3">
+                  <Link
+                    href="/image"
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      buttonVariants({ size: "lg" }),
+                      "gap-2 shadow-lg shadow-zinc-900/10 dark:shadow-black/40"
                     )}
                   >
-                    You need to fill the fields
-                  </button>
-                )}
-                <AlertDialogContent className="scrollbar-hide flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto">
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Close</AlertDialogCancel>
-                    <button
-                      className={cn(
-                        "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
-                      )}
-                      onClick={downloadImage}
-                    >
-                      Download Image
-                    </button>
-                  </AlertDialogFooter>
-                  <div className="flex w-full items-center justify-center gap-2">
-                    <button
-                      className="h-6 w-6 rounded-full bg-gradient-to-br from-blue-400 to-indigo-700"
-                      onClick={handleChangeBgImg1}
-                    ></button>{" "}
-                    <button
-                      className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-indigo-600"
-                      onClick={handleChangeBgImg2}
-                    ></button>{" "}
-                    <button
-                      className="h-6 w-6 rounded-full bg-gradient-to-br from-teal-400 to-green-500"
-                      onClick={handleChangeBgImg3}
-                    ></button>
-                    <button
-                      className="h-6 w-6 rounded-full bg-gradient-to-br from-yellow-300 to-orange-500"
-                      onClick={handleChangeBgImg4}
-                    ></button>
-                    <button
-                      className="h-6 w-6 rounded-full bg-gradient-to-br from-red-500 to-pink-600"
-                      onClick={handleChangeBgImg5}
-                    ></button>
-                    <input
-                      type="color"
-                      className="h-8 w-8 cursor-pointer appearance-none rounded-full border-0 bg-transparent p-0"
-                      value={backgroundImage}
-                      onChange={(e) => {
-                        setBackgroundImage(`${e.target.value}`)
-                      }}
-                    />
-                  </div>
-                  <div className="flex w-full items-center justify-center gap-2">
-                    <Input
-                      className="w-full"
-                      type="text"
-                      id="tags"
-                      placeholder="Name of your image"
-                      value={nameOfImage}
-                      onChange={(e) => {
-                        setNameOfImage(`${e.target.value}`)
-                      }}
-                    />
-                  </div>
-                  <div
-                    ref={domRefImage}
-                    className={`flex max-w-[1280px] flex-col items-center justify-center ${backgroundImage} p-8`}
-                    style={{
-                      backgroundColor: `${backgroundImage}`,
-                    }}
-                  >
-                    <h3 className="mb-2 text-center text-lg font-semibold text-white">
-                      sharuco.lndev.me
-                    </h3>
-                    <div className="card-code-image max-w-[1280px] overflow-hidden rounded-lg bg-zinc-900 dark:bg-black">
-                      <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`flex h-4 w-4 items-center rounded-full p-1 text-xs font-medium text-white`}
-                            style={{
-                              backgroundColor: `${
-                                languageImage !== "" &&
-                                getLanguageColor(languageImage)
-                              }`,
-                            }}
-                          ></span>
-                          <span className="text-xs font-medium text-white">
-                            {languageImage}
-                          </span>
-                        </div>
-                        {user && (
-                          <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
-                            @ {userPseudo}
-                          </span>
-                        )}
-                      </div>
-                      <pre className="max-w-[1280px] rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black">
-                        <code
-                          className="text-sm text-white"
-                          dangerouslySetInnerHTML={{
-                            __html: highlight(codeImage, languageImage),
-                          }}
-                        />
-                      </pre>
-                    </div>
-                  </div>
-                </AlertDialogContent>
-              </AlertDialog>
+                    Open full editor
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                    Free · no sign-in required
+                  </span>
+                </div>
+              </div>
+
+              <div className="relative">
+                <div className="pointer-events-none absolute inset-0 -m-4 rounded-3xl bg-gradient-to-br from-fuchsia-500/40 via-violet-500/30 to-sky-500/40 blur-2xl dark:from-fuchsia-500/30 dark:via-violet-500/20 dark:to-sky-500/30" />
+                <div
+                  className="relative overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl ring-1 ring-black/5 dark:border-white/10 dark:bg-zinc-950"
+                  style={{
+                    transform:
+                      "perspective(1200px) rotateY(-6deg) rotateX(2deg)",
+                  }}
+                >
+                  <Image
+                    src="/home/code-preview.png"
+                    alt="Preview of a code image generated with Sharuco"
+                    width={1598}
+                    height={904}
+                    priority={false}
+                    className="h-auto w-full"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
