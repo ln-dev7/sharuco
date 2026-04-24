@@ -1,25 +1,17 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import Prism from "prismjs"
 
 import { cn } from "@/lib/utils"
 
 interface CodeEditorProps {
   value: string
   onChange: (value: string) => void
-  language: string
+  html?: string
+  caretColor?: string
+  fg?: string
   showLineNumbers?: boolean
   placeholder?: string
-}
-
-function highlightToHtml(code: string, language: string) {
-  const grammar = Prism.languages[language] ?? Prism.languages.javascript
-  try {
-    return Prism.highlight(code, grammar, language)
-  } catch {
-    return escapeHtml(code)
-  }
 }
 
 function escapeHtml(s: string) {
@@ -29,29 +21,34 @@ function escapeHtml(s: string) {
 export function CodeEditor({
   value,
   onChange,
-  language,
+  html,
+  caretColor,
+  fg,
   showLineNumbers = false,
   placeholder,
 }: CodeEditorProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const preRef = useRef<HTMLPreElement>(null)
 
   const lines = value.split("\n").length
+  const safeHtml = html && value.length > 0 ? html : escapeHtml(value || " ")
 
   useEffect(() => {
-    if (textareaRef.current && preRef.current) {
+    if (textareaRef.current) {
       textareaRef.current.style.height = "auto"
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
     }
   }, [value])
 
   return (
-    <div className="relative w-full font-mono text-sm leading-6">
+    <div
+      className="relative w-full font-mono text-sm leading-6"
+      style={{ color: fg }}
+    >
       {showLineNumbers ? (
         <div
           aria-hidden
-          className="pointer-events-none absolute top-0 left-0 flex flex-col items-end pr-3 text-right text-white/30 select-none"
-          style={{ width: "2.5rem" }}
+          className="pointer-events-none absolute top-0 left-0 flex flex-col items-end pr-3 text-right select-none"
+          style={{ width: "2.5rem", color: fg, opacity: 0.4 }}
         >
           {Array.from({ length: lines }).map((_, i) => (
             <span key={i} className="block">
@@ -62,18 +59,15 @@ export function CodeEditor({
       ) : null}
 
       <pre
-        ref={preRef}
         aria-hidden
         className={cn(
-          "pointer-events-none m-0 overflow-hidden break-words whitespace-pre-wrap text-transparent",
+          "pointer-events-none m-0 overflow-hidden break-words whitespace-pre-wrap",
           showLineNumbers && "pl-10"
         )}
       >
         <code
-          className={`language-${language}`}
-          dangerouslySetInnerHTML={{
-            __html: highlightToHtml(value || " ", language),
-          }}
+          className="shiki-output"
+          dangerouslySetInnerHTML={{ __html: safeHtml }}
         />
       </pre>
 
@@ -88,9 +82,10 @@ export function CodeEditor({
         autoCapitalize="off"
         autoComplete="off"
         className={cn(
-          "absolute inset-0 h-full w-full resize-none overflow-hidden border-0 bg-transparent p-0 font-mono text-sm leading-6 break-words whitespace-pre-wrap text-transparent caret-white outline-none placeholder:text-white/40 focus:outline-none",
+          "absolute inset-0 h-full w-full resize-none overflow-hidden border-0 bg-transparent p-0 font-mono text-sm leading-6 break-words whitespace-pre-wrap text-transparent outline-none focus:outline-none",
           showLineNumbers && "pl-10"
         )}
+        style={{ caretColor: caretColor ?? fg ?? "#ffffff" }}
       />
     </div>
   )

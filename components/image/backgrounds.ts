@@ -11,6 +11,10 @@ export interface ImageBackground {
   logoColor?: string
   /** Gradient swatch for the dropdown trigger */
   swatch?: string
+  /** Shiki theme to use when darkCode is on */
+  shikiDark: string
+  /** Shiki theme to use when darkCode is off */
+  shikiLight: string
 }
 
 const partnerLogos: Record<string, string> = {
@@ -50,6 +54,8 @@ const partnerLogos: Record<string, string> = {
 const PARTNERS: ImageBackground[] = [
   {
     id: "vercel",
+    shikiDark: "github-dark-default",
+    shikiLight: "github-light-default",
     name: "Vercel",
     kind: "partner",
     style: "#000000",
@@ -58,6 +64,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "supabase",
+    shikiDark: "poimandres",
+    shikiLight: "github-light",
     name: "Supabase",
     kind: "partner",
     style: "linear-gradient(140deg, #1F1F1F, #0E0E0E)",
@@ -66,6 +74,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "tailwind",
+    shikiDark: "material-theme-ocean",
+    shikiLight: "min-light",
     name: "Tailwind",
     kind: "partner",
     style: "linear-gradient(140deg, #0F172A, #1E293B)",
@@ -74,6 +84,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "openai",
+    shikiDark: "github-dark-dimmed",
+    shikiLight: "github-light",
     name: "OpenAI",
     kind: "partner",
     style: "#000000",
@@ -82,6 +94,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "mintlify",
+    shikiDark: "everforest-dark",
+    shikiLight: "everforest-light",
     name: "Mintlify",
     kind: "partner",
     style: "linear-gradient(140deg, #041112, #0A1F22)",
@@ -90,6 +104,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "prisma",
+    shikiDark: "vitesse-dark",
+    shikiLight: "vitesse-light",
     name: "Prisma",
     kind: "partner",
     style: "linear-gradient(140deg, #1B1B21, #2D2D36)",
@@ -98,6 +114,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "clerk",
+    shikiDark: "vesper",
+    shikiLight: "min-light",
     name: "Clerk",
     kind: "partner",
     style: "linear-gradient(140deg, #1B1B1B, #0E0E0E)",
@@ -106,6 +124,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "stripe",
+    shikiDark: "laserwave",
+    shikiLight: "min-light",
     name: "Stripe",
     kind: "partner",
     style: "linear-gradient(140deg, #635BFF, #0A2540)",
@@ -114,6 +134,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "nuxt",
+    shikiDark: "material-theme-palenight",
+    shikiLight: "min-light",
     name: "Nuxt",
     kind: "partner",
     style: "linear-gradient(140deg, #002E3B, #00DC82)",
@@ -122,6 +144,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "resend",
+    shikiDark: "github-dark",
+    shikiLight: "github-light",
     name: "Resend",
     kind: "partner",
     style: "#000000",
@@ -130,6 +154,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "gemini",
+    shikiDark: "night-owl",
+    shikiLight: "light-plus",
     name: "Gemini",
     kind: "partner",
     style: "linear-gradient(140deg, #1B72E8, #8F44F0)",
@@ -138,6 +164,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "cloudflare",
+    shikiDark: "dracula-soft",
+    shikiLight: "min-light",
     name: "Cloudflare",
     kind: "partner",
     style: "linear-gradient(140deg, #F38020, #FBAD41)",
@@ -146,6 +174,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "firecrawl",
+    shikiDark: "monokai",
+    shikiLight: "min-light",
     name: "Firecrawl",
     kind: "partner",
     style: "linear-gradient(140deg, #FA5D19, #FFB300)",
@@ -154,6 +184,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "elevenlabs",
+    shikiDark: "vesper",
+    shikiLight: "min-light",
     name: "ElevenLabs",
     kind: "partner",
     style: "#000000",
@@ -162,6 +194,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "triggerdev",
+    shikiDark: "synthwave-84",
+    shikiLight: "min-light",
     name: "Trigger.dev",
     kind: "partner",
     style: "linear-gradient(140deg, #0B1115, #1B2530)",
@@ -170,6 +204,8 @@ const PARTNERS: ImageBackground[] = [
   },
   {
     id: "browserbase",
+    shikiDark: "laserwave",
+    shikiLight: "min-light",
     name: "Browserbase",
     kind: "partner",
     style: "linear-gradient(140deg, #F03603, #FF7B3F)",
@@ -181,84 +217,112 @@ const PARTNERS: ImageBackground[] = [
 const THEMES: ImageBackground[] = [
   {
     id: "bitmap",
+    shikiDark: "dracula-soft",
+    shikiLight: "min-light",
     name: "Bitmap",
     kind: "theme",
     style: "linear-gradient(140deg, #881616, #F1393F)",
   },
   {
     id: "noir",
+    shikiDark: "github-dark-dimmed",
+    shikiLight: "github-light",
     name: "Noir",
     kind: "theme",
     style: "linear-gradient(140deg, #B1B1B1, #181818)",
   },
   {
     id: "ice",
+    shikiDark: "slack-ochin",
+    shikiLight: "light-plus",
     name: "Ice",
     kind: "theme",
     style: "linear-gradient(140deg, #FFFFFF, #80DEEA)",
   },
   {
     id: "sand",
+    shikiDark: "rose-pine-dawn",
+    shikiLight: "solarized-light",
     name: "Sand",
     kind: "theme",
     style: "linear-gradient(140deg, #EED5B6, #AF8856)",
   },
   {
     id: "forest",
+    shikiDark: "everforest-dark",
+    shikiLight: "everforest-light",
     name: "Forest",
     kind: "theme",
     style: "linear-gradient(140deg, #506853, #213223)",
   },
   {
     id: "mono",
+    shikiDark: "monokai",
+    shikiLight: "min-light",
     name: "Mono",
     kind: "theme",
     style: "linear-gradient(140deg, #333333, #181818)",
   },
   {
     id: "breeze",
+    shikiDark: "synthwave-84",
+    shikiLight: "catppuccin-latte",
     name: "Breeze",
     kind: "theme",
     style: "linear-gradient(140deg, #CF2F98, #6A3DEC)",
   },
   {
     id: "candy",
+    shikiDark: "rose-pine",
+    shikiLight: "rose-pine-dawn",
     name: "Candy",
     kind: "theme",
     style: "linear-gradient(140deg, #A58EFB, #E9BFF8)",
   },
   {
     id: "crimson",
+    shikiDark: "dracula",
+    shikiLight: "min-light",
     name: "Crimson",
     kind: "theme",
     style: "linear-gradient(140deg, #FF6363, #733434)",
   },
   {
     id: "falcon",
+    shikiDark: "github-dark-default",
+    shikiLight: "github-light-default",
     name: "Falcon",
     kind: "theme",
     style: "linear-gradient(140deg, #BDE3EC, #363654)",
   },
   {
     id: "meadow",
+    shikiDark: "catppuccin-frappe",
+    shikiLight: "catppuccin-latte",
     name: "Meadow",
     kind: "theme",
     style: "linear-gradient(140deg, #59D499, #A0872D)",
   },
   {
     id: "midnight",
+    shikiDark: "tokyo-night",
+    shikiLight: "light-plus",
     name: "Midnight",
     kind: "theme",
     style: "linear-gradient(140deg, #4CC8C8, #202033)",
   },
   {
     id: "raindrop",
+    shikiDark: "one-dark-pro",
+    shikiLight: "one-light",
     name: "Raindrop",
     kind: "theme",
     style: "linear-gradient(140deg, #8EC7FB, #1C55AA)",
   },
   {
     id: "sunset",
+    shikiDark: "ayu-dark",
+    shikiLight: "snazzy-light",
     name: "Sunset",
     kind: "theme",
     style: "linear-gradient(140deg, #FFCF73, #FF7A2F)",

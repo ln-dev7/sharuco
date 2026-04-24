@@ -14,6 +14,7 @@ import {
 import { AboutDialog } from "@/components/image/about-dialog"
 import { CodeFrame } from "@/components/image/code-frame"
 import { ThemeSelect } from "@/components/image/theme-select"
+import { useShikiHtml } from "@/components/image/use-shiki"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import {
@@ -27,26 +28,6 @@ import {
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 
-import "prismjs/components/prism-typescript"
-import "prismjs/components/prism-jsx"
-import "prismjs/components/prism-tsx"
-import "prismjs/components/prism-css"
-import "prismjs/components/prism-bash"
-import "prismjs/components/prism-json"
-import "prismjs/components/prism-python"
-import "prismjs/components/prism-go"
-import "prismjs/components/prism-rust"
-import "prismjs/components/prism-java"
-import "prismjs/components/prism-ruby"
-import "prismjs/components/prism-sql"
-import "prismjs/components/prism-yaml"
-import "prismjs/components/prism-markdown"
-import "prismjs/components/prism-csharp"
-import "prismjs/components/prism-swift"
-import "prismjs/components/prism-kotlin"
-import "prismjs/components/prism-dart"
-import "prismjs/components/prism-php"
-
 const SAMPLE_CODE = `// Press cmd+v / ctrl+v to paste your code here
 
 function greet(name: string) {
@@ -59,14 +40,17 @@ greet("World")
 const LANGUAGE_ALIASES: Record<string, string> = {
   "c++": "cpp",
   "c#": "csharp",
-  javascript: "javascript",
-  typescript: "typescript",
-  html: "markup",
   shell: "bash",
-  "objective-c": "objectivec",
+  bash: "bash",
+  "objective-c": "objective-c",
+  sql: "sql",
+  yaml: "yaml",
+  markdown: "md",
+  text: "plaintext",
+  other: "plaintext",
 }
 
-function toPrismLang(language: string): string {
+function toShikiLang(language: string): string {
   const normalized = language.toLowerCase()
   return LANGUAGE_ALIASES[normalized] ?? normalized
 }
@@ -86,6 +70,9 @@ export function ImagePageClient() {
 
   const selectedBg =
     IMAGE_BACKGROUNDS.find((b) => b.id === background) ?? IMAGE_BACKGROUNDS[0]
+  const shikiTheme = darkCode ? selectedBg.shikiDark : selectedBg.shikiLight
+  const shikiLang = toShikiLang(language)
+  const shiki = useShikiHtml(code, shikiLang, shikiTheme)
 
   const downloadImage = useCallback(async () => {
     if (!frameRef.current) return
@@ -268,14 +255,15 @@ export function ImagePageClient() {
               ref={frameRef}
               code={code}
               onCodeChange={setCode}
-              language={toPrismLang(language)}
               title={title}
               onTitleChange={setTitle}
               background={selectedBg.style}
               padding={padding}
               showLineNumbers={showLineNumbers}
               showTrafficLights={showTrafficLights}
-              darkCode={darkCode}
+              surfaceBg={shiki.bg}
+              surfaceFg={shiki.fg}
+              codeHtml={shiki.html}
             />
           </div>
         </div>
