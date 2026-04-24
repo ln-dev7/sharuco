@@ -135,7 +135,7 @@ export default function IndexPage() {
       <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
         <a
           className="inline-flex w-fit items-center rounded-lg bg-zinc-100 px-3 py-1 text-sm font-medium dark:bg-zinc-800"
-          href="/forms"
+          href="/image"
         >
           🚀
           <div
@@ -143,10 +143,10 @@ export default function IndexPage() {
             className="mx-2 h-4 w-[1px] shrink-0 bg-zinc-200 dark:bg-zinc-700"
           ></div>
           <span className="text-zinc-800 sm:hidden dark:text-zinc-200">
-            Sharuco Form, Create and share your forms.
+            Sharuco Image, Turn your code into a shareable picture.
           </span>
           <span className="hidden text-zinc-800 sm:inline dark:text-zinc-200">
-            Introducing Sharuco Form, Create and share your forms.
+            Introducing Sharuco Image, Turn your code into a shareable picture.
           </span>
           <svg
             width="15"
