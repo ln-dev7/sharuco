@@ -192,7 +192,7 @@ export default function CodePreview() {
   return (
     <>
       {" "}
-      <section className="container grid items-center gap-0 pt-6 pb-8 md:py-10">
+      <section className="container-wrapper grid items-center gap-0 pt-6 pb-8 md:py-10">
         {isLoadingCode && <LoaderCode />}
         {dataCode &&
           dataCode.exists &&

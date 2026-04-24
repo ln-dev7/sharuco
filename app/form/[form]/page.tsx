@@ -71,7 +71,7 @@ export default function FormPage() {
   return (
     <>
       {" "}
-      <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+      <section className="container-wrapper grid items-center gap-6 pt-6 pb-8 md:py-10">
         {isLoadingForm && (
           <div className="flex w-full items-center justify-center">
             <Loader2 className="h-10 w-10 animate-spin" />

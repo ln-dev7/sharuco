@@ -281,7 +281,7 @@ export function ImagePageClient() {
   ])
 
   return (
-    <section className="container flex flex-col gap-4 py-6 md:py-8">
+    <section className="container-wrapper flex flex-col gap-4 py-6 md:py-8">
       <header className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div className="flex flex-col gap-1.5">
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">

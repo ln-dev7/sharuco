@@ -48,7 +48,7 @@ export default function LinkPage() {
   return (
     <>
       {" "}
-      <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+      <section className="container-wrapper grid items-center gap-6 pt-6 pb-8 md:py-10">
         {isLoading && <LoaderLinks />}
         {data && data.exists && data.data.publicLinkPage && (
           <div className="flex flex-col items-center gap-8">

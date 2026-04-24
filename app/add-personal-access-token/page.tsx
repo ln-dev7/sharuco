@@ -74,7 +74,7 @@ export default function AddPersonalAccessToken() {
 
   return (
     <>
-      <section className="container grid items-center gap-8 pt-6 pb-8 md:py-10">
+      <section className="container-wrapper grid items-center gap-8 pt-6 pb-8 md:py-10">
         <div className="flex flex-col items-start gap-2">
           <h1 className="text-2xl leading-tight font-extrabold tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
             Guides to add your personal access token on Sharuco

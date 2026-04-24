@@ -7,7 +7,7 @@ const DONATION_URL = "https://lndev.mychariow.shop/prd_3cu1s0"
 
 export default function Support() {
   return (
-    <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+    <section className="container-wrapper grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex max-w-[980px] flex-col items-start gap-2">
         <h1 className="text-2xl leading-tight font-bold tracking-tighter sm:text-2xl md:text-4xl lg:text-5xl">
           Support Sharuco

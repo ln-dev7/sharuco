@@ -132,7 +132,7 @@ export default function IndexPage() {
   }
   return (
     <>
-      <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+      <section className="container-wrapper grid items-center gap-6 pt-6 pb-8 md:py-10">
         <a
           className="inline-flex w-fit items-center rounded-lg bg-zinc-100 px-3 py-1 text-sm font-medium dark:bg-zinc-800"
           href="/image"

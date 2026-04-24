@@ -242,7 +242,7 @@ export default function FormViewPage() {
     <>
       {" "}
       <section className="fixed inset-0 z-50 h-screen overflow-scroll bg-white dark:bg-zinc-900">
-        <div className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
+        <div className="container-wrapper grid items-center gap-6 pt-6 pb-8 md:py-10">
           <div className="flex w-full items-center justify-start">
             <Link href="/forms" className="flex items-center font-bold">
               <Terminal className="mr-2 h-6 w-6" />
