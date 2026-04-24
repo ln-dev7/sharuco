@@ -372,9 +372,9 @@ export default function IndexPage() {
                   <Image
                     src="/home/code-preview.png"
                     alt="Preview of a code image generated with Sharuco"
-                    width={1598}
-                    height={904}
-                    priority={false}
+                    width={2700}
+                    height={1440}
+                    priority={true}
                     className="h-auto w-full"
                   />
                 </div>
@@ -510,8 +510,8 @@ export default function IndexPage() {
               <Image
                 src="/home/sharuco-link.png"
                 alt="Sharuco Link"
-                width={2880}
-                height={1448}
+                width={3024}
+                height={1896}
                 className="w-full"
                 priority={true}
               />
