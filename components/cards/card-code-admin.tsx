@@ -16,7 +16,6 @@ import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
 import embedProject from "@/utils/embedStackblitzProject"
-import highlight from "@/utils/highlight"
 import indentCode from "@/utils/indentCode"
 import linearizeCode from "@/utils/linearizeCode"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -53,6 +52,7 @@ import * as yup from "yup"
 import { TemplateName } from "@/types/templatStackblitzName"
 import { buildImageUrl } from "@/lib/image-link"
 import { cn } from "@/lib/utils"
+import { CodeBlock } from "@/components/image/code-block"
 import Loader from "@/components/loaders/loader"
 import {
   AlertDialog,
@@ -689,30 +689,23 @@ export default function CardCodeAdmin({
         </div>
         {params["code-preview"] === undefined && !isPrivate ? (
           <Link href={`/code-preview/${id}`}>
-            <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
-              <code
-                className="text-white"
-                dangerouslySetInnerHTML={{
-                  __html: highlight(code, language),
-                }}
-              />
-            </pre>
+            <CodeBlock
+              code={code}
+              language={language}
+              className="max-h-[200px] rounded-t-none"
+            />
           </Link>
         ) : (
-          <pre
-            className={`${
+          <CodeBlock
+            code={code}
+            language={language}
+            className={cn(
+              "rounded-t-none",
               params["code-preview"] === undefined &&
-              isPrivate &&
-              "max-h-[200px]"
-            } w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black`}
-          >
-            <code
-              className="text-white"
-              dangerouslySetInnerHTML={{
-                __html: highlight(code, language),
-              }}
-            />
-          </pre>
+                isPrivate &&
+                "max-h-[200px]"
+            )}
+          />
         )}
       </div>
       <div className="flex items-center justify-between gap-4">

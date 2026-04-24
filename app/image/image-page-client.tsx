@@ -7,6 +7,7 @@ import { Hash } from "lucide-react"
 
 import { readImageParams } from "@/lib/image-link"
 import { cn } from "@/lib/utils"
+import { useCodeStyleStore } from "@/store/code-style-store"
 import {
   IMAGE_BACKGROUNDS,
   PADDING_OPTIONS,
@@ -80,7 +81,9 @@ export function ImagePageClient() {
   const [showTitleBar, setShowTitleBar] = useState(true)
   const [windowControl, setWindowControl] = useState<WindowControlStyle>("mac")
   const [windowRadius, setWindowRadius] = useState(12)
-  const [fontId, setFontId] = useState("jetbrains-mono")
+  const fontId = useCodeStyleStore((s) => s.fontId)
+  const setFontId = useCodeStyleStore((s) => s.setFontId)
+  const setGlobalShikiTheme = useCodeStyleStore((s) => s.setShikiTheme)
   const [fontSize, setFontSize] = useState(14)
   const [backdropNoise, setBackdropNoise] = useState(false)
   const [watermarkEnabled, setWatermarkEnabled] = useState(true)
@@ -118,9 +121,22 @@ export function ImagePageClient() {
 
   const selectedBg =
     IMAGE_BACKGROUNDS.find((b) => b.id === background) ?? IMAGE_BACKGROUNDS[0]
-  const shikiTheme = darkCode ? selectedBg.shikiDark : selectedBg.shikiLight
+  const storeShikiTheme = useCodeStyleStore((s) => s.shikiTheme)
   const shikiLang = toShikiLang(language)
-  const shiki = useShikiHtml(code, shikiLang, shikiTheme)
+  const shiki = useShikiHtml(code, shikiLang, storeShikiTheme)
+
+  // When the user picks a backdrop or flips the dark-code toggle, adopt the
+  // shiki theme that ships with that backdrop. The store is the single source
+  // of truth for card-code and the header's Code cards block.
+  useEffect(() => {
+    setGlobalShikiTheme(darkCode ? selectedBg.shikiDark : selectedBg.shikiLight)
+  }, [
+    darkCode,
+    selectedBg.id,
+    selectedBg.shikiDark,
+    selectedBg.shikiLight,
+    setGlobalShikiTheme,
+  ])
 
   const downloadImage = useCallback(async () => {
     if (!frameRef.current) return

@@ -17,7 +17,17 @@ import {
   useColorThemeStore,
   type ColorTheme,
 } from "@/store/color-theme-store"
+import { CARD_SHIKI_THEMES, useCodeStyleStore } from "@/store/code-style-store"
 import { cn } from "@/lib/utils"
+import { CODE_FONTS, loadGoogleFont } from "@/components/image/fonts"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { useEffect } from "react"
 
 const DARK_PREVIEWS: Record<
   ColorTheme,
@@ -338,6 +348,15 @@ export function ThemeSwitcher() {
 
   const isDark = resolvedTheme === "dark"
   const [search, setSearch] = useState("")
+  const shikiTheme = useCodeStyleStore((s) => s.shikiTheme)
+  const setShikiTheme = useCodeStyleStore((s) => s.setShikiTheme)
+  const fontId = useCodeStyleStore((s) => s.fontId)
+  const setFontId = useCodeStyleStore((s) => s.setFontId)
+
+  useEffect(() => {
+    const font = CODE_FONTS.find((f) => f.id === fontId)
+    if (font?.google) loadGoogleFont(font.google)
+  }, [fontId])
 
   const filteredThemes = COLOR_THEMES.filter(
     (t) =>
@@ -368,6 +387,42 @@ export function ThemeSwitcher() {
             />
           </div>
         </SheetHeader>
+
+        <div className="flex flex-col gap-3 border-b px-5 py-4">
+          <p className="text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+            Code cards
+          </p>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[11px] text-muted-foreground">Theme</label>
+            <Select value={shikiTheme} onValueChange={setShikiTheme}>
+              <SelectTrigger className="h-8 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {CARD_SHIKI_THEMES.map((t) => (
+                  <SelectItem key={t.id} value={t.id} className="text-xs">
+                    {t.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[11px] text-muted-foreground">Font</label>
+            <Select value={fontId} onValueChange={setFontId}>
+              <SelectTrigger className="h-8 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {CODE_FONTS.map((f) => (
+                  <SelectItem key={f.id} value={f.id} className="text-xs">
+                    <span style={{ fontFamily: f.family }}>{f.name}</span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
 
         <div className="flex-1 overflow-y-auto px-4 py-0">
           {filteredThemes.length === 0 ? (

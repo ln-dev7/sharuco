@@ -10,7 +10,6 @@ import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
 import embedProject from "@/utils/embedStackblitzProject"
-import highlight from "@/utils/highlight"
 import indentCode from "@/utils/indentCode"
 import * as htmlToImage from "html-to-image"
 import {
@@ -40,6 +39,7 @@ import {
 import { TemplateName } from "@/types/templatStackblitzName"
 import { buildImageUrl } from "@/lib/image-link"
 import { cn } from "@/lib/utils"
+import { CodeBlock } from "@/components/image/code-block"
 import Loader from "@/components/loaders/loader"
 import {
   AlertDialog,
@@ -311,24 +311,18 @@ export default function CardCode({
         </div>
         {params["code-preview"] === undefined ? (
           <Link href={`/code-preview/${id}`}>
-            <pre className="max-h-[200px] w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 hover:bg-gray-900 dark:bg-black dark:hover:bg-zinc-900">
-              <code
-                className="text-white"
-                dangerouslySetInnerHTML={{
-                  __html: highlight(code, language),
-                }}
-              />
-            </pre>
+            <CodeBlock
+              code={code}
+              language={language}
+              className="max-h-[200px] rounded-t-none"
+            />
           </Link>
         ) : (
-          <pre className="w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black">
-            <code
-              className="text-white"
-              dangerouslySetInnerHTML={{
-                __html: highlight(code, language),
-              }}
-            />
-          </pre>
+          <CodeBlock
+            code={code}
+            language={language}
+            className="rounded-t-none"
+          />
         )}
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2">
