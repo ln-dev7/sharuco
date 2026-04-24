@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import * as htmlToImage from "html-to-image"
 import { Hash } from "lucide-react"
@@ -71,9 +71,18 @@ function toShikiLang(language: string): string {
 export function ImagePageClient() {
   const frameRef = useRef<HTMLDivElement>(null)
   const searchParams = useSearchParams()
-  const [code, setCode] = useState(SAMPLE_CODE)
-  const [language, setLanguage] = useState("typescript")
-  const [title, setTitle] = useState("hello.ts")
+  const initialParams = useMemo(
+    () => (searchParams ? readImageParams(searchParams) : {}),
+    // URL params are only read once on mount — later searchParams changes
+    // shouldn't reset user edits to the editor
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  )
+  const [code, setCode] = useState(() => initialParams.code ?? SAMPLE_CODE)
+  const [language, setLanguage] = useState(
+    () => initialParams.language ?? "typescript"
+  )
+  const [title, setTitle] = useState(() => initialParams.title ?? "hello.ts")
   const background = useCodeStyleStore((s) => s.backgroundId)
   const setBackground = useCodeStyleStore((s) => s.setBackgroundId)
   const [padding, setPadding] = useState<PaddingValue>(64)
@@ -87,10 +96,16 @@ export function ImagePageClient() {
   const [fontSize, setFontSize] = useState(14)
   const [backdropNoise, setBackdropNoise] = useState(false)
   const [watermarkEnabled, setWatermarkEnabled] = useState(true)
-  const [userName, setUserName] = useState("")
-  const [userHandle, setUserHandle] = useState("")
-  const [userSocial, setUserSocial] = useState<SocialId>("x")
-  const [userAvatar, setUserAvatar] = useState("")
+  const [userName, setUserName] = useState(() => initialParams.author ?? "")
+  const [userHandle, setUserHandle] = useState(() =>
+    initialParams.authorHandle ? `@${initialParams.authorHandle}` : ""
+  )
+  const [userSocial, setUserSocial] = useState<SocialId>(() =>
+    initialParams.authorHandle ? "github" : "x"
+  )
+  const [userAvatar, setUserAvatar] = useState(
+    () => initialParams.authorAvatar ?? ""
+  )
   const [isExporting, setIsExporting] = useState(false)
   const [copied, setCopied] = useState(false)
 
@@ -99,18 +114,6 @@ export function ImagePageClient() {
   useEffect(() => {
     if (selectedFont.google) loadGoogleFont(selectedFont.google)
   }, [selectedFont])
-
-  useEffect(() => {
-    if (!searchParams) return
-    const params = readImageParams(searchParams)
-    if (params.code) setCode(params.code)
-    if (params.language) setLanguage(params.language)
-    if (params.title) setTitle(params.title)
-    if (params.author) setUserName(params.author)
-    if (params.authorHandle) setUserHandle(`@${params.authorHandle}`)
-    if (params.authorAvatar) setUserAvatar(params.authorAvatar)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const userInfo: UserInfo = {
     name: userName,
@@ -174,12 +177,11 @@ export function ImagePageClient() {
   }, [])
 
   const cycleTheme = useCallback(() => {
-    setBackground((current) => {
-      const idx = IMAGE_BACKGROUNDS.findIndex((b) => b.id === current)
-      const next = IMAGE_BACKGROUNDS[(idx + 1) % IMAGE_BACKGROUNDS.length]
-      return next.id
-    })
-  }, [])
+    const current = useCodeStyleStore.getState().backgroundId
+    const idx = IMAGE_BACKGROUNDS.findIndex((b) => b.id === current)
+    const next = IMAGE_BACKGROUNDS[(idx + 1) % IMAGE_BACKGROUNDS.length]
+    setBackground(next.id)
+  }, [setBackground])
 
   const cyclePadding = useCallback(() => {
     setPadding((current) => {
