@@ -5,7 +5,7 @@ import { buttonVariants } from "@/components/ui/button"
 
 const DONATION_URL = "https://lndev.mychariow.shop/prd_3cu1s0"
 
-export default function Donation() {
+export default function Support() {
   return (
     <section className="container grid items-center gap-6 pt-6 pb-8 md:py-10">
       <div className="flex max-w-[980px] flex-col items-start gap-2">

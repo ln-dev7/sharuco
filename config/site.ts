@@ -24,7 +24,7 @@ export const siteConfig: SiteConfig = {
     {
       title: "Forms",
       href: "/forms",
-      pined: true,
+      pined: false,
       support: false,
     },
     {
@@ -46,7 +46,7 @@ export const siteConfig: SiteConfig = {
       support: false,
     },
     {
-      title: "Donation",
+      title: "Support",
       href: "https://lndev.mychariow.shop/prd_3cu1s0",
       external: true,
       support: false,
