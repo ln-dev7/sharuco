@@ -127,7 +127,7 @@ export const CodeFrame = forwardRef<HTMLDivElement, CodeFrameProps>(
 
         {watermark ? (
           <span
-            className="pointer-events-none absolute bottom-2 left-3 text-[10px] font-medium tracking-wide text-white/70 select-none"
+            className="pointer-events-none absolute bottom-2 left-3 text-xs font-medium tracking-wide text-white/70 select-none"
             style={{ textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}
           >
             {watermark}
