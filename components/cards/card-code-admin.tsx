@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useParams } from "next/navigation"
 import {
   allLanguages,
+  getExtensionByName,
   getLanguageColor,
   languagesName,
 } from "@/constants/languages"
@@ -676,7 +677,7 @@ export default function CardCodeAdmin({
               href={buildImageUrl({
                 code: indentCode(code),
                 language,
-                title: `${id}.${language?.toLowerCase() ?? "txt"}`,
+                title: `${id}${getExtensionByName(language) ?? ".txt"}`,
                 authorHandle: idAuthor,
               })}
               className="cursor-pointer text-white"

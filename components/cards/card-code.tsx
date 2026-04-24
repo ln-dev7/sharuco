@@ -3,7 +3,7 @@
 import { useRef, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { getLanguageColor } from "@/constants/languages"
+import { getExtensionByName, getLanguageColor } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -271,7 +271,7 @@ export default function CardCode({
               href={buildImageUrl({
                 code: indentCode(code),
                 language,
-                title: `${id}.${language?.toLowerCase() ?? "txt"}`,
+                title: `${id}${getExtensionByName(language) ?? ".txt"}`,
                 authorHandle: idAuthor,
               })}
               className="cursor-pointer text-white"
