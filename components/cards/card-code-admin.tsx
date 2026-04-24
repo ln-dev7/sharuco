@@ -50,6 +50,7 @@ import {
 import * as yup from "yup"
 
 import { TemplateName } from "@/types/templatStackblitzName"
+import { buildImageUrl } from "@/lib/image-link"
 import { cn } from "@/lib/utils"
 import Loader from "@/components/loaders/loader"
 import {
@@ -413,7 +414,7 @@ export default function CardCodeAdmin({
             <AlertDialogContent className="scrollbar-hide max-h-[640px] overflow-hidden overflow-y-auto">
               <AlertDialogHeader>
                 <AlertDialogTitle>
-                  <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">
                     Edit a code
                   </h3>
                 </AlertDialogTitle>
@@ -525,7 +526,7 @@ export default function CardCodeAdmin({
                   <div className="mb-4 flex w-full flex-col items-start gap-1.5">
                     <Label htmlFor="language">Edit language</Label>
                     <select
-                      className="flex h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      className="flex h-10 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                       name="language"
                       id="language"
                       {...register("language")}
@@ -568,13 +569,11 @@ export default function CardCodeAdmin({
                       {...register("isPrivate")}
                       name="isPrivate"
                       id="isPrivate"
-                      className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-zinc-200 outline-none dark:bg-zinc-800
-                      ${
+                      className={`relative h-[24px] w-[24px] cursor-pointer appearance-none rounded-full bg-zinc-200 outline-none dark:bg-zinc-800 ${
                         checkboxOn
                           ? "before:absolute before:inset-0 before:scale-75 before:rounded-full before:bg-zinc-500 before:transition-transform"
                           : ""
-                      } 
-                      `}
+                      } `}
                       checked={checkboxOn}
                       onChange={() => setCheckboxOn(!checkboxOn)}
                     />
@@ -607,7 +606,7 @@ export default function CardCodeAdmin({
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <button
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                    "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                   )}
                   disabled={isLoading}
                   onClick={!isLoading ? handleSubmit(onSubmit) : undefined}
@@ -640,7 +639,7 @@ export default function CardCodeAdmin({
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <button
                   className={cn(
-                    "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                    "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                   )}
                   disabled={isLoadingDelete}
                   onClick={!isLoadingDelete ? handleDeleteDocument : undefined}
@@ -673,109 +672,18 @@ export default function CardCodeAdmin({
               <Copy className="mr-2 h-4 w-4" />
               Copy code
             </span>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <button className="cursor-pointer text-white">
-                  <Save className="h-4 w-4 cursor-pointer" />
-                </button>
-              </AlertDialogTrigger>
-              <AlertDialogContent className="scrollbar-hide flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto">
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Close</AlertDialogCancel>
-                  <button
-                    className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
-                    )}
-                    onClick={downloadImage}
-                  >
-                    Download Image
-                  </button>
-                </AlertDialogFooter>
-                <div className="flex w-full items-center justify-center gap-2">
-                  <button
-                    className="h-6 w-6 rounded-full bg-gradient-to-br from-blue-400 to-indigo-700"
-                    onClick={handleChangeBgImg1}
-                  ></button>{" "}
-                  <button
-                    className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-indigo-600"
-                    onClick={handleChangeBgImg2}
-                  ></button>{" "}
-                  <button
-                    className="h-6 w-6 rounded-full bg-gradient-to-br from-teal-400 to-green-500"
-                    onClick={handleChangeBgImg3}
-                  ></button>
-                  <button
-                    className="h-6 w-6 rounded-full bg-gradient-to-br from-yellow-300 to-orange-500"
-                    onClick={handleChangeBgImg4}
-                  ></button>
-                  <button
-                    className="h-6 w-6 rounded-full bg-gradient-to-br from-red-500 to-pink-600"
-                    onClick={handleChangeBgImg5}
-                  ></button>
-                  <input
-                    type="color"
-                    className="h-8 w-8 cursor-pointer appearance-none rounded-full border-0 bg-transparent p-0"
-                    value={backgroundImage}
-                    onChange={(e) => {
-                      setBackgroundImage(`${e.target.value}`)
-                    }}
-                  />
-                </div>
-                <div className="flex w-full items-center justify-center gap-2">
-                  <Input
-                    className="w-full"
-                    type="text"
-                    id="tags"
-                    placeholder="Name of your image"
-                    value={nameOfImage}
-                    onChange={(e) => {
-                      setNameOfImage(`${e.target.value}`)
-                    }}
-                  />
-                </div>
-                <div
-                  ref={domRefImage}
-                  className={`flex max-w-[1280px] flex-col items-center justify-center ${backgroundImage} p-8`}
-                  style={{
-                    backgroundColor: `${backgroundImage}`,
-                  }}
-                >
-                  <h3 className="mb-2 text-center text-lg font-semibold text-white">
-                    sharuco.lndev.me
-                  </h3>
-                  <div className="card-code-image max-w-[1280px] overflow-hidden rounded-lg bg-zinc-900 dark:bg-black">
-                    <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`
-                          flex h-4 w-4 items-center rounded-full p-1 text-xs font-medium text-white
-                        `}
-                          style={{
-                            backgroundColor: `${
-                              language !== "" && getLanguageColor(language)
-                            }`,
-                          }}
-                        ></span>
-                        <span className="text-xs font-medium text-white">
-                          {language.toLowerCase()}
-                        </span>
-                      </div>
-                      <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
-                        @ {idAuthor}
-                      </span>
-                    </div>
-                    <pre className="max-w-[1280px] rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black">
-                      <code
-                        className="max-w-[1280px] text-white"
-                        dangerouslySetInnerHTML={{
-                          __html: highlight(code, language),
-                        }}
-                      />
-                    </pre>
-                  </div>
-                </div>
-              </AlertDialogContent>
-            </AlertDialog>
+            <Link
+              href={buildImageUrl({
+                code,
+                language,
+                title: `${id}.${language?.toLowerCase() ?? "txt"}`,
+                authorHandle: idAuthor,
+              })}
+              className="cursor-pointer text-white"
+              title="Export as image"
+            >
+              <Save className="h-4 w-4 cursor-pointer" />
+            </Link>
           </div>
         </div>
         {params["code-preview"] === undefined && !isPrivate ? (
@@ -794,9 +702,8 @@ export default function CardCodeAdmin({
             className={`${
               params["code-preview"] === undefined &&
               isPrivate &&
-              "max-h-[200px] "
-            }
-          w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black`}
+              "max-h-[200px]"
+            } w-auto overflow-auto rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black`}
           >
             <code
               className="text-white"
@@ -847,7 +754,7 @@ export default function CardCodeAdmin({
             )}
           </Avatar>
           <div className="flex items-center justify-start gap-1">
-            <span className="text-md font-bold text-zinc-700 hover:underline dark:text-zinc-400 ">
+            <span className="text-md font-bold text-zinc-700 hover:underline dark:text-zinc-400">
               {idAuthor}{" "}
             </span>
             {dataUser && dataUser.exists && (
@@ -893,7 +800,7 @@ export default function CardCodeAdmin({
             </TooltipProvider>
           )}
           {isPrivate ? null : (
-            <div className="flex items-center text-zinc-700 dark:text-zinc-400 ">
+            <div className="flex items-center text-zinc-700 dark:text-zinc-400">
               {user && favorisInit.includes(userPseudo) ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

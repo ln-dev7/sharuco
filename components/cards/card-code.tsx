@@ -37,6 +37,7 @@ import {
 } from "react-share"
 
 import { TemplateName } from "@/types/templatStackblitzName"
+import { buildImageUrl } from "@/lib/image-link"
 import { cn } from "@/lib/utils"
 import Loader from "@/components/loaders/loader"
 import {
@@ -265,109 +266,18 @@ export default function CardCode({
               <Copy className="mr-2 h-4 w-4" />
               Copy code
             </span>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <button className="cursor-pointer text-white">
-                  <Save className="h-4 w-4 cursor-pointer" />
-                </button>
-              </AlertDialogTrigger>
-              <AlertDialogContent className="scrollbar-hide flex max-h-[640px] !w-auto !max-w-[1280px] flex-col items-center justify-start overflow-hidden overflow-y-auto">
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Close</AlertDialogCancel>
-                  <button
-                    className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
-                    )}
-                    onClick={downloadImage}
-                  >
-                    Download Image
-                  </button>
-                </AlertDialogFooter>
-                <div className="flex w-full items-center justify-center gap-2">
-                  <button
-                    className="h-6 w-6 rounded-full bg-gradient-to-br from-blue-400 to-indigo-700"
-                    onClick={handleChangeBgImg1}
-                  ></button>{" "}
-                  <button
-                    className="h-6 w-6 rounded-full bg-gradient-to-r from-pink-500 to-indigo-600"
-                    onClick={handleChangeBgImg2}
-                  ></button>{" "}
-                  <button
-                    className="h-6 w-6 rounded-full bg-gradient-to-br from-teal-400 to-green-500"
-                    onClick={handleChangeBgImg3}
-                  ></button>
-                  <button
-                    className="h-6 w-6 rounded-full bg-gradient-to-br from-yellow-300 to-orange-500"
-                    onClick={handleChangeBgImg4}
-                  ></button>
-                  <button
-                    className="h-6 w-6 rounded-full bg-gradient-to-br from-red-500 to-pink-600"
-                    onClick={handleChangeBgImg5}
-                  ></button>
-                  <input
-                    type="color"
-                    className="h-8 w-8 cursor-pointer appearance-none rounded-full border-0 bg-transparent p-0"
-                    value={backgroundImage}
-                    onChange={(e) => {
-                      setBackgroundImage(`${e.target.value}`)
-                    }}
-                  />
-                </div>
-                <div className="flex w-full items-center justify-center gap-2">
-                  <Input
-                    className="w-full"
-                    type="text"
-                    id="tags"
-                    placeholder="Name of your image"
-                    value={nameOfImage}
-                    onChange={(e) => {
-                      setNameOfImage(`${e.target.value}`)
-                    }}
-                  />
-                </div>
-                <div
-                  ref={domRefImage}
-                  className={`flex max-w-[1280px] flex-col items-center justify-center ${backgroundImage} p-8`}
-                  style={{
-                    backgroundColor: `${backgroundImage}`,
-                  }}
-                >
-                  <h3 className="mb-2 text-center text-lg font-semibold text-white">
-                    sharuco.lndev.me
-                  </h3>
-                  <div className="card-code-image max-w-[1280px] overflow-hidden rounded-lg bg-zinc-900 dark:bg-black">
-                    <div className="flex items-center justify-between bg-[#343541] px-4 py-1">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`
-                          flex h-4 w-4 items-center rounded-full p-1 text-xs font-medium text-white
-                        `}
-                          style={{
-                            backgroundColor: `${
-                              language !== "" && getLanguageColor(language)
-                            }`,
-                          }}
-                        ></span>
-                        <span className="text-xs font-medium text-white">
-                          {language.toLowerCase()}
-                        </span>
-                      </div>
-                      <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
-                        @ {idAuthor}
-                      </span>
-                    </div>
-                    <pre className="max-w-[1280px] rounded-lg rounded-t-none bg-zinc-900 p-4 dark:bg-black">
-                      <code
-                        className="max-w-[1280px] text-white"
-                        dangerouslySetInnerHTML={{
-                          __html: highlight(code, language),
-                        }}
-                      />
-                    </pre>
-                  </div>
-                </div>
-              </AlertDialogContent>
-            </AlertDialog>
+            <Link
+              href={buildImageUrl({
+                code,
+                language,
+                title: `${id}.${language?.toLowerCase() ?? "txt"}`,
+                authorHandle: idAuthor,
+              })}
+              className="cursor-pointer text-white"
+              title="Export as image"
+            >
+              <Save className="h-4 w-4 cursor-pointer" />
+            </Link>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <button className="cursor-pointer text-white">
@@ -387,7 +297,7 @@ export default function CardCode({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <a
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     href={`mailto:sharuco@leonelngoya.com?subject=REPORTING%20A%20CODE%20ON%20SHARUCO&body=Hello,%20%0D%0A%0D%0AI%20want%20to%20report%20this%20code%20https://sharuco.lndev.me/code-preview/${id}%20that%20I%20saw%20on%20Sharuco.%0D%0AThank%20you`}
                   >
@@ -466,7 +376,7 @@ export default function CardCode({
             )}
           </Avatar>
           <div className="flex items-center justify-start gap-1">
-            <span className="text-md font-bold text-zinc-700 hover:underline dark:text-zinc-400 ">
+            <span className="text-md font-bold text-zinc-700 hover:underline dark:text-zinc-400">
               {idAuthor}{" "}
             </span>
             {dataAuthor && dataAuthor.exists && (
@@ -485,7 +395,7 @@ export default function CardCode({
                 <TooltipTrigger asChild>
                   <Link
                     href={`/code-preview/${id}#commentsCode`}
-                    className="flex gap-1 text-zinc-700 hover:text-zinc-500 dark:text-zinc-400  hover:dark:text-white"
+                    className="flex gap-1 text-zinc-700 hover:text-zinc-500 dark:text-zinc-400 hover:dark:text-white"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -520,7 +430,7 @@ export default function CardCode({
                 }}
               >
                 {user && favorisInit.includes(userPseudo) ? (
-                  <div className="mr-1 flex cursor-pointer  items-center justify-center rounded-full p-1 hover:bg-[#F8E3EB] dark:hover:bg-[#210C14]">
+                  <div className="mr-1 flex cursor-pointer items-center justify-center rounded-full p-1 hover:bg-[#F8E3EB] dark:hover:bg-[#210C14]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="#F9197F"
@@ -549,7 +459,7 @@ export default function CardCode({
                 <span
                   className={`${
                     favorisInit.includes(userPseudo) ? "text-[#F9197F]" : ""
-                  } hover:dark:text-white"  text-base text-zinc-700 hover:text-zinc-500  dark:text-zinc-400`}
+                  } hover:dark:text-white" text-base text-zinc-700 hover:text-zinc-500 dark:text-zinc-400`}
                 >
                   {favorisInit.length}
                 </span>
@@ -559,7 +469,7 @@ export default function CardCode({
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <span className="flex cursor-pointer items-center p-1 text-xs font-medium text-white">
-                  <div className="mr-1 flex cursor-pointer items-center  justify-center rounded-full p-1 text-zinc-700 hover:bg-[#F8E3EB] dark:text-zinc-400 dark:hover:bg-[#210C14]">
+                  <div className="mr-1 flex cursor-pointer items-center justify-center rounded-full p-1 text-zinc-700 hover:bg-[#F8E3EB] dark:text-zinc-400 dark:hover:bg-[#210C14]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -576,7 +486,7 @@ export default function CardCode({
                     </svg>
                   </div>
                   <span
-                    className={`hover:dark:text-white" text-base text-zinc-700 hover:text-zinc-500  dark:text-zinc-400`}
+                    className={`hover:dark:text-white" text-base text-zinc-700 hover:text-zinc-500 dark:text-zinc-400`}
                   >
                     {favorisInit.length}
                   </span>
@@ -606,7 +516,7 @@ export default function CardCode({
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <button
                     className={cn(
-                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
+                      "inline-flex h-10 items-center justify-center rounded-md bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus:ring-zinc-400 dark:focus:ring-offset-zinc-900"
                     )}
                     disabled={isPending}
                     onClick={login}

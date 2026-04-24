@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import type { Metadata } from "next"
 
 import { ImagePageClient } from "./image-page-client"
@@ -30,5 +31,9 @@ export const metadata: Metadata = {
 }
 
 export default function ImagePage() {
-  return <ImagePageClient />
+  return (
+    <Suspense fallback={null}>
+      <ImagePageClient />
+    </Suspense>
+  )
 }

@@ -1,10 +1,12 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { allLanguages } from "@/constants/languages"
 import * as htmlToImage from "html-to-image"
 import { Check, Clipboard, Copy, Download, Hash, Loader2 } from "lucide-react"
 
+import { readImageParams } from "@/lib/image-link"
 import { cn } from "@/lib/utils"
 import {
   IMAGE_BACKGROUNDS,
@@ -69,6 +71,7 @@ function toShikiLang(language: string): string {
 
 export function ImagePageClient() {
   const frameRef = useRef<HTMLDivElement>(null)
+  const searchParams = useSearchParams()
   const [code, setCode] = useState(SAMPLE_CODE)
   const [language, setLanguage] = useState("typescript")
   const [title, setTitle] = useState("hello.ts")
@@ -96,6 +99,18 @@ export function ImagePageClient() {
   useEffect(() => {
     if (selectedFont.google) loadGoogleFont(selectedFont.google)
   }, [selectedFont])
+
+  useEffect(() => {
+    if (!searchParams) return
+    const params = readImageParams(searchParams)
+    if (params.code) setCode(params.code)
+    if (params.language) setLanguage(params.language)
+    if (params.title) setTitle(params.title)
+    if (params.author) setUserName(params.author)
+    if (params.authorHandle) setUserHandle(`@${params.authorHandle}`)
+    if (params.authorAvatar) setUserAvatar(params.authorAvatar)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const userInfo: UserInfo = {
     name: userName,
