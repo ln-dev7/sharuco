@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { QueryClient, QueryClientProvider } from "react-query"
 import { ThemeProvider } from "next-themes"
 
 import { AuthContextProvider } from "@/context/AuthContext"
