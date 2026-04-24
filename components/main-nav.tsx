@@ -21,15 +21,18 @@ interface MainNavProps {
 
 export function MainNav({ items }: MainNavProps) {
   return (
-    <div className="flex gap-6 lg:gap-10">
-      <Link href="/" className="hidden items-center space-x-2 lg:flex">
+    <div className="flex gap-6 min-[1250px]:gap-10">
+      <Link
+        href="/"
+        className="hidden items-center space-x-2 min-[1250px]:flex"
+      >
         <Icons.logo className="h-6 w-6" />
         <span className="hidden font-bold sm:inline-block">
           {siteConfig.name}
         </span>
       </Link>
       {items?.length ? (
-        <nav className="hidden gap-2 lg:flex">
+        <nav className="hidden gap-2 min-[1250px]:flex">
           {items?.map(
             (item, index) =>
               item.href &&
@@ -50,7 +53,7 @@ export function MainNav({ items }: MainNavProps) {
                     </span>
                   )}
                   {item.pined && (
-                    <span className="absolute right-0 top-0 flex h-3 w-3">
+                    <span className="absolute top-0 right-0 flex h-3 w-3">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
                       <span className="inline-flex h-3 w-3 rounded-full bg-sky-500"></span>
                     </span>
@@ -64,7 +67,7 @@ export function MainNav({ items }: MainNavProps) {
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="-ml-4 text-base hover:bg-transparent focus:ring-0 lg:hidden"
+            className="-ml-4 text-base hover:bg-transparent focus:ring-0 min-[1250px]:hidden"
           >
             <Icons.logo className="mr-2 h-4 w-4" />{" "}
             <span className="font-bold">Menu</span>

@@ -36,7 +36,9 @@ export function SiteHeader() {
         <MainNav items={siteConfig.mainNav} />
 
         <div className="flex min-w-0 flex-1 items-center justify-end gap-1 sm:gap-2">
-          <div className="min-w-0 flex-1 lg:w-72 lg:flex-none">{searchBar}</div>
+          <div className="min-w-0 flex-1 min-[1250px]:w-72 min-[1250px]:flex-none">
+            {searchBar}
+          </div>
 
           {!user ? (
             <>
