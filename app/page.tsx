@@ -1,16 +1,8 @@
 "use client"
 
-import {
-  allLanguages,
-  getLanguageColor,
-  languagesName,
-} from "@/constants/languages"
-import { COMPANIES } from "@/constants/supports.js"
+import { COMPANIES } from "@/constants/supports"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
-import highlight from "@/utils/highlight"
-import linearizeCode from "@/utils/linearizeCode"
-import hljs from "highlight.js"
 
 import { Separator } from "@/components/ui/separator"
 import "highlight.js/styles/vs.css"
@@ -58,6 +50,10 @@ import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Textarea } from "@/components/ui/textarea"
+import { CountUp } from "@/components/home/count-up"
+import { ScrollReveal } from "@/components/home/scroll-reveal"
+import { SpotlightCard } from "@/components/home/spotlight-card"
+import { TiltedPreview } from "@/components/home/tilted-preview"
 
 export default function IndexPage() {
   const { login, isPending } = useGitHubLogin()
@@ -80,71 +76,12 @@ export default function IndexPage() {
       (response) => response.json()
     )
   )
-  //
 
-  const [codeImage, setCodeImage] = useState("")
-  const [languageImage, setLanguageImage] = useState("")
-
-  const domRefImage = useRef(null)
-  const [backgroundImage, setBackgroundImage] = useState(
-    "bg-gradient-to-br from-blue-400 to-indigo-700"
-  )
-
-  const handleChangeBgImg1 = () => {
-    setBackgroundImage("bg-gradient-to-br from-blue-400 to-indigo-700")
-  }
-
-  const handleChangeBgImg2 = () => {
-    setBackgroundImage("bg-gradient-to-r from-pink-500 to-indigo-600")
-  }
-
-  const handleChangeBgImg3 = () => {
-    setBackgroundImage("bg-gradient-to-br from-teal-400 to-green-500")
-  }
-
-  const handleChangeBgImg4 = () => {
-    setBackgroundImage("bg-gradient-to-br from-yellow-300 to-orange-500")
-  }
-  const handleChangeBgImg5 = () => {
-    setBackgroundImage("bg-gradient-to-br from-red-500 to-pink-600")
-  }
-
-  const [nameOfImage, setNameOfImage] = useState("")
-
-  const downloadImage = async () => {
-    const dataUrl = await htmlToImage.toPng(domRefImage.current)
-
-    // download image
-    const link = document.createElement("a")
-    link.download =
-      nameOfImage !== ""
-        ? nameOfImage
-        : `sharuco-code-${Math.random().toString(36).substring(7)}.png`
-    link.href = dataUrl
-    link.click()
-  }
-  //
-
-  function detectLanguage(code) {
-    const language = hljs.highlightAuto(code).language
-    return language || "text"
-  }
-
-  function handleCodeChange(code) {
-    const detectedLanguage = detectLanguage(code)
-    if (!languagesName.includes(detectedLanguage)) {
-      setCodeImage(linearizeCode(code))
-      setLanguageImage("other")
-      return
-    }
-    setCodeImage(linearizeCode(code))
-    setLanguageImage(detectedLanguage)
-  }
   return (
     <>
       <section className="container-wrapper grid items-center gap-6 pt-6 pb-8 md:py-10">
         <a
-          className="inline-flex w-fit items-center rounded-lg bg-zinc-100 px-3 py-1 text-sm font-medium dark:bg-zinc-800"
+          className="sharuco-shimmer group relative inline-flex w-fit items-center overflow-hidden rounded-lg bg-zinc-100 px-3 py-1 text-sm font-medium transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"
           href="/image"
         >
           🚀
@@ -177,17 +114,17 @@ export default function IndexPage() {
         <div className="flex max-w-[980px] flex-col items-start gap-3">
           <h1 className="text-3xl leading-[1.05] font-extrabold tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
             Share your{" "}
-            <span className="bg-gradient-to-r from-sky-500 via-violet-500 to-fuchsia-500 bg-clip-text text-transparent">
+            <span className="sharuco-animated-gradient bg-gradient-to-r from-sky-500 via-violet-500 to-fuchsia-500 bg-clip-text text-transparent">
               code
             </span>
             .
             <br className="inline" />
             Manage{" "}
-            <span className="bg-gradient-to-r from-emerald-500 via-sky-500 to-indigo-500 bg-clip-text text-transparent">
+            <span className="sharuco-animated-gradient bg-gradient-to-r from-emerald-500 via-sky-500 to-indigo-500 bg-clip-text text-transparent">
               Form
             </span>{" "}
             &amp;{" "}
-            <span className="bg-gradient-to-r from-amber-500 via-rose-500 to-fuchsia-500 bg-clip-text text-transparent">
+            <span className="sharuco-animated-gradient bg-gradient-to-r from-amber-500 via-rose-500 to-fuchsia-500 bg-clip-text text-transparent">
               Link
             </span>
             .
@@ -250,10 +187,10 @@ export default function IndexPage() {
           for the latest updates
         </p>
         <Separator className="my-2" />
-        <div className="relative my-4 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-10 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
+        <ScrollReveal className="relative my-4 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-10 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
           <div
             aria-hidden
-            className="pointer-events-none absolute -top-24 left-1/3 h-48 w-48 rounded-full bg-gradient-to-br from-sky-500/20 via-indigo-500/15 to-violet-500/20 blur-3xl"
+            className="sharuco-drift-a pointer-events-none absolute -top-24 left-1/3 h-48 w-48 rounded-full bg-gradient-to-br from-sky-500/20 via-indigo-500/15 to-violet-500/20 blur-3xl"
           />
           <div className="relative flex flex-col items-center gap-6">
             <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/60 px-3 py-1 text-xs font-medium text-zinc-700 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300">
@@ -268,6 +205,7 @@ export default function IndexPage() {
                   href={support.link}
                   target="_blank"
                   rel="noopener noreferrer"
+                  style={{ width: support.width && `${support.width}px` }}
                 >
                   <Image
                     width={160}
@@ -294,16 +232,16 @@ export default function IndexPage() {
               <ArrowUpRight className="h-3.5 w-3.5" />
             </a>
           </div>
-        </div>
-        <div className="mt-8 flex flex-col items-start gap-4">
-          <div className="relative w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-12 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
+        </ScrollReveal>
+        <ScrollReveal className="mt-8 flex flex-col items-start gap-4">
+          <SpotlightCard className="relative w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-12 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
             <div
               aria-hidden
-              className="pointer-events-none absolute -top-24 -right-20 h-64 w-64 rounded-full bg-gradient-to-br from-pink-500/30 via-violet-500/20 to-indigo-500/30 blur-3xl"
+              className="sharuco-drift-a pointer-events-none absolute -top-24 -right-20 h-64 w-64 rounded-full bg-gradient-to-br from-pink-500/30 via-violet-500/20 to-indigo-500/30 blur-3xl"
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute -bottom-24 -left-16 h-56 w-56 rounded-full bg-gradient-to-br from-emerald-500/25 via-sky-500/20 to-blue-500/25 blur-3xl"
+              className="sharuco-drift-b pointer-events-none absolute -bottom-24 -left-16 h-56 w-56 rounded-full bg-gradient-to-br from-emerald-500/25 via-sky-500/20 to-blue-500/25 blur-3xl"
             />
 
             <div className="relative grid gap-10 md:grid-cols-[1.1fr_1fr] md:items-center">
@@ -394,13 +332,7 @@ export default function IndexPage() {
 
               <div className="relative">
                 <div className="pointer-events-none absolute inset-0 -m-4 rounded-3xl bg-gradient-to-br from-fuchsia-500/40 via-violet-500/30 to-sky-500/40 blur-2xl dark:from-fuchsia-500/30 dark:via-violet-500/20 dark:to-sky-500/30" />
-                <div
-                  className="relative overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl ring-1 ring-black/5 dark:border-white/10 dark:bg-zinc-950"
-                  style={{
-                    transform:
-                      "perspective(1200px) rotateY(-6deg) rotateX(2deg)",
-                  }}
-                >
+                <TiltedPreview className="relative overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl ring-1 ring-black/5 dark:border-white/10 dark:bg-zinc-950">
                   <Image
                     src="/home/code-preview.png"
                     alt="Preview of a code image generated with Sharuco"
@@ -409,19 +341,19 @@ export default function IndexPage() {
                     priority={true}
                     className="h-auto w-full"
                   />
-                </div>
+                </TiltedPreview>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="relative mt-8 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-12 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
+          </SpotlightCard>
+        </ScrollReveal>
+        <ScrollReveal className="relative mt-8 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-12 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
           <div
             aria-hidden
-            className="pointer-events-none absolute -top-32 -right-16 h-72 w-72 rounded-full bg-gradient-to-br from-sky-500/25 via-cyan-500/20 to-emerald-500/25 blur-3xl"
+            className="sharuco-drift-a pointer-events-none absolute -top-32 -right-16 h-72 w-72 rounded-full bg-gradient-to-br from-sky-500/25 via-cyan-500/20 to-emerald-500/25 blur-3xl"
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-gradient-to-br from-amber-500/20 via-orange-500/15 to-rose-500/20 blur-3xl"
+            className="sharuco-drift-b pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-gradient-to-br from-amber-500/20 via-orange-500/15 to-rose-500/20 blur-3xl"
           />
 
           <div className="relative flex flex-col gap-10">
@@ -477,11 +409,12 @@ export default function IndexPage() {
                   image: "/home/form-4.png",
                   reverse: true,
                 },
-              ].map((row) => {
+              ].map((row, i) => {
                 const RowIcon = row.icon
                 return (
-                  <div
+                  <ScrollReveal
                     key={row.title}
+                    delay={i * 80}
                     className={cn(
                       "flex flex-col items-center gap-6 lg:flex-row lg:gap-14",
                       row.reverse && "lg:flex-row-reverse"
@@ -490,7 +423,7 @@ export default function IndexPage() {
                     <div className="flex w-full flex-col items-start gap-3 lg:w-2/5">
                       <span
                         className={cn(
-                          "inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-200 bg-white/70 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/60"
+                          "inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-200 bg-white/70 backdrop-blur-sm transition-transform duration-300 hover:scale-110 hover:-rotate-6 dark:border-zinc-700 dark:bg-zinc-900/60"
                         )}
                       >
                         <RowIcon className={cn("h-5 w-5", row.iconColor)} />
@@ -502,20 +435,20 @@ export default function IndexPage() {
                         {row.description}
                       </p>
                     </div>
-                    <div className="relative w-full lg:w-3/5">
-                      <div className="pointer-events-none absolute inset-0 -m-3 rounded-3xl bg-gradient-to-br from-sky-500/15 via-indigo-500/10 to-violet-500/15 blur-2xl dark:from-sky-500/20 dark:via-indigo-500/15 dark:to-violet-500/20" />
-                      <div className="relative overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-xl ring-1 ring-black/5 dark:border-white/10 dark:bg-zinc-950">
+                    <div className="group relative w-full lg:w-3/5">
+                      <div className="pointer-events-none absolute inset-0 -m-3 rounded-3xl bg-gradient-to-br from-sky-500/15 via-indigo-500/10 to-violet-500/15 opacity-70 blur-2xl transition-opacity duration-500 group-hover:opacity-100 dark:from-sky-500/20 dark:via-indigo-500/15 dark:to-violet-500/20" />
+                      <div className="relative overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-xl ring-1 ring-black/5 transition-transform duration-500 group-hover:-translate-y-1 dark:border-white/10 dark:bg-zinc-950">
                         <Image
                           src={row.image}
                           alt={row.title}
                           width={2880}
                           height={1448}
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                           priority={true}
                         />
                       </div>
                     </div>
-                  </div>
+                  </ScrollReveal>
                 )
               })}
             </div>
@@ -536,93 +469,95 @@ export default function IndexPage() {
               </span>
             </div>
           </div>
-        </div>
-        <div className="relative mt-8 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-12 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -top-24 -left-20 h-64 w-64 rounded-full bg-gradient-to-br from-violet-500/30 via-fuchsia-500/20 to-rose-500/30 blur-3xl"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-16 -bottom-24 h-56 w-56 rounded-full bg-gradient-to-br from-teal-500/25 via-emerald-500/20 to-sky-500/25 blur-3xl"
-          />
+        </ScrollReveal>
+        <ScrollReveal className="relative mt-8 w-full">
+          <SpotlightCard className="relative w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-12 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
+            <div
+              aria-hidden
+              className="sharuco-drift-a pointer-events-none absolute -top-24 -left-20 h-64 w-64 rounded-full bg-gradient-to-br from-violet-500/30 via-fuchsia-500/20 to-rose-500/30 blur-3xl"
+            />
+            <div
+              aria-hidden
+              className="sharuco-drift-b pointer-events-none absolute -right-16 -bottom-24 h-56 w-56 rounded-full bg-gradient-to-br from-teal-500/25 via-emerald-500/20 to-sky-500/25 blur-3xl"
+            />
 
-          <div className="relative grid gap-10 md:grid-cols-[1fr_1.1fr] md:items-center">
-            <div className="flex flex-col items-start gap-5">
-              <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/60 px-3 py-1 text-xs font-medium text-zinc-700 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300">
-                <Bookmark className="h-3.5 w-3.5 text-fuchsia-500" />
-                Sharuco Link · Curated hub
-              </span>
-
-              <h2 className="text-3xl leading-[1.05] font-extrabold tracking-tighter md:text-4xl lg:text-5xl">
-                Store every link worth keeping.
-              </h2>
-              <p className="max-w-[520px] text-sm text-zinc-600 md:text-base dark:text-zinc-400">
-                Save the resources you care about, organize them in seconds, and
-                let the community discover the best of what you have bookmarked.
-              </p>
-
-              <ul className="mt-1 grid grid-cols-1 gap-x-6 gap-y-2 text-sm text-zinc-700 sm:grid-cols-2 dark:text-zinc-300">
-                <li className="flex items-center gap-2">
-                  <Bookmark className="h-4 w-4 shrink-0 text-fuchsia-500" />
-                  Personal link library
-                </li>
-                <li className="flex items-center gap-2">
-                  <Compass className="h-4 w-4 shrink-0 text-teal-500" />
-                  Discover community picks
-                </li>
-                <li className="flex items-center gap-2">
-                  <Globe className="h-4 w-4 shrink-0 text-sky-500" />
-                  Rich link previews
-                </li>
-                <li className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 shrink-0 text-amber-500" />
-                  One-click sharing
-                </li>
-              </ul>
-
-              <div className="mt-3 flex flex-wrap items-center gap-3">
-                <Link
-                  href="/links"
-                  className={cn(
-                    buttonVariants({ size: "lg" }),
-                    "gap-2 shadow-lg shadow-zinc-900/10 dark:shadow-black/40"
-                  )}
-                >
-                  Go to Sharuco Link
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                  Public & private lists
+            <div className="relative grid gap-10 md:grid-cols-[1fr_1.1fr] md:items-center">
+              <div className="flex flex-col items-start gap-5">
+                <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/60 px-3 py-1 text-xs font-medium text-zinc-700 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300">
+                  <Bookmark className="h-3.5 w-3.5 text-fuchsia-500" />
+                  Sharuco Link · Curated hub
                 </span>
+
+                <h2 className="text-3xl leading-[1.05] font-extrabold tracking-tighter md:text-4xl lg:text-5xl">
+                  Store every link worth keeping.
+                </h2>
+                <p className="max-w-[520px] text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+                  Save the resources you care about, organize them in seconds,
+                  and let the community discover the best of what you have
+                  bookmarked.
+                </p>
+
+                <ul className="mt-1 grid grid-cols-1 gap-x-6 gap-y-2 text-sm text-zinc-700 sm:grid-cols-2 dark:text-zinc-300">
+                  <li className="flex items-center gap-2">
+                    <Bookmark className="h-4 w-4 shrink-0 text-fuchsia-500" />
+                    Personal link library
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Compass className="h-4 w-4 shrink-0 text-teal-500" />
+                    Discover community picks
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Globe className="h-4 w-4 shrink-0 text-sky-500" />
+                    Rich link previews
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 shrink-0 text-amber-500" />
+                    One-click sharing
+                  </li>
+                </ul>
+
+                <div className="mt-3 flex flex-wrap items-center gap-3">
+                  <Link
+                    href="/links"
+                    className={cn(
+                      buttonVariants({ size: "lg" }),
+                      "gap-2 shadow-lg shadow-zinc-900/10 dark:shadow-black/40"
+                    )}
+                  >
+                    Go to Sharuco Link
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                    Public & private lists
+                  </span>
+                </div>
+              </div>
+
+              <div className="relative">
+                <div className="pointer-events-none absolute inset-0 -m-4 rounded-3xl bg-gradient-to-br from-fuchsia-500/30 via-violet-500/25 to-teal-500/30 blur-2xl dark:from-fuchsia-500/25 dark:via-violet-500/20 dark:to-teal-500/25" />
+                <TiltedPreview
+                  baseRotateY={6}
+                  baseRotateX={2}
+                  className="relative overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl ring-1 ring-black/5 dark:border-white/10 dark:bg-zinc-950"
+                >
+                  <Image
+                    src="/home/sharuco-link.png"
+                    alt="Sharuco Link preview"
+                    width={3024}
+                    height={1896}
+                    className="h-auto w-full"
+                    priority={true}
+                  />
+                </TiltedPreview>
               </div>
             </div>
+          </SpotlightCard>
+        </ScrollReveal>
 
-            <div className="relative">
-              <div className="pointer-events-none absolute inset-0 -m-4 rounded-3xl bg-gradient-to-br from-fuchsia-500/30 via-violet-500/25 to-teal-500/30 blur-2xl dark:from-fuchsia-500/25 dark:via-violet-500/20 dark:to-teal-500/25" />
-              <div
-                className="relative overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl ring-1 ring-black/5 dark:border-white/10 dark:bg-zinc-950"
-                style={{
-                  transform: "perspective(1200px) rotateY(6deg) rotateX(2deg)",
-                }}
-              >
-                <Image
-                  src="/home/sharuco-link.png"
-                  alt="Sharuco Link preview"
-                  width={3024}
-                  height={1896}
-                  className="h-auto w-full"
-                  priority={true}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="relative mt-8 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-10 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
+        <ScrollReveal className="relative mt-8 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-10 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
           <div
             aria-hidden
-            className="pointer-events-none absolute -top-20 right-1/3 h-48 w-48 rounded-full bg-gradient-to-br from-rose-500/20 via-orange-500/15 to-amber-500/20 blur-3xl"
+            className="sharuco-drift-a pointer-events-none absolute -top-20 right-1/3 h-48 w-48 rounded-full bg-gradient-to-br from-rose-500/20 via-orange-500/15 to-amber-500/20 blur-3xl"
           />
 
           <div className="relative flex flex-col gap-5">
@@ -633,7 +568,7 @@ export default function IndexPage() {
               </span>
               {typeof contributors?.length === "number" && (
                 <span className="rounded-full bg-zinc-900 px-2.5 py-0.5 text-xs font-semibold text-white dark:bg-white dark:text-zinc-900">
-                  {contributors.length} contributors
+                  <CountUp to={contributors.length} /> contributors
                 </span>
               )}
             </div>
@@ -660,21 +595,23 @@ export default function IndexPage() {
                     .filter((user) => user.login !== "dependabot[bot]")
                     .sort((a, b) => b.contributions - a.contributions)
                     .slice(0, 8)
-                    .map((user) => (
-                      <a
+                    .map((user, i) => (
+                      <ScrollReveal
+                        as="a"
                         key={user.login}
+                        delay={i * 70}
                         href={"https://github.com/" + user.login}
                         target="_blank"
                         rel="noopener noreferrer"
                         title={user.login}
-                        className="transition-transform hover:z-10 hover:-translate-y-0.5"
+                        className="transition-transform duration-300 hover:z-10 hover:-translate-y-1 hover:scale-110"
                       >
                         <img
-                          className="inline-block h-12 w-12 rounded-full ring-2 ring-white hover:ring-rose-500 dark:ring-zinc-950"
+                          className="inline-block h-12 w-12 rounded-full ring-2 ring-white transition-all duration-300 hover:ring-4 hover:ring-rose-500 dark:ring-zinc-950"
                           src={user.avatar_url}
                           alt={user.login}
                         />
-                      </a>
+                      </ScrollReveal>
                     ))}
               </div>
               {contributors?.length > 8 && (
@@ -710,7 +647,7 @@ export default function IndexPage() {
               </a>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   )
