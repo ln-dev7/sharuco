@@ -1,8 +1,9 @@
 "use client"
 
 import { Paintbrush, Check, Search } from "lucide-react"
-import { useTheme } from "next-themes"
 import { useState } from "react"
+
+import { useTheme } from "@/components/theme-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {

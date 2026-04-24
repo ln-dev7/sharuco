@@ -43,7 +43,7 @@ import {
   Sparkles,
   Users,
 } from "lucide-react"
-import { useTheme } from "next-themes"
+import { useTheme } from "@/components/theme-provider"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"

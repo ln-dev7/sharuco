@@ -2,10 +2,10 @@
 
 import { useState } from "react"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { ThemeProvider } from "next-themes"
 
 import { AuthContextProvider } from "@/context/AuthContext"
 import { ColorThemeProvider } from "@/components/color-theme-provider"
+import { ThemeProvider } from "@/components/theme-provider"
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -20,7 +20,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider>
           <ColorThemeProvider>{children}</ColorThemeProvider>
         </ThemeProvider>
       </AuthContextProvider>

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { Providers } from "@/components/providers"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
+import { ThemeScript } from "@/components/theme-script"
 import { Toaster } from "@/components/ui/toaster"
 
 import "./globals.css"
@@ -65,6 +66,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
