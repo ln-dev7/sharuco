@@ -26,11 +26,12 @@ export const getDocument = async <T = DocumentData>(
 }
 
 export const useDocument = <T = DocumentData>(
-  documentId: string,
+  documentId: string | null | undefined,
   collectionName: string
 ): UseQueryResult<DocumentResult<T>> => {
   return useQuery<DocumentResult<T>>(
     [`document-${collectionName}`, documentId],
-    () => getDocument<T>(documentId, collectionName)
+    () => getDocument<T>(documentId as string, collectionName),
+    { enabled: Boolean(documentId) }
   )
 }

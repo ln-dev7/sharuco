@@ -1,9 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
@@ -35,7 +34,6 @@ import { useToast } from "@/components/ui/use-toast"
 
 export default function Links() {
   const { user, userPseudo } = useAuthContext()
-  const { login, isPending } = useGitHubLogin()
   const { toast } = useToast()
 
   const notifyCodeAdded = () =>
@@ -44,11 +42,7 @@ export default function Links() {
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
 
-  const {
-    data: dataUser,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
-  } = useDocument(userPseudo, "users")
+  const { data: dataUser } = useDocument(userPseudo, "users")
 
   const [openChangeVisibilityDialog, setOpenChangeVisibilityDialog] =
     useState(false)
@@ -56,7 +50,7 @@ export default function Links() {
   const { updateUserDocument }: any = useUpdateUserDocument("users")
 
   const changeVisibiltyForLinkPage = async (pseudo: string) => {
-    let updatedUserData = {
+    const updatedUserData = {
       publicLinkPage: !dataUser.data.publicLinkPage,
     }
     updateUserDocument({ pseudo, updatedUserData })
@@ -99,8 +93,7 @@ export default function Links() {
   })
 
   const [openCreateLinkDialog, setOpenCreateLinkDialog] = useState(false)
-  const { createDocument, isLoading, isError, isSuccess }: any =
-    useCreateDocument("links")
+  const { createDocument, isLoading, isError }: any = useCreateDocument("links")
 
   const onSubmit = async (data) => {
     const { link, description, tags } = data
@@ -111,7 +104,7 @@ export default function Links() {
       tabTabs.pop()
     }
 
-    let newDocument = {
+    const newDocument = {
       link: link,
       description: description,
       tags: tabTabs,
@@ -119,7 +112,12 @@ export default function Links() {
       idAuthor: userPseudo,
     }
 
-    createDocument(newDocument)
+    createDocument(newDocument, {
+      onSuccess: () => {
+        notifyCodeAdded()
+        setOpenCreateLinkDialog(false)
+      },
+    })
 
     reset({
       link: "",
@@ -127,13 +125,6 @@ export default function Links() {
       tags: "",
     })
   }
-
-  useEffect(() => {
-    if (isSuccess) {
-      notifyCodeAdded()
-      setOpenCreateLinkDialog(!isSuccess)
-    }
-  }, [isSuccess])
 
   return (
     <>

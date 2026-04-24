@@ -6,18 +6,15 @@ import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 
 import { Separator } from "@/components/ui/separator"
 import "highlight.js/styles/vs.css"
-import { useEffect, useRef, useState } from "react"
 import { useQuery } from "react-query"
 
 import "highlight.js/styles/vs.css"
 import Image from "next/image"
 import Link from "next/link"
-import * as htmlToImage from "html-to-image"
 import {
   ArrowRight,
   ArrowUpRight,
   Bookmark,
-  Check,
   Code2,
   Compass,
   Download,
@@ -39,17 +36,9 @@ import { useTheme } from "@/components/theme-provider"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+
 import { buttonVariants } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Textarea } from "@/components/ui/textarea"
 import { CountUp } from "@/components/home/count-up"
 import { ScrollReveal } from "@/components/home/scroll-reveal"
 import { SpotlightCard } from "@/components/home/spotlight-card"
@@ -59,22 +48,15 @@ export default function IndexPage() {
   const { login, isPending } = useGitHubLogin()
   const { resolvedTheme } = useTheme()
 
-  const { user, userPseudo } = useAuthContext()
-
-  const [userCountry, setUserCountry] = useState("")
-  useEffect(() => {
-    setUserCountry(window.navigator.language.split("-")[1])
-  }, [])
+  const { user } = useAuthContext()
 
   // Contributors
-  const {
-    data: contributors,
-    isLoading: isLoadingContributors,
-    isError: isErrorContributors,
-  } = useQuery("contributors", () =>
-    fetch("https://api.github.com/repos/ln-dev7/sharuco/contributors").then(
-      (response) => response.json()
-    )
+  const { data: contributors, isLoading: isLoadingContributors } = useQuery(
+    "contributors",
+    () =>
+      fetch("https://api.github.com/repos/ln-dev7/sharuco/contributors").then(
+        (response) => response.json()
+      )
   )
 
   return (
@@ -164,18 +146,6 @@ export default function IndexPage() {
             </button>
           )}
         </div>
-        {!user && userCountry == "CM" && (
-          <div
-            className="mb-4 rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-gray-800 dark:text-red-400"
-            role="alert"
-          >
-            <span className="font-semibold">Warning alert !</span> We have
-            noticed that you are in{" "}
-            <span className="font-semibold">Cameroon</span> , if you are using
-            an <span className="font-semibold">Orange connection</span> you need
-            to use a VPN and change your location in order to connect.
-          </div>
-        )}
         <p className="text-sm text-zinc-700 dark:text-zinc-400">
           Follow us on{" "}
           <Link

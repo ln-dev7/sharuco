@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore"
 import { Loader, Terminal } from "lucide-react"
 
-import firebase_app, { isFirebaseConfigured } from "@/firebase/config"
+import firebase_app from "@/firebase/config"
 
 const db = firebase_app ? getFirestore(firebase_app) : null
 const auth = firebase_app ? getAuth(firebase_app) : null
@@ -40,13 +40,10 @@ export function AuthContextProvider({
 }) {
   const [user, setUser] = useState<FirebaseUserWithScreenName | null>(null)
   const [userPseudo, setUserPseudo] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState<boolean>(() => Boolean(auth && db))
 
   useEffect(() => {
-    if (!auth || !db) {
-      setLoading(false)
-      return
-    }
+    if (!auth || !db) return
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
         const u = firebaseUser as FirebaseUserWithScreenName

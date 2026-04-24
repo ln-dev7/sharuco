@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
@@ -20,24 +20,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/components/ui/use-toast"
 
 export default function FormViewPage() {
   const params = useParams()
-  const { user, userPseudo } = useAuthContext()
-  const router = useRouter() || ""
-
-  const { toast } = useToast()
-
-  type QuestionType =
-    | "text"
-    | "email"
-    | "link"
-    | "longtext"
-    | "date"
-    | "uniquechoice"
-    | "listchoice"
-    | "multiplechoice"
+  const { userPseudo } = useAuthContext()
 
   const {
     data: dataForm,
@@ -49,17 +35,17 @@ export default function FormViewPage() {
     isLoading: boolean
     isError: boolean
     error: any
-  } = useDocument(params["form"], "forms")
-
-  //
-  const [randomNumbers, setRandomNumbers] = useState(generateRandomNumbers())
+  } = useDocument(params["form"] as string, "forms")
 
   function generateRandomNumbers() {
     const number1 = Math.floor(Math.random() * 51)
     const number2 = Math.floor(Math.random() * 51)
     return { number1, number2 }
   }
-  //
+
+  const [randomNumbers, setRandomNumbers] = useState(() =>
+    generateRandomNumbers()
+  )
 
   const schema = yup.object().shape({
     responses: yup.array().of(
@@ -68,8 +54,6 @@ export default function FormViewPage() {
       })
     ),
     answer: yup.number().integer(),
-    // paymentStatut: yup.string(),
-    // emailPayment: yup.string(),
   })
 
   const ALGOLIA_INDEX_NAME = "forms"
@@ -83,9 +67,6 @@ export default function FormViewPage() {
   const {
     register,
     handleSubmit,
-    control,
-    setValue,
-    watch,
     reset,
     formState: { errors },
   } = useForm({
@@ -95,14 +76,11 @@ export default function FormViewPage() {
   const {
     updateFormDocument,
     isLoading: isLoadingUpdateForm,
-    isError: isErrorUpdateForm,
     isSuccess: isSuccessUpdateForm,
     reset: resetUpdateForm,
   }: any = useUpdateFormDocument("forms")
 
   const onSubmit = async (data) => {
-    // setPaymentDone(false)
-
     // Vérifie si la réponse de l'utilisateur est la somme des nombres aléatoires
     const userAnswer = parseInt(data.answer, 10)
     const correctAnswer = randomNumbers.number1 + randomNumbers.number2
@@ -112,18 +90,14 @@ export default function FormViewPage() {
       return
     }
 
-    let updatedFormData: {
+    const updatedFormData: {
       responses: any[]
-      // paymentStatut?: string
-      // emailPayment?: string
     } = {
       responses: [
         ...dataForm?.data?.responses,
         {
           idResponse: moment().valueOf() + uid(),
           createdAt: moment().valueOf(),
-          // paymentStatut: data.paymentStatut ? data.paymentStatut : "",
-          // emailPayment: data.emailPayment ? data.emailPayment : "",
           responses: [
             ...data.responses.map((response: any, index: number) => {
               return {
@@ -136,7 +110,6 @@ export default function FormViewPage() {
         },
       ],
     }
-    // console.log("updatedFormData", updatedFormData)
 
     const id = params["form"]
 
@@ -161,9 +134,11 @@ export default function FormViewPage() {
     setRandomNumbers(generateRandomNumbers())
   }
 
-  if (dataForm?.data?.redirectOnCompletion && isSuccessUpdateForm) {
-    window.location.href = dataForm.data.redirectOnCompletion
-  }
+  useEffect(() => {
+    if (dataForm?.data?.redirectOnCompletion && isSuccessUpdateForm) {
+      window.location.href = dataForm.data.redirectOnCompletion
+    }
+  }, [dataForm?.data?.redirectOnCompletion, isSuccessUpdateForm])
 
   return (
     <>
@@ -203,70 +178,6 @@ export default function FormViewPage() {
                 </div>
                 <Separator className="mx-auto my-8 sm:w-2/3" />
                 <div className="mx-auto w-full space-y-6 lg:w-2/3">
-                  {/* {dataForm?.data?.acceptPayment && !paymentDone && (
-                    <div className="flex flex-col items-start gap-4 rounded-xl border border-[#11B981] bg-emerald-50/50 px-4 py-6 dark:bg-emerald-500/5 sm:flex-row">
-                      <a href="https://notchpay.co/" className="w-12 shrink-0">
-                        <img
-                          src="/partner/notchpay-favicon.svg"
-                          alt="notchpay"
-                        />
-                      </a>
-                      <div className="flex w-full flex-col items-start gap-2">
-                        <p>
-                          This form accepts a payment at the rate of{" "}
-                          <span className="font-bold">
-                            {dataForm?.data?.amountNotchPay} Euro
-                          </span>{" "}
-                          , If you make it this will be notified to the
-                          administrator of this form.
-                        </p>
-                        <div className="flex w-full flex-col items-start gap-2 sm:flex-row">
-                          <div className="flex w-full flex-col items-start gap-2">
-                            <Input
-                              className="w-full"
-                              placeholder="Enter your email"
-                              {...registerPayment("email")}
-                            />
-                            <p className="text-sm text-red-500">
-                              {errorsPayment.email && (
-                                <>{errorsPayment.email.message}</>
-                              )}
-                            </p>
-                          </div>
-                          <Button
-                            className="w-full shrink-0 sm:w-fit"
-                            disabled={isLoadingPayment}
-                            onClick={
-                              !isLoadingPayment
-                                ? handleSubmitPayment(onSubmitPayment)
-                                : undefined
-                            }
-                          >
-                            {isLoadingPayment && (
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            )}
-                            Pay {dataForm?.data?.amountNotchPay} EURO
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  )} */}
-                  {/* {paymentDone ? (
-                    <div className="flex flex-col items-start gap-4 rounded-xl border border-[#11B981] bg-emerald-50/50 px-4 py-6 dark:bg-emerald-500/5 sm:flex-row">
-                      <a href="https://notchpay.co/" className="w-12 shrink-0">
-                        <img
-                          src="/partner/notchpay-favicon.svg"
-                          alt="notchpay"
-                        />
-                      </a>
-                      <div className="flex w-full flex-col items-start gap-2 font-bold">
-                        <p>Your payment has been made successfully !</p>
-                        <p>
-                          Fill out this form now without reloading the page !
-                        </p>
-                      </div>
-                    </div>
-                  ) : null} */}
                   {dataForm?.data?.questions.map((question, index) => {
                     return (
                       <div
@@ -299,7 +210,6 @@ export default function FormViewPage() {
                             {...register(`responses.${index}.text` as const)}
                             placeholder={question.text}
                             value={question.type}
-                            // defaultValue={question.type}
                             className="hidden"
                           />
                         )}

@@ -1,10 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { colors, getRandomColor } from "@/constants/colors"
 import { useAuthContext } from "@/context/AuthContext"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
-import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Loader2, Plus } from "lucide-react"
 import moment from "moment"
@@ -42,8 +41,6 @@ export default function Forms() {
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
 
-  const { updateUserDocument }: any = useUpdateUserDocument("users")
-
   const schema = yup.object().shape({
     name: yup.string().required(),
     description: yup.string().required(),
@@ -59,13 +56,12 @@ export default function Forms() {
   })
 
   const [openCreateFormDialog, setOpenCreateFormDialog] = useState(false)
-  const { createDocument, isLoading, isError, isSuccess }: any =
-    useCreateDocument("forms")
+  const { createDocument, isLoading, isError }: any = useCreateDocument("forms")
 
   const onSubmit = async (data) => {
     const { name, description } = data
 
-    let newDocument = {
+    const newDocument = {
       name: name,
       description: description,
       createdAt: moment().valueOf(),
@@ -77,20 +73,18 @@ export default function Forms() {
       collaborators: [],
     }
 
-    createDocument(newDocument)
+    createDocument(newDocument, {
+      onSuccess: () => {
+        notifyFormCreated()
+        setOpenCreateFormDialog(false)
+      },
+    })
 
     reset({
       name: "",
       description: "",
     })
   }
-
-  useEffect(() => {
-    if (isSuccess) {
-      notifyFormCreated()
-      setOpenCreateFormDialog(!isSuccess)
-    }
-  }, [isSuccess])
 
   return (
     <>

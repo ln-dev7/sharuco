@@ -34,12 +34,13 @@ const getDocumentFromUser = async <T = DocumentData>(
 }
 
 const useGetDocumentFromUser = <T = DocumentData>(
-  userId: string,
+  userId: string | null | undefined,
   document: string
 ): UseQueryResult<DocumentWithId<T>[]> => {
   return useQuery<DocumentWithId<T>[]>(
-    [`${document}-from-user`, document],
-    () => getDocumentFromUser<T>(userId, document)
+    [`${document}-from-user`, document, userId],
+    () => getDocumentFromUser<T>(userId as string, document),
+    { enabled: Boolean(userId) }
   )
 }
 

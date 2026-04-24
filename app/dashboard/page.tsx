@@ -9,7 +9,6 @@ import {
   languagesName,
 } from "@/constants/languages"
 import { useAuthContext } from "@/context/AuthContext"
-import { useGitHubLogout } from "@/firebase/auth/githubLogout"
 import { useCreateDocument } from "@/firebase/firestore/createDocument"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser"
@@ -90,7 +89,6 @@ export default function Dashboard() {
 
   const { toast } = useToast()
 
-  const { logout } = useGitHubLogout()
   const notifyCodeAdded = () =>
     toast({
       title: "Your code has been added successfully !",
@@ -98,18 +96,7 @@ export default function Dashboard() {
       action: <ToastAction altText="Okay">Okay</ToastAction>,
     })
 
-  const notifyUserTokenCopied = () =>
-    toast({
-      title: "Your user token has been copied to your clipboard !",
-      description: "You can find it in your profile section.",
-      action: <ToastAction altText="Okay">Okay</ToastAction>,
-    })
-
-  const {
-    data: dataUser,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
-  } = useDocument(userPseudo, "users")
+  const { data: dataUser } = useDocument(userPseudo, "users")
 
   const {
     isLoading: isLoadingPrivateCodes,
@@ -123,11 +110,10 @@ export default function Dashboard() {
     data: dataPublicCodes,
   } = useGetIsPrivateCodeFromUser(false, userPseudo)
 
-  const {
-    isLoading: isLoadingCodes,
-    isError: isErrorCodes,
-    data: dataCodes,
-  } = useGetDocumentFromUser(userPseudo, "codes")
+  const { isLoading: isLoadingCodes, data: dataCodes } = useGetDocumentFromUser(
+    userPseudo,
+    "codes"
+  )
 
   const {
     isLoading: isLoadingFavoriteCodes,
@@ -186,8 +172,7 @@ export default function Dashboard() {
   }
 
   const [openDialog, setOpenDialog] = useState(false)
-  const { createDocument, isLoading, isError, isSuccess }: any =
-    useCreateDocument("codes")
+  const { createDocument, isLoading, isError }: any = useCreateDocument("codes")
 
   const onSubmit = async (data) => {
     const { code, description, language, tags, isPrivate, isGithubGist } = data
@@ -201,7 +186,7 @@ export default function Dashboard() {
 
     const extension = getExtensionByName(language)
 
-    let newDocument = {
+    const newDocument = {
       code: linearCode,
       description: description,
       isPrivate: !!isPrivate,
@@ -272,8 +257,10 @@ export default function Dashboard() {
           githubGistInfos: { gistUrl, id },
         }
 
-        createDocument(newDocumentWithGist)
-      } catch (error) {
+        createDocument(newDocumentWithGist, {
+          onSuccess: onCreateSuccess,
+        })
+      } catch (_error) {
         setIsErrorAddOnGithubGist({
           isError: true,
           isUnauthorized: false,
@@ -282,7 +269,7 @@ export default function Dashboard() {
         setIsLoadingAddOnGithubGist(false)
       }
     } else {
-      createDocument(newDocument)
+      createDocument(newDocument, { onSuccess: onCreateSuccess })
     }
 
     reset({
@@ -297,12 +284,10 @@ export default function Dashboard() {
     setGistCheckboxOn(false)
   }
 
-  useEffect(() => {
-    if (isSuccess) {
-      notifyCodeAdded()
-      setOpenDialog(!isSuccess)
-    }
-  }, [isSuccess])
+  const onCreateSuccess = () => {
+    notifyCodeAdded()
+    setOpenDialog(false)
+  }
 
   return (
     <>
@@ -475,7 +460,10 @@ export default function Dashboard() {
                         The code is written in what language ?
                       </option>
                       {allLanguages.map((language) => (
-                        <option value={language.name.toLocaleLowerCase()}>
+                        <option
+                          key={language.name}
+                          value={language.name.toLocaleLowerCase()}
+                        >
                           {language.name}
                         </option>
                       ))}

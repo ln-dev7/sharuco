@@ -33,10 +33,12 @@ const getFavoriteCode = async <T = DocumentData>(
 }
 
 const useGetFavoriteCode = <T = DocumentData>(
-  userId: string
+  userId: string | null | undefined
 ): UseQueryResult<DocumentWithId<T>[]> => {
-  return useQuery<DocumentWithId<T>[]>(["favorites-codes", "codes"], () =>
-    getFavoriteCode<T>(userId)
+  return useQuery<DocumentWithId<T>[]>(
+    ["favorites-codes", "codes", userId],
+    () => getFavoriteCode<T>(userId as string),
+    { enabled: Boolean(userId) }
   )
 }
 

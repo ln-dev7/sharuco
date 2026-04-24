@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { addCodesOnAlgolia } from "@/algolia/addCodesOnAlgolia"
 import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGetCodesWithLanguage } from "@/firebase/firestore/getCodesWithLanguage"
@@ -18,17 +17,7 @@ import CardCode from "@/components/cards/card-code"
 import Error from "@/components/error"
 import LoaderCode from "@/components/loaders/loader-code"
 import LoaderCodes from "@/components/loaders/loader-codes"
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
+
 import {
   Select,
   SelectContent,
@@ -38,16 +27,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Explore() {
-  const { user, userPseudo } = useAuthContext()
+  const { userPseudo } = useAuthContext()
 
-  const {
-    data: dataUser,
-    isLoading: isLoadingUser,
-    isError: isErrorUser,
-  } = useDocument(userPseudo, "users")
+  const { data: dataUser } = useDocument(userPseudo, "users")
 
   const [currentData, setCurrentData] = useState(null)
   const [lastDocc, setLastDocc] = useState(null)
@@ -60,10 +44,14 @@ export default function Explore() {
   } = useGetIsPrivateCodeWithPagination(false)
 
   useEffect(() => {
-    if (data) {
-      setCurrentData(data.collections)
-      setLastDocc(data.lastDoc)
-    }
+    if (!data) return
+    // Mirrors the initial query page into local pagination state; further
+    // pages are appended by fetchMorePublicCodes, and filter callbacks
+    // override currentData independently.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCurrentData(data.collections)
+
+    setLastDocc(data.lastDoc)
   }, [data])
 
   const fetchMorePublicCodes = async () => {
@@ -198,7 +186,6 @@ export default function Explore() {
           </div>
         </div>
         <div className="">
-          {/* {isLoadingPublicCodes && <Loader />} */}
           {currentData && !isLoadingWithTag && !isLoadingWithLanguage ? (
             <InfiniteScroll
               dataLength={currentData.length}

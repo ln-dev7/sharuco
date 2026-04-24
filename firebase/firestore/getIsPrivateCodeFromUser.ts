@@ -36,11 +36,12 @@ const getIsPrivateCodeFromUser = async <T = DocumentData>(
 
 const useGetIsPrivateCodeFromUser = <T = DocumentData>(
   isPrivate: boolean,
-  userId: string
+  userId: string | null | undefined
 ): UseQueryResult<DocumentWithId<T>[]> => {
   return useQuery<DocumentWithId<T>[]>(
-    [`isprivate-code-from-user-${isPrivate}`, "codes"],
-    () => getIsPrivateCodeFromUser<T>(isPrivate, userId)
+    [`isprivate-code-from-user-${isPrivate}`, "codes", userId],
+    () => getIsPrivateCodeFromUser<T>(isPrivate, userId as string),
+    { enabled: Boolean(userId) }
   )
 }
 

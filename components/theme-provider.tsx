@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useSyncExternalStore,
 } from "react"
 
 export type Theme = "light" | "dark" | "system"
@@ -20,12 +21,6 @@ interface ThemeContextValue {
 const STORAGE_KEY = "theme"
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
-function getSystem(): ResolvedTheme {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light"
-}
-
 function readStoredTheme(): Theme {
   if (typeof window === "undefined") return "system"
   try {
@@ -36,46 +31,47 @@ function readStoredTheme(): Theme {
   }
 }
 
+function subscribeSystemTheme(onChange: () => void): () => void {
+  const mq = window.matchMedia("(prefers-color-scheme: dark)")
+  mq.addEventListener("change", onChange)
+  return () => mq.removeEventListener("change", onChange)
+}
+
+function getSystemSnapshot(): ResolvedTheme {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light"
+}
+
+function getSystemServerSnapshot(): ResolvedTheme {
+  return "light"
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => readStoredTheme())
-  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() => {
-    if (typeof window === "undefined") return "light"
-    const stored = readStoredTheme()
-    return stored === "system" ? getSystem() : stored
-  })
-
-  const applyTheme = useCallback((next: ResolvedTheme) => {
-    const root = document.documentElement
-    root.classList.remove("light", "dark")
-    root.classList.add(next)
-    root.style.colorScheme = next
-    setResolvedTheme(next)
-  }, [])
-
-  const setTheme = useCallback(
-    (next: Theme) => {
-      setThemeState(next)
-      try {
-        localStorage.setItem(STORAGE_KEY, next)
-      } catch {
-        // storage might be unavailable
-      }
-      applyTheme(next === "system" ? getSystem() : next)
-    },
-    [applyTheme]
+  const systemTheme = useSyncExternalStore(
+    subscribeSystemTheme,
+    getSystemSnapshot,
+    getSystemServerSnapshot
   )
 
+  const resolvedTheme: ResolvedTheme = theme === "system" ? systemTheme : theme
+
   useEffect(() => {
-    if (theme !== "system") {
-      applyTheme(theme)
-      return
+    const root = document.documentElement
+    root.classList.remove("light", "dark")
+    root.classList.add(resolvedTheme)
+    root.style.colorScheme = resolvedTheme
+  }, [resolvedTheme])
+
+  const setTheme = useCallback((next: Theme) => {
+    setThemeState(next)
+    try {
+      localStorage.setItem(STORAGE_KEY, next)
+    } catch {
+      // storage might be unavailable
     }
-    const mq = window.matchMedia("(prefers-color-scheme: dark)")
-    const handle = () => applyTheme(mq.matches ? "dark" : "light")
-    handle()
-    mq.addEventListener("change", handle)
-    return () => mq.removeEventListener("change", handle)
-  }, [theme, applyTheme])
+  }, [])
 
   useEffect(() => {
     const onStorage = (event: StorageEvent) => {
@@ -97,8 +93,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme(): ThemeContextValue {
   const ctx = useContext(ThemeContext)
   if (ctx) return ctx
-  // Allow useTheme to be called outside the provider without crashing; useful
-  // while the app is still transitioning or in storybook-like contexts.
   return {
     theme: "system",
     setTheme: () => {},
