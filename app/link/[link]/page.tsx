@@ -9,7 +9,7 @@ import { useGetDocumentFromUser } from "@/firebase/firestore/getDocumentFromUser
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
-import formatDateTime from "@/utils/formatDateTime.js"
+import formatDateTime from "@/utils/formatDateTime"
 import {
   Eye,
   FileCog,

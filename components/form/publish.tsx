@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import copyToClipboard from "@/utils/copyToClipboard.js"
+import copyToClipboard from "@/utils/copyToClipboard"
 import algoliasearch from "algoliasearch"
 import { Check, Eye, Loader2, X } from "lucide-react"
 
@@ -86,7 +86,7 @@ export default function PublishForms({ dataForm }: { dataForm: any }) {
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
                 <p
-                  className="mb-4 mt-2 cursor-pointer text-sm font-semibold uppercase text-muted-foreground underline underline-offset-4"
+                  className="mt-2 mb-4 cursor-pointer text-sm font-semibold text-muted-foreground uppercase underline underline-offset-4"
                   onClick={() => changeStatutOfForm()}
                 >
                   {!dataForm?.published ? "Publish" : "Unpublish"} your form

@@ -1,9 +1,9 @@
 "use client"
 
-import { NBR_OF_POPULAR_CODES } from "@/constants/nbr-codes.js"
+import { NBR_OF_POPULAR_CODES } from "@/constants/nbr-codes"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
-import { useGetPopularCodes } from "@/firebase/firestore/getPopularCodes.js"
+import { useGetPopularCodes } from "@/firebase/firestore/getPopularCodes"
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
 
 import CardCode from "@/components/cards/card-code"

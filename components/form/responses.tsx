@@ -3,8 +3,8 @@
 import { useParams, useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import copyToClipboard from "@/utils/copyToClipboard.js"
-import formatDateTime from "@/utils/formatDateTime.js"
+import copyToClipboard from "@/utils/copyToClipboard"
+import formatDateTime from "@/utils/formatDateTime"
 import algoliasearch from "algoliasearch"
 import jsPDF from "jspdf"
 import { Loader2, MessageSquare, Timer, Trash } from "lucide-react"
@@ -164,7 +164,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                 <Accordion
                   type="single"
                   collapsible
-                  className="w-full border-b  border-dashed border-zinc-300 dark:border-zinc-700"
+                  className="w-full border-b border-dashed border-zinc-300 dark:border-zinc-700"
                 >
                   <AccordionItem value="response" className="border-none">
                     <AccordionTrigger>
@@ -198,7 +198,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                           </p>
                         </div>
                       ) : null}
-                      <div className="flex w-full flex-col items-start gap-2 ">
+                      <div className="flex w-full flex-col items-start gap-2">
                         {response.responses.map((answer, answerIndex) => (
                           <>
                             {answer.type === "heading" ? (

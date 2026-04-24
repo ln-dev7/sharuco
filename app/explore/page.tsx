@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { addCodesOnAlgolia } from "@/algolia/addCodesOnAlgolia"
-import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes.js"
+import { NBR_OF_CODES_PER_PAGE } from "@/constants/nbr-codes"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGetCodesWithLanguage } from "@/firebase/firestore/getCodesWithLanguage"
 import { useGetCodesWithTag } from "@/firebase/firestore/getCodesWithTag"

@@ -8,7 +8,7 @@ import { useDocument } from "@/firebase/firestore/getDocument"
 import { useGetFavoriteCode } from "@/firebase/firestore/getFavoriteCode"
 import { useGetIsPrivateCodeFromUser } from "@/firebase/firestore/getIsPrivateCodeFromUser"
 import { useUpdateUserDocument } from "@/firebase/firestore/updateUserDocument"
-import formatDateTime from "@/utils/formatDateTime.js"
+import formatDateTime from "@/utils/formatDateTime"
 import {
   Eye,
   Github,
