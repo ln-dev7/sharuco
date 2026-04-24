@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare": "husky"
   },
   "dependencies": {
     "@bradgarropy/next-google-analytics": "^1.0.2",
@@ -91,11 +92,16 @@
     "@types/react-responsive-masonry": "^2.6.0",
     "eslint": "^9.39.4",
     "eslint-config-next": "16.1.7",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.3.0",
     "postcss": "^8",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "sass": "^1.83.4",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3"
+  },
+  "lint-staged": {
+    "*.{css,json,ts,tsx,mdx}": "prettier --write"
   }
 }
