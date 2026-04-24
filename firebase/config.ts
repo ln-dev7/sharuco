@@ -11,12 +11,12 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 }
 
-const isConfigured = Boolean(firebaseConfig.apiKey)
+export const isFirebaseConfigured = Boolean(firebaseConfig.apiKey)
 
 let firebase_app: FirebaseApp | null = null
 let _auth: Auth | null = null
 
-if (isConfigured) {
+if (isFirebaseConfigured) {
   firebase_app =
     getApps().length === 0
       ? initializeApp(firebaseConfig as Required<typeof firebaseConfig>)
@@ -24,6 +24,5 @@ if (isConfigured) {
   _auth = getAuth(firebase_app)
 }
 
-export default firebase_app as FirebaseApp
-export const auth = _auth as Auth
-export { isConfigured as isFirebaseConfigured }
+export default firebase_app
+export const auth = _auth
