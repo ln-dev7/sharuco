@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useRouter } from "next/router"
+import { usePathname, useRouter } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { auth } from "@/firebase/config"
 import { useDocument } from "@/firebase/firestore/getDocument"
@@ -25,8 +25,9 @@ import { Separator } from "./ui/separator"
 
 export const useGitHubLogout = () => {
   const router = useRouter()
+  const pathname = usePathname()
   const logout = async () => {
-    if (router.pathname === "/dashboard") {
+    if (pathname === "/dashboard") {
       router.push("/")
     }
     try {
@@ -49,7 +50,7 @@ export function AvatarUser() {
       <SheetTrigger asChild>
         <div className="relative">
           {data && data.exists && data.data.premium && (
-            <div className="absolute -bottom-1 -right-1 z-10 flex items-center justify-center rounded-full border-2 border-yellow-500 bg-white dark:bg-zinc-800">
+            <div className="absolute -right-1 -bottom-1 z-10 flex items-center justify-center rounded-full border-2 border-yellow-500 bg-white dark:bg-zinc-800">
               <Verified className="h-5 w-5 shrink-0 p-1 text-yellow-500" />
             </div>
           )}
@@ -123,7 +124,7 @@ export function AvatarUser() {
         </div>
         {user && (
           <>
-            <Separator className="mb-4 mt-8" />
+            <Separator className="mt-8 mb-4" />
             <p className="mb-1 text-sm text-zinc-500 dark:text-zinc-400">
               Follow Sharuco on{" "}
             </p>
