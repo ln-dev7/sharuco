@@ -41,7 +41,7 @@ export function CodeEditor({
 
   return (
     <div
-      className="relative w-full leading-6"
+      className="relative w-full max-w-full overflow-hidden leading-6"
       style={{ color: fg, fontFamily: "inherit", fontSize: "inherit" }}
     >
       {showLineNumbers ? (
@@ -61,10 +61,15 @@ export function CodeEditor({
       <pre
         aria-hidden
         className={cn(
-          "pointer-events-none m-0 overflow-hidden break-words whitespace-pre-wrap",
+          "pointer-events-none m-0 w-full max-w-full overflow-hidden break-all whitespace-pre-wrap",
           showLineNumbers && "pl-10"
         )}
-        style={{ fontFamily: "inherit", fontSize: "inherit" }}
+        style={{
+          fontFamily: "inherit",
+          fontSize: "inherit",
+          wordBreak: "break-word",
+          overflowWrap: "anywhere",
+        }}
       >
         <code
           className="shiki-output"
@@ -84,13 +89,15 @@ export function CodeEditor({
         autoCapitalize="off"
         autoComplete="off"
         className={cn(
-          "absolute inset-0 h-full w-full resize-none overflow-hidden border-0 bg-transparent p-0 leading-6 break-words whitespace-pre-wrap text-transparent outline-none focus:outline-none",
+          "absolute inset-0 h-full w-full max-w-full resize-none overflow-hidden border-0 bg-transparent p-0 leading-6 break-all whitespace-pre-wrap text-transparent outline-none focus:outline-none",
           showLineNumbers && "pl-10"
         )}
         style={{
           caretColor: caretColor ?? fg ?? "#ffffff",
           fontFamily: "inherit",
           fontSize: "inherit",
+          wordBreak: "break-word",
+          overflowWrap: "anywhere",
         }}
       />
     </div>

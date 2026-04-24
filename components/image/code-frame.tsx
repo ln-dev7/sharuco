@@ -57,8 +57,11 @@ export const CodeFrame = forwardRef<HTMLDivElement, CodeFrameProps>(
     return (
       <div
         ref={ref}
-        className="relative flex w-full items-center justify-center"
-        style={{ background, padding: `${padding}px` }}
+        className="relative flex w-full max-w-full items-center justify-center overflow-hidden"
+        style={{
+          background,
+          padding: `min(${padding}px, 6vw)`,
+        }}
       >
         {backdropNoise ? (
           <div
@@ -74,7 +77,7 @@ export const CodeFrame = forwardRef<HTMLDivElement, CodeFrameProps>(
         ) : null}
 
         <div
-          className="relative w-full overflow-hidden shadow-2xl"
+          className="relative w-full max-w-full overflow-hidden shadow-2xl"
           style={{
             backgroundColor: surfaceBg,
             color: surfaceFg,

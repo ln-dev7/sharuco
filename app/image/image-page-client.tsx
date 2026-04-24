@@ -283,7 +283,7 @@ export function ImagePageClient() {
   ])
 
   return (
-    <section className="container-wrapper flex flex-col gap-4 py-6 md:py-8">
+    <section className="container-wrapper flex w-full max-w-full flex-col gap-4 overflow-x-hidden py-6 md:py-8">
       <header className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div className="flex flex-col gap-1.5">
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
@@ -520,7 +520,7 @@ export function ImagePageClient() {
           </div>
         </aside>
 
-        <div className="order-1 flex min-h-[420px] items-start justify-center rounded-xl border bg-muted/40 p-3 sm:p-12 lg:sticky lg:top-20 lg:order-2 lg:max-h-[calc(100vh-6rem)] lg:overflow-auto">
+        <div className="order-1 flex min-h-[420px] w-full min-w-0 items-start justify-center overflow-hidden rounded-xl border bg-muted/40 p-3 sm:p-12 lg:sticky lg:top-20 lg:order-2 lg:max-h-[calc(100vh-6rem)] lg:overflow-auto">
           <div className="w-full max-w-[900px] overflow-hidden rounded-2xl">
             <CodeFrame
               ref={frameRef}
