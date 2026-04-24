@@ -11,6 +11,7 @@ import { useUpdateCodeDocument } from "@/firebase/firestore/updateCodeDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
 import embedProject from "@/utils/embedStackblitzProject"
 import highlight from "@/utils/highlight"
+import indentCode from "@/utils/indentCode"
 import * as htmlToImage from "html-to-image"
 import {
   Copy,
@@ -268,7 +269,7 @@ export default function CardCode({
             </span>
             <Link
               href={buildImageUrl({
-                code,
+                code: indentCode(code),
                 language,
                 title: `${id}.${language?.toLowerCase() ?? "txt"}`,
                 authorHandle: idAuthor,

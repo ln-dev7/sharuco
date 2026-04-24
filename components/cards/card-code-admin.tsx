@@ -674,7 +674,7 @@ export default function CardCodeAdmin({
             </span>
             <Link
               href={buildImageUrl({
-                code,
+                code: indentCode(code),
                 language,
                 title: `${id}.${language?.toLowerCase() ?? "txt"}`,
                 authorHandle: idAuthor,

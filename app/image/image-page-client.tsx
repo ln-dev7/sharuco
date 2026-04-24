@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { allLanguages } from "@/constants/languages"
 import * as htmlToImage from "html-to-image"
-import { Check, Clipboard, Copy, Download, Hash, Loader2 } from "lucide-react"
+import { Hash } from "lucide-react"
 
 import { readImageParams } from "@/lib/image-link"
 import { cn } from "@/lib/utils"
@@ -15,6 +15,7 @@ import {
 } from "@/components/image/backgrounds"
 import { AboutDialog } from "@/components/image/about-dialog"
 import { CodeFrame } from "@/components/image/code-frame"
+import { ExportMenu } from "@/components/image/export-menu"
 import { CODE_FONTS, loadGoogleFont } from "@/components/image/fonts"
 import { ThemeSelect } from "@/components/image/theme-select"
 import { useShikiHtml } from "@/components/image/use-shiki"
@@ -27,7 +28,6 @@ import {
   WINDOW_CONTROL_OPTIONS,
   type WindowControlStyle,
 } from "@/components/image/window-controls"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -86,7 +86,6 @@ export function ImagePageClient() {
   const [fontSize, setFontSize] = useState(14)
   const [backdropNoise, setBackdropNoise] = useState(false)
   const [watermarkEnabled, setWatermarkEnabled] = useState(true)
-  const [watermarkText, setWatermarkText] = useState("sharuco.lndev.me")
   const [userName, setUserName] = useState("")
   const [userHandle, setUserHandle] = useState("")
   const [userSocial, setUserSocial] = useState<SocialId>("x")
@@ -131,7 +130,9 @@ export function ImagePageClient() {
     try {
       const dataUrl = await htmlToImage.toPng(frameRef.current, {
         cacheBust: true,
-        pixelRatio: 2,
+        pixelRatio: 3,
+        quality: 1,
+        skipFonts: false,
       })
       const link = document.createElement("a")
       link.download = `${title || "sharuco"}.png`
@@ -147,7 +148,9 @@ export function ImagePageClient() {
     try {
       const blob = await htmlToImage.toBlob(frameRef.current, {
         cacheBust: true,
-        pixelRatio: 2,
+        pixelRatio: 3,
+        quality: 1,
+        skipFonts: false,
       })
       if (!blob) return
       await navigator.clipboard.write([
@@ -277,56 +280,30 @@ export function ImagePageClient() {
   ])
 
   return (
-    <section className="container flex flex-col gap-6 py-8 md:py-12">
-      <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+    <section className="container flex flex-col gap-4 py-6 md:py-8">
+      <header className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-1.5">
+          <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
             Create beautiful images of your code
           </h1>
-          <p className="max-w-[720px] text-sm text-muted-foreground md:text-base">
+          <p className="max-w-[680px] text-xs text-muted-foreground md:text-sm">
             Pick a theme, tune the padding, and export a clean screenshot of
-            your snippet. Paste code with{" "}
-            <kbd className="rounded bg-muted px-1.5 py-0.5 text-[11px] font-medium">
-              ⌘V
-            </kbd>{" "}
-            /{" "}
-            <kbd className="rounded bg-muted px-1.5 py-0.5 text-[11px] font-medium">
-              Ctrl V
-            </kbd>
-            .
+            your snippet.
           </p>
         </div>
-        <AboutDialog />
+        <div className="flex items-center gap-2">
+          <AboutDialog />
+          <ExportMenu
+            onDownload={downloadImage}
+            onCopy={copyImage}
+            isExporting={isExporting}
+            copied={copied}
+          />
+        </div>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
-        <div className="flex min-h-[520px] items-center justify-center rounded-xl border bg-muted/40 p-4">
-          <div className="w-full max-w-[900px]">
-            <CodeFrame
-              ref={frameRef}
-              code={code}
-              onCodeChange={setCode}
-              title={title}
-              onTitleChange={setTitle}
-              background={selectedBg.style}
-              padding={padding}
-              showLineNumbers={showLineNumbers}
-              showTitleBar={showTitleBar}
-              windowControl={windowControl}
-              windowRadius={windowRadius}
-              fontFamily={selectedFont.family}
-              fontSize={fontSize}
-              backdropNoise={backdropNoise}
-              surfaceBg={shiki.bg}
-              surfaceFg={shiki.fg}
-              codeHtml={shiki.html}
-              user={userInfo}
-              watermark={watermarkEnabled ? watermarkText : ""}
-            />
-          </div>
-        </div>
-
-        <aside className="flex flex-col gap-6 rounded-xl border p-5">
+      <div className="grid gap-4 lg:grid-cols-[320px_1fr] lg:items-start">
+        <aside className="order-2 flex flex-col gap-5 rounded-xl border bg-card p-4 lg:sticky lg:top-20 lg:order-1 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
           <div className="flex flex-col gap-2">
             <Label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
               Language
@@ -542,60 +519,43 @@ export function ImagePageClient() {
             />
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-border/50 pt-4">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="watermark" className="text-sm font-medium">
-                Watermark
-              </Label>
-              <Switch
-                id="watermark"
-                checked={watermarkEnabled}
-                onCheckedChange={setWatermarkEnabled}
-              />
-            </div>
-            {watermarkEnabled ? (
-              <Input
-                value={watermarkText}
-                onChange={(e) => setWatermarkText(e.target.value)}
-                placeholder="sharuco.lndev.me"
-              />
-            ) : null}
-          </div>
-
-          <div className="mt-auto flex flex-col gap-2">
-            <Button
-              onClick={pasteFromClipboard}
-              variant="outline"
-              className="w-full"
-            >
-              <Clipboard className="mr-2 h-4 w-4" />
-              Paste from clipboard
-            </Button>
-            <Button onClick={copyImage} variant="outline" className="w-full">
-              {copied ? (
-                <>
-                  <Check className="mr-2 h-4 w-4" /> Copied!
-                </>
-              ) : (
-                <>
-                  <Copy className="mr-2 h-4 w-4" /> Copy image
-                </>
-              )}
-            </Button>
-            <Button
-              onClick={downloadImage}
-              disabled={isExporting}
-              className="w-full"
-            >
-              {isExporting ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <Download className="mr-2 h-4 w-4" />
-              )}
-              Download PNG
-            </Button>
+          <div className="flex items-center justify-between border-t border-border/50 pt-4">
+            <Label htmlFor="watermark" className="text-sm font-medium">
+              Show watermark
+            </Label>
+            <Switch
+              id="watermark"
+              checked={watermarkEnabled}
+              onCheckedChange={setWatermarkEnabled}
+            />
           </div>
         </aside>
+
+        <div className="order-1 flex min-h-[420px] items-start justify-center rounded-xl border bg-muted/40 p-3 sm:p-4 lg:sticky lg:top-20 lg:order-2 lg:max-h-[calc(100vh-6rem)] lg:items-center lg:overflow-auto">
+          <div className="w-full max-w-[900px]">
+            <CodeFrame
+              ref={frameRef}
+              code={code}
+              onCodeChange={setCode}
+              title={title}
+              onTitleChange={setTitle}
+              background={selectedBg.style}
+              padding={padding}
+              showLineNumbers={showLineNumbers}
+              showTitleBar={showTitleBar}
+              windowControl={windowControl}
+              windowRadius={windowRadius}
+              fontFamily={selectedFont.family}
+              fontSize={fontSize}
+              backdropNoise={backdropNoise}
+              surfaceBg={shiki.bg}
+              surfaceFg={shiki.fg}
+              codeHtml={shiki.html}
+              user={userInfo}
+              watermark={watermarkEnabled ? "sharuco.lndev.me" : ""}
+            />
+          </div>
+        </div>
       </div>
     </section>
   )

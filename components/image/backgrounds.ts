@@ -1,4 +1,4 @@
-export type BackgroundKind = "theme" | "partner"
+export type BackgroundKind = "theme" | "partner" | "backdrop"
 
 export interface ImageBackground {
   id: string
@@ -329,10 +329,232 @@ const THEMES: ImageBackground[] = [
   },
 ]
 
-export const IMAGE_BACKGROUNDS: ImageBackground[] = [...THEMES, ...PARTNERS]
+const mkDark = (
+  id: string,
+  name: string,
+  style: string,
+  overrides: Partial<Pick<ImageBackground, "shikiDark" | "shikiLight">> = {}
+): ImageBackground => ({
+  id,
+  name,
+  kind: "backdrop",
+  style,
+  shikiDark: overrides.shikiDark ?? "tokyo-night",
+  shikiLight: overrides.shikiLight ?? "light-plus",
+})
+
+const mkLight = (id: string, name: string, style: string): ImageBackground => ({
+  id,
+  name,
+  kind: "backdrop",
+  style,
+  shikiDark: "github-light-default",
+  shikiLight: "github-light-default",
+})
+
+const BACKDROPS: ImageBackground[] = [
+  mkDark(
+    "mono1",
+    "Monochrome 1",
+    "conic-gradient(from 230.29deg at 51.63% 52.16%, rgb(0,0,0) 0deg, rgb(41,41,41) 67.5deg, rgb(5,5,5) 198.75deg, rgb(102,102,102) 251.25deg, rgb(33,33,33) 301.88deg, rgb(23,23,23) 360deg)",
+    { shikiDark: "github-dark-dimmed" }
+  ),
+  mkDark(
+    "mono2",
+    "Monochrome 2",
+    "linear-gradient(140deg, rgb(46,46,46), rgb(18,18,18), rgb(5,5,5))",
+    { shikiDark: "github-dark-dimmed" }
+  ),
+  mkDark(
+    "nord",
+    "Nord",
+    "linear-gradient(140deg, rgb(77,87,106), rgb(68,77,95), rgb(60,67,83), rgb(47,53,65))",
+    { shikiDark: "nord" }
+  ),
+  mkDark(
+    "turb1",
+    "Turbulent 1",
+    "linear-gradient(yellow 5%, fuchsia, royalblue 95%)",
+    { shikiDark: "dracula" }
+  ),
+  mkLight(
+    "turb2",
+    "Turbulent 2",
+    "linear-gradient(rgb(255,255,255) 5%, rgb(128,128,128) 50%, rgb(51,51,51) 95%)"
+  ),
+  mkDark(
+    "turb3",
+    "Turbulent 3",
+    "linear-gradient(rgb(0,44,102) 5%, rgb(0,109,255) 50%, rgb(153,197,255) 95%)"
+  ),
+  mkDark(
+    "turb4",
+    "Turbulent 4",
+    "linear-gradient(rgb(0,14,102) 5%, rgb(0,35,255) 50%, rgb(153,167,255) 95%)"
+  ),
+  mkDark(
+    "turb5",
+    "Turbulent 5",
+    "linear-gradient(rgb(0,51,102) 5%, rgb(0,126,255) 50%, rgb(199,227,255) 95%)"
+  ),
+  mkDark(
+    "turb6",
+    "Turbulent 6",
+    "linear-gradient(rgb(41,0,102) 5%, rgb(104,0,255) 50%, rgb(194,153,255) 95%)"
+  ),
+  mkDark(
+    "r1",
+    "R1",
+    "conic-gradient(from 45deg, rgb(102,7,203), rgb(14,188,212), rgb(184,71,243), rgb(82,14,204), rgb(0,168,244), rgb(79,92,184))",
+    { shikiDark: "one-dark-pro" }
+  ),
+  mkDark(
+    "r2",
+    "R2",
+    "conic-gradient(from 90deg, rgb(140,195,228), rgb(37,12,163), rgb(5,197,235), rgb(5,209,192), rgb(4,146,35), rgb(30,239,110))",
+    { shikiDark: "poimandres" }
+  ),
+  mkDark(
+    "r3",
+    "R3",
+    "conic-gradient(from 45deg, rgb(106,102,190), rgb(114,79,247), rgb(36,165,81), rgb(17,152,178), rgb(34,135,249), rgb(199,188,236))"
+  ),
+  mkDark(
+    "r4",
+    "R4",
+    "conic-gradient(rgb(214,164,38), rgb(167,80,1), rgb(255,173,126), rgb(168,178,185), rgb(16,219,203), rgb(109,177,154))",
+    { shikiDark: "ayu-dark" }
+  ),
+  mkDark(
+    "r5",
+    "R5",
+    "conic-gradient(from 45deg, rgb(122,37,174), rgb(11,26,75), rgb(241,44,222), rgb(53,31,254), rgb(20,30,195))",
+    { shikiDark: "synthwave-84" }
+  ),
+  mkDark(
+    "r6",
+    "R6",
+    "conic-gradient(rgb(56,10,26), rgb(249,73,58), rgb(32,155,198), rgb(3,47,115), rgb(183,214,180), rgb(17,41,139))"
+  ),
+  mkDark(
+    "lakka",
+    "Lakka",
+    "conic-gradient(from 230.29deg at 51.63% 52.16%, rgb(51,58,255) 0deg, rgb(127,28,166) 67.5deg, rgb(64,85,191) 198.75deg, rgb(255,78,51) 251.25deg, rgb(207,122,250) 301.88deg, rgb(255,255,255) 360deg)"
+  ),
+  mkDark(
+    "chrome",
+    "Chrome",
+    "conic-gradient(from 230.29deg at 51.63% 52.16%, rgb(0,0,5) 0deg, rgb(40,9,52) 67.5deg, rgb(10,14,31) 198.75deg, rgb(255,78,51) 251.25deg, rgb(207,122,250) 301.88deg, rgb(46,0,46) 360deg)"
+  ),
+  mkDark(
+    "kozuchi",
+    "Kozuchi",
+    "conic-gradient(from 80deg at 47% 42%, rgb(44,41,61) 0deg, rgb(47,44,104) 60deg, rgb(41,54,122) 140deg, rgb(115,82,152) 200deg, rgb(102,45,159) 280deg, rgb(49,12,49) 360deg)"
+  ),
+  mkDark(
+    "linear-backdrop",
+    "Linear",
+    "conic-gradient(from 230.29deg at 51.63% 52.16%, rgb(36,0,255) 0deg, rgb(0,135,255) 67.5deg, rgb(255,29,122) 198.75deg, rgb(245,56,27) 251.25deg, rgb(255,83,53) 301.88deg, rgb(105,31,255) 360deg)"
+  ),
+  mkDark(
+    "linear2",
+    "Linear 2",
+    "conic-gradient(from 135deg, rgb(105,16,126), rgb(139,42,240), rgb(98,72,250), rgb(19,9,113), rgb(210,7,6), rgb(243,70,225))"
+  ),
+  mkDark(
+    "supa",
+    "Supa",
+    "conic-gradient(from 135deg, rgb(176,242,173), rgb(58,234,230), rgb(33,187,184), rgb(59,138,141), rgb(149,172,6), rgb(184,233,88))",
+    { shikiDark: "poimandres" }
+  ),
+  mkLight(
+    "lotion",
+    "Lotion",
+    "linear-gradient(rgb(250,250,250), rgb(250,250,250))"
+  ),
+  mkLight(
+    "liveblocks",
+    "Liveblocks",
+    "linear-gradient(125deg, rgb(253,226,237) 0%, rgb(247,229,246) 91%, rgb(244,231,250) 100%)"
+  ),
+  mkLight(
+    "jigglypuff",
+    "Jigglypuff",
+    "linear-gradient(140deg, rgb(245,214,245), rgb(235,173,235), rgb(224,133,224))"
+  ),
+  mkLight(
+    "sakura",
+    "Sakura",
+    "linear-gradient(140deg, rgb(250,209,230), rgb(245,163,204), rgb(240,117,179))"
+  ),
+  mkLight(
+    "lavender",
+    "Lavender",
+    "linear-gradient(140deg, rgb(217,204,255), rgb(179,153,255), rgb(140,102,255))"
+  ),
+  mkDark(
+    "gengar",
+    "Gengar",
+    "linear-gradient(140deg, rgb(128,51,204), rgb(102,41,163), rgb(77,31,122))"
+  ),
+  mkDark(
+    "lucario",
+    "Lucario",
+    "conic-gradient(from 140deg, rgb(71,106,209) 0%, rgb(46,80,184) 33%, rgb(36,62,143) 66%, rgb(26,45,102) 100%)"
+  ),
+  mkDark(
+    "snorlax",
+    "Snorlax",
+    "conic-gradient(from 140deg, rgb(89,89,166) 0%, rgb(71,71,133) 33%, rgb(54,54,99) 66%, rgb(36,36,66) 100%)"
+  ),
+  mkLight(
+    "ocean",
+    "Ocean",
+    "linear-gradient(140deg, rgb(117,199,240), rgb(71,180,235), rgb(26,162,230))"
+  ),
+  mkDark(
+    "squirtle",
+    "Squirtle",
+    "linear-gradient(140deg, rgb(0,191,255), rgb(0,153,204), rgb(0,115,153))"
+  ),
+  mkDark(
+    "tailwindcss",
+    "TailwindCSS",
+    "linear-gradient(140deg, rgb(9,171,241), rgb(5,105,148), rgb(4,84,118), rgb(6,119,167))",
+    { shikiDark: "material-theme-ocean" }
+  ),
+  mkDark(
+    "bulbasaur",
+    "Bulbasaur",
+    "linear-gradient(140deg, rgb(77,179,77), rgb(61,143,61), rgb(46,107,46))"
+  ),
+  mkDark(
+    "vue",
+    "Vue",
+    "linear-gradient(140deg, rgb(66,184,131), rgb(41,112,80), rgb(32,90,64), rgb(46,127,91))",
+    { shikiDark: "catppuccin-macchiato" }
+  ),
+  mkDark(
+    "dragonite",
+    "Dragonite",
+    "linear-gradient(140deg, rgb(255,166,0), rgb(204,133,0), rgb(153,99,0))"
+  ),
+  mkDark(
+    "dawn",
+    "Dawn",
+    "linear-gradient(140deg, rgb(204,135,51), rgb(160,62,55), rgb(39,26,40))"
+  ),
+]
+
+export const IMAGE_BACKGROUNDS: ImageBackground[] = [
+  ...THEMES,
+  ...BACKDROPS,
+  ...PARTNERS,
+]
 
 export const IMAGE_BACKGROUNDS_THEMES = THEMES
 export const IMAGE_BACKGROUNDS_PARTNERS = PARTNERS
+export const IMAGE_BACKGROUNDS_BACKDROPS = BACKDROPS
 
 export const PADDING_OPTIONS = [
   { id: "sm", label: "16", value: 16 },

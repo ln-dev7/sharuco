@@ -4,6 +4,7 @@ import { Check } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import {
+  IMAGE_BACKGROUNDS_BACKDROPS,
   IMAGE_BACKGROUNDS_PARTNERS,
   IMAGE_BACKGROUNDS_THEMES,
   type ImageBackground,
@@ -40,7 +41,11 @@ function BackgroundPreview({ bg }: { bg: ImageBackground }) {
 }
 
 export function ThemeSelect({ value, onChange }: ThemeSelectProps) {
-  const all = [...IMAGE_BACKGROUNDS_THEMES, ...IMAGE_BACKGROUNDS_PARTNERS]
+  const all = [
+    ...IMAGE_BACKGROUNDS_THEMES,
+    ...IMAGE_BACKGROUNDS_BACKDROPS,
+    ...IMAGE_BACKGROUNDS_PARTNERS,
+  ]
   const selected = all.find((b) => b.id === value) ?? all[0]
 
   return (
@@ -57,6 +62,17 @@ export function ThemeSelect({ value, onChange }: ThemeSelectProps) {
         <SelectGroup>
           <SelectLabel>Themes</SelectLabel>
           {IMAGE_BACKGROUNDS_THEMES.map((bg) => (
+            <SelectItem key={bg.id} value={bg.id}>
+              <span className="flex items-center gap-2">
+                <BackgroundPreview bg={bg} />
+                <span>{bg.name}</span>
+              </span>
+            </SelectItem>
+          ))}
+        </SelectGroup>
+        <SelectGroup>
+          <SelectLabel>Backdrops</SelectLabel>
+          {IMAGE_BACKGROUNDS_BACKDROPS.map((bg) => (
             <SelectItem key={bg.id} value={bg.id}>
               <span className="flex items-center gap-2">
                 <BackgroundPreview bg={bg} />
