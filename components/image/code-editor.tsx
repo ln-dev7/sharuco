@@ -64,9 +64,11 @@ export function CodeEditor({
           "pointer-events-none m-0 overflow-hidden break-words whitespace-pre-wrap",
           showLineNumbers && "pl-10"
         )}
+        style={{ fontFamily: "inherit", fontSize: "inherit" }}
       >
         <code
           className="shiki-output"
+          style={{ fontFamily: "inherit", fontSize: "inherit" }}
           dangerouslySetInnerHTML={{ __html: safeHtml }}
         />
       </pre>

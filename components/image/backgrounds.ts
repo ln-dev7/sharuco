@@ -544,6 +544,17 @@ const BACKDROPS: ImageBackground[] = [
     "Dawn",
     "linear-gradient(140deg, rgb(204,135,51), rgb(160,62,55), rgb(39,26,40))"
   ),
+  mkLight(
+    "white-with-dots",
+    "White with Dots",
+    `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 15 15'><circle fill-opacity='0.25' fill='%23000000' cx='13.5' cy='13.5' r='1.5'/></svg>"), linear-gradient(140deg, rgb(255,255,255), rgb(230,230,230), rgb(204,204,204))`
+  ),
+  mkDark(
+    "transparent",
+    "Transparent",
+    "repeating-conic-gradient(rgb(0,0,0) 0%, rgb(0,0,0) 25%, rgb(17,17,17) 0%, rgb(17,17,17) 50%) 0% 0% / 16px 16px",
+    { shikiDark: "github-dark-dimmed" }
+  ),
 ]
 
 export const IMAGE_BACKGROUNDS: ImageBackground[] = [
