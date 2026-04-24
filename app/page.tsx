@@ -23,15 +23,25 @@ import Link from "next/link"
 import * as htmlToImage from "html-to-image"
 import {
   ArrowRight,
+  ArrowUpRight,
+  Bookmark,
   Check,
   Code2,
+  Compass,
   Download,
   Github,
+  Globe,
   Hash,
+  Heart,
+  Inbox,
   Keyboard,
+  LayoutGrid,
+  ListChecks,
   Loader2,
   Paintbrush,
+  Send,
   Sparkles,
+  Users,
 } from "lucide-react"
 import { useTheme } from "next-themes"
 
@@ -164,11 +174,23 @@ export default function IndexPage() {
             ></path>
           </svg>
         </a>
-        <div className="flex max-w-[980px] flex-col items-start gap-2">
-          <h1 className="text-3xl leading-tight font-extrabold tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-            Share your code.
+        <div className="flex max-w-[980px] flex-col items-start gap-3">
+          <h1 className="text-3xl leading-[1.05] font-extrabold tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
+            Share your{" "}
+            <span className="bg-gradient-to-r from-sky-500 via-violet-500 to-fuchsia-500 bg-clip-text text-transparent">
+              code
+            </span>
+            .
             <br className="inline" />
-            Manage Form & Link.
+            Manage{" "}
+            <span className="bg-gradient-to-r from-emerald-500 via-sky-500 to-indigo-500 bg-clip-text text-transparent">
+              Form
+            </span>{" "}
+            &amp;{" "}
+            <span className="bg-gradient-to-r from-amber-500 via-rose-500 to-fuchsia-500 bg-clip-text text-transparent">
+              Link
+            </span>
+            .
           </h1>
           <p className="max-w-[700px] text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
             Share and explore essential codes, create forms to retrieve
@@ -228,41 +250,51 @@ export default function IndexPage() {
           for the latest updates
         </p>
         <Separator className="my-2" />
-        <div className="my-8 flex flex-col items-center gap-8">
-          <h2 className="text-xl leading-tight font-bold tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
-            OUR SPONSORS
-          </h2>
-          <div className="flex flex-wrap items-center justify-center gap-6">
-            {COMPANIES.map((support) => (
-              <a
-                key={support.name}
-                className="w-40 shrink-0"
-                href={support.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  width={160}
-                  height={55}
-                  src={
-                    resolvedTheme === "dark" ? support.image : support.imageDark
-                  }
-                  className="cursor-pointer"
-                  alt={support.name}
-                  priority={true}
-                />
-              </a>
-            ))}
+        <div className="relative my-4 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-10 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -top-24 left-1/3 h-48 w-48 rounded-full bg-gradient-to-br from-sky-500/20 via-indigo-500/15 to-violet-500/20 blur-3xl"
+          />
+          <div className="relative flex flex-col items-center gap-6">
+            <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/60 px-3 py-1 text-xs font-medium text-zinc-700 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300">
+              <Heart className="h-3.5 w-3.5 text-rose-500" />
+              Our sponsors
+            </span>
+            <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
+              {COMPANIES.map((support) => (
+                <a
+                  key={support.name}
+                  className="w-40 shrink-0 opacity-80 transition-opacity hover:opacity-100"
+                  href={support.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    width={160}
+                    height={55}
+                    src={
+                      resolvedTheme === "dark"
+                        ? support.image
+                        : support.imageDark
+                    }
+                    className="cursor-pointer"
+                    alt={support.name}
+                    priority={true}
+                  />
+                </a>
+              ))}
+            </div>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://lndev.mychariow.shop/prd_3cu1s0"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            >
+              Become a sponsor
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
           </div>
-          <a
-            target="href"
-            href="https://lndev.mychariow.shop/prd_3cu1s0"
-            className="text-center text-xs font-semibold text-sky-400 uppercase underline underline-offset-4"
-          >
-            Your logo here?
-          </a>
         </div>
-        <Separator className="my-2" />
         <div className="mt-8 flex flex-col items-start gap-4">
           <div className="relative w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-12 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
             <div
@@ -382,200 +414,302 @@ export default function IndexPage() {
             </div>
           </div>
         </div>
-        <div className="mt-16 flex w-full flex-col items-start gap-4">
-          <div className="flex w-full flex-col items-center justify-center gap-2">
-            <h2 className="text-3xl leading-tight font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
-              Sharuco Form
-            </h2>
-            <p className="text-md max-w-[700px] text-center text-zinc-700 sm:text-lg dark:text-zinc-400">
-              Sharuco Form allows you to create forms to collect information
-              from your users.
-            </p>
-          </div>
-          <Separator className="mx-auto my-2 block w-1/2 lg:hidden" />
-          <div className="flex w-full flex-col items-center justify-center gap-4">
-            <div className="flex flex-col items-start gap-16 pt-10 pb-12 lg:gap-6">
-              <div className="flex flex-col gap-4 lg:flex-row lg:gap-20">
-                <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
-                  <h3 className="text-2xl font-medium sm:text-4xl">
-                    Create forms
-                    <br className="hidden sm:inline" /> easily in minutes{" "}
-                  </h3>
-                  <p>
-                    Choose from all the different question types present to
-                    customize your form.
-                  </p>
-                </div>
-                <div className="w-full overflow-hidden rounded-md border border-zinc-200 bg-zinc-100 dark:bg-zinc-800">
-                  <Image
-                    src="/home/form-1.png"
-                    alt="Sharuco Form"
-                    width={2880}
-                    height={1448}
-                    className="h-full w-full object-cover"
-                    priority={true}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col-reverse gap-4 lg:flex-row lg:gap-20">
-                <div className="w-full overflow-hidden rounded-md bg-zinc-100 dark:border dark:border-zinc-800 dark:bg-zinc-800">
-                  <Image
-                    src="/home/form-2.png"
-                    alt="Sharuco Form"
-                    width={2880}
-                    height={1448}
-                    className="h-full w-full object-cover"
-                    priority={true}
-                  />
-                </div>
-                <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
-                  <h3 className="text-2xl font-medium sm:text-4xl">
-                    Publish your form
-                    <br className="hidden sm:inline" /> in one click
-                  </h3>
-                  <p>
-                    Give everyone the opportunity to reply to your form by
-                    publishing and sharing it on your networks.
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-4 lg:flex-row lg:gap-20">
-                <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
-                  <h3 className="text-2xl font-medium sm:text-4xl">
-                    Collect all
-                    <br className="hidden sm:inline" /> your information
-                  </h3>
-                  <p>
-                    In a dedicated area you have access to all the data sent via
-                    your form
-                  </p>
-                </div>
-                <div className="w-full overflow-hidden rounded-md border border-zinc-200 bg-zinc-100 dark:bg-zinc-800">
-                  <Image
-                    src="/home/form-3.png"
-                    alt="Sharuco Form"
-                    width={2880}
-                    height={1448}
-                    className="h-full w-full object-cover"
-                    priority={true}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col-reverse gap-4 lg:flex-row lg:gap-20">
-                <div className="w-full overflow-hidden rounded-md bg-zinc-100 dark:border dark:border-zinc-800 dark:bg-zinc-800">
-                  <Image
-                    src="/home/form-4.png"
-                    alt="Sharuco Form"
-                    width={2880}
-                    height={1448}
-                    className="h-full w-full object-cover"
-                    priority={true}
-                  />
-                </div>
-                <div className="flex w-full flex-col items-start justify-center gap-2 sm:gap-4">
-                  <h3 className="text-2xl font-medium sm:text-4xl">
-                    Manages all forms
-                  </h3>
-                  <p>
-                    In one screen you have a global visualization of all your
-                    forms with the ability to manage them.
-                  </p>
-                </div>
-              </div>
+        <div className="relative mt-8 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-12 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -top-32 -right-16 h-72 w-72 rounded-full bg-gradient-to-br from-sky-500/25 via-cyan-500/20 to-emerald-500/25 blur-3xl"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -bottom-32 -left-16 h-72 w-72 rounded-full bg-gradient-to-br from-amber-500/20 via-orange-500/15 to-rose-500/20 blur-3xl"
+          />
+
+          <div className="relative flex flex-col gap-10">
+            <div className="flex max-w-[680px] flex-col items-start gap-4">
+              <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/60 px-3 py-1 text-xs font-medium text-zinc-700 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300">
+                <ListChecks className="h-3.5 w-3.5 text-sky-500" />
+                Sharuco Form · Collect anything
+              </span>
+              <h2 className="text-3xl leading-[1.05] font-extrabold tracking-tighter md:text-4xl lg:text-5xl">
+                Create & share forms in minutes.
+              </h2>
+              <p className="max-w-[560px] text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+                Build any form with the question types you need, publish it with
+                a single click, and collect every response in one place.
+              </p>
             </div>
-            <div className="flex w-fit items-center justify-center">
+
+            <div className="flex flex-col gap-14 lg:gap-10">
+              {[
+                {
+                  icon: ListChecks,
+                  iconColor: "text-sky-500",
+                  title: "Create forms easily in minutes",
+                  description:
+                    "Pick from every question type you need and customize the form to match your flow.",
+                  image: "/home/form-1.png",
+                  reverse: false,
+                },
+                {
+                  icon: Send,
+                  iconColor: "text-violet-500",
+                  title: "Publish in one click",
+                  description:
+                    "Give everyone the opportunity to respond by publishing your form and sharing it on your socials.",
+                  image: "/home/form-2.png",
+                  reverse: true,
+                },
+                {
+                  icon: Inbox,
+                  iconColor: "text-emerald-500",
+                  title: "Collect all your information",
+                  description:
+                    "In a dedicated area you have access to every response submitted through your form.",
+                  image: "/home/form-3.png",
+                  reverse: false,
+                },
+                {
+                  icon: LayoutGrid,
+                  iconColor: "text-amber-500",
+                  title: "Manage all your forms",
+                  description:
+                    "A single screen gives you a global view of every form you own, with full control over each.",
+                  image: "/home/form-4.png",
+                  reverse: true,
+                },
+              ].map((row) => {
+                const RowIcon = row.icon
+                return (
+                  <div
+                    key={row.title}
+                    className={cn(
+                      "flex flex-col items-center gap-6 lg:flex-row lg:gap-14",
+                      row.reverse && "lg:flex-row-reverse"
+                    )}
+                  >
+                    <div className="flex w-full flex-col items-start gap-3 lg:w-2/5">
+                      <span
+                        className={cn(
+                          "inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-200 bg-white/70 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/60"
+                        )}
+                      >
+                        <RowIcon className={cn("h-5 w-5", row.iconColor)} />
+                      </span>
+                      <h3 className="text-2xl leading-tight font-bold tracking-tight sm:text-3xl">
+                        {row.title}
+                      </h3>
+                      <p className="text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+                        {row.description}
+                      </p>
+                    </div>
+                    <div className="relative w-full lg:w-3/5">
+                      <div className="pointer-events-none absolute inset-0 -m-3 rounded-3xl bg-gradient-to-br from-sky-500/15 via-indigo-500/10 to-violet-500/15 blur-2xl dark:from-sky-500/20 dark:via-indigo-500/15 dark:to-violet-500/20" />
+                      <div className="relative overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-xl ring-1 ring-black/5 dark:border-white/10 dark:bg-zinc-950">
+                        <Image
+                          src={row.image}
+                          alt={row.title}
+                          width={2880}
+                          height={1448}
+                          className="h-full w-full object-cover"
+                          priority={true}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
               <Link
                 href="/forms"
-                className={buttonVariants({ size: "lg", variant: "subtle" })}
+                className={cn(
+                  buttonVariants({ size: "lg" }),
+                  "gap-2 shadow-lg shadow-zinc-900/10 dark:shadow-black/40"
+                )}
               >
                 Go to Sharuco Form
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="h-4 w-4" />
               </Link>
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                Free · Sign in to start
+              </span>
             </div>
           </div>
         </div>
-        <div className="mt-16 flex w-full flex-col items-start gap-4">
-          <div className="flex w-full flex-col items-start justify-center gap-2">
-            <h2 className="text-xl leading-tight font-bold tracking-tighter sm:text-2xl md:text-3xl lg:text-4xl">
-              Discover Sharuco Link
-            </h2>
-            <p className="text-md max-w-[700px] text-zinc-700 sm:text-lg dark:text-zinc-400">
-              Sharuco Link is a simple way to store all the links that are
-              useful to you and with possibilities to make everyone discover
-              them.
-            </p>
-          </div>
-          <div className="flex w-full flex-col items-center justify-center gap-4">
-            <div className="w-full overflow-hidden rounded-md bg-zinc-100 dark:border dark:border-zinc-700 dark:bg-zinc-800">
-              <Image
-                src="/home/sharuco-link.png"
-                alt="Sharuco Link"
-                width={3024}
-                height={1896}
-                className="w-full"
-                priority={true}
-              />
+        <div className="relative mt-8 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-12 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -top-24 -left-20 h-64 w-64 rounded-full bg-gradient-to-br from-violet-500/30 via-fuchsia-500/20 to-rose-500/30 blur-3xl"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-16 -bottom-24 h-56 w-56 rounded-full bg-gradient-to-br from-teal-500/25 via-emerald-500/20 to-sky-500/25 blur-3xl"
+          />
+
+          <div className="relative grid gap-10 md:grid-cols-[1fr_1.1fr] md:items-center">
+            <div className="flex flex-col items-start gap-5">
+              <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/60 px-3 py-1 text-xs font-medium text-zinc-700 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300">
+                <Bookmark className="h-3.5 w-3.5 text-fuchsia-500" />
+                Sharuco Link · Curated hub
+              </span>
+
+              <h2 className="text-3xl leading-[1.05] font-extrabold tracking-tighter md:text-4xl lg:text-5xl">
+                Store every link worth keeping.
+              </h2>
+              <p className="max-w-[520px] text-sm text-zinc-600 md:text-base dark:text-zinc-400">
+                Save the resources you care about, organize them in seconds, and
+                let the community discover the best of what you have bookmarked.
+              </p>
+
+              <ul className="mt-1 grid grid-cols-1 gap-x-6 gap-y-2 text-sm text-zinc-700 sm:grid-cols-2 dark:text-zinc-300">
+                <li className="flex items-center gap-2">
+                  <Bookmark className="h-4 w-4 shrink-0 text-fuchsia-500" />
+                  Personal link library
+                </li>
+                <li className="flex items-center gap-2">
+                  <Compass className="h-4 w-4 shrink-0 text-teal-500" />
+                  Discover community picks
+                </li>
+                <li className="flex items-center gap-2">
+                  <Globe className="h-4 w-4 shrink-0 text-sky-500" />
+                  Rich link previews
+                </li>
+                <li className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 shrink-0 text-amber-500" />
+                  One-click sharing
+                </li>
+              </ul>
+
+              <div className="mt-3 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/links"
+                  className={cn(
+                    buttonVariants({ size: "lg" }),
+                    "gap-2 shadow-lg shadow-zinc-900/10 dark:shadow-black/40"
+                  )}
+                >
+                  Go to Sharuco Link
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                  Public & private lists
+                </span>
+              </div>
             </div>
-            <div className="flex w-fit items-center justify-center">
-              <Link href="/links" className={buttonVariants({ size: "lg" })}>
-                Go to Sharuco Link
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-        <Separator className="my-2" />
-        <div>
-          <div className="flex items-center space-x-2 text-base">
-            <h4 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Contributors
-            </h4>
-            <span className="rounded-full bg-zinc-100 px-2 py-1 text-xs font-semibold text-zinc-700">
-              {contributors?.length}
-            </span>
-          </div>
-          <div className="mt-3 flex -space-x-2">
-            {isLoadingContributors && (
-              <>
-                <Skeleton className="inline-block h-14 w-14 rounded-full bg-zinc-200 ring-2 ring-white hover:ring-sky-500 dark:bg-zinc-800" />
-                <Skeleton className="inline-block h-14 w-14 rounded-full bg-zinc-200 ring-2 ring-white hover:ring-sky-500 dark:bg-zinc-800" />
-                <Skeleton className="inline-block h-14 w-14 rounded-full bg-zinc-200 ring-2 ring-white hover:ring-sky-500 dark:bg-zinc-800" />
-              </>
-            )}
-            {contributors &&
-              contributors
-                .filter((user) => user.login !== "dependabot[bot]")
-                .sort((a, b) => b.contributions - a.contributions)
-                .slice(0, 6)
-                .map((user) => (
-                  <a
-                    key={user.login}
-                    href={"https://github.com/" + user.login}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      className="inline-block h-14 w-14 rounded-full ring-2 ring-white hover:ring-sky-500"
-                      src={user.avatar_url}
-                      alt={user.login}
-                    />
-                  </a>
-                ))}
-          </div>
-          {contributors?.length > 6 && (
-            <div className="mt-3 text-sm font-medium">
-              <a
-                href="https://github.com/ln-dev7/sharuco/graphs/contributors"
-                className="text-blue-500"
+
+            <div className="relative">
+              <div className="pointer-events-none absolute inset-0 -m-4 rounded-3xl bg-gradient-to-br from-fuchsia-500/30 via-violet-500/25 to-teal-500/30 blur-2xl dark:from-fuchsia-500/25 dark:via-violet-500/20 dark:to-teal-500/25" />
+              <div
+                className="relative overflow-hidden rounded-xl border border-zinc-900/10 bg-white shadow-2xl ring-1 ring-black/5 dark:border-white/10 dark:bg-zinc-950"
+                style={{
+                  transform: "perspective(1200px) rotateY(6deg) rotateX(2deg)",
+                }}
               >
-                + {contributors.length - 6} contributors
+                <Image
+                  src="/home/sharuco-link.png"
+                  alt="Sharuco Link preview"
+                  width={3024}
+                  height={1896}
+                  className="h-auto w-full"
+                  priority={true}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative mt-8 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-10 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -top-20 right-1/3 h-48 w-48 rounded-full bg-gradient-to-br from-rose-500/20 via-orange-500/15 to-amber-500/20 blur-3xl"
+          />
+
+          <div className="relative flex flex-col gap-5">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/60 px-3 py-1 text-xs font-medium text-zinc-700 backdrop-blur-sm dark:border-zinc-700 dark:bg-zinc-900/60 dark:text-zinc-300">
+                <Users className="h-3.5 w-3.5 text-rose-500" />
+                Community
+              </span>
+              {typeof contributors?.length === "number" && (
+                <span className="rounded-full bg-zinc-900 px-2.5 py-0.5 text-xs font-semibold text-white dark:bg-white dark:text-zinc-900">
+                  {contributors.length} contributors
+                </span>
+              )}
+            </div>
+
+            <h3 className="text-2xl leading-tight font-bold tracking-tighter sm:text-3xl">
+              Built by people who{" "}
+              <span className="bg-gradient-to-r from-rose-500 to-orange-500 bg-clip-text text-transparent">
+                love
+              </span>{" "}
+              sharing code.
+            </h3>
+
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex -space-x-2">
+                {isLoadingContributors && (
+                  <>
+                    <Skeleton className="inline-block h-12 w-12 rounded-full bg-zinc-200 ring-2 ring-white dark:bg-zinc-800 dark:ring-zinc-950" />
+                    <Skeleton className="inline-block h-12 w-12 rounded-full bg-zinc-200 ring-2 ring-white dark:bg-zinc-800 dark:ring-zinc-950" />
+                    <Skeleton className="inline-block h-12 w-12 rounded-full bg-zinc-200 ring-2 ring-white dark:bg-zinc-800 dark:ring-zinc-950" />
+                  </>
+                )}
+                {contributors &&
+                  contributors
+                    .filter((user) => user.login !== "dependabot[bot]")
+                    .sort((a, b) => b.contributions - a.contributions)
+                    .slice(0, 8)
+                    .map((user) => (
+                      <a
+                        key={user.login}
+                        href={"https://github.com/" + user.login}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={user.login}
+                        className="transition-transform hover:z-10 hover:-translate-y-0.5"
+                      >
+                        <img
+                          className="inline-block h-12 w-12 rounded-full ring-2 ring-white hover:ring-rose-500 dark:ring-zinc-950"
+                          src={user.avatar_url}
+                          alt={user.login}
+                        />
+                      </a>
+                    ))}
+              </div>
+              {contributors?.length > 8 && (
+                <a
+                  href="https://github.com/ln-dev7/sharuco/graphs/contributors"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-zinc-700 underline-offset-4 hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
+                >
+                  + {contributors.length - 8} more
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </a>
+              )}
+            </div>
+
+            <p className="max-w-[560px] text-sm text-zinc-600 dark:text-zinc-400">
+              Sharuco is open source. Huge thanks to every contributor who has
+              shaped what it is today — and to everyone who ships a PR next.
+            </p>
+
+            <div>
+              <a
+                href="https://github.com/ln-dev7/sharuco"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "sm" }),
+                  "gap-2"
+                )}
+              >
+                <Github className="h-4 w-4" />
+                Star on GitHub
               </a>
             </div>
-          )}
-          {/* https://tailwindcss.com/docs/reusing-styles */}
-          <p className="mt-4 text-sm text-zinc-700 dark:text-zinc-400">
-            Many thanks to all of you !
-          </p>
+          </div>
         </div>
       </section>
     </>
