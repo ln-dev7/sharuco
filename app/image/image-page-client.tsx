@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import { allLanguages, languagesName } from "@/constants/languages"
+import { allLanguages } from "@/constants/languages"
 import * as htmlToImage from "html-to-image"
 import { Check, Clipboard, Copy, Download, Hash, Loader2 } from "lucide-react"
 
@@ -13,9 +13,20 @@ import {
 } from "@/components/image/backgrounds"
 import { AboutDialog } from "@/components/image/about-dialog"
 import { CodeFrame } from "@/components/image/code-frame"
+import { CODE_FONTS, loadGoogleFont } from "@/components/image/fonts"
 import { ThemeSelect } from "@/components/image/theme-select"
 import { useShikiHtml } from "@/components/image/use-shiki"
+import {
+  SOCIAL_OPTIONS,
+  type SocialId,
+  type UserInfo,
+} from "@/components/image/user-badge"
+import {
+  WINDOW_CONTROL_OPTIONS,
+  type WindowControlStyle,
+} from "@/components/image/window-controls"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
   Select,
@@ -26,6 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
 
 const SAMPLE_CODE = `// Press cmd+v / ctrl+v to paste your code here
@@ -64,9 +76,33 @@ export function ImagePageClient() {
   const [padding, setPadding] = useState<PaddingValue>(64)
   const [darkCode, setDarkCode] = useState(true)
   const [showLineNumbers, setShowLineNumbers] = useState(false)
-  const [showTrafficLights, setShowTrafficLights] = useState(true)
+  const [showTitleBar, setShowTitleBar] = useState(true)
+  const [windowControl, setWindowControl] = useState<WindowControlStyle>("mac")
+  const [windowRadius, setWindowRadius] = useState(12)
+  const [fontId, setFontId] = useState("jetbrains-mono")
+  const [fontSize, setFontSize] = useState(14)
+  const [backdropNoise, setBackdropNoise] = useState(false)
+  const [watermarkEnabled, setWatermarkEnabled] = useState(true)
+  const [watermarkText, setWatermarkText] = useState("sharuco.lndev.me")
+  const [userName, setUserName] = useState("")
+  const [userHandle, setUserHandle] = useState("")
+  const [userSocial, setUserSocial] = useState<SocialId>("x")
+  const [userAvatar, setUserAvatar] = useState("")
   const [isExporting, setIsExporting] = useState(false)
   const [copied, setCopied] = useState(false)
+
+  const selectedFont = CODE_FONTS.find((f) => f.id === fontId) ?? CODE_FONTS[0]
+
+  useEffect(() => {
+    if (selectedFont.google) loadGoogleFont(selectedFont.google)
+  }, [selectedFont])
+
+  const userInfo: UserInfo = {
+    name: userName,
+    handle: userHandle,
+    social: userSocial,
+    avatar: userAvatar,
+  }
 
   const selectedBg =
     IMAGE_BACKGROUNDS.find((b) => b.id === background) ?? IMAGE_BACKGROUNDS[0]
@@ -260,10 +296,17 @@ export function ImagePageClient() {
               background={selectedBg.style}
               padding={padding}
               showLineNumbers={showLineNumbers}
-              showTrafficLights={showTrafficLights}
+              showTitleBar={showTitleBar}
+              windowControl={windowControl}
+              windowRadius={windowRadius}
+              fontFamily={selectedFont.family}
+              fontSize={fontSize}
+              backdropNoise={backdropNoise}
               surfaceBg={shiki.bg}
               surfaceFg={shiki.fg}
               codeHtml={shiki.html}
+              user={userInfo}
+              watermark={watermarkEnabled ? watermarkText : ""}
             />
           </div>
         </div>
@@ -349,15 +392,159 @@ export function ImagePageClient() {
             />
           </div>
 
+          <div className="flex flex-col gap-2">
+            <Label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+              Font
+            </Label>
+            <Select value={fontId} onValueChange={setFontId}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {CODE_FONTS.map((f) => (
+                  <SelectItem key={f.id} value={f.id}>
+                    <span style={{ fontFamily: f.family }}>{f.name}</span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                Font size
+              </Label>
+              <span className="text-xs text-muted-foreground tabular-nums">
+                {fontSize}px
+              </span>
+            </div>
+            <Slider
+              min={11}
+              max={24}
+              step={1}
+              value={[fontSize]}
+              onValueChange={(v) => setFontSize(v[0])}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                Window radius
+              </Label>
+              <span className="text-xs text-muted-foreground tabular-nums">
+                {windowRadius}px
+              </span>
+            </div>
+            <Slider
+              min={0}
+              max={24}
+              step={1}
+              value={[windowRadius]}
+              onValueChange={(v) => setWindowRadius(v[0])}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+              Window controls
+            </Label>
+            <div className="grid grid-cols-4 gap-2">
+              {WINDOW_CONTROL_OPTIONS.map((opt) => (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setWindowControl(opt.id)}
+                  className={cn(
+                    "rounded-md border py-2 text-xs font-medium transition-colors",
+                    windowControl === opt.id
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border hover:bg-accent"
+                  )}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="flex items-center justify-between">
-            <Label htmlFor="traffic-lights" className="text-sm font-medium">
-              Traffic lights
+            <Label htmlFor="title-bar" className="text-sm font-medium">
+              Title bar
             </Label>
             <Switch
-              id="traffic-lights"
-              checked={showTrafficLights}
-              onCheckedChange={setShowTrafficLights}
+              id="title-bar"
+              checked={showTitleBar}
+              onCheckedChange={setShowTitleBar}
             />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <Label htmlFor="backdrop-noise" className="text-sm font-medium">
+              Backdrop noise
+            </Label>
+            <Switch
+              id="backdrop-noise"
+              checked={backdropNoise}
+              onCheckedChange={setBackdropNoise}
+            />
+          </div>
+
+          <div className="flex flex-col gap-3 border-t border-border/50 pt-4">
+            <Label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+              User info
+            </Label>
+            <Input
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              placeholder="Name"
+            />
+            <Input
+              value={userHandle}
+              onChange={(e) => setUserHandle(e.target.value)}
+              placeholder="Handle (e.g. @ln_dev7)"
+            />
+            <Select
+              value={userSocial}
+              onValueChange={(v) => setUserSocial(v as SocialId)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {SOCIAL_OPTIONS.map((s) => (
+                  <SelectItem key={s.id} value={s.id}>
+                    {s.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input
+              value={userAvatar}
+              onChange={(e) => setUserAvatar(e.target.value)}
+              placeholder="Avatar URL (optional)"
+            />
+          </div>
+
+          <div className="flex flex-col gap-3 border-t border-border/50 pt-4">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="watermark" className="text-sm font-medium">
+                Watermark
+              </Label>
+              <Switch
+                id="watermark"
+                checked={watermarkEnabled}
+                onCheckedChange={setWatermarkEnabled}
+              />
+            </div>
+            {watermarkEnabled ? (
+              <Input
+                value={watermarkText}
+                onChange={(e) => setWatermarkText(e.target.value)}
+                placeholder="sharuco.lndev.me"
+              />
+            ) : null}
           </div>
 
           <div className="mt-auto flex flex-col gap-2">

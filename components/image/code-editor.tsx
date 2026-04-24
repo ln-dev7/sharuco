@@ -41,8 +41,8 @@ export function CodeEditor({
 
   return (
     <div
-      className="relative w-full font-mono text-sm leading-6"
-      style={{ color: fg }}
+      className="relative w-full leading-6"
+      style={{ color: fg, fontFamily: "inherit", fontSize: "inherit" }}
     >
       {showLineNumbers ? (
         <div
@@ -82,10 +82,14 @@ export function CodeEditor({
         autoCapitalize="off"
         autoComplete="off"
         className={cn(
-          "absolute inset-0 h-full w-full resize-none overflow-hidden border-0 bg-transparent p-0 font-mono text-sm leading-6 break-words whitespace-pre-wrap text-transparent outline-none focus:outline-none",
+          "absolute inset-0 h-full w-full resize-none overflow-hidden border-0 bg-transparent p-0 leading-6 break-words whitespace-pre-wrap text-transparent outline-none focus:outline-none",
           showLineNumbers && "pl-10"
         )}
-        style={{ caretColor: caretColor ?? fg ?? "#ffffff" }}
+        style={{
+          caretColor: caretColor ?? fg ?? "#ffffff",
+          fontFamily: "inherit",
+          fontSize: "inherit",
+        }}
       />
     </div>
   )
