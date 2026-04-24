@@ -252,10 +252,22 @@ export default function IndexPage() {
         </div>
         <Separator className="my-2" />
         <div className="mt-8 flex flex-col items-start gap-4">
-          <div>
-            <h2 className="text-xl leading-tight font-bold tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
-              Create beautiful images of your code.
-            </h2>
+          <div className="flex w-full flex-col items-start justify-between gap-3 sm:flex-row sm:items-end">
+            <div>
+              <h2 className="text-xl leading-tight font-bold tracking-tighter sm:text-2xl md:text-2xl lg:text-2xl">
+                Create beautiful images of your code.
+              </h2>
+              <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                Want more themes, backgrounds, partner presets and line numbers?
+              </p>
+            </div>
+            <Link
+              href="/image"
+              className={cn(buttonVariants({ size: "sm" }), "shrink-0 gap-2")}
+            >
+              Open full editor
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
           <div className="flex flex-col gap-6 md:flex-row">
             <div className="w-full overflow-hidden rounded-md bg-zinc-100 md:w-1/2 dark:bg-zinc-800">
