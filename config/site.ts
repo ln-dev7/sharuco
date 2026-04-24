@@ -41,7 +41,7 @@ export const siteConfig: SiteConfig = {
     },
     {
       title: "Donation",
-      href: "https://www.buymeacoffee.com/lndev",
+      href: "https://lndev.mychariow.shop/prd_3cu1s0",
       external: true,
       support: false,
     },

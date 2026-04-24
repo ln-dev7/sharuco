@@ -244,7 +244,7 @@ export default function IndexPage() {
           </div>
           <a
             target="href"
-            href="https://www.buymeacoffee.com/lndev/membership"
+            href="https://lndev.mychariow.shop/prd_3cu1s0"
             className="text-center text-xs font-semibold text-sky-400 uppercase underline underline-offset-4"
           >
             Your logo here?

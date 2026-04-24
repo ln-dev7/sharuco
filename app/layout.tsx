@@ -10,6 +10,7 @@ import { SiteHeader } from "@/components/site-header"
 import { Toaster } from "@/components/ui/toaster"
 
 import "./globals.css"
+import "prism-themes/themes/prism-one-dark.min.css"
 
 const fontSans = Inter({
   subsets: ["latin"],
