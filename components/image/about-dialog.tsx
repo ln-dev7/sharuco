@@ -38,7 +38,7 @@ export function AboutDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="outline" size="sm" className="gap-2 px-4">
           <HelpCircle className="h-4 w-4" />
           About
         </Button>

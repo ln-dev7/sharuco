@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useSearchParams } from "next/navigation"
-import { allLanguages } from "@/constants/languages"
 import * as htmlToImage from "html-to-image"
 import { Hash } from "lucide-react"
 
@@ -17,6 +16,7 @@ import { AboutDialog } from "@/components/image/about-dialog"
 import { CodeFrame } from "@/components/image/code-frame"
 import { ExportMenu } from "@/components/image/export-menu"
 import { CODE_FONTS, loadGoogleFont } from "@/components/image/fonts"
+import { LanguageCombobox } from "@/components/image/language-combobox"
 import { ThemeSelect } from "@/components/image/theme-select"
 import { useShikiHtml } from "@/components/image/use-shiki"
 import {
@@ -33,9 +33,7 @@ import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
@@ -308,21 +306,7 @@ export function ImagePageClient() {
             <Label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
               Language
             </Label>
-            <Select value={language} onValueChange={setLanguage}>
-              <SelectTrigger data-language-trigger="">
-                <SelectValue placeholder="Select language" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Languages</SelectLabel>
-                  {allLanguages.map((lang) => (
-                    <SelectItem key={lang.name} value={lang.name.toLowerCase()}>
-                      {lang.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <LanguageCombobox value={language} onChange={setLanguage} />
           </div>
 
           <div className="flex flex-col gap-2">
@@ -531,7 +515,7 @@ export function ImagePageClient() {
           </div>
         </aside>
 
-        <div className="order-1 flex min-h-[420px] items-start justify-center rounded-xl border bg-muted/40 p-3 sm:p-4 lg:sticky lg:top-20 lg:order-2 lg:max-h-[calc(100vh-6rem)] lg:items-center lg:overflow-auto">
+        <div className="order-1 flex min-h-[420px] items-start justify-center rounded-xl border bg-muted/40 p-3 sm:p-12 lg:sticky lg:top-20 lg:order-2 lg:max-h-[calc(100vh-6rem)] lg:items-center lg:overflow-auto">
           <div className="w-full max-w-[900px]">
             <CodeFrame
               ref={frameRef}

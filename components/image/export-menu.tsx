@@ -26,7 +26,7 @@ export function ExportMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="sm" className="gap-2" disabled={isExporting}>
+        <Button size="sm" className="gap-2 px-4" disabled={isExporting}>
           {isExporting ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (

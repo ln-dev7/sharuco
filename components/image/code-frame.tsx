@@ -57,7 +57,7 @@ export const CodeFrame = forwardRef<HTMLDivElement, CodeFrameProps>(
     return (
       <div
         ref={ref}
-        className="relative flex w-full items-center justify-center"
+        className="relative flex w-full items-center justify-center rounded-2xl"
         style={{ background, padding: `${padding}px` }}
       >
         {backdropNoise ? (
