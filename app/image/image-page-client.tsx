@@ -520,7 +520,7 @@ export function ImagePageClient() {
           </div>
         </aside>
 
-        <div className="order-1 flex min-h-[420px] items-start justify-center rounded-xl border bg-muted/40 p-3 sm:p-12 lg:sticky lg:top-20 lg:order-2 lg:max-h-[calc(100vh-6rem)] lg:items-center lg:overflow-auto">
+        <div className="order-1 flex min-h-[420px] items-start justify-center rounded-xl border bg-muted/40 p-3 sm:p-12 lg:sticky lg:top-20 lg:order-2 lg:max-h-[calc(100vh-6rem)] lg:overflow-auto">
           <div className="w-full max-w-[900px] overflow-hidden rounded-2xl">
             <CodeFrame
               ref={frameRef}
