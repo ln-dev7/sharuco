@@ -31,6 +31,7 @@ import {
   Sparkles,
   Users,
 } from "lucide-react"
+import { useUiSounds } from "@/hooks/use-ui-sounds"
 import { useTheme } from "@/components/theme-provider"
 
 import { siteConfig } from "@/config/site"
@@ -47,8 +48,14 @@ import { TiltedPreview } from "@/components/home/tilted-preview"
 export default function IndexPage() {
   const { login, isPending } = useGitHubLogin()
   const { resolvedTheme } = useTheme()
+  const { playClick, playPop } = useUiSounds()
 
   const { user } = useAuthContext()
+
+  const handleLogin = () => {
+    playClick()
+    login()
+  }
 
   // Contributors
   const { data: contributors, isLoading: isLoadingContributors } = useQuery(
@@ -90,6 +97,7 @@ export default function IndexPage() {
         {/* Announcement pill */}
         <Link
           href="/image"
+          onClick={() => playPop()}
           className="group relative z-10 inline-flex w-fit items-center gap-2 rounded-full border border-zinc-200 bg-white/80 px-3 py-1 text-sm font-medium shadow-sm backdrop-blur-sm transition-all hover:border-zinc-300 hover:bg-white hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:border-zinc-700 dark:hover:bg-zinc-900"
         >
           <span className="relative flex h-2 w-2 shrink-0">
@@ -141,6 +149,7 @@ export default function IndexPage() {
         <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:gap-4">
           <Link
             href={siteConfig.links.explore}
+            onClick={() => playClick()}
             className={cn(
               buttonVariants({ size: "lg" }),
               "group relative gap-2 overflow-hidden shadow-[0_10px_30px_-12px_rgba(99,102,241,0.5)] transition-shadow hover:shadow-[0_16px_40px_-12px_rgba(99,102,241,0.7)] dark:shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)]"
@@ -155,6 +164,7 @@ export default function IndexPage() {
           {user ? (
             <Link
               href="/dashboard"
+              onClick={() => playClick()}
               className={cn(
                 buttonVariants({ size: "lg", variant: "outline" }),
                 "gap-2 backdrop-blur-sm"
@@ -170,7 +180,7 @@ export default function IndexPage() {
                 "gap-2 backdrop-blur-sm"
               )}
               disabled={isPending}
-              onClick={login}
+              onClick={handleLogin}
             >
               {isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

@@ -9,6 +9,7 @@ import { signOut } from "firebase/auth"
 import { Verified } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
+import { useUiSounds } from "@/hooks/use-ui-sounds"
 import { Icons } from "@/components/icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -43,12 +44,13 @@ export const useGitHubLogout = () => {
 export function AvatarUser() {
   const { logout } = useGitHubLogout()
   const { user, userPseudo } = useAuthContext()
+  const { playClick, playPop, playError } = useUiSounds()
 
   const { data, isLoading } = useDocument(userPseudo, "users")
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <div className="relative">
+        <div className="relative" onClick={() => playPop()}>
           {data && data.exists && data.data.premium && (
             <div className="absolute -right-1 -bottom-1 z-10 flex items-center justify-center rounded-full border-2 border-yellow-500 bg-white dark:bg-zinc-800">
               <Verified className="h-5 w-5 shrink-0 p-1 text-yellow-500" />
@@ -109,6 +111,7 @@ export function AvatarUser() {
           <Link
             defaultChecked
             href="/dashboard"
+            onClick={() => playClick()}
             className={buttonVariants({ size: "lg", variant: "outline" })}
           >
             Dashboard
@@ -116,6 +119,7 @@ export function AvatarUser() {
           <Button
             className={buttonVariants({ size: "lg", variant: "destructive" })}
             onClick={() => {
+              playError()
               logout()
             }}
           >
@@ -132,6 +136,7 @@ export function AvatarUser() {
               href={siteConfig.links.github}
               target="_blank"
               rel="noreferrer"
+              onClick={() => playClick()}
             >
               <div
                 className={buttonVariants({
@@ -148,6 +153,7 @@ export function AvatarUser() {
               href={siteConfig.links.twitter}
               target="_blank"
               rel="noreferrer"
+              onClick={() => playClick()}
             >
               <div
                 className={buttonVariants({
