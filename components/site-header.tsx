@@ -32,7 +32,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-      <div className="mx-auto flex h-16 w-full items-center gap-2 px-6 sm:gap-3">
+      <div className="mx-auto flex h-16 w-full max-w-[1400px] items-center gap-2 px-6 sm:gap-3">
         <MainNav items={siteConfig.mainNav} />
 
         <div className="flex min-w-0 flex-1 items-center justify-end gap-1 sm:gap-2">
