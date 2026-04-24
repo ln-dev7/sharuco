@@ -389,7 +389,7 @@ export function ThemeSwitcher() {
           </div>
         </SheetHeader>
 
-        <div className="flex flex-col gap-3 border-b px-5 py-4">
+        <div className="flex flex-col gap-3 border-b px-5 py-4 pt-0">
           <p className="text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
             Code cards
           </p>
