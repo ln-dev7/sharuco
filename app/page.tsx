@@ -82,9 +82,9 @@ export default function IndexPage() {
             glowColor={resolvedTheme === "dark" ? "#09090b" : "#ffffff"}
           />
           {/* Floating gradient orbs layered over the dot field */}
-          <div className="sharuco-drift-a absolute top-24 left-[15%] h-72 w-72 rounded-full bg-gradient-to-br from-sky-500/40 via-violet-500/30 to-fuchsia-500/40 blur-3xl" />
-          <div className="sharuco-drift-b absolute top-40 right-[12%] h-80 w-80 rounded-full bg-gradient-to-br from-rose-500/30 via-amber-500/20 to-emerald-500/30 blur-3xl" />
-          <div className="sharuco-drift-a absolute top-[420px] left-[45%] h-56 w-56 -translate-x-1/2 rounded-full bg-gradient-to-br from-cyan-500/25 via-indigo-500/20 to-pink-500/25 blur-3xl" />
+          <div className="sharuco-drift-a absolute top-24 left-[15%] h-72 w-72 rounded-full bg-gradient-to-br from-sky-500/30 via-violet-500/25 to-fuchsia-500/30 blur-3xl dark:from-sky-500/15 dark:via-violet-500/12 dark:to-fuchsia-500/15" />
+          <div className="sharuco-drift-b absolute top-40 right-[12%] h-80 w-80 rounded-full bg-gradient-to-br from-rose-500/25 via-amber-500/18 to-emerald-500/25 blur-3xl dark:from-rose-500/12 dark:via-amber-500/10 dark:to-emerald-500/12" />
+          <div className="sharuco-drift-c absolute top-[420px] left-[45%] h-56 w-56 rounded-full bg-gradient-to-br from-cyan-500/22 via-indigo-500/18 to-pink-500/22 blur-3xl dark:from-cyan-500/10 dark:via-indigo-500/8 dark:to-pink-500/10" />
         </div>
 
         {/* Announcement pill */}

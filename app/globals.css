@@ -162,27 +162,56 @@
 @keyframes sharuco-drift-a {
   0%,
   100% {
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.85;
   }
-  50% {
-    transform: translate3d(20px, -14px, 0);
+  33% {
+    transform: translate3d(28px, -18px, 0) scale(1.08);
+    opacity: 1;
+  }
+  66% {
+    transform: translate3d(-14px, 10px, 0) scale(0.96);
+    opacity: 0.75;
   }
 }
 @keyframes sharuco-drift-b {
   0%,
   100% {
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.8;
+  }
+  40% {
+    transform: translate3d(-24px, 22px, 0) scale(1.1);
+    opacity: 1;
+  }
+  70% {
+    transform: translate3d(16px, -12px, 0) scale(0.94);
+    opacity: 0.7;
+  }
+}
+@keyframes sharuco-drift-c {
+  0%,
+  100% {
+    transform: translate3d(-50%, 0, 0) scale(0.95);
+    opacity: 0.7;
   }
   50% {
-    transform: translate3d(-18px, 18px, 0);
+    transform: translate3d(-50%, -16px, 0) scale(1.12);
+    opacity: 1;
   }
 }
 
 .sharuco-drift-a {
   animation: sharuco-drift-a 14s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 .sharuco-drift-b {
-  animation: sharuco-drift-b 16s ease-in-out infinite;
+  animation: sharuco-drift-b 17s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+.sharuco-drift-c {
+  animation: sharuco-drift-c 12s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 @keyframes sharuco-shimmer {
@@ -281,6 +310,7 @@
   .sharuco-animated-gradient,
   .sharuco-drift-a,
   .sharuco-drift-b,
+  .sharuco-drift-c,
   .sharuco-shimmer::after,
   .sharuco-orbit {
     animation: none !important;
