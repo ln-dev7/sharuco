@@ -4,7 +4,6 @@ import { COMPANIES } from "@/constants/supports"
 import { useAuthContext } from "@/context/AuthContext"
 import { useGitHubLogin } from "@/firebase/auth/githubLogin"
 
-import { Separator } from "@/components/ui/separator"
 import "highlight.js/styles/vs.css"
 import { useQuery } from "react-query"
 
@@ -40,6 +39,7 @@ import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { CountUp } from "@/components/home/count-up"
+import { DotField } from "@/components/home/dot-field"
 import { ScrollReveal } from "@/components/home/scroll-reveal"
 import { SpotlightCard } from "@/components/home/spotlight-card"
 import { TiltedPreview } from "@/components/home/tilted-preview"
@@ -61,40 +61,56 @@ export default function IndexPage() {
 
   return (
     <>
-      <section className="container-wrapper grid items-center gap-6 pt-6 pb-8 md:py-10">
-        <a
-          className="sharuco-shimmer group relative inline-flex w-fit items-center overflow-hidden rounded-lg bg-zinc-100 px-3 py-1 text-sm font-medium transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"
-          href="/image"
+      <section className="container-wrapper relative grid items-center gap-6 pt-10 pb-8 md:pt-16 md:pb-12">
+        {/* Full-bleed decorative background */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute top-0 left-1/2 h-[720px] w-screen -translate-x-1/2 overflow-hidden [mask-image:radial-gradient(ellipse_75%_55%_at_50%_30%,black_40%,transparent_90%)]"
         >
-          🚀
-          <div
-            data-orientation="vertical"
-            className="mx-2 h-4 w-[1px] shrink-0 bg-zinc-200 dark:bg-zinc-700"
-          ></div>
+          {/* Interactive dot field (reactbits-inspired): dots bulge away from the cursor */}
+          <DotField
+            dotRadius={1.5}
+            dotSpacing={16}
+            cursorRadius={260}
+            bulgeStrength={55}
+            gradientFrom={
+              resolvedTheme === "dark"
+                ? "rgba(168, 85, 247, 0.55)"
+                : "rgba(99, 102, 241, 0.55)"
+            }
+            gradientTo="rgba(236, 72, 153, 0.35)"
+            glowColor={resolvedTheme === "dark" ? "#09090b" : "#ffffff"}
+          />
+          {/* Floating gradient orbs layered over the dot field */}
+          <div className="sharuco-drift-a absolute top-24 left-[15%] h-72 w-72 rounded-full bg-gradient-to-br from-sky-500/40 via-violet-500/30 to-fuchsia-500/40 blur-3xl" />
+          <div className="sharuco-drift-b absolute top-40 right-[12%] h-80 w-80 rounded-full bg-gradient-to-br from-rose-500/30 via-amber-500/20 to-emerald-500/30 blur-3xl" />
+          <div className="sharuco-drift-a absolute top-[420px] left-[45%] h-56 w-56 -translate-x-1/2 rounded-full bg-gradient-to-br from-cyan-500/25 via-indigo-500/20 to-pink-500/25 blur-3xl" />
+        </div>
+
+        {/* Announcement pill */}
+        <Link
+          href="/image"
+          className="group relative z-10 inline-flex w-fit items-center gap-2 rounded-full border border-zinc-200 bg-white/80 px-3 py-1 text-sm font-medium shadow-sm backdrop-blur-sm transition-all hover:border-zinc-300 hover:bg-white hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:border-zinc-700 dark:hover:bg-zinc-900"
+        >
+          <span className="relative flex h-2 w-2 shrink-0">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-500" />
+          </span>
+          <span className="rounded-full bg-gradient-to-r from-sky-500 to-violet-500 px-2 py-0.5 text-[10px] font-semibold tracking-wider text-white uppercase">
+            New
+          </span>
           <span className="text-zinc-800 sm:hidden dark:text-zinc-200">
-            Sharuco Image, Turn your code into a shareable picture.
+            Sharuco Image is live
           </span>
           <span className="hidden text-zinc-800 sm:inline dark:text-zinc-200">
-            Introducing Sharuco Image, Turn your code into a shareable picture.
+            Turn any snippet into a shareable picture
           </span>
-          <svg
-            width="15"
-            height="15"
-            viewBox="0 0 15 15"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="ml-1 h-4 w-4 shrink-0"
-          >
-            <path
-              d="M8.14645 3.14645C8.34171 2.95118 8.65829 2.95118 8.85355 3.14645L12.8536 7.14645C13.0488 7.34171 13.0488 7.65829 12.8536 7.85355L8.85355 11.8536C8.65829 12.0488 8.34171 12.0488 8.14645 11.8536C7.95118 11.6583 7.95118 11.3417 8.14645 11.1464L11.2929 8H2.5C2.22386 8 2 7.77614 2 7.5C2 7.22386 2.22386 7 2.5 7H11.2929L8.14645 3.85355C7.95118 3.65829 7.95118 3.34171 8.14645 3.14645Z"
-              fill="currentColor"
-              fillRule="evenodd"
-              clipRule="evenodd"
-            ></path>
-          </svg>
-        </a>
-        <div className="flex max-w-[980px] flex-col items-start gap-3">
-          <h1 className="text-3xl leading-[1.05] font-extrabold tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
+          <ArrowUpRight className="h-4 w-4 shrink-0 text-zinc-500 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-zinc-400" />
+        </Link>
+
+        {/* Headline */}
+        <div className="relative z-10 flex max-w-[980px] flex-col items-start gap-5">
+          <h1 className="text-4xl leading-[1.03] font-extrabold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
             Share your{" "}
             <span className="sharuco-animated-gradient bg-gradient-to-r from-sky-500 via-violet-500 to-fuchsia-500 bg-clip-text text-transparent">
               code
@@ -111,52 +127,88 @@ export default function IndexPage() {
             </span>
             .
           </h1>
-          <p className="max-w-[700px] text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
+          <p className="max-w-[680px] text-lg text-zinc-700 sm:text-xl dark:text-zinc-400">
             Share and explore essential codes, create forms to retrieve
-            information and keep useful links.
+            information and keep useful links —{" "}
+            <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+              all in one delightful place
+            </span>
+            .
           </p>
         </div>
-        <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 md:flex-row">
+
+        {/* CTAs */}
+        <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:gap-4">
           <Link
             href={siteConfig.links.explore}
-            className={buttonVariants({ size: "lg" })}
+            className={cn(
+              buttonVariants({ size: "lg" }),
+              "group relative gap-2 overflow-hidden shadow-[0_10px_30px_-12px_rgba(99,102,241,0.5)] transition-shadow hover:shadow-[0_16px_40px_-12px_rgba(99,102,241,0.7)] dark:shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)]"
+            )}
           >
-            Explore code
+            <span className="sharuco-animated-gradient absolute inset-0 bg-gradient-to-r from-sky-500 via-violet-500 to-fuchsia-500 bg-[length:200%_200%] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+            <span className="relative z-10 flex items-center gap-2">
+              Explore code
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+            </span>
           </Link>
           {user ? (
             <Link
               href="/dashboard"
-              className={buttonVariants({ size: "lg", variant: "outline" })}
+              className={cn(
+                buttonVariants({ size: "lg", variant: "outline" }),
+                "gap-2 backdrop-blur-sm"
+              )}
             >
-              <Code2 className="mr-2 h-4 w-4" />
+              <Code2 className="h-4 w-4" />
               Your dashboard
             </Link>
           ) : (
             <button
-              className={buttonVariants({ variant: "outline", size: "lg" })}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "gap-2 backdrop-blur-sm"
+              )}
               disabled={isPending}
               onClick={login}
             >
               {isPending ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <Github className="mr-2 h-4 w-4" />
+                <Github className="h-4 w-4" />
               )}
               Sign in with Github
             </button>
           )}
         </div>
-        <p className="text-sm text-zinc-700 dark:text-zinc-400">
-          Follow us on{" "}
-          <Link
-            href="https://twitter.com/ln_dev7"
-            className="font-bold underline underline-offset-4"
+
+        {/* Trust row */}
+        <div className="relative z-10 mt-1 mb-16 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+          <a
+            href="https://github.com/ln-dev7/sharuco"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-1.5 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
           >
-            Twitter
-          </Link>{" "}
-          for the latest updates
-        </p>
-        <Separator className="my-2" />
+            <Github className="h-4 w-4" />
+            Open source on GitHub
+            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
+          <span
+            aria-hidden
+            className="hidden h-4 w-px bg-zinc-300 sm:inline-block dark:bg-zinc-700"
+          />
+          <a
+            href="https://twitter.com/ln_dev7"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-1.5 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
+          >
+            Follow us on Twitter
+            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
+        </div>
+
         <ScrollReveal className="relative my-4 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-br from-zinc-50 via-white to-zinc-100 p-8 md:p-10 dark:border-zinc-800 dark:from-zinc-900 dark:via-zinc-950 dark:to-black">
           <div
             aria-hidden
