@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "react-query"
 import { ThemeProvider } from "next-themes"
 
 import { AuthContextProvider } from "@/context/AuthContext"
+import { ColorThemeProvider } from "@/components/color-theme-provider"
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -20,7 +21,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <ColorThemeProvider>{children}</ColorThemeProvider>
         </ThemeProvider>
       </AuthContextProvider>
     </QueryClientProvider>

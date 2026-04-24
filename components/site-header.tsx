@@ -7,6 +7,7 @@ import { useAuthContext } from "@/context/AuthContext"
 import { siteConfig } from "@/config/site"
 import { Icons } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
+import { ThemeSwitcher } from "@/components/theme-switcher"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { buttonVariants } from "@/components/ui/button"
 import { AvatarUser } from "./avatar-user"
@@ -72,6 +73,7 @@ export function SiteHeader() {
                 </Link>
               </>
             )}
+            <ThemeSwitcher />
             <ThemeToggle />
           </nav>
           {user && <AvatarUser />}
