@@ -3,30 +3,69 @@ import type { Metadata } from "next"
 
 import { ImagePageClient } from "./image-page-client"
 
+const IMAGE_PAGE_URL = "https://sharuco.lndev.me/image"
+const IMAGE_PAGE_TITLE = "Code to Image — Beautiful Code Screenshots Generator"
+const IMAGE_PAGE_DESCRIPTION =
+  "Turn any code snippet into a stunning, shareable screenshot. 30+ backgrounds, partner-made syntax themes, custom fonts, line numbers, window controls, and one-click PNG export — free, no sign-up."
+const IMAGE_PAGE_OG_IMAGE = {
+  url: "/sharuco-image-banner.png",
+  width: 2780,
+  height: 1628,
+  alt: "Sharuco — Create beautiful images of your code",
+}
+
 export const metadata: Metadata = {
-  title: "Create beautiful images of your code",
-  description:
-    "Turn any snippet into a shareable screenshot. Pick from 30+ backgrounds and partner themes, tune the padding, toggle line numbers, and export as PNG.",
-  alternates: { canonical: "https://sharuco.lndev.me/image" },
+  title: IMAGE_PAGE_TITLE,
+  description: IMAGE_PAGE_DESCRIPTION,
+  keywords: [
+    "code to image",
+    "code screenshot",
+    "code image generator",
+    "snippet to png",
+    "beautiful code screenshots",
+    "share code online",
+    "syntax highlighter",
+    "code to image converter",
+    "ray.so alternative",
+    "carbon alternative",
+    "codeshot",
+    "shiki themes",
+    "developer tools",
+    "Sharuco",
+  ],
+  authors: [{ name: "Leonel Ngoya", url: "https://lndev.me" }],
+  creator: "Leonel Ngoya",
+  publisher: "Sharuco",
+  category: "Developer Tools",
+  applicationName: "Sharuco",
+  alternates: { canonical: IMAGE_PAGE_URL },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: "Create beautiful images of your code — Sharuco",
-    description:
-      "Turn any snippet into a shareable screenshot. Pick from 30+ backgrounds and partner themes, tune the padding, toggle line numbers, and export as PNG.",
-    url: "https://sharuco.lndev.me/image",
+    title: IMAGE_PAGE_TITLE,
+    description: IMAGE_PAGE_DESCRIPTION,
+    url: IMAGE_PAGE_URL,
+    siteName: "Sharuco",
     type: "website",
-    images: [
-      {
-        url: "/sharuco-banner.png",
-        alt: "Sharuco — Create beautiful images of your code",
-      },
-    ],
+    locale: "en_US",
+    images: [IMAGE_PAGE_OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Create beautiful images of your code — Sharuco",
-    description:
-      "Turn any snippet into a shareable screenshot. Pick from 30+ backgrounds and partner themes, tune the padding, toggle line numbers, and export as PNG.",
-    images: ["/sharuco-banner.png"],
+    site: "@ln_dev7",
+    creator: "@ln_dev7",
+    title: IMAGE_PAGE_TITLE,
+    description: IMAGE_PAGE_DESCRIPTION,
+    images: [IMAGE_PAGE_OG_IMAGE.url],
   },
 }
 
