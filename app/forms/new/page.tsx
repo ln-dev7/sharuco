@@ -164,58 +164,49 @@ export default function NewFormDraftPage() {
   const busy = isCreating || isLoggingIn
 
   return (
-    <section className="container-wrapper grid items-center gap-6 pt-6 pb-8 md:py-10">
-      <div className="flex w-full items-center justify-between">
-        <Link href="/forms" className="flex items-center font-bold">
-          <Terminal className="mr-2 h-6 w-6" />
-          Sharuco Form
-        </Link>
-        {!user && (
-          <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-            Draft — not saved yet
-          </span>
-        )}
-      </div>
-
-      <div className="flex flex-col items-start gap-2">
-        <h1 className="text-2xl leading-tight font-extrabold tracking-tighter sm:text-2xl md:text-4xl lg:text-4xl">
-          Create a new form
-        </h1>
-        <p className="text-sm leading-5 font-medium text-gray-500 sm:text-base md:text-lg dark:text-gray-400">
-          Build your form freely. You only need to sign in when you want to save
-          it — nothing you create here will be lost.
-        </p>
+    <section className="container-wrapper grid items-start gap-5 pt-6 pb-8 md:py-8">
+      {/* Compact header: brand + title on one row, draft badge on the right */}
+      <div className="flex w-full flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/forms"
+            className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+            title="Back to forms"
+          >
+            <Terminal className="h-5 w-5" />
+          </Link>
+          <h1 className="text-xl leading-none font-extrabold tracking-tighter md:text-2xl">
+            Create a new form
+          </h1>
+        </div>
+        <span
+          className={
+            user
+              ? "rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+              : "rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
+          }
+        >
+          {user
+            ? "Sign in detected — ready to save"
+            : "Draft — sign in only to save, nothing is lost"}
+        </span>
       </div>
 
       <Separator />
 
-      {/* General settings */}
-      <div className="flex w-full max-w-3xl flex-col items-start gap-4">
-        <div className="flex w-full flex-col items-start gap-2">
+      {/* General settings — laid out in a grid to use the full width */}
+      <div className="grid w-full grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-3">
+        <div className="flex flex-col items-start gap-1.5 sm:col-span-2">
           <Label>Name</Label>
           <Input
             placeholder="Name of the form"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          {errors.name && (
-            <p className="text-sm text-red-500">{errors.name}</p>
-          )}
+          {errors.name && <p className="text-sm text-red-500">{errors.name}</p>}
         </div>
-        <div className="flex w-full flex-col items-start gap-2">
-          <Label>Description</Label>
-          <Textarea
-            placeholder="Description of the form"
-            className="h-24"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          {errors.description && (
-            <p className="text-sm text-red-500">{errors.description}</p>
-          )}
-        </div>
-        <div className="flex w-full flex-col items-start gap-2">
-          <Label>Color of the form</Label>
+        <div className="flex flex-col items-start gap-1.5 sm:col-span-1">
+          <Label>Color</Label>
           <div className="flex w-full items-center gap-2">
             <Input
               className="w-full"
@@ -224,10 +215,22 @@ export default function NewFormDraftPage() {
               onChange={(e) => setColor(e.target.value)}
             />
             <div
-              className="block h-9 w-9 shrink-0 rounded-full"
+              className="block h-9 w-9 shrink-0 rounded-full border"
               style={{ background: color }}
             ></div>
           </div>
+        </div>
+        <div className="flex flex-col items-start gap-1.5 sm:col-span-3">
+          <Label>Description</Label>
+          <Textarea
+            placeholder="Description of the form"
+            className="h-20"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          {errors.description && (
+            <p className="text-sm text-red-500">{errors.description}</p>
+          )}
         </div>
       </div>
 
