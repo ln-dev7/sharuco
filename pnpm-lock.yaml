@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@hookform/resolvers':
         specifier: ^3.10.0
-        version: 3.10.0(react-hook-form@7.73.1(react@19.2.5))
+        version: 3.10.0(react-hook-form@7.80.0(react@19.2.5))
       '@radix-ui/react-accessible-icon':
         specifier: ^1.1.2
         version: 1.1.7(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -168,8 +168,8 @@ importers:
         specifier: ^19.2.4
         version: 19.2.5(react@19.2.5)
       react-hook-form:
-        specifier: ^7.54.2
-        version: 7.73.1(react@19.2.5)
+        specifier: ^7.80.0
+        version: 7.80.0(react@19.2.5)
       react-infinite-scroll-component:
         specifier: ^6.1.0
         version: 6.1.1(react@19.2.5)
@@ -3624,8 +3624,8 @@ packages:
     peerDependencies:
       react: ^19.2.5
 
-  react-hook-form@7.73.1:
-    resolution: {integrity: sha512-VAfVYOPcx3piiEVQy95vyFmBwbVUsP/AUIN+mpFG8h11yshDd444nn0VyfaGWSRnhOLVgiDu7HIuBtAIzxn9dA==}
+  react-hook-form@7.80.0:
+    resolution: {integrity: sha512-4P+fk6oXsxY+6xSj7Euhc2sumQD8zQqCuVHoJwoyp9EchP+IUW9OESB7uHFJOKsIBQ4MQqYE84INJFqUCYNoOg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -4860,9 +4860,9 @@ snapshots:
       protobufjs: 7.5.5
       yargs: 17.7.2
 
-  '@hookform/resolvers@3.10.0(react-hook-form@7.73.1(react@19.2.5))':
+  '@hookform/resolvers@3.10.0(react-hook-form@7.80.0(react@19.2.5))':
     dependencies:
-      react-hook-form: 7.73.1(react@19.2.5)
+      react-hook-form: 7.80.0(react@19.2.5)
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -7910,7 +7910,7 @@ snapshots:
       react: 19.2.5
       scheduler: 0.27.0
 
-  react-hook-form@7.73.1(react@19.2.5):
+  react-hook-form@7.80.0(react@19.2.5):
     dependencies:
       react: 19.2.5
 
