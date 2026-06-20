@@ -6,6 +6,11 @@ export type QuestionType =
   | "heading"
   | "paragraph"
   | "divider"
+  // Embed blocks
+  | "image"
+  | "video"
+  | "audio"
+  | "embed"
   // Text inputs
   | "text"
   | "longtext"
@@ -13,8 +18,9 @@ export type QuestionType =
   | "link"
   | "number"
   | "phone"
-  // Date
+  // Date & time
   | "date"
+  | "time"
   // Choices
   | "uniquechoice"
   | "multiplechoice"
@@ -30,7 +36,7 @@ export type QuestionType =
 export interface Question {
   type: QuestionType
   label: string
-  text?: string // placeholder
+  text?: string // placeholder, or the URL for embed blocks
   description?: string // helper text under the label
   required?: boolean
   options?: string[] // for choice / ranking fields
@@ -46,8 +52,16 @@ export interface AnswerItem {
   text: string // always a string representation of the answer
 }
 
+// Embed/media blocks (display a URL, collect no answer)
+export const MEDIA_TYPES: QuestionType[] = ["image", "video", "audio", "embed"]
+
 // Field types that don't collect an answer
-export const CONTENT_TYPES: QuestionType[] = ["heading", "paragraph", "divider"]
+export const CONTENT_TYPES: QuestionType[] = [
+  "heading",
+  "paragraph",
+  "divider",
+  ...MEDIA_TYPES,
+]
 
 // Field types that use an editable list of options
 export const OPTION_TYPES: QuestionType[] = [
@@ -61,6 +75,8 @@ export const OPTION_TYPES: QuestionType[] = [
 export const isContentBlock = (type: QuestionType) =>
   CONTENT_TYPES.includes(type)
 
+export const isMediaBlock = (type: QuestionType) => MEDIA_TYPES.includes(type)
+
 export const hasOptions = (type: QuestionType) => OPTION_TYPES.includes(type)
 
 // Human readable label for a field type (used for badges)
@@ -68,6 +84,10 @@ export const QUESTION_TYPE_LABELS: Record<QuestionType, string> = {
   heading: "Heading",
   paragraph: "Paragraph",
   divider: "Divider",
+  image: "Image",
+  video: "Video",
+  audio: "Audio",
+  embed: "Embed",
   text: "Short answer",
   longtext: "Long answer",
   email: "Email",
@@ -75,6 +95,7 @@ export const QUESTION_TYPE_LABELS: Record<QuestionType, string> = {
   number: "Number",
   phone: "Phone",
   date: "Date",
+  time: "Time",
   uniquechoice: "Multiple choice",
   multiplechoice: "Checkboxes",
   dropdown: "Dropdown",

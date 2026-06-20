@@ -95,8 +95,14 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
             pdf.addPage() // Ajoute une nouvelle page si nécessaire
             yPos = 15 // Réinitialise la position Y pour la nouvelle page
           }
-          if (res.type === "divider") {
-            // skip layout dividers in the PDF
+          if (
+            res.type === "divider" ||
+            res.type === "image" ||
+            res.type === "video" ||
+            res.type === "audio" ||
+            res.type === "embed"
+          ) {
+            // skip layout/embed blocks in the PDF
             return
           } else if (res.type === "heading" || res.type === "paragraph") {
             pdf.text(`${res.label}`, 15, yPos)
@@ -182,6 +188,15 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                             return (
                               <Separator key={answerIndex} className="my-1 w-full" />
                             )
+                          }
+                          // Embed blocks carry no answer — don't show them
+                          if (
+                            answer.type === "image" ||
+                            answer.type === "video" ||
+                            answer.type === "audio" ||
+                            answer.type === "embed"
+                          ) {
+                            return null
                           }
 
                           const isUrl =

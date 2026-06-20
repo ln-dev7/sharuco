@@ -12,6 +12,7 @@ import {
 import {
   hasOptions,
   isContentBlock,
+  isMediaBlock,
   QUESTION_TYPE_LABELS,
   type Question,
   type QuestionType,
@@ -178,6 +179,35 @@ export default function QuestionsEditor({
 
                 {type === "divider" ? (
                   <Separator className="my-1 w-full" />
+                ) : isMediaBlock(type) ? (
+                  <div className="flex w-full flex-col items-start gap-2">
+                    <Input
+                      value={q.text || ""}
+                      onChange={(e) =>
+                        updateField(index, { text: e.target.value })
+                      }
+                      disabled={!editable}
+                      className="h-9"
+                      placeholder={
+                        type === "image"
+                          ? "Image URL (https://…)"
+                          : type === "video"
+                            ? "Video URL (YouTube, Vimeo or .mp4)"
+                            : type === "audio"
+                              ? "Audio URL (.mp3, .ogg…)"
+                              : "URL to embed (https://…)"
+                      }
+                    />
+                    <Input
+                      value={q.label}
+                      onChange={(e) =>
+                        updateField(index, { label: e.target.value })
+                      }
+                      disabled={!editable}
+                      className="h-8 text-sm"
+                      placeholder="Caption (optional)"
+                    />
+                  </div>
                 ) : (
                   <div className="flex w-full flex-col items-start gap-1">
                     <Input

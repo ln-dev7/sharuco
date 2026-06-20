@@ -1,10 +1,15 @@
 import {
   AlignLeft,
+  AudioLines,
   Calendar,
   ChevronDown,
   CircleDot,
+  Clock,
+  Code,
+  Film,
   Hash,
   Heading,
+  Image,
   LinkIcon,
   ListChecks,
   ListOrdered,
@@ -46,6 +51,16 @@ export const FIELD_GROUPS: { group: string; fields: FieldDef[] }[] = [
       { type: "number", label: "Number", icon: <Hash className="h-4 w-4" /> },
       { type: "phone", label: "Phone", icon: <Phone className="h-4 w-4" /> },
       { type: "date", label: "Date", icon: <Calendar className="h-4 w-4" /> },
+      { type: "time", label: "Time", icon: <Clock className="h-4 w-4" /> },
+    ],
+  },
+  {
+    group: "Embed",
+    fields: [
+      { type: "image", label: "Image", icon: <Image className="h-4 w-4" /> },
+      { type: "video", label: "Video", icon: <Film className="h-4 w-4" /> },
+      { type: "audio", label: "Audio", icon: <AudioLines className="h-4 w-4" /> },
+      { type: "embed", label: "Embed", icon: <Code className="h-4 w-4" /> },
     ],
   },
   {

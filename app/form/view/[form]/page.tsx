@@ -23,7 +23,7 @@ import moment from "moment"
 import { uid } from "uid"
 
 import { cn } from "@/lib/utils"
-import { isContentBlock, type Question } from "@/types/form"
+import { isContentBlock, isMediaBlock, type Question } from "@/types/form"
 import SignaturePad from "@/components/form/signature-pad"
 import StarRating from "@/components/form/star-rating"
 import Error from "@/components/error"
@@ -48,6 +48,19 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
 import { Textarea } from "@/components/ui/textarea"
+
+const isDirectVideo = (url: string) =>
+  /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url)
+
+const toVideoEmbedUrl = (url: string) => {
+  const yt = url.match(
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]+)/
+  )
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}`
+  const vimeo = url.match(/vimeo\.com\/(?:video\/)?(\d+)/)
+  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`
+  return url
+}
 
 export default function FormViewPage() {
   const params = useParams()
@@ -256,6 +269,15 @@ export default function FormViewPage() {
             value={answers[index] || ""}
             onChange={(e) => setAnswer(index, e.target.value)}
             placeholder={q.text}
+          />
+        )
+      case "time":
+        return (
+          <Input
+            type="time"
+            value={answers[index] || ""}
+            onChange={(e) => setAnswer(index, e.target.value)}
+            className="w-fit"
           />
         )
       case "longtext":
@@ -503,6 +525,56 @@ export default function FormViewPage() {
                         >
                           {question.label}
                         </p>
+                      )
+                    }
+                    if (isMediaBlock(question.type)) {
+                      const url = question.text || ""
+                      if (!url) return null
+                      return (
+                        <div
+                          key={qIndex}
+                          className="flex w-full flex-col items-start gap-2"
+                        >
+                          {question.type === "image" && (
+                            <img
+                              src={url}
+                              alt={question.label || "image"}
+                              className="max-h-96 w-full rounded-md object-contain"
+                            />
+                          )}
+                          {question.type === "video" &&
+                            (isDirectVideo(url) ? (
+                              <video
+                                src={url}
+                                controls
+                                className="w-full rounded-md"
+                              />
+                            ) : (
+                              <iframe
+                                src={toVideoEmbedUrl(url)}
+                                className="aspect-video w-full rounded-md"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                title={question.label || "video"}
+                              />
+                            ))}
+                          {question.type === "audio" && (
+                            <audio src={url} controls className="w-full" />
+                          )}
+                          {question.type === "embed" && (
+                            <iframe
+                              src={url}
+                              className="aspect-video w-full rounded-md border"
+                              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                              title={question.label || "embed"}
+                            />
+                          )}
+                          {question.label && (
+                            <p className="text-xs text-zinc-500">
+                              {question.label}
+                            </p>
+                          )}
+                        </div>
                       )
                     }
                     return (
