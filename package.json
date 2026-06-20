@@ -45,7 +45,7 @@
     "@stackblitz/sdk": "^1.11.0",
     "@tanstack/react-query": "^5.66.7",
     "@types/prismjs": "^1.26.5",
-    "@vercel/analytics": "^1.4.1",
+    "@vercel/analytics": "^2.0.1",
     "algoliasearch": "^4.24.0",
     "axios": "^1.7.9",
     "cheerio": "^1.0.0",
