@@ -8,27 +8,35 @@ import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
 import { uploadFormFile, uploadSignature } from "@/firebase/storage/uploadFile"
 import algoliasearch from "algoliasearch"
+import { format } from "date-fns"
 import {
   ArrowDown,
   ArrowUp,
+  CalendarIcon,
   Check,
   Loader2,
   Send,
   Terminal,
-  Upload,
   X,
 } from "lucide-react"
 import moment from "moment"
 import { uid } from "uid"
 
+import { cn } from "@/lib/utils"
 import { isContentBlock, type Question } from "@/types/form"
 import SignaturePad from "@/components/form/signature-pad"
 import StarRating from "@/components/form/star-rating"
 import Error from "@/components/error"
 import { Button, buttonVariants } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
   Select,
@@ -164,6 +172,8 @@ export default function FormViewPage() {
               ? answers[i]
               : q.options || []
             text = order.join(", ")
+          } else if (q.type === "date") {
+            text = answers[i] instanceof Date ? format(answers[i], "yyyy-MM-dd") : ""
           } else if (!isContentBlock(q.type)) {
             text = serialize(q, answers[i])
           }
@@ -256,15 +266,34 @@ export default function FormViewPage() {
             placeholder={q.text}
           />
         )
-      case "date":
+      case "date": {
+        const selected: Date | undefined =
+          answers[index] instanceof Date ? answers[index] : undefined
         return (
-          <Input
-            type="date"
-            value={answers[index] || ""}
-            onChange={(e) => setAnswer(index, e.target.value)}
-            className="w-fit"
-          />
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn(
+                  "w-[260px] justify-start text-left font-normal",
+                  !selected && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {selected ? format(selected, "PPP") : "Pick a date"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={selected}
+                onSelect={(d) => setAnswer(index, d)}
+                autoFocus
+              />
+            </PopoverContent>
+          </Popover>
         )
+      }
       case "uniquechoice":
         return (
           <RadioGroup
@@ -399,22 +428,16 @@ export default function FormViewPage() {
         return <SignaturePad onChange={(dataUrl) => setAnswer(index, dataUrl)} />
       case "fileupload":
         return (
-          <label
-            className={buttonVariants({ variant: "outline" }) + " cursor-pointer"}
-          >
-            <Upload className="mr-2 h-4 w-4" />
-            {files[index] ? files[index]?.name : "Choose a file"}
-            <input
-              type="file"
-              className="hidden"
-              onChange={(e) =>
-                setFiles((prev) => ({
-                  ...prev,
-                  [index]: e.target.files?.[0] || null,
-                }))
-              }
-            />
-          </label>
+          <Input
+            type="file"
+            className="cursor-pointer"
+            onChange={(e) =>
+              setFiles((prev) => ({
+                ...prev,
+                [index]: e.target.files?.[0] || null,
+              }))
+            }
+          />
         )
       default:
         return null
@@ -520,13 +543,13 @@ export default function FormViewPage() {
                         alt="stacked-waves-haikei"
                         className="absolute inset-0 h-full w-full object-cover"
                       />
-                      <input
+                      <Input
                         type="number"
                         id="answer"
                         name="answer"
                         value={captcha}
                         onChange={(e) => setCaptcha(e.target.value)}
-                        className="z-10 h-10 w-full rounded-md bg-white px-3 py-2 text-sm font-medium text-zinc-900 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                        className="z-10 bg-white text-zinc-900"
                         placeholder={`${randomNumbers.number1} + ${randomNumbers.number2}`}
                       />
                     </div>
