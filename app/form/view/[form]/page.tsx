@@ -48,6 +48,16 @@ import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
 import { Textarea } from "@/components/ui/textarea"
 
+// Approximate byte size of a base64 data URL
+const dataUrlBytes = (dataUrl: string) => {
+  const comma = dataUrl.indexOf(",")
+  if (comma === -1) return 0
+  const b64 = dataUrl.slice(comma + 1)
+  return Math.floor((b64.length * 3) / 4)
+}
+
+const MAX_DRAWN_SIGNATURE_BYTES = 30 * 1024 // 30 KB
+
 const isDirectVideo = (url: string) =>
   /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url)
 
@@ -91,6 +101,9 @@ export default function FormViewPage() {
 
   // answers keyed by question index
   const [answers, setAnswers] = useState<Record<number, any>>({})
+  const [signatureModes, setSignatureModes] = useState<
+    Record<number, "draw" | "type">
+  >({})
   const [errors, setErrors] = useState<Record<number, string>>({})
   const [submitting, setSubmitting] = useState(false)
 
@@ -159,6 +172,21 @@ export default function FormViewPage() {
         (Array.isArray(v) && v.length === 0)
       if (empty) newErrors[i] = "This field is required"
     })
+    // drawn signatures must stay small (Firestore-friendly); typed are unlimited
+    questions.forEach((q, i) => {
+      if (q.type !== "signature") return
+      const val = answers[i]
+      const mode = signatureModes[i] || "draw"
+      if (
+        mode === "draw" &&
+        typeof val === "string" &&
+        val &&
+        dataUrlBytes(val) > MAX_DRAWN_SIGNATURE_BYTES
+      ) {
+        newErrors[i] =
+          "This drawn signature is too large (max 30 KB). Please simplify it, or use the “Type” option which has no size limit."
+      }
+    })
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
       return
@@ -207,6 +235,7 @@ export default function FormViewPage() {
       })
 
       setAnswers({})
+      setSignatureModes({})
       setCaptcha("")
       setRandomNumbers(generateRandomNumbers())
     } finally {
@@ -441,7 +470,15 @@ export default function FormViewPage() {
         )
       }
       case "signature":
-        return <SignaturePad onChange={(dataUrl) => setAnswer(index, dataUrl)} />
+        return (
+          <SignaturePad
+            onChange={(dataUrl, meta) => {
+              setAnswer(index, dataUrl)
+              if (meta)
+                setSignatureModes((prev) => ({ ...prev, [index]: meta.mode }))
+            }}
+          />
+        )
       case "fileupload":
         return (
           <div className="w-full rounded-md border border-dashed border-zinc-300 p-3 text-sm text-zinc-500 dark:border-zinc-700">

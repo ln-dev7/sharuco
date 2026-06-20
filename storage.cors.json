@@ -1,0 +1,17 @@
+[
+  {
+    "origin": [
+      "https://sharuco.lndev.me",
+      "http://localhost:3000"
+    ],
+    "method": ["GET", "HEAD", "PUT", "POST", "DELETE"],
+    "responseHeader": [
+      "Content-Type",
+      "Authorization",
+      "Content-Length",
+      "User-Agent",
+      "x-goog-resumable"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]
