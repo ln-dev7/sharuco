@@ -3,7 +3,6 @@
 import { Paintbrush, Check, Search } from "lucide-react"
 import { useState } from "react"
 
-import { useUiSounds } from "@/hooks/use-ui-sounds"
 import { useTheme } from "@/components/theme-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -348,7 +347,6 @@ const DARK_PREVIEWS: Record<
 export function ThemeSwitcher() {
   const { colorTheme, setColorTheme } = useColorThemeStore()
   const { resolvedTheme } = useTheme()
-  const { playClick, playPop } = useUiSounds()
 
   const isDark = resolvedTheme === "dark"
   const [search, setSearch] = useState("")
@@ -371,12 +369,7 @@ export function ThemeSwitcher() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-8"
-          onClick={() => playPop()}
-        >
+        <Button variant="ghost" size="icon" className="size-8">
           <Paintbrush className="size-4" />
         </Button>
       </SheetTrigger>
@@ -436,10 +429,7 @@ export function ThemeSwitcher() {
                 return (
                   <button
                     key={theme.id}
-                    onClick={() => {
-                      playClick()
-                      setColorTheme(theme.id)
-                    }}
+                    onClick={() => setColorTheme(theme.id)}
                     className={cn(
                       "relative flex flex-col gap-2 rounded-xl border-2 p-3 text-left transition-all hover:border-primary/50",
                       isSelected

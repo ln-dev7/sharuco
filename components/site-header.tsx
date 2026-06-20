@@ -5,7 +5,6 @@ import { useParams, usePathname } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 
 import { siteConfig } from "@/config/site"
-import { useUiSounds } from "@/hooks/use-ui-sounds"
 import { Icons } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
 import { ThemeSwitcher } from "@/components/theme-switcher"
@@ -20,7 +19,6 @@ export function SiteHeader() {
   const { user } = useAuthContext()
   const pathName = usePathname()
   const params = useParams()
-  const { playClick } = useUiSounds()
 
   const searchBar =
     params["link"] !== undefined || (pathName === "/links" && user) ? (
@@ -48,7 +46,6 @@ export function SiteHeader() {
                 href={siteConfig.links.github}
                 target="_blank"
                 rel="noreferrer"
-                onClick={() => playClick()}
                 className={buttonVariants({
                   size: "sm",
                   variant: "ghost",
@@ -63,7 +60,6 @@ export function SiteHeader() {
                 href={siteConfig.links.twitter}
                 target="_blank"
                 rel="noreferrer"
-                onClick={() => playClick()}
                 className={buttonVariants({
                   size: "sm",
                   variant: "ghost",
