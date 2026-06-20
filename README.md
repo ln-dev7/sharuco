@@ -14,7 +14,7 @@ Share your code. Manage Form & Link.
 - **Search** — Full-text search across codes, users, forms and links powered by Algolia.
 - **GitHub Auth** — One-click sign-in with GitHub via Firebase Authentication.
 - **Dark / Light mode** — Theme switcher with system preference support.
-- **Donation** — Support the project with a donation through Notch Pay. ( https://sharuco.lndev.me/donation )
+- **Donation** — Support the project with a donation via an external link. ( https://sharuco.lndev.me/donation )
 
 ## Requirements
 
@@ -36,10 +36,6 @@ cp .env.example .env
 #   - `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` : Firebase Messaging Sender ID
 #   - `NEXT_PUBLIC_FIREBASE_APP_ID` : Firebase App ID
 #   - `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID` : Firebase Measurement ID
-#   - `NEXT_PUBLIC_NOTCH_PAY_API_URL` : Notch Pay API URL
-#   - `NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY` : Notch Pay Public Key
-#   - `NEXT_PUBLIC_NOTCH_PAY_PRIVATE_KEY` : Notch Pay Private Key
-#   - `NEXT_PUBLIC_NOTCH_PAY_PUBLIC_KEY_TEST` : Notch Pay Public Key Test
 #   - `NEXT_PUBLIC_ALGOLIA_APP_ID` : Algolia App ID
 #   - `NEXT_PUBLIC_ALGOLIA_SEARCH_KEY` : Algolia Search Key
 #   - `NEXT_PUBLIC_ALGOLIA_ADMIN_KEY` : Algolia Admin Key
@@ -88,4 +84,3 @@ This project is licensed under the MIT License.
 - **Forms**: React Hook Form + Yup
 - **Data fetching / State**: TanStack React Query, Zustand
 - **Sharing**: react-share
-- **Payments**: Notch Pay (donations)
