@@ -30,6 +30,8 @@ export interface FieldDef {
   type: QuestionType
   label: string
   icon: React.ReactNode
+  disabled?: boolean
+  disabledReason?: string
 }
 
 export const FIELD_GROUPS: { group: string; fields: FieldDef[] }[] = [
@@ -79,7 +81,13 @@ export const FIELD_GROUPS: { group: string; fields: FieldDef[] }[] = [
       { type: "rating", label: "Rating", icon: <Star className="h-4 w-4" /> },
       { type: "linearscale", label: "Linear scale", icon: <SlidersHorizontal className="h-4 w-4" /> },
       { type: "signature", label: "Signature", icon: <PenTool className="h-4 w-4" /> },
-      { type: "fileupload", label: "File upload", icon: <Upload className="h-4 w-4" /> },
+      {
+        type: "fileupload",
+        label: "File upload",
+        icon: <Upload className="h-4 w-4" />,
+        disabled: true,
+        disabledReason: "Not available at the moment",
+      },
     ],
   },
 ]

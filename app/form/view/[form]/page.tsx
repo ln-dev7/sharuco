@@ -6,7 +6,6 @@ import { useParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import { uploadFormFile, uploadSignature } from "@/firebase/storage/uploadFile"
 import algoliasearch from "algoliasearch"
 import { format } from "date-fns"
 import {
@@ -92,7 +91,6 @@ export default function FormViewPage() {
 
   // answers keyed by question index
   const [answers, setAnswers] = useState<Record<number, any>>({})
-  const [files, setFiles] = useState<Record<number, File | null>>({})
   const [errors, setErrors] = useState<Record<number, string>>({})
   const [submitting, setSubmitting] = useState(false)
 
@@ -153,7 +151,7 @@ export default function FormViewPage() {
     const newErrors: Record<number, string> = {}
     questions.forEach((q, i) => {
       if (isContentBlock(q.type) || !q.required) return
-      const v = q.type === "fileupload" ? files[i] : answers[i]
+      const v = answers[i]
       const empty =
         v === undefined ||
         v === null ||
@@ -173,12 +171,9 @@ export default function FormViewPage() {
       const builtResponses = await Promise.all(
         questions.map(async (q, i) => {
           let text = ""
-          if (q.type === "fileupload") {
-            const file = files[i]
-            if (file) text = await uploadFormFile(formId, file)
-          } else if (q.type === "signature") {
-            const dataUrl = answers[i]
-            if (dataUrl) text = await uploadSignature(formId, dataUrl)
+          if (q.type === "signature") {
+            // store the signature image directly in Firestore as a data URL
+            text = typeof answers[i] === "string" ? answers[i] : ""
           } else if (q.type === "ranking") {
             // default to the options order if respondent didn't reorder
             const order = Array.isArray(answers[i])
@@ -212,7 +207,6 @@ export default function FormViewPage() {
       })
 
       setAnswers({})
-      setFiles({})
       setCaptcha("")
       setRandomNumbers(generateRandomNumbers())
     } finally {
@@ -450,16 +444,9 @@ export default function FormViewPage() {
         return <SignaturePad onChange={(dataUrl) => setAnswer(index, dataUrl)} />
       case "fileupload":
         return (
-          <Input
-            type="file"
-            className="cursor-pointer"
-            onChange={(e) =>
-              setFiles((prev) => ({
-                ...prev,
-                [index]: e.target.files?.[0] || null,
-              }))
-            }
-          />
+          <div className="w-full rounded-md border border-dashed border-zinc-300 p-3 text-sm text-zinc-500 dark:border-zinc-700">
+            File upload is not available at the moment.
+          </div>
         )
       default:
         return null

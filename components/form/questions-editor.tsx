@@ -28,6 +28,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 /**
  * Controlled, Firestore-agnostic form builder UI. Used both by the
@@ -101,19 +107,37 @@ export default function QuestionsEditor({
                 <p className="mb-1 px-2 text-xs font-semibold tracking-wide text-zinc-400 uppercase">
                   {group.group}
                 </p>
-                {group.fields.map((field) => (
-                  <button
-                    key={field.type}
-                    type="button"
-                    onClick={() => addField(field.type)}
-                    className="flex w-full items-center justify-start gap-2 rounded-md px-3 py-1.5 hover:bg-zinc-100 hover:dark:bg-zinc-800"
-                  >
-                    {field.icon}
-                    <span className="ml-1 text-sm font-medium">
-                      {field.label}
-                    </span>
-                  </button>
-                ))}
+                {group.fields.map((field) =>
+                  field.disabled ? (
+                    <TooltipProvider key={field.type} delayDuration={150}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="flex w-full cursor-not-allowed items-center justify-start gap-2 rounded-md px-3 py-1.5 opacity-50">
+                            {field.icon}
+                            <span className="ml-1 text-sm font-medium">
+                              {field.label}
+                            </span>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {field.disabledReason || "Not available"}
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ) : (
+                    <button
+                      key={field.type}
+                      type="button"
+                      onClick={() => addField(field.type)}
+                      className="flex w-full items-center justify-start gap-2 rounded-md px-3 py-1.5 hover:bg-zinc-100 hover:dark:bg-zinc-800"
+                    >
+                      {field.icon}
+                      <span className="ml-1 text-sm font-medium">
+                        {field.label}
+                      </span>
+                    </button>
+                  )
+                )}
               </div>
             ))}
             <Separator className="my-2 hidden w-full sm:block" />
