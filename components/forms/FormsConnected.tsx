@@ -43,6 +43,7 @@ export default function FormsConnected() {
                     color: string
                     responses: any[]
                     createdAt: any
+                    questions?: any[]
                   }) => (
                     <CardForm
                       key={form.id}
@@ -53,6 +54,7 @@ export default function FormsConnected() {
                       color={form.color}
                       responses={form.responses}
                       createdAt={form.createdAt}
+                      questions={form.questions}
                     />
                   )
                 )}

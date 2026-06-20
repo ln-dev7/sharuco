@@ -2,16 +2,21 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useAuthContext } from "@/context/AuthContext"
+import { useCreateDocument } from "@/firebase/firestore/createDocument"
+import { useDeleteDocument } from "@/firebase/firestore/deleteDocument"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
 import formatDateTime from "@/utils/formatDateTime"
 import { yupResolver } from "@hookform/resolvers/yup"
 import algoliasearch from "algoliasearch"
 import {
+  Copy,
   Loader2,
   MessageSquare,
   MoreHorizontal,
   Pencil,
   Timer,
+  Trash,
 } from "lucide-react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
@@ -47,6 +52,7 @@ export default function CardForm({
   description,
   color,
   responses,
+  questions = [],
 }: {
   id: string
   createdAt: number
@@ -55,10 +61,13 @@ export default function CardForm({
   color: string
   responses: any[]
   idAuthor?: string
+  questions?: any[]
 }) {
   const { toast } = useToast()
+  const { userPseudo } = useAuthContext()
 
   const [openEditDialog, setOpenEditDialog] = useState(false)
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
 
   //
 
@@ -69,6 +78,39 @@ export default function CardForm({
     process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
   )
   const index = client.initIndex(ALGOLIA_INDEX_NAME)
+
+  const { createDocument: duplicateForm, isLoading: isDuplicating }: any =
+    useCreateDocument("forms")
+
+  const handleDuplicate = () => {
+    const newDocument = {
+      name: `Copy of ${name}`,
+      description,
+      createdAt: moment().valueOf(),
+      idAuthor: userPseudo,
+      color,
+      published: false,
+      // strip undefined/NaN — Firestore rejects them
+      questions: JSON.parse(JSON.stringify(questions || [])),
+      responses: [],
+      collaborators: [],
+    }
+    duplicateForm(newDocument)
+    // createDocument redirects to /form/{newId} on success
+  }
+
+  const { deleteDocument, isLoading: isDeleting }: any =
+    useDeleteDocument("forms")
+
+  const handleDelete = () => {
+    deleteDocument(id)
+    index.deleteObject(id)
+    setOpenDeleteDialog(false)
+    toast({
+      title: "Your form has been deleted",
+      action: <ToastAction altText="Okay">Okay</ToastAction>,
+    })
+  }
 
   const schema = yup.object().shape({
     name: yup.string().required(),
@@ -178,11 +220,70 @@ export default function CardForm({
         </PopoverTrigger>
         <PopoverContent className="w-fit">
           <div className="flex w-full items-center justify-end gap-2">
+            <Button
+              variant="outline"
+              className="h-10 w-10 rounded-full p-0"
+              title="Duplicate"
+              disabled={isDuplicating}
+              onClick={isDuplicating ? undefined : handleDuplicate}
+            >
+              {isDuplicating ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+            </Button>
+            <AlertDialog
+              open={openDeleteDialog}
+              onOpenChange={setOpenDeleteDialog}
+            >
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="destructive"
+                  className="h-10 w-10 rounded-full p-0"
+                  title="Delete"
+                >
+                  <Trash className="h-4 w-4" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to delete this form ?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    <span className="block rounded-lg bg-red-50 p-4 text-sm font-semibold text-red-800 dark:bg-gray-800 dark:text-red-400">
+                      This action is irreversible. The form{" "}
+                      <span className="font-bold">{name}</span> and all its
+                      responses will be permanently deleted.
+                    </span>
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <button
+                    className={cn(
+                      "inline-flex h-10 items-center justify-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-zinc-900 focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-red-600 dark:hover:bg-zinc-200 dark:hover:text-zinc-900"
+                    )}
+                    disabled={isDeleting}
+                    onClick={!isDeleting ? handleDelete : undefined}
+                  >
+                    {isDeleting ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Trash className="mr-2 h-4 w-4" />
+                    )}
+                    Delete
+                  </button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
             <AlertDialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
               <AlertDialogTrigger asChild>
                 <Button
                   variant="outline"
                   className="h-10 w-10 rounded-full p-0"
+                  title="Edit"
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
