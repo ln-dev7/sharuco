@@ -107,6 +107,12 @@ export default function NewFormDraftPage() {
   }
 
   const persist = (pseudo: string) => {
+    const cleanQuestions = questions.map((q) => ({
+      ...q,
+      ...(q.options
+        ? { options: q.options.filter((o) => o && o.trim() !== "") }
+        : {}),
+    }))
     const newDocument = {
       name,
       description,
@@ -114,12 +120,8 @@ export default function NewFormDraftPage() {
       idAuthor: pseudo,
       color,
       published: false,
-      questions: questions.map((q) => ({
-        ...q,
-        options: q.options
-          ? q.options.filter((o) => o && o.trim() !== "")
-          : q.options,
-      })),
+      // strip any `undefined` values — Firestore rejects them
+      questions: JSON.parse(JSON.stringify(cleanQuestions)),
       responses: [],
       collaborators: [],
     }
@@ -241,7 +243,7 @@ export default function NewFormDraftPage() {
       />
 
       {/* Save bar */}
-      <div className="sticky inset-x-0 bottom-0 z-10 flex w-full items-center justify-between gap-2 border-t bg-white py-4 dark:bg-zinc-900">
+      <div className="sticky inset-x-0 bottom-0 z-10 flex w-full items-center justify-between gap-2 border-t bg-background py-4">
         <Button disabled={busy} onClick={busy ? undefined : handleSave}>
           {busy ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

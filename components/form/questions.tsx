@@ -63,12 +63,14 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     }
     setErrors({})
 
-    const cleaned = questions.map((q) => ({
+    const cleanedQuestions = questions.map((q) => ({
       ...q,
-      options: q.options
-        ? q.options.filter((o) => o && o.trim() !== "")
-        : q.options,
+      ...(q.options
+        ? { options: q.options.filter((o) => o && o.trim() !== "") }
+        : {}),
     }))
+    // strip any `undefined` values — Firestore rejects them
+    const cleaned = JSON.parse(JSON.stringify(cleanedQuestions))
 
     const id = params["form"]
     await updateFormDocument({ id, updatedFormData: { questions: cleaned } })
