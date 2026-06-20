@@ -1,36 +1,16 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
-import { yupResolver } from "@hookform/resolvers/yup"
 import algoliasearch from "algoliasearch"
-import {
-  AlignJustify,
-  Calendar,
-  Check,
-  CircleDot,
-  FileQuestion,
-  Heading,
-  LinkIcon,
-  List,
-  ListChecks,
-  Loader2,
-  Mail,
-  Minus,
-  Save,
-  Trash,
-  X,
-} from "lucide-react"
-import { useFieldArray, useForm, useWatch } from "react-hook-form"
-import * as yup from "yup"
+import { Check, Loader2, Save, X } from "lucide-react"
 
-import EmptyCard from "@/components/empty-card"
+import { isContentBlock, type Question } from "@/types/form"
+import QuestionsEditor from "@/components/form/questions-editor"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Textarea } from "@/components/ui/textarea"
 
 export default function QuestionsForms({ dataForm }: { dataForm: any }) {
   const params = useParams()
@@ -43,270 +23,96 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     reset: resetUpdateForm,
   }: any = useUpdateFormDocument("forms")
 
-  type QuestionType =
-    | "heading"
-    | "text"
-    | "email"
-    | "link"
-    | "longtext"
-    | "date"
-    | "uniquechoice"
-    | "listchoice"
-    | "multiplechoice"
+  const isOwner = dataForm.idAuthor === userPseudo
 
-  interface Question {
-    text: string
-    type: QuestionType
-    label: string
-  }
-
-  interface FormData {
-    questions: Question[]
-  }
-
-  const schema = yup.object().shape({
-    questions: yup.array().of(
-      yup.object().shape({
-        label: yup.string().required("The label is required"),
-      })
-    ),
-  })
-
-  const handleAddField = (type: QuestionType) => {
-    append({ type, text: "", label: "" })
-  }
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: dataForm,
-  })
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "questions",
-  })
-
-  const watchedQuestions = useWatch({ control, name: "questions" })
+  const [questions, setQuestions] = useState<Question[]>(
+    dataForm.questions || []
+  )
+  const [errors, setErrors] = useState<Record<number, string>>({})
 
   useEffect(() => {
-    setValue("questions", dataForm.questions)
-  }, [dataForm, setValue])
-
-  const handleRemoveField = (index: number) => {
-    remove(index)
-  }
+    setQuestions(dataForm.questions || [])
+  }, [dataForm])
 
   const ALGOLIA_INDEX_NAME = "forms"
-
   const client = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
     process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
   )
   const index = client.initIndex(ALGOLIA_INDEX_NAME)
 
-  const onSubmit = async (data: FormData) => {
-    const updatedFormData: {
-      questions: Question[]
-    } = {
-      questions: data.questions,
+  const validate = (qs: Question[]) => {
+    const newErrors: Record<number, string> = {}
+    qs.forEach((q, i) => {
+      if (!isContentBlock(q.type) && (!q.label || q.label.trim() === "")) {
+        newErrors[i] = "The label is required"
+      }
+      if (q.type === "heading" || q.type === "paragraph") {
+        if (!q.label || q.label.trim() === "")
+          newErrors[i] = "This field is required"
+      }
+    })
+    return newErrors
+  }
+
+  const onSubmit = async () => {
+    const newErrors = validate(questions)
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
+      return
     }
+    setErrors({})
+
+    const cleaned = questions.map((q) => ({
+      ...q,
+      options: q.options
+        ? q.options.filter((o) => o && o.trim() !== "")
+        : q.options,
+    }))
 
     const id = params["form"]
-
-    await updateFormDocument({ id, updatedFormData })
-
-    await index.partialUpdateObject({
-      objectID: id,
-      questions: data.questions,
-    })
+    await updateFormDocument({ id, updatedFormData: { questions: cleaned } })
+    await index.partialUpdateObject({ objectID: id, questions: cleaned })
   }
 
   return (
-    <div className="flex w-full flex-col items-start gap-4 sm:flex-row">
-      {dataForm.idAuthor === userPseudo && (
-        <>
-          <div className="flex w-full shrink-0 flex-col items-start gap-2 rounded-md sm:sticky sm:top-20 sm:w-[250px]">
-            <button
-              onClick={() => handleAddField("heading")}
-              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
-            >
-              <Heading className="h-5 w-5" />
-              <span className="ml-2 text-sm font-semibold">Heading</span>
-            </button>
-            <button
-              onClick={() => handleAddField("text")}
-              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
-            >
-              <Minus className="h-5 w-5" />
-              <span className="ml-2 text-sm font-semibold">Short answer</span>
-            </button>
-            <button
-              onClick={() => handleAddField("longtext")}
-              className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800"
-            >
-              <AlignJustify className="h-5 w-5" />
-              <span className="ml-2 text-sm font-semibold">Long answer</span>
-            </button>
-            <button className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800">
-              <LinkIcon className="h-5 w-5" />
-              <span className="ml-2 text-sm font-semibold">Link</span>
-              <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-                soon
-              </span>
-            </button>
-            <button className="flex w-full items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800">
-              <Mail className="h-5 w-5" />
-              <span className="ml-2 text-sm font-semibold">E-mail</span>
-              <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-                soon
-              </span>
-            </button>
-            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800">
-              <CircleDot className="h-5 w-5" />
-              <span className="ml-2 text-sm font-semibold">Unique choice</span>
-              <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-                soon
-              </span>
-            </button>
-            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800">
-              <ListChecks className="h-5 w-5" />
-              <span className="ml-2 text-sm font-semibold">Multi choice</span>
-              <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-                soon
-              </span>
-            </button>
-            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800">
-              <List className="h-5 w-5" />
-              <span className="ml-2 text-sm font-semibold">
-                List of choices
-              </span>
-              <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-                soon
-              </span>
-            </button>
-            <button className="flex w-full cursor-default items-center justify-start gap-1 rounded-md px-4 py-2 hover:bg-zinc-100 hover:dark:bg-zinc-800">
-              <Calendar className="h-5 w-5" />
-              <span className="ml-2 text-sm font-semibold">Date</span>
-              <span className="mr-2 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
-                soon
-              </span>
-            </button>
-            <Separator className="my-2 hidden w-full sm:block" />
-          </div>
-          <Separator className="my-2 block w-full sm:hidden" />
-        </>
-      )}
-      <div
-        id="questions"
-        className="relative flex w-full flex-col items-start gap-4 overflow-hidden rounded-md border px-4 pt-7 pb-4"
-      >
+    <div className="flex w-full flex-col items-start gap-4">
+      <QuestionsEditor
+        questions={questions}
+        onChange={setQuestions}
+        color={dataForm.color}
+        errors={errors}
+        editable={isOwner}
+      />
+
+      {isSuccessUpdateForm && (
         <div
-          className={`absolute inset-x-0 top-0 h-3 w-full`}
-          style={{
-            background: `${dataForm.color}`,
-          }}
-        ></div>
-        <div className="w-full space-y-6">
-          {fields.map((field, index) => {
-            const watchedFieldType = watchedQuestions?.[index]?.type
-            return (
-              <div
-                className="relative flex w-full flex-col items-start gap-2 first:mt-2"
-                key={field.id}
-              >
-                <label className="flex w-3/4 flex-col items-start">
-                  {watchedFieldType === "heading" ? (
-                    <Input
-                      {...register(`questions.${index}.label` as const)}
-                      className="text-md h-6 border-none p-0 font-semibold outline-none hover:border-none hover:ring-0 hover:outline-none focus:border-none focus:ring-0 focus:outline-none"
-                      placeholder="Your label"
-                    />
-                  ) : (
-                    <Input
-                      {...register(`questions.${index}.label` as const)}
-                      className="h-8 border-none pl-0 outline-none hover:border-none hover:ring-0 hover:outline-none focus:border-none focus:ring-0 focus:outline-none"
-                      placeholder="Your label"
-                    />
-                  )}
-
-                  {errors?.questions?.[index]?.label && (
-                    <p className="mt-1 text-xs font-medium text-red-500">
-                      {errors.questions[index].label.message}
-                    </p>
-                  )}
-                </label>
-                {(watchedFieldType === "text" ||
-                  watchedFieldType === "email" ||
-                  watchedFieldType === "link") && (
-                  <Input
-                    {...register(`questions.${index}.text` as const)}
-                    placeholder="Enter placeholder"
-                  />
-                )}
-                {watchedFieldType === "longtext" && (
-                  <Textarea
-                    {...register(`questions.${index}.text` as const)}
-                    placeholder="Enter placeholder"
-                  />
-                )}
-                <div className="flex w-full items-center justify-start">
-                  <span className="mr-2 rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300">
-                    {watchedFieldType}
-                  </span>
-                </div>
-                {dataForm.idAuthor === userPseudo && (
-                  <Button
-                    variant="destructive"
-                    className="absolute -top-2 right-2 flex h-10 w-10 items-center justify-center rounded-full p-2"
-                    onClick={() => handleRemoveField(index)}
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
-            )
-          })}
-          {fields.length < 1 && (
-            <EmptyCard
-              icon={<FileQuestion className="h-8 w-8" />}
-              title="No questions yet"
-              description="Click on the buttons above to add questions to your form"
-            />
-          )}
-        </div>
-        <Separator className="my-2 w-full" />
-
-        {isSuccessUpdateForm && (
-          <div
-            className="flex w-full items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
-            role="alert"
-          >
-            <Check className="h-4 w-4" />
-            <span className="sr-only">Info</span>
-            <div className="ml-3 text-sm font-medium">
-              Your questions have been updated
-            </div>
-            <button
-              type="button"
-              className="-m-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 p-1.5 text-green-500 hover:bg-green-200 focus:ring-2 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
-              onClick={resetUpdateForm}
-            >
-              <span className="sr-only">Close</span>
-              <X />
-            </button>
+          className="flex w-full items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
+          role="alert"
+        >
+          <Check className="h-4 w-4" />
+          <span className="sr-only">Info</span>
+          <div className="ml-3 text-sm font-medium">
+            Your questions have been updated
           </div>
-        )}
-        {dataForm.idAuthor === userPseudo && (
+          <button
+            type="button"
+            className="-m-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 p-1.5 text-green-500 hover:bg-green-200 focus:ring-2 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
+            onClick={resetUpdateForm}
+          >
+            <span className="sr-only">Close</span>
+            <X />
+          </button>
+        </div>
+      )}
+
+      {isOwner && (
+        <>
+          <Separator className="w-full" />
           <Button
             variant="outline"
             disabled={isLoadingUpdateForm}
-            onClick={isLoadingUpdateForm ? undefined : handleSubmit(onSubmit)}
+            onClick={isLoadingUpdateForm ? undefined : onSubmit}
           >
             {isLoadingUpdateForm ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -315,8 +121,8 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
             )}
             Save questions
           </Button>
-        )}
-      </div>
+        </>
+      )}
     </div>
   )
 }

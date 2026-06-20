@@ -9,7 +9,6 @@ import jsPDF from "jspdf"
 import { Loader2, MessageSquare, Timer, Trash } from "lucide-react"
 import moment from "moment"
 
-import { cn } from "@/lib/utils"
 import EmptyCard from "@/components/empty-card"
 import {
   Accordion,
@@ -19,6 +18,7 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { Separator } from "@/components/ui/separator"
 import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
@@ -83,12 +83,6 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
         yPos += 10
 
         pdf.setFontSize(10)
-        pdf.text(`Email Payment : ${response.emailPayment}`, 15, yPos)
-        yPos += 8
-
-        pdf.text(`Payment Status : ${response.paymentStatut}`, 15, yPos)
-        yPos += 8
-
         pdf.text(
           `Created At : ${new Date(response.createdAt).toLocaleString()}`,
           15,
@@ -101,10 +95,19 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
             pdf.addPage() // Ajoute une nouvelle page si nécessaire
             yPos = 15 // Réinitialise la position Y pour la nouvelle page
           }
-          if (res.type === "heading") {
+          if (res.type === "divider") {
+            // skip layout dividers in the PDF
+            return
+          } else if (res.type === "heading" || res.type === "paragraph") {
             pdf.text(`${res.label}`, 15, yPos)
           } else {
-            pdf.text(`${res.label}: ${res.text}`, 15, yPos)
+            const value = res.text || "(no answer)"
+            const line = pdf.splitTextToSize(
+              `${res.label}: ${value}`,
+              pdf.internal.pageSize.width - 30
+            )
+            pdf.text(line, 15, yPos)
+            yPos += 8 * (line.length - 1)
           }
           yPos += 8
         })
@@ -137,12 +140,7 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
             .reverse()
             .map((response) => (
               <div
-                className={cn(
-                  "flex w-full flex-col items-start gap-4 rounded-md border border-dashed border-zinc-300 p-4 dark:border-zinc-700",
-                  response.paymentStatut === "complete"
-                    ? "border-2 border-solid border-emerald-500 dark:border-emerald-900"
-                    : ""
-                )}
+                className="flex w-full flex-col items-start gap-4 rounded-md border border-dashed border-zinc-300 p-4 dark:border-zinc-700"
                 key={response.idResponse}
               >
                 <Accordion
@@ -154,76 +152,118 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                     <AccordionTrigger>
                       <div className="flex items-center justify-start gap-2">
                         View response
-                        {response.paymentStatut === "complete" ? (
-                          <span className="mr-2 flex items-center gap-2 rounded bg-green-100 px-2.5 py-1 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300">
-                            PAID
-                          </span>
-                        ) : null}
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
-                      {response.paymentStatut === "complete" ? (
-                        <div className="text-md mb-4 flex items-center gap-2 rounded bg-green-100 px-2.5 py-1.5 font-medium text-green-800 dark:bg-emerald-900 dark:text-green-300">
-                          <p>
-                            This user paid with this address :{" "}
-                            <a
-                              href={`mailto:${response.emailPayment}`}
-                              className="underline underline-offset-4"
-                            >
-                              {response.emailPayment}
-                            </a>{" "}
-                            , you can check it in your{" "}
-                            <a
-                              href="https://business.notchpay.co/transactions"
-                              className="underline underline-offset-4"
-                            >
-                              NotchPay Dashboard
-                            </a>{" "}
-                          </p>
-                        </div>
-                      ) : null}
                       <div className="flex w-full flex-col items-start gap-2">
-                        {response.responses.map((answer, answerIndex) => (
-                          <>
-                            {answer.type === "heading" ? (
+                        {response.responses.map((answer, answerIndex) => {
+                          // Layout blocks
+                          if (answer.type === "heading") {
+                            return (
                               <h3
                                 className="text-xl font-semibold"
                                 key={answerIndex}
                               >
                                 {answer.label}
                               </h3>
-                            ) : (
-                              <div
-                                className="flex w-full flex-col items-start gap-2 rounded-md bg-zinc-100 p-4 dark:bg-zinc-800"
+                            )
+                          }
+                          if (answer.type === "paragraph") {
+                            return (
+                              <p
+                                className="text-sm text-zinc-600 dark:text-zinc-300"
                                 key={answerIndex}
                               >
-                                <Label>{answer.label}</Label>
+                                {answer.label}
+                              </p>
+                            )
+                          }
+                          if (answer.type === "divider") {
+                            return (
+                              <Separator key={answerIndex} className="my-1 w-full" />
+                            )
+                          }
 
-                                <div className="flex w-full items-center justify-between">
-                                  <p className="font-semibold">{answer.text}</p>
-                                  <span
-                                    className="block cursor-pointer underline underline-offset-2"
-                                    onClick={() => {
-                                      copyToClipboard(answer.text)
-                                      toast({
-                                        title: `"${answer.text}" copied to clipboard`,
-                                        description:
-                                          "You can paste it wherever you want",
-                                        action: (
-                                          <ToastAction altText="Okay">
-                                            Okay
-                                          </ToastAction>
-                                        ),
-                                      })
-                                    }}
-                                  >
-                                    copy
-                                  </span>
+                          const isUrl =
+                            typeof answer.text === "string" &&
+                            /^https?:\/\//.test(answer.text)
+                          const isImage =
+                            answer.type === "signature" ||
+                            (isUrl && /\.(png|jpe?g|gif|webp|svg)$/i.test(answer.text))
+
+                          return (
+                            <div
+                              className="flex w-full flex-col items-start gap-2 rounded-md bg-zinc-100 p-4 dark:bg-zinc-800"
+                              key={answerIndex}
+                            >
+                              <Label>{answer.label}</Label>
+
+                              {answer.type === "signature" && answer.text ? (
+                                <img
+                                  src={answer.text}
+                                  alt="signature"
+                                  className="max-h-32 rounded-md border bg-white"
+                                />
+                              ) : answer.type === "fileupload" && isUrl ? (
+                                <a
+                                  href={answer.text}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="font-semibold text-blue-600 underline underline-offset-2 dark:text-blue-400"
+                                >
+                                  Download file
+                                </a>
+                              ) : isImage ? (
+                                <img
+                                  src={answer.text}
+                                  alt={answer.label}
+                                  className="max-h-32 rounded-md border"
+                                />
+                              ) : (
+                                <div className="flex w-full items-center justify-between gap-4">
+                                  {isUrl ? (
+                                    <a
+                                      href={answer.text}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="font-semibold break-all text-blue-600 underline underline-offset-2 dark:text-blue-400"
+                                    >
+                                      {answer.text}
+                                    </a>
+                                  ) : (
+                                    <p className="font-semibold break-words">
+                                      {answer.text || (
+                                        <span className="font-normal text-zinc-400 italic">
+                                          (no answer)
+                                        </span>
+                                      )}
+                                    </p>
+                                  )}
+                                  {answer.text && (
+                                    <span
+                                      className="block shrink-0 cursor-pointer underline underline-offset-2"
+                                      onClick={() => {
+                                        copyToClipboard(answer.text)
+                                        toast({
+                                          title: `"${answer.text}" copied to clipboard`,
+                                          description:
+                                            "You can paste it wherever you want",
+                                          action: (
+                                            <ToastAction altText="Okay">
+                                              Okay
+                                            </ToastAction>
+                                          ),
+                                        })
+                                      }}
+                                    >
+                                      copy
+                                    </span>
+                                  )}
                                 </div>
-                              </div>
-                            )}
-                          </>
-                        ))}
+                              )}
+                            </div>
+                          )
+                        })}
                       </div>
                     </AccordionContent>
                   </AccordionItem>
