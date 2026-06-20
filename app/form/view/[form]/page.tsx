@@ -172,15 +172,22 @@ export default function FormViewPage() {
         (Array.isArray(v) && v.length === 0)
       if (empty) newErrors[i] = "This field is required"
     })
-    // drawn signatures must stay small (Firestore-friendly); typed are unlimited
+    // Signature rules:
+    //  - typed signatures: unlimited (small, no size limit)
+    //  - drawn signatures: only one allowed per form, and it must stay small
+    let drawnSignatureCount = 0
     questions.forEach((q, i) => {
       if (q.type !== "signature") return
       const val = answers[i]
+      if (!val) return
       const mode = signatureModes[i] || "draw"
-      if (
-        mode === "draw" &&
+      if (mode !== "draw") return
+      drawnSignatureCount += 1
+      if (drawnSignatureCount > 1) {
+        newErrors[i] =
+          "Only one drawn signature is allowed per form. Please use the “Type” option for this one."
+      } else if (
         typeof val === "string" &&
-        val &&
         dataUrlBytes(val) > MAX_DRAWN_SIGNATURE_BYTES
       ) {
         newErrors[i] =
