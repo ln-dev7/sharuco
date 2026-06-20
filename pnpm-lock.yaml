@@ -184,8 +184,8 @@ importers:
         specifier: ^7.80.0
         version: 7.80.0(react@19.2.5)
       react-infinite-scroll-component:
-        specifier: ^6.1.0
-        version: 6.1.1(react@19.2.5)
+        specifier: ^7.2.1
+        version: 7.2.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       react-instantsearch:
         specifier: ^7.15.0
         version: 7.30.0(algoliasearch@4.27.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -3924,10 +3924,12 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
 
-  react-infinite-scroll-component@6.1.1:
-    resolution: {integrity: sha512-R8YoOyiNDynSWmfVme5LHslsKrP+/xcRUWR2ies8UgUab9dtyw5ECnMCVPPmnmjjF4MWQmfVdRwRWcWaDgeyMA==}
+  react-infinite-scroll-component@7.2.1:
+    resolution: {integrity: sha512-yPuEf6VHBJXFt+YXDxjlnAuhorUwiA2cKURx/P6a7WW3k+TvwY/mbx7KP1rQ1hxGzDcwreczRyLIv6eSd1sFIw==}
+    engines: {node: '>=20.0.0'}
     peerDependencies:
-      react: '>=16.0.0'
+      react: '>=17'
+      react-dom: '>=17'
 
   react-instantsearch-core@7.30.0:
     resolution: {integrity: sha512-omJvOU60RG/2xcZCWhGkFzg8mymFSZI6wKguvZqLLNmiJfLmH0JhFUM27RSCp6XMGq+0cPuGIrK+KPJEujwqJA==}
@@ -4287,10 +4289,6 @@ packages:
 
   text-segmentation@1.0.3:
     resolution: {integrity: sha512-iOiPUo/BGnZ6+54OsWxZidGCsdU8YbE4PSpdPinp7DeMtUJNJBoJ/ouUSTJjHkh1KntHaltHl/gDs2FC4i5+Nw==}
-
-  throttle-debounce@2.3.0:
-    resolution: {integrity: sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ==}
-    engines: {node: '>=8'}
 
   tiny-case@1.0.3:
     resolution: {integrity: sha512-Eet/eeMhkO6TX8mnUteS9zgPbUMQa4I6Kkp5ORiBD5476/m+PIRiumP5tmh5ioJpH7k51Kehawy2UDfsnxxY8Q==}
@@ -8480,10 +8478,10 @@ snapshots:
     dependencies:
       react: 19.2.5
 
-  react-infinite-scroll-component@6.1.1(react@19.2.5):
+  react-infinite-scroll-component@7.2.1(react-dom@19.2.5(react@19.2.5))(react@19.2.5):
     dependencies:
       react: 19.2.5
-      throttle-debounce: 2.3.0
+      react-dom: 19.2.5(react@19.2.5)
 
   react-instantsearch-core@7.30.0(algoliasearch@4.27.0)(react@19.2.5):
     dependencies:
@@ -8918,8 +8916,6 @@ snapshots:
     dependencies:
       utrie: 1.0.2
     optional: true
-
-  throttle-debounce@2.3.0: {}
 
   tiny-case@1.0.3: {}
 
