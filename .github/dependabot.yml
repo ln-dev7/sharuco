@@ -5,3 +5,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      # lucide-react v1 removed brand icons (Github, Linkedin, Twitter)
+      # which breaks the build. Stay on 0.x until migrated to inline SVGs.
+      - dependency-name: "lucide-react"
+        update-types: ["version-update:semver-major"]
