@@ -163,19 +163,9 @@ export default function QuestionsEditor({
                 key={index}
               >
                 <div className="flex w-full items-center justify-between">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300">
-                      {QUESTION_TYPE_LABELS[type] ?? type}
-                    </span>
-                    {fieldId && (
-                      <span
-                        className="rounded-md bg-zinc-100 px-2 py-0.5 font-mono text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
-                        title="Field id — use it as a URL parameter to prefill this field"
-                      >
-                        id: {fieldId}
-                      </span>
-                    )}
-                  </div>
+                  <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300">
+                    {QUESTION_TYPE_LABELS[type] ?? type}
+                  </span>
                   {editable && (
                     <div className="flex items-center gap-1">
                       <Button
@@ -424,6 +414,17 @@ export default function QuestionsEditor({
                         updateField(index, { required: v })
                       }
                     />
+                  </div>
+                )}
+
+                {fieldId && (
+                  <div className="flex w-full items-center justify-end">
+                    <span
+                      className="rounded-md bg-zinc-100 px-2 py-0.5 font-mono text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+                      title="Field id — use it as a URL parameter to prefill this field"
+                    >
+                      id: {fieldId}
+                    </span>
                   </div>
                 )}
               </div>
