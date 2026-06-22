@@ -95,8 +95,19 @@ export default function FormViewPage() {
   const [errors, setErrors] = useState<Record<number, string>>({})
   const [submitting, setSubmitting] = useState(false)
 
-  const setAnswer = (index: number, value: any) =>
+  // remove a field's "required" error once the respondent interacts with it
+  const clearError = (index: number) =>
+    setErrors((prev) => {
+      if (!(index in prev)) return prev
+      const next = { ...prev }
+      delete next[index]
+      return next
+    })
+
+  const setAnswer = (index: number, value: any) => {
     setAnswers((prev) => ({ ...prev, [index]: value }))
+    clearError(index)
+  }
 
   const ALGOLIA_INDEX_NAME = "forms"
   const client = algoliasearch(
@@ -120,6 +131,7 @@ export default function FormViewPage() {
         : [...current, value]
       return { ...prev, [index]: next }
     })
+    clearError(index)
   }
 
   const moveRankItem = (index: number, from: number, to: number) => {
