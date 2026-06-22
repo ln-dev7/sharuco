@@ -1,7 +1,15 @@
 import Link from "next/link"
 import { Heart } from "lucide-react"
 
+import { pageMetadata } from "@/lib/page-metadata"
 import { buttonVariants } from "@/components/ui/button"
+
+export const metadata = pageMetadata({
+  title: "Support Sharuco",
+  description:
+    "Sharuco is a free and open source project. Support its development by making a donation.",
+  path: "/donation",
+})
 
 const DONATION_URL = "https://lndev.mychariow.shop/prd_3cu1s0"
 
