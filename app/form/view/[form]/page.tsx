@@ -48,8 +48,7 @@ import { Separator } from "@/components/ui/separator"
 import { Slider } from "@/components/ui/slider"
 import { Textarea } from "@/components/ui/textarea"
 
-const isDirectVideo = (url: string) =>
-  /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url)
+const isDirectVideo = (url: string) => /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url)
 
 const toVideoEmbedUrl = (url: string) => {
   const yt = url.match(
@@ -79,8 +78,8 @@ export default function FormViewPage() {
   } = useDocument(formId, "forms")
 
   function generateRandomNumbers() {
-    const number1 = Math.floor(Math.random() * 51)
-    const number2 = Math.floor(Math.random() * 51)
+    const number1 = Math.floor(Math.random() * 10)
+    const number2 = Math.floor(Math.random() * 10)
     return { number1, number2 }
   }
 
@@ -181,7 +180,8 @@ export default function FormViewPage() {
               : q.options || []
             text = order.join(", ")
           } else if (q.type === "date") {
-            text = answers[i] instanceof Date ? format(answers[i], "yyyy-MM-dd") : ""
+            text =
+              answers[i] instanceof Date ? format(answers[i], "yyyy-MM-dd") : ""
           } else if (!isContentBlock(q.type)) {
             text = serialize(q, answers[i])
           }
@@ -241,7 +241,9 @@ export default function FormViewPage() {
       case "link":
         return (
           <Input
-            type={q.type === "email" ? "email" : q.type === "link" ? "url" : "text"}
+            type={
+              q.type === "email" ? "email" : q.type === "link" ? "url" : "text"
+            }
             value={answers[index] || ""}
             onChange={(e) => setAnswer(index, e.target.value)}
             placeholder={q.text}
@@ -420,7 +422,8 @@ export default function FormViewPage() {
         const min = q.min ?? 1
         const max = q.max ?? 10
         const step = q.step || 1
-        const current = answers[index] !== undefined ? Number(answers[index]) : min
+        const current =
+          answers[index] !== undefined ? Number(answers[index]) : min
         return (
           <div className="flex w-full flex-col gap-3">
             <div className="flex items-center justify-between text-xs text-zinc-500">
@@ -441,7 +444,9 @@ export default function FormViewPage() {
         )
       }
       case "signature":
-        return <SignaturePad onChange={(dataUrl) => setAnswer(index, dataUrl)} />
+        return (
+          <SignaturePad onChange={(dataUrl) => setAnswer(index, dataUrl)} />
+        )
       case "fileupload":
         return (
           <div className="w-full rounded-md border border-dashed border-zinc-300 p-3 text-sm text-zinc-500 dark:border-zinc-700">
@@ -496,10 +501,7 @@ export default function FormViewPage() {
                     }
                     if (question.type === "heading") {
                       return (
-                        <h3
-                          key={qIndex}
-                          className="pt-2 text-xl font-bold"
-                        >
+                        <h3 key={qIndex} className="pt-2 text-xl font-bold">
                           {question.label}
                         </h3>
                       )
