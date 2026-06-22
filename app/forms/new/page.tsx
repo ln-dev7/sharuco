@@ -10,6 +10,7 @@ import { Github, Loader2, Save, Terminal } from "lucide-react"
 import moment from "moment"
 
 import { isContentBlock, type Question } from "@/types/form"
+import { attachQuestionIds } from "@/lib/form-id"
 import QuestionsEditor from "@/components/form/questions-editor"
 import {
   AlertDialog,
@@ -91,28 +92,23 @@ export default function NewFormDraftPage() {
     questions.forEach((q, i) => {
       if (!isContentBlock(q.type) && !q.label?.trim())
         qErrors[i] = "The label is required"
-      if (
-        (q.type === "heading" || q.type === "paragraph") &&
-        !q.label?.trim()
-      )
+      if ((q.type === "heading" || q.type === "paragraph") && !q.label?.trim())
         qErrors[i] = "This field is required"
     })
     if (Object.keys(qErrors).length > 0) next.questions = qErrors
     setErrors(next)
-    return (
-      !next.name &&
-      !next.description &&
-      Object.keys(qErrors).length === 0
-    )
+    return !next.name && !next.description && Object.keys(qErrors).length === 0
   }
 
   const persist = (pseudo: string) => {
-    const cleanQuestions = questions.map((q) => ({
-      ...q,
-      ...(q.options
-        ? { options: q.options.filter((o) => o && o.trim() !== "") }
-        : {}),
-    }))
+    const cleanQuestions = attachQuestionIds(
+      questions.map((q) => ({
+        ...q,
+        ...(q.options
+          ? { options: q.options.filter((o) => o && o.trim() !== "") }
+          : {}),
+      }))
+    )
     const newDocument = {
       name,
       description,
@@ -255,10 +251,7 @@ export default function NewFormDraftPage() {
           )}
           {user ? "Save form" : "Save form (sign in)"}
         </Button>
-        <Link
-          href="/forms"
-          className={buttonVariants({ variant: "outline" })}
-        >
+        <Link href="/forms" className={buttonVariants({ variant: "outline" })}>
           Cancel
         </Link>
       </div>

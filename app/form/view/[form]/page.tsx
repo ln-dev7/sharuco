@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { useParams } from "next/navigation"
+import { useParams, useSearchParams } from "next/navigation"
 import { useAuthContext } from "@/context/AuthContext"
 import { useDocument } from "@/firebase/firestore/getDocument"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
@@ -22,6 +22,7 @@ import moment from "moment"
 import { uid } from "uid"
 
 import { cn } from "@/lib/utils"
+import { computeQuestionIds, matchOption } from "@/lib/form-id"
 import { isContentBlock, isMediaBlock, type Question } from "@/types/form"
 import SignaturePad from "@/components/form/signature-pad"
 import StarRating from "@/components/form/star-rating"
@@ -62,6 +63,7 @@ const toVideoEmbedUrl = (url: string) => {
 
 export default function FormViewPage() {
   const params = useParams()
+  const searchParams = useSearchParams()
   const { userPseudo } = useAuthContext()
   const formId = params["form"] as string
 
@@ -135,6 +137,84 @@ export default function FormViewPage() {
     if (Array.isArray(value)) return value.join(", ")
     return String(value)
   }
+
+  // Coerce raw URL values into the answer shape expected for a given question.
+  // Returns undefined when the value can't be applied (e.g. no matching option).
+  const parsePrefillValue = (q: Question, raw: string[]): any => {
+    const options = q.options || []
+    switch (q.type) {
+      case "text":
+      case "longtext":
+      case "email":
+      case "link":
+      case "phone":
+      case "number":
+      case "time":
+        return raw[0]
+      case "date": {
+        const d = new Date(raw[0])
+        return isNaN(d.getTime()) ? undefined : d
+      }
+      case "rating": {
+        const n = Number(raw[0])
+        if (isNaN(n)) return undefined
+        return Math.min(Math.max(Math.round(n), 0), q.maxRating || 5)
+      }
+      case "linearscale": {
+        const n = Number(raw[0])
+        if (isNaN(n)) return undefined
+        return Math.min(Math.max(n, q.min ?? 1), q.max ?? 10)
+      }
+      case "uniquechoice":
+      case "dropdown":
+        return matchOption(options, raw[0])
+      case "multiplechoice":
+      case "multiselect": {
+        const values = raw
+          .flatMap((r) => r.split(","))
+          .map((s) => s.trim())
+          .filter(Boolean)
+        const matched = values
+          .map((v) => matchOption(options, v))
+          .filter(Boolean) as string[]
+        return matched.length ? matched : undefined
+      }
+      default:
+        // ranking / signature / fileupload — not prefillable from the URL
+        return undefined
+    }
+  }
+
+  // Prefill answers once from the URL query params, matching each question by
+  // its id (e.g. /form/view/xxx?note-globale=4&pays=cameroun).
+  const prefilledRef = useRef(false)
+  useEffect(() => {
+    if (prefilledRef.current) return
+    const questions: Question[] = dataForm?.data?.questions || []
+    if (questions.length === 0) return
+    if (!searchParams || searchParams.toString() === "") {
+      prefilledRef.current = true
+      return
+    }
+
+    const computed = computeQuestionIds(questions)
+    const seeded: Record<number, any> = {}
+    questions.forEach((q, i) => {
+      if (isContentBlock(q.type)) return
+      const id = q.id || computed[i]
+      if (!id) return
+      const raw = searchParams.getAll(id)
+      if (raw.length === 0) return
+      const value = parsePrefillValue(q, raw)
+      if (value !== undefined) seeded[i] = value
+    })
+
+    if (Object.keys(seeded).length > 0) {
+      // don't clobber anything the respondent already touched
+      setAnswers((prev) => ({ ...seeded, ...prev }))
+    }
+    prefilledRef.current = true
+  }, [dataForm?.data?.questions, searchParams])
 
   const onSubmit = async () => {
     const questions: Question[] = dataForm?.data?.questions || []

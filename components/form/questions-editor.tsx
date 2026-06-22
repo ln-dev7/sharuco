@@ -1,13 +1,6 @@
 "use client"
 
-import {
-  ArrowDown,
-  ArrowUp,
-  FileQuestion,
-  Plus,
-  Trash,
-  X,
-} from "lucide-react"
+import { ArrowDown, ArrowUp, FileQuestion, Plus, Trash, X } from "lucide-react"
 
 import {
   hasOptions,
@@ -17,6 +10,7 @@ import {
   type Question,
   type QuestionType,
 } from "@/types/form"
+import { computeQuestionIds, optionId } from "@/lib/form-id"
 import EmptyCard from "@/components/empty-card"
 import {
   defaultsForType,
@@ -97,6 +91,11 @@ export default function QuestionsEditor({
     })
   }
 
+  // URL-friendly id for each field, derived live from its label. These ids are
+  // what get saved and what respondents can use to prefill the form via the URL
+  // (e.g. ?note-globale=4&pays=cameroun).
+  const questionIds = computeQuestionIds(questions)
+
   return (
     <div className="flex w-full flex-col items-start gap-4 sm:flex-row">
       {editable && (
@@ -157,15 +156,26 @@ export default function QuestionsEditor({
           {questions.map((q, index) => {
             const type = q.type
             const options: string[] = q.options || []
+            const fieldId = questionIds[index]
             return (
               <div
                 className="relative flex w-full flex-col items-start gap-3 rounded-md border border-dashed border-zinc-200 p-4 first:mt-2 dark:border-zinc-700"
                 key={index}
               >
                 <div className="flex w-full items-center justify-between">
-                  <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300">
-                    {QUESTION_TYPE_LABELS[type] ?? type}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300">
+                      {QUESTION_TYPE_LABELS[type] ?? type}
+                    </span>
+                    {fieldId && (
+                      <span
+                        className="rounded-md bg-zinc-100 px-2 py-0.5 font-mono text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+                        title="Field id — use it as a URL parameter to prefill this field"
+                      >
+                        id: {fieldId}
+                      </span>
+                    )}
+                  </div>
                   {editable && (
                     <div className="flex items-center gap-1">
                       <Button
@@ -241,9 +251,7 @@ export default function QuestionsEditor({
                       }
                       disabled={!editable}
                       className={
-                        type === "heading"
-                          ? "text-md h-9 font-semibold"
-                          : "h-9"
+                        type === "heading" ? "text-md h-9 font-semibold" : "h-9"
                       }
                       placeholder={
                         type === "paragraph"
@@ -288,34 +296,47 @@ export default function QuestionsEditor({
                 {hasOptions(type) && (
                   <div className="flex w-full flex-col items-start gap-2">
                     <Label className="text-xs text-zinc-500">Options</Label>
-                    {options.map((opt, optIndex) => (
-                      <div
-                        key={optIndex}
-                        className="flex w-full items-center gap-2"
-                      >
-                        <Input
-                          value={opt}
-                          onChange={(e) =>
-                            updateOption(index, optIndex, e.target.value)
-                          }
-                          disabled={!editable}
-                          className="h-8 text-sm"
-                          placeholder={`Option ${optIndex + 1}`}
-                        />
-                        {editable && (
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 shrink-0"
-                            disabled={options.length <= 1}
-                            onClick={() => removeOption(index, optIndex)}
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        )}
-                      </div>
-                    ))}
+                    {options.map((opt, optIndex) => {
+                      const optId = optionId(opt)
+                      return (
+                        <div
+                          key={optIndex}
+                          className="flex w-full flex-col items-start gap-1"
+                        >
+                          <div className="flex w-full items-center gap-2">
+                            <Input
+                              value={opt}
+                              onChange={(e) =>
+                                updateOption(index, optIndex, e.target.value)
+                              }
+                              disabled={!editable}
+                              className="h-8 text-sm"
+                              placeholder={`Option ${optIndex + 1}`}
+                            />
+                            {editable && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 shrink-0"
+                                disabled={options.length <= 1}
+                                onClick={() => removeOption(index, optIndex)}
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+                          {optId && (
+                            <span
+                              className="ml-1 font-mono text-[11px] text-zinc-400 dark:text-zinc-500"
+                              title="Option id — use it as the parameter value to preselect this option"
+                            >
+                              id: {optId}
+                            </span>
+                          )}
+                        </div>
+                      )
+                    })}
                     {editable && (
                       <Button
                         type="button"

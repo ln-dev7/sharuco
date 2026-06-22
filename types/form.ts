@@ -34,6 +34,7 @@ export type QuestionType =
   | "fileupload"
 
 export interface Question {
+  id?: string // stable, URL-friendly id derived from the label (for prefill via query params)
   type: QuestionType
   label: string
   text?: string // placeholder, or the URL for embed blocks

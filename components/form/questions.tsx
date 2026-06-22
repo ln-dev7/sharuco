@@ -8,6 +8,7 @@ import algoliasearch from "algoliasearch"
 import { Check, Loader2, Save, X } from "lucide-react"
 
 import { isContentBlock, type Question } from "@/types/form"
+import { attachQuestionIds } from "@/lib/form-id"
 import QuestionsEditor from "@/components/form/questions-editor"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -63,12 +64,14 @@ export default function QuestionsForms({ dataForm }: { dataForm: any }) {
     }
     setErrors({})
 
-    const cleanedQuestions = questions.map((q) => ({
-      ...q,
-      ...(q.options
-        ? { options: q.options.filter((o) => o && o.trim() !== "") }
-        : {}),
-    }))
+    const cleanedQuestions = attachQuestionIds(
+      questions.map((q) => ({
+        ...q,
+        ...(q.options
+          ? { options: q.options.filter((o) => o && o.trim() !== "") }
+          : {}),
+      }))
+    )
     // strip any `undefined` values — Firestore rejects them
     const cleaned = JSON.parse(JSON.stringify(cleanedQuestions))
 
