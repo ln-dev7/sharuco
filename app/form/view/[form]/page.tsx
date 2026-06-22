@@ -231,12 +231,12 @@ export default function FormViewPage() {
   const onSubmit = async () => {
     const questions: Question[] = dataForm?.data?.questions || []
 
-    // captcha check
-    const correctAnswer = randomNumbers.number1 + randomNumbers.number2
-    if (parseInt(captcha, 10) !== correctAnswer) {
-      alert("The answer to the mathematical question is incorrect.")
-      return
-    }
+    // captcha check (disabled — no longer required)
+    // const correctAnswer = randomNumbers.number1 + randomNumbers.number2
+    // if (parseInt(captcha, 10) !== correctAnswer) {
+    //   alert("The answer to the mathematical question is incorrect.")
+    //   return
+    // }
 
     // required validation
     const newErrors: Record<number, string> = {}
@@ -691,6 +691,7 @@ export default function FormViewPage() {
                       </div>
                     )
                   })}
+                  {/* Captcha disabled — no longer required to fill the form
                   <div className="mx-auto my-8 flex w-full flex-col items-center gap-2 sm:w-2/3">
                     <div className="relative flex w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-lg bg-blue-600 p-8">
                       <h3 className="text-md z-10 text-center font-bold text-white uppercase">
@@ -715,6 +716,7 @@ export default function FormViewPage() {
                       />
                     </div>
                   </div>
+                  */}
                   {isSuccessUpdateForm && (
                     <div
                       className="mx-auto mb-8 flex items-center rounded-lg bg-green-50 p-4 text-green-800 dark:bg-gray-800 dark:text-green-400"
