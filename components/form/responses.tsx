@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { useParams } from "next/navigation"
 import { useUpdateFormDocument } from "@/firebase/firestore/updateFormDocument"
 import copyToClipboard from "@/utils/copyToClipboard"
@@ -26,6 +27,24 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
   const params = useParams()
 
   const { toast } = useToast()
+
+  const [openResponses, setOpenResponses] = useState<string[]>([])
+
+  const allResponseIds: string[] = (dataForm?.responses || []).map(
+    (response: any) => response.idResponse
+  )
+  const areAllOpen =
+    allResponseIds.length > 0 && openResponses.length === allResponseIds.length
+
+  const toggleAllResponses = () => {
+    setOpenResponses(areAllOpen ? [] : allResponseIds)
+  }
+
+  const toggleResponse = (idResponse: string, isOpen: boolean) => {
+    setOpenResponses((prev) =>
+      isOpen ? [...prev, idResponse] : prev.filter((id) => id !== idResponse)
+    )
+  }
 
   const ALGOLIA_INDEX_NAME = "forms"
 
@@ -140,7 +159,12 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
     <>
       {dataForm.responses && dataForm.responses.length > 0 ? (
         <div className="w-full space-y-4">
-          <Button onClick={() => generatePDF(dataForm)}>Generate PDF</Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button onClick={() => generatePDF(dataForm)}>Generate PDF</Button>
+            <Button variant="outline" onClick={toggleAllResponses}>
+              {areAllOpen ? "Collapse all" : "Expand all"}
+            </Button>
+          </div>
           {dataForm.responses
             .slice()
             .reverse()
@@ -152,6 +176,14 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                 <Accordion
                   type="single"
                   collapsible
+                  value={
+                    openResponses.includes(response.idResponse)
+                      ? "response"
+                      : ""
+                  }
+                  onValueChange={(value) =>
+                    toggleResponse(response.idResponse, value === "response")
+                  }
                   className="w-full border-b border-dashed border-zinc-300 dark:border-zinc-700"
                 >
                   <AccordionItem value="response" className="border-none">
@@ -186,7 +218,10 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                           }
                           if (answer.type === "divider") {
                             return (
-                              <Separator key={answerIndex} className="my-1 w-full" />
+                              <Separator
+                                key={answerIndex}
+                                className="my-1 w-full"
+                              />
                             )
                           }
                           // Embed blocks carry no answer — don't show them
@@ -204,7 +239,8 @@ export default function ResponsesForms({ dataForm }: { dataForm: any }) {
                             /^https?:\/\//.test(answer.text)
                           const isImage =
                             answer.type === "signature" ||
-                            (isUrl && /\.(png|jpe?g|gif|webp|svg)$/i.test(answer.text))
+                            (isUrl &&
+                              /\.(png|jpe?g|gif|webp|svg)$/i.test(answer.text))
 
                           return (
                             <div
