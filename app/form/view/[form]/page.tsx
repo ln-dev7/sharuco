@@ -240,6 +240,13 @@ export default function FormViewPage() {
     })
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
+      // scroll to the first field in error once the message has rendered
+      const firstErrorIndex = Math.min(...Object.keys(newErrors).map(Number))
+      setTimeout(() => {
+        document
+          .getElementById(`form-question-${firstErrorIndex}`)
+          ?.scrollIntoView({ behavior: "smooth", block: "center" })
+      }, 50)
       return
     }
     setErrors({})
@@ -650,6 +657,7 @@ export default function FormViewPage() {
                       <div
                         className="flex w-full flex-col items-start gap-2"
                         key={qIndex}
+                        id={`form-question-${qIndex}`}
                       >
                         <Label className="flex items-center gap-1">
                           {question.label}

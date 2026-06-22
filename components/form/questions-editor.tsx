@@ -1,6 +1,31 @@
 "use client"
 
-import { ArrowDown, ArrowUp, FileQuestion, Plus, Trash, X } from "lucide-react"
+import {
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core"
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
+import {
+  ArrowDown,
+  ArrowUp,
+  FileQuestion,
+  GripVertical,
+  Plus,
+  Trash,
+  X,
+} from "lucide-react"
 
 import {
   hasOptions,
@@ -28,6 +53,54 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+
+interface DragHandleProps {
+  attributes: Record<string, any>
+  listeners: Record<string, any> | undefined
+  setActivatorNodeRef: (el: HTMLElement | null) => void
+}
+
+/**
+ * Sortable wrapper for a single question card. Exposes the drag handle props
+ * via a render prop so the handle can live inside the existing action group.
+ */
+function SortableQuestion({
+  id,
+  disabled,
+  children,
+}: {
+  id: string
+  disabled?: boolean
+  children: (handle: DragHandleProps) => React.ReactNode
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id, disabled })
+
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.6 : undefined,
+    zIndex: isDragging ? 20 : undefined,
+    position: "relative",
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex w-full flex-col items-start gap-3 rounded-md border border-dashed border-zinc-200 p-4 first:mt-2 dark:border-zinc-700"
+    >
+      {children({ attributes, listeners, setActivatorNodeRef })}
+    </div>
+  )
+}
 
 /**
  * Controlled, Firestore-agnostic form builder UI. Used both by the
@@ -69,6 +142,22 @@ export default function QuestionsEditor({
     const next = [...questions]
     ;[next[index], next[target]] = [next[target], next[index]]
     onChange(next)
+  }
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+    const from = Number(String(active.id).replace("field-", ""))
+    const to = Number(String(over.id).replace("field-", ""))
+    if (Number.isNaN(from) || Number.isNaN(to)) return
+    onChange(arrayMove(questions, from, to))
   }
 
   const addOption = (index: number) => {
@@ -153,283 +242,337 @@ export default function QuestionsEditor({
           style={{ background: color }}
         ></div>
         <div className="w-full space-y-4">
-          {questions.map((q, index) => {
-            const type = q.type
-            const options: string[] = q.options || []
-            const fieldId = questionIds[index]
-            return (
-              <div
-                className="relative flex w-full flex-col items-start gap-3 rounded-md border border-dashed border-zinc-200 p-4 first:mt-2 dark:border-zinc-700"
-                key={index}
-              >
-                <div className="flex w-full items-center justify-between">
-                  <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300">
-                    {QUESTION_TYPE_LABELS[type] ?? type}
-                  </span>
-                  {editable && (
-                    <div className="flex items-center gap-1">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        className="h-8 w-8"
-                        disabled={index === 0}
-                        onClick={() => moveField(index, -1)}
-                      >
-                        <ArrowUp className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        className="h-8 w-8"
-                        disabled={index === questions.length - 1}
-                        onClick={() => moveField(index, 1)}
-                      >
-                        <ArrowDown className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={() => removeField(index)}
-                      >
-                        <Trash className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  )}
-                </div>
-
-                {type === "divider" ? (
-                  <Separator className="my-1 w-full" />
-                ) : isMediaBlock(type) ? (
-                  <div className="flex w-full flex-col items-start gap-2">
-                    <Input
-                      value={q.text || ""}
-                      onChange={(e) =>
-                        updateField(index, { text: e.target.value })
-                      }
-                      disabled={!editable}
-                      className="h-9"
-                      placeholder={
-                        type === "image"
-                          ? "Image URL (https://…)"
-                          : type === "video"
-                            ? "Video URL (YouTube, Vimeo or .mp4)"
-                            : type === "audio"
-                              ? "Audio URL (.mp3, .ogg…)"
-                              : "URL to embed (https://…)"
-                      }
-                    />
-                    <Input
-                      value={q.label}
-                      onChange={(e) =>
-                        updateField(index, { label: e.target.value })
-                      }
-                      disabled={!editable}
-                      className="h-8 text-sm"
-                      placeholder="Caption (optional)"
-                    />
-                  </div>
-                ) : (
-                  <div className="flex w-full flex-col items-start gap-1">
-                    <Input
-                      value={q.label}
-                      onChange={(e) =>
-                        updateField(index, { label: e.target.value })
-                      }
-                      disabled={!editable}
-                      className={
-                        type === "heading" ? "text-md h-9 font-semibold" : "h-9"
-                      }
-                      placeholder={
-                        type === "paragraph"
-                          ? "Your text content"
-                          : type === "heading"
-                            ? "Section heading"
-                            : "Your question"
-                      }
-                    />
-                    {errors[index] && (
-                      <p className="mt-1 text-xs font-medium text-red-500">
-                        {errors[index]}
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {!isContentBlock(type) && (
-                  <Input
-                    value={q.description || ""}
-                    onChange={(e) =>
-                      updateField(index, { description: e.target.value })
-                    }
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={questions.map((_, i) => `field-${i}`)}
+              strategy={verticalListSortingStrategy}
+            >
+              {questions.map((q, index) => {
+                const type = q.type
+                const options: string[] = q.options || []
+                const fieldId = questionIds[index]
+                return (
+                  <SortableQuestion
+                    key={index}
+                    id={`field-${index}`}
                     disabled={!editable}
-                    className="h-8 text-sm"
-                    placeholder="Description / help text (optional)"
-                  />
-                )}
+                  >
+                    {({ attributes, listeners, setActivatorNodeRef }) => (
+                      <>
+                        <div className="flex w-full items-center justify-between">
+                          <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300">
+                            {QUESTION_TYPE_LABELS[type] ?? type}
+                          </span>
+                          {editable && (
+                            <div className="flex items-center gap-1">
+                              <Button
+                                ref={setActivatorNodeRef}
+                                {...attributes}
+                                {...listeners}
+                                type="button"
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8 cursor-grab touch-none active:cursor-grabbing"
+                                title="Drag to reorder"
+                              >
+                                <GripVertical className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8"
+                                disabled={index === 0}
+                                onClick={() => moveField(index, -1)}
+                              >
+                                <ArrowUp className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8"
+                                disabled={index === questions.length - 1}
+                                onClick={() => moveField(index, 1)}
+                              >
+                                <ArrowDown className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="destructive"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() => removeField(index)}
+                              >
+                                <Trash className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          )}
+                        </div>
 
-                {PLACEHOLDER_TYPES.includes(type) && (
-                  <Input
-                    value={q.text || ""}
-                    onChange={(e) =>
-                      updateField(index, { text: e.target.value })
-                    }
-                    disabled={!editable}
-                    className="h-8 text-sm"
-                    placeholder="Placeholder (optional)"
-                  />
-                )}
-
-                {hasOptions(type) && (
-                  <div className="flex w-full flex-col items-start gap-2">
-                    <Label className="text-xs text-zinc-500">Options</Label>
-                    {options.map((opt, optIndex) => {
-                      const optId = optionId(opt)
-                      return (
-                        <div
-                          key={optIndex}
-                          className="flex w-full flex-col items-start gap-1"
-                        >
-                          <div className="flex w-full items-center gap-2">
+                        {type === "divider" ? (
+                          <Separator className="my-1 w-full" />
+                        ) : isMediaBlock(type) ? (
+                          <div className="flex w-full flex-col items-start gap-2">
                             <Input
-                              value={opt}
+                              value={q.text || ""}
                               onChange={(e) =>
-                                updateOption(index, optIndex, e.target.value)
+                                updateField(index, { text: e.target.value })
+                              }
+                              disabled={!editable}
+                              className="h-9"
+                              placeholder={
+                                type === "image"
+                                  ? "Image URL (https://…)"
+                                  : type === "video"
+                                    ? "Video URL (YouTube, Vimeo or .mp4)"
+                                    : type === "audio"
+                                      ? "Audio URL (.mp3, .ogg…)"
+                                      : "URL to embed (https://…)"
+                              }
+                            />
+                            <Input
+                              value={q.label}
+                              onChange={(e) =>
+                                updateField(index, { label: e.target.value })
                               }
                               disabled={!editable}
                               className="h-8 text-sm"
-                              placeholder={`Option ${optIndex + 1}`}
+                              placeholder="Caption (optional)"
                             />
+                          </div>
+                        ) : (
+                          <div className="flex w-full flex-col items-start gap-1">
+                            <Input
+                              value={q.label}
+                              onChange={(e) =>
+                                updateField(index, { label: e.target.value })
+                              }
+                              disabled={!editable}
+                              className={
+                                type === "heading"
+                                  ? "text-md h-9 font-semibold"
+                                  : "h-9"
+                              }
+                              placeholder={
+                                type === "paragraph"
+                                  ? "Your text content"
+                                  : type === "heading"
+                                    ? "Section heading"
+                                    : "Your question"
+                              }
+                            />
+                            {errors[index] && (
+                              <p className="mt-1 text-xs font-medium text-red-500">
+                                {errors[index]}
+                              </p>
+                            )}
+                          </div>
+                        )}
+
+                        {!isContentBlock(type) && (
+                          <Input
+                            value={q.description || ""}
+                            onChange={(e) =>
+                              updateField(index, {
+                                description: e.target.value,
+                              })
+                            }
+                            disabled={!editable}
+                            className="h-8 text-sm"
+                            placeholder="Description / help text (optional)"
+                          />
+                        )}
+
+                        {PLACEHOLDER_TYPES.includes(type) && (
+                          <Input
+                            value={q.text || ""}
+                            onChange={(e) =>
+                              updateField(index, { text: e.target.value })
+                            }
+                            disabled={!editable}
+                            className="h-8 text-sm"
+                            placeholder="Placeholder (optional)"
+                          />
+                        )}
+
+                        {hasOptions(type) && (
+                          <div className="flex w-full flex-col items-start gap-2">
+                            <Label className="text-xs text-zinc-500">
+                              Options
+                            </Label>
+                            {options.map((opt, optIndex) => {
+                              const optId = optionId(opt)
+                              return (
+                                <div
+                                  key={optIndex}
+                                  className="flex w-full flex-col items-start gap-1"
+                                >
+                                  <div className="flex w-full items-center gap-2">
+                                    <Input
+                                      value={opt}
+                                      onChange={(e) =>
+                                        updateOption(
+                                          index,
+                                          optIndex,
+                                          e.target.value
+                                        )
+                                      }
+                                      disabled={!editable}
+                                      className="h-8 text-sm"
+                                      placeholder={`Option ${optIndex + 1}`}
+                                    />
+                                    {editable && (
+                                      <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-8 w-8 shrink-0"
+                                        disabled={options.length <= 1}
+                                        onClick={() =>
+                                          removeOption(index, optIndex)
+                                        }
+                                      >
+                                        <X className="h-4 w-4" />
+                                      </Button>
+                                    )}
+                                  </div>
+                                  {optId && (
+                                    <span
+                                      className="ml-1 font-mono text-[11px] text-zinc-400 dark:text-zinc-500"
+                                      title="Option id — use it as the parameter value to preselect this option"
+                                    >
+                                      id: {optId}
+                                    </span>
+                                  )}
+                                </div>
+                              )
+                            })}
                             {editable && (
                               <Button
                                 type="button"
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8 shrink-0"
-                                disabled={options.length <= 1}
-                                onClick={() => removeOption(index, optIndex)}
+                                variant="outline"
+                                size="sm"
+                                onClick={() => addOption(index)}
                               >
-                                <X className="h-4 w-4" />
+                                <Plus className="mr-2 h-4 w-4" />
+                                Add option
                               </Button>
                             )}
                           </div>
-                          {optId && (
+                        )}
+
+                        {type === "rating" && (
+                          <div className="flex w-full items-center gap-2">
+                            <Label className="text-xs text-zinc-500">
+                              Number of stars
+                            </Label>
+                            <Input
+                              type="number"
+                              min={2}
+                              max={10}
+                              value={q.maxRating ?? 5}
+                              onChange={(e) =>
+                                updateField(index, {
+                                  maxRating: Number(e.target.value),
+                                })
+                              }
+                              disabled={!editable}
+                              className="h-8 w-24 text-sm"
+                            />
+                          </div>
+                        )}
+
+                        {type === "linearscale" && (
+                          <div className="flex w-full flex-wrap items-center gap-3">
+                            <div className="flex items-center gap-2">
+                              <Label className="text-xs text-zinc-500">
+                                Min
+                              </Label>
+                              <Input
+                                type="number"
+                                value={q.min ?? 1}
+                                onChange={(e) =>
+                                  updateField(index, {
+                                    min: Number(e.target.value),
+                                  })
+                                }
+                                disabled={!editable}
+                                className="h-8 w-20 text-sm"
+                              />
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Label className="text-xs text-zinc-500">
+                                Max
+                              </Label>
+                              <Input
+                                type="number"
+                                value={q.max ?? 10}
+                                onChange={(e) =>
+                                  updateField(index, {
+                                    max: Number(e.target.value),
+                                  })
+                                }
+                                disabled={!editable}
+                                className="h-8 w-20 text-sm"
+                              />
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Label className="text-xs text-zinc-500">
+                                Step
+                              </Label>
+                              <Input
+                                type="number"
+                                min={1}
+                                value={q.step ?? 1}
+                                onChange={(e) =>
+                                  updateField(index, {
+                                    step: Number(e.target.value),
+                                  })
+                                }
+                                disabled={!editable}
+                                className="h-8 w-20 text-sm"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {!isContentBlock(type) && (
+                          <div className="flex w-full items-center justify-end gap-2 border-t border-dashed border-zinc-200 pt-3 dark:border-zinc-700">
+                            <Label className="text-xs text-zinc-500">
+                              Required
+                            </Label>
+                            <Switch
+                              checked={!!q.required}
+                              disabled={!editable}
+                              onCheckedChange={(v) =>
+                                updateField(index, { required: v })
+                              }
+                            />
+                          </div>
+                        )}
+
+                        {fieldId && (
+                          <div className="flex w-full items-center justify-end">
                             <span
-                              className="ml-1 font-mono text-[11px] text-zinc-400 dark:text-zinc-500"
-                              title="Option id — use it as the parameter value to preselect this option"
+                              className="rounded-md bg-zinc-100 px-2 py-0.5 font-mono text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+                              title="Field id — use it as a URL parameter to prefill this field"
                             >
-                              id: {optId}
+                              id: {fieldId}
                             </span>
-                          )}
-                        </div>
-                      )
-                    })}
-                    {editable && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => addOption(index)}
-                      >
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add option
-                      </Button>
+                          </div>
+                        )}
+                      </>
                     )}
-                  </div>
-                )}
-
-                {type === "rating" && (
-                  <div className="flex w-full items-center gap-2">
-                    <Label className="text-xs text-zinc-500">
-                      Number of stars
-                    </Label>
-                    <Input
-                      type="number"
-                      min={2}
-                      max={10}
-                      value={q.maxRating ?? 5}
-                      onChange={(e) =>
-                        updateField(index, {
-                          maxRating: Number(e.target.value),
-                        })
-                      }
-                      disabled={!editable}
-                      className="h-8 w-24 text-sm"
-                    />
-                  </div>
-                )}
-
-                {type === "linearscale" && (
-                  <div className="flex w-full flex-wrap items-center gap-3">
-                    <div className="flex items-center gap-2">
-                      <Label className="text-xs text-zinc-500">Min</Label>
-                      <Input
-                        type="number"
-                        value={q.min ?? 1}
-                        onChange={(e) =>
-                          updateField(index, { min: Number(e.target.value) })
-                        }
-                        disabled={!editable}
-                        className="h-8 w-20 text-sm"
-                      />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Label className="text-xs text-zinc-500">Max</Label>
-                      <Input
-                        type="number"
-                        value={q.max ?? 10}
-                        onChange={(e) =>
-                          updateField(index, { max: Number(e.target.value) })
-                        }
-                        disabled={!editable}
-                        className="h-8 w-20 text-sm"
-                      />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Label className="text-xs text-zinc-500">Step</Label>
-                      <Input
-                        type="number"
-                        min={1}
-                        value={q.step ?? 1}
-                        onChange={(e) =>
-                          updateField(index, { step: Number(e.target.value) })
-                        }
-                        disabled={!editable}
-                        className="h-8 w-20 text-sm"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {!isContentBlock(type) && (
-                  <div className="flex w-full items-center justify-end gap-2 border-t border-dashed border-zinc-200 pt-3 dark:border-zinc-700">
-                    <Label className="text-xs text-zinc-500">Required</Label>
-                    <Switch
-                      checked={!!q.required}
-                      disabled={!editable}
-                      onCheckedChange={(v) =>
-                        updateField(index, { required: v })
-                      }
-                    />
-                  </div>
-                )}
-
-                {fieldId && (
-                  <div className="flex w-full items-center justify-end">
-                    <span
-                      className="rounded-md bg-zinc-100 px-2 py-0.5 font-mono text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
-                      title="Field id — use it as a URL parameter to prefill this field"
-                    >
-                      id: {fieldId}
-                    </span>
-                  </div>
-                )}
-              </div>
-            )
-          })}
+                  </SortableQuestion>
+                )
+              })}
+            </SortableContext>
+          </DndContext>
           {questions.length < 1 && (
             <EmptyCard
               icon={<FileQuestion className="h-8 w-8" />}
